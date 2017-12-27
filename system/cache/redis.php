@@ -34,19 +34,19 @@ class Redis extends \Redis
 
         if (php_sapi_name() == 'cli') {
             if ($this->connect($config['host'], $config['port'], $config['timeout']) == false) {
-                echo "Redis '{$config['host']}' Connected Failed. \n";
+                echo "Redis '{$config['host']}' Connection Failed. \n";
                 exit($this->getLastError());
             }
         } else {
             if ($this->pconnect($config['host'], $config['port'], $config['timeout']) == false) {
-                echo "Redis '{$config['host']}' Connected Failed. \n";
+                echo "Redis '{$config['host']}' Connection Failed. \n";
                 exit($this->getLastError());
             }
         }
 
         if ($config['password']) {
             if ($this->auth($config['password']) == false) {
-                echo "Redis '{$config['host']}' Password Is Incorrect. \n";
+                echo "Redis '{$config['host']}' Password Incorrect. \n";
                 exit($this->getLastError());
             }
         }

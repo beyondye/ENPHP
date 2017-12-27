@@ -37,7 +37,7 @@ class Database
         $this->db = new \mysqli($config['host'], $config['username'], $config['password'], $config['database'], $config['port']);
 
         if ($this->db->connect_errno) {
-            exit('Database Connect Error :' . $this->db->connect_errno);
+            exit('Database Connection Error :' . $this->db->connect_errno);
         }
 
         $this->db->set_charset($config['charset']);

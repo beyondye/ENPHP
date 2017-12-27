@@ -87,25 +87,6 @@ class Input
         }
     }
 
-    /**
-     * 判断是否是移动端的请求
-     * 
-     * @return boolean
-     */
-    public function isMobileRequest()
-    {
-        return isset($_SERVER['HTTP_ANTHORIZATION']) || isset($_SERVER['HTTP_UUID']);
-    }
-
-    /**
-     * 判断是否是扩展端请求
-     * =
-     * @return boolean
-     */
-    public function isExtensionRequest()
-    {
-        return (isset($_GET['client']) && $_GET['client'] == "extension") || (isset($_SERVER['HTTP_REQUEST_CLIENT']) && $_SERVER['HTTP_REQUEST_CLIENT'] == "Extension");
-    }
 
     /**
      * 获取ip
