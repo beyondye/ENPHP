@@ -16,11 +16,6 @@ require_once APP_DIR . 'config/' . ENVIRONMENT . '/constans.php';
 class System
 {
 
-    public function __construct()
-    {
-        
-    }
-
     /**
      * 加载类并返回类实例
      * 
@@ -33,14 +28,14 @@ class System
      * 
      * @return array 类实例数组
      */
-    public function loadClass($name, $namespace, $alias = '', $arguments = '')
+    public function load($name, $namespace, $alias = '', $arguments = '')
     {
         global $instances;
 
         $name = ucfirst($name);
         //$namespace=ucwords(str_replace('/', '\\', $namespace),'\\');
-        $namespace=str_replace('/', '\\', $namespace);
-        
+        $namespace = str_replace('/', '\\', $namespace);
+
         $handler = $alias ? $alias : $name;
 
         //实例已存在直接返回
@@ -84,15 +79,15 @@ class System
     public function __get($name)
     {
         if (in_array($name, array('input', 'config', 'output', 'session', 'lang', 'helper'))) {
-            return $this->loadClass($name, 'System\\Core');
+            return $this->load($name, 'System');
         }
 
         if ($name == 'db') {
-            return $this->loadClass('database', 'System\\Database', 'default');
+            return $this->load('database', 'System\\Database', 'default');
         }
 
         if ($name == 'redis') {
-            return $this->loadClass('redis', 'System\\Cache', 'default');
+            return $this->load('redis', 'System\\Cache', 'default');
         }
     }
 
@@ -105,19 +100,7 @@ class System
      */
     public function db($service)
     {
-        return $this->loadClass('database', 'System\\Database', $service);
-    }
-
-    /**
-     * 调用controller
-     * 
-     * @param string $name
-     * 
-     * @return object
-     */
-    public function controller($name)
-    {
-        return $this->loadClass(str_replace('/', '\\', $name), 'Module\\' . ucfirst(MODULE));
+        return $this->load('database', 'System\\Database', $service);
     }
 
     /**
@@ -129,35 +112,7 @@ class System
      */
     public function model($name)
     {
-        return $this->loadClass(str_replace('/', '\\', $name), 'Model');
-    }
-
-    /**
-     * 调用类库
-     * 
-     * @param string $name  类库名
-     * @param string $alias 别名防止单例模式
-     * @param string|array $arguments 构造函数参数接收一个字符串或一个数组
-     * 
-     * @return object
-     */
-    public function library($name, $alias = '', $arguments = '')
-    {
-        return $this->loadClass($name, 'Library', $alias, $arguments);
-    }
-
-    /**
-     * 调用第三方类库
-     * 
-     * @param string $name  类库名
-     * @param string $alias 别名防止单例模式
-     * @param string|array $arguments 构造函数参数接收一个字符串或一个数组
-     * 
-     * @return object
-     */
-    public function vendor($name, $alias = '', $arguments = '')
-    {
-        return $this->loadClass($name, 'Vendor', $alias, $arguments);
+        return $this->load(str_replace('/', '\\', $name), 'Model');
     }
 
     /**
@@ -169,7 +124,7 @@ class System
      */
     public function redis($service)
     {
-        return $this->loadClass('redis', 'System\Cache', $service);
+        return $this->load('redis', 'System\Cache', $service);
     }
 
     /**
@@ -181,12 +136,12 @@ class System
      */
     public function lang($lang)
     {
-        return $this->loadClass('lang', 'System\Core', 'lang_' . $lang, $lang);
+        return $this->load('lang', 'System', 'lang_' . $lang, $lang);
     }
 
 }
 
-//auto load  class
+//autoload  class
 spl_autoload_register(function ($class) {
 
     $file = strtolower(str_replace('\\', '/', $class));
@@ -215,7 +170,7 @@ if (php_sapi_name() == 'cli') {
     $_action = $instances['system']->input->get(ACTION_KEY_NAME) ? $instances['system']->input->get(ACTION_KEY_NAME) : DEFAULT_ACTION;
 }
 
-$instances['system']->controller($_controller)->$_action();
+$instances['system']->load(str_replace('/', '\\', $_controller), 'Module\\' . ucfirst(MODULE))->$_action();
 
 //echo '<pre>',var_dump($instances),'</pre>';
 //close databases

@@ -1,6 +1,6 @@
 <?php
 
-namespace System\Core;
+namespace System;
 
 /**
  * 会话类

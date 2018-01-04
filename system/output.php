@@ -1,6 +1,6 @@
 <?php
 
-namespace System\Core;
+namespace System;
 
 /**
  * 输出类
