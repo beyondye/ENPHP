@@ -87,7 +87,6 @@ class Input
         }
     }
 
-
     /**
      * 获取ip
      * 
@@ -97,22 +96,30 @@ class Input
     {
 
         if (getenv('HTTP_CLIENT_IP')) {
-            $ipaddress = getenv('HTTP_CLIENT_IP');
-        } else if (getenv('HTTP_X_FORWARDED_FOR')) {
-            $ipaddress = getenv('HTTP_X_FORWARDED_FOR');
-        } else if (getenv('HTTP_X_FORWARDED')) {
-            $ipaddress = getenv('HTTP_X_FORWARDED');
-        } else if (getenv('HTTP_FORWARDED_FOR')) {
-            $ipaddress = getenv('HTTP_FORWARDED_FOR');
-        } else if (getenv('HTTP_FORWARDED')) {
-            $ipaddress = getenv('HTTP_FORWARDED');
-        } else if (getenv('REMOTE_ADDR')) {
-            $ipaddress = getenv('REMOTE_ADDR');
-        } else {
-            $ipaddress = '0.0.0.0';
+            return getenv('HTTP_CLIENT_IP');
         }
 
-        return $ipaddress;
+        if (getenv('HTTP_X_FORWARDED_FOR')) {
+            return getenv('HTTP_X_FORWARDED_FOR');
+        }
+
+        if (getenv('HTTP_X_FORWARDED')) {
+            return getenv('HTTP_X_FORWARDED');
+        }
+
+        if (getenv('HTTP_FORWARDED_FOR')) {
+            return getenv('HTTP_FORWARDED_FOR');
+        }
+
+        if (getenv('HTTP_FORWARDED')) {
+            return getenv('HTTP_FORWARDED');
+        }
+
+        if (getenv('REMOTE_ADDR')) {
+            return getenv('REMOTE_ADDR');
+        }
+
+        return '0.0.0.0';
     }
 
 }
