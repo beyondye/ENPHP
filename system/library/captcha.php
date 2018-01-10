@@ -96,11 +96,14 @@ class Captcha
 
     public function __construct()
     {
-        $this->fontPath = APP_DIR . 'font/';
+        if (defined('APP_DIR')) {
+            $this->fontPath = APP_DIR . 'font/';
+        }
+
         $this->arrChr = array_merge(range(1, 9), range('A', 'Z'), range('a', 'z'));
     }
 
-    public function getColor($color)
+    private function getColor($color)
     {
         $color = preg_replace("/^#/i", "", $color);
         $r = $color[0] . $color[1];
@@ -128,7 +131,7 @@ class Captcha
     /**
      * 设置杂线
      */
-    function setNoiseLine()
+    private function setNoiseLine()
     {
         for ($i = 0; $i < $this->noiseNumLine; $i++) {
             $randColor = imageColorAllocate($this->image, rand(0, 255), rand(0, 255), rand(0, 255));
@@ -141,7 +144,7 @@ class Captcha
      * 
      * @return void
      */
-    function create()
+    public function create()
     {
         $this->image = imageCreate($this->width, $this->height);
         $this->back = $this->getColor($this->bgcolor);

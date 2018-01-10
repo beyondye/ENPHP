@@ -18,7 +18,7 @@ class Html
     /**
      * 特定处理的标签
      */
-    const SPECIFIED_TAGS = ['select', 'input'];
+    const SPECIAL_TAGS = ['select', 'input'];
 
     /**
      * 生成html标签
@@ -159,7 +159,7 @@ class Html
 
             $name = isset($value['name']) ? $value['name'] : '';
 
-            if (in_array($name, self::SPECIFIED_TAGS)) {
+            if (in_array($name, self::SPECIAL_TAGS)) {
                 $str .= $this->$name($value);
             } else {
                 $str .= $this->tag($value);

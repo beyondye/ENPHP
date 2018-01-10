@@ -1,6 +1,6 @@
 <?php
 
-namespace Library\Email;
+namespace System\Library;
 
 /**
  * SMTP邮件发送, 支持发送纯文本邮件和HTML格式的邮件
