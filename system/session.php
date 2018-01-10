@@ -13,7 +13,7 @@ class Session
     public function __construct()
     {
         if (SESSION_USE_DATABASE) {
-            $handler = new \System\Core\SessionHandler();
+            $handler = new \System\SessionHandler();
             session_set_save_handler($handler, true);
         }
 
