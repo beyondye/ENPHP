@@ -2,6 +2,8 @@
 
 namespace System\Library;
 
+use \System\Library\Html;
+
 /**
  * 表格
  * 
@@ -45,9 +47,16 @@ class Table
      * @var int
      */
     public $pager;
-
-   
-
+    
+    /**
+     *字段的默认处理
+     * @var array 
+     */
+    private $field_default= [
+        'convert' => null,
+        'primary' => false,
+        'hide'=>false,
+    ];
 
     /**
      * 模板渲染返回html
@@ -56,17 +65,7 @@ class Table
      */
     public function render()
     {
-        $this->field = array_filter($this->field, function($var) {
-            return !in_array($var, $this->hide);
-        });
-
-
-        ob_start();
-        include $this->template;
-        $_buffer = ob_get_contents();
-        ob_end_clean();
-
-        return $_buffer;
+        
     }
 
 }
