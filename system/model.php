@@ -174,19 +174,19 @@ class Model extends \System\System
      * 
      * @return array|object
      */
-    public function select($config = [])
-    {
-        $init = ['where' => [], 'fields' => [], 'orderby' => [], 'limit' => []];
-
-        foreach ($config as $key => $value) {
-            $init[$key] = $value;
-        }
-
-        //if (is_array($init['where']) && is_array($init['fields']) && is_array($init['orderby']) && (is_array($init['limit']) or is_int($init['limit']))) {
-            return $this->db($this->RDB)->select($this->table, $init['where'], $init['fields'], $init['orderby'], $init['limit'])->result();
-        //}
-
-    }
+//    public function select($config = [])
+//    {
+//        $init = ['where' => [], 'fields' => [], 'orderby' => [], 'limit' => []];
+//
+//        foreach ($config as $key => $value) {
+//            $init[$key] = $value;
+//        }
+//
+//        //if (is_array($init['where']) && is_array($init['fields']) && is_array($init['orderby']) && (is_array($init['limit']) or is_int($init['limit']))) {
+//            return $this->db($this->RDB)->select($this->table, $init['where'], $init['fields'], $init['orderby'], $init['limit'])->result();
+//        //}
+//
+//    }
 
     /**
      * 通过主键返回一条数据

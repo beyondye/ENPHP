@@ -3,7 +3,7 @@
 namespace System\Library;
 
 /**
- * 表单元素
+ * 生成html标签
  * 
  * @author Ding <beyondye@gmail.com>
  */
@@ -21,70 +21,72 @@ class Html
     const SPECIAL_TAGS = ['select', 'input'];
 
     /**
-     * 生成html标签
+     * 生成单个标签
      * 
      * @param array $param
      * @example
      * $param=[
-     * 'name'=>'p'
-     * 'properties'=>['name'=>''],
-     * 'elements'=>[['name'='','elements'=[],'properties'=>[]]
-     * ]'
+     *      'name'=>'p'
+     *      'properties'=>['name'=>''],
+     *      'elements'=>[['name'='','elements'=[],'properties'=>[]]
+     * ]
      * 
      * @return string 返回html代码
      */
-    public function tag(array $param)
+    private static function tag(array $param)
     {
-        $param = array_merge(['name' => '', 'elements' => [], 'properties' => [], 'text' => ''], $param);
-
+        $param = array_merge(['name' => '', 'elements' => [], 'properties' => []], $param);
 
         if (in_array($param['name'], self::NO_END_TAGS)) {
-            return '<' . $param['name'] . $this->_properties($param['properties']) . '/>';
+            return '<' . $param['name'] . self::properties($param['properties']) . '/>';
         }
 
         $start = '';
         $end = '';
 
         if ($param['name']) {
-            $start = '<' . $param['name'] . $this->_properties($param['properties']) . '>';
+            $start = '<' . $param['name'] . self::properties($param['properties']) . '>';
             $end = '</' . $param['name'] . '>';
         }
 
-        if ($param['elements']) {
-            return $start . $this->_elements($param['elements']) . $end;
+        if (is_array($param['elements'])) {
+            return $start . self::elements($param['elements']) . $end;
         }
 
-        if ($param['text']) {
-            return $start . $param['text'] . $end;
+        if (is_string($param['elements'])) {
+            return $start . $param['elements'] . $end;
         }
-
-
 
         return $start . $end;
     }
 
     /**
-     * 一次处理多个
+     * 一次处理多个标签
      * 
      * @param array $param
-     * 
      * @example
      * $param=[[
-     * 'name'='p',
-     * 'properties'=>['name'=>''],
-     * 'elements'=>[['name'='','elements'=[],'properties'=>[]]
+     *      'name'='p',
+     *      'properties'=>['name'=>''],
+     *      'elements'=>[['name'='','elements'=[],'properties'=>[]]
      * ],
      * [
-     * 'name'='p',
-     * 'properties'=>['name'=>''],
-     * 'elements'=>[['name'='','elements'=[],'properties'=>[]]
+     *      'name'='p',
+     *      'properties'=>['name'=>''],
+     *      'elements'=>[['name'='','elements'=[],'properties'=>[]]
      * ]]'
      * 
      * @return string 返回html代码
      */
-    public function tags(array $param)
+    public static function tags(array $param)
     {
-        return $this->_elements($param);
+        $keys=array_keys($param);
+        
+        if(is_int($keys[0])){
+            return self::elements($param);
+        }
+        
+        return self::tag($param);
     }
 
     /**
@@ -94,17 +96,17 @@ class Html
      * 
      * @example 
      * $param=[
-     * 'name'=>'select',
-     * 'options' => $this->menu->read('parent_id=0', 'id,name'),
-     * 'default' => ['literal'=>'请选择','value'=>''],
-     * 'model' => array('value' => 'id', 'literal' => 'name'),
-     * 'selected' => $this->input->get('parent_id'),
-     * 'properties' => array('name' => 'parent_id')
+     *      'name'=>'select',
+     *      'options' => $this->menu->read('parent_id=0', 'id,name'),
+     *      'default' => ['literal'=>'请选择','value'=>''],
+     *      'model' => array('value' => 'id', 'literal' => 'name'),
+     *      'selected' => $this->input->get('parent_id'),
+     *      'properties' => array('name' => 'parent_id')
      * ]
      * 
      * @return string 返回select html代码
      */
-    private function select(array $param)
+    private static function select(array $param)
     {
         $param = array_merge(['name' => '', 'properties' => [], 'default' => [], 'model' => [], 'options' => [], 'selected' => ''], $param);
 
@@ -128,7 +130,7 @@ class Html
             }
         }
 
-        return '<select' . $this->_properties($param['properties']) . '>' . $options . '</select>';
+        return '<select' . self::properties($param['properties']) . '>' . $options . '</select>';
     }
 
     /**
@@ -138,11 +140,11 @@ class Html
      * 
      * @return string
      */
-    private function input(array $param)
+    private static function input(array $param)
     {
         $param['properties'] = array_merge(['type' => 'text'], $param['properties']);
 
-        return $this->tag($param);
+        return self::tag($param);
     }
 
     /**
@@ -152,7 +154,7 @@ class Html
      * 
      * @return string
      */
-    private function _elements($elements)
+    private static function elements($elements)
     {
         $str = '';
         foreach ($elements as $value) {
@@ -160,9 +162,9 @@ class Html
             $name = isset($value['name']) ? $value['name'] : '';
 
             if (in_array($name, self::SPECIAL_TAGS)) {
-                $str .= $this->$name($value);
+                $str .= self::$name($value);
             } else {
-                $str .= $this->tag($value);
+                $str .= self::tag($value);
             }
         }
 
@@ -175,7 +177,7 @@ class Html
      * @param array $properties
      * @return string
      */
-    private function _properties($properties)
+    private static function properties($properties)
     {
         $str = '';
         foreach ($properties as $key => $value) {

@@ -11,113 +11,198 @@ class Grid
 {
 
     /**
+     * 唯一主键字段
+     * 
+     * @var string
+     */
+    public $primary = '';
+
+    /**
+     * 表格html
+     * 
+     * @var string
+     */
+    public $table = '';
+
+    /**
      * 设置需要显示的字段
      * @var array
      */
-    public $field;
-
-    /**
-     * 设置需要显示的字段字面量标题
-     * @var array
-     */
-    public $title;
-
-    /**
-     * 设置需要隐藏的字段
-     * @var array
-     */
-    public $hide;
-
-    /**
-     * 设置需要转换显示的字段
-     * @var array
-     */
-    public $convert;
+    public $fields = [];
 
     /**
      * 设置需要过滤筛选字段表单项
      * @var array
      */
-    public $filter;
+    public $filters = [];
 
     /**
      * 设置操作表格需要的工具按钮
      * @var string
      */
-    public $tool;
-
-    /**
-     * 设置表格尾部额外字段
-     * @var array
-     */
-    public $after ;
-
-    /**
-     * 设置表格首部额外字段
-     * @var array
-     */
-    public $before;
+    public $tools;
 
     /**
      * 设置表格单项或多项操作
      * @var string
      */
-    public $operation;
+    public $operations;
 
     /**
      * 设置表格数据源
      * @var array
      */
-    public $datasource;
+    public $datasource = [];
 
     /**
      * 设置当前页码
      * @var int
      */
-    public $page_num = 0;
+    public $pager;
 
     /**
-     * 设置当前分页地址 url?page=
-     * @var string
+     * 设置补全字段数据
+     * 
+     * @param array $fields
+     * @example 
+     * $fields=['id'=>['primary'=>true,'literal'=>'ID'],'name','time']
+     * 
+     * 
+     * $default = [
+     *      'convert' => null,
+     *      'primary' => false,
+     *      'hide' => false,
+     *      'literal'=>''
+     * ];
+     * 
+     * @return $this
      */
-    public $page_url = '';
+    public function setField(array $fields = [])
+    {
+
+        $default = [
+            'convert' => null,
+            'primary' => false,
+            'hide' => false,
+            'literal' => ''
+        ];
+
+        foreach ($fields as $key => $value) {
+
+            if (is_int($key)) {
+
+                if (isset($this->fields[$value])) {
+                    continue;
+                }
+
+                $this->fields[$value] = $default;
+                $this->fields[$value]['literal'] = $value;
+                continue;
+            }
+
+            if (isset($this->fields[$key])) {
+                $this->fields[$key] = array_merge($this->fields[$key], $value);
+            } else {
+                $this->fields[$key] = array_merge($default, $value);
+            }
+
+            if ($this->fields[$key]['literal'] == '') {
+                $this->fields[$key]['literal'] = $key;
+            }
+
+            if ($this->fields[$key]['primary'] === true) {
+                $this->primary = $key;
+            }
+        }
+
+        return $this;
+    }
 
     /**
-     * 设置每个页面条数
-     * @var int
+     * 设置过滤表单项
+     * 
+     * @param array $container htmls
+     * 
+     * @return $this
      */
-    public $page_size = 0;
+    public function setFilter(array $filters = [])
+    {
+
+        foreach ($filters as $val) {
+            $this->filters[] = $val;
+        }
+
+        return $this;
+    }
 
     /**
-     * 设置数据总条数
-     * @var int
-     */
-    public $total = 0;
-
-    /**
-     * 表格模板路径
-     * @var string
-     */
-    public $template = '';
-
-    /**
-     * 模板渲染返回html
+     * 生成表格行
+     * 
+     * @param object $row
      * 
      * @return string
      */
-    public function render()
+    private function tr($row)
     {
-        $this->field = array_filter($this->field, function($var) {
-            return !in_array($var, $this->hide);
-        });
+        $tds = '';
+        foreach ($this->fields as $key => $value) {
 
+            if ($value['hide'] === true) {
+                continue;
+            }
 
-        ob_start();
-        include $this->template;
-        $_buffer = ob_get_contents();
-        ob_end_clean();
+            $convert = $value['convert'];
 
-        return $_buffer;
+            if (isset($row->$key)) {
+                $str = $convert === null ? $row->$key : $convert($row);
+                $tds = $tds . '<td>' . $str . '</td>';
+                continue;
+            }
+
+            $str = $convert === null ? '' : $convert($row);
+            $tds = $tds . '<td>' . $str . '</td>';
+        }
+
+        return '<tr>' . $tds . '</tr>';
+    }
+
+    /**
+     * 生成表格头部
+     * 
+     * @return string
+     */
+    private function thead()
+    {
+        $ths = '';
+        foreach ($this->fields as $key => $value) {
+
+            if ($value['hide'] === true) {
+                continue;
+            }
+
+            $ths = $ths . '<th>' . $value['literal'] . '</th>';
+        }
+
+        return '<thead><tr>' . $ths . '</tr></thead>';
+    }
+
+    /**
+     * 生成表格html
+     * 
+     * @return string
+     */
+    public function render(callable $make)
+    {
+        $thead = $this->thead();
+        $tfoot = '<tfoot></tfoot>';
+        $tbody = '<tbody>';
+        foreach ($this->datasource as $row) {
+            $tbody = $tbody . $this->tr($row);
+        }
+        $tbody . '</tbody>';
+        $this->table = '<table>' . $thead . $tbody . $tfoot . '</table>';
+
+        return $make($this);
     }
 
 }
