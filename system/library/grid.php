@@ -7,8 +7,7 @@ namespace System\Library;
  * 
  * @author Ding <beyondye@gmail.com>
  */
-class Grid
-{
+class Grid {
 
     /**
      * 唯一主键字段
@@ -40,7 +39,7 @@ class Grid
      * 设置操作表格需要的工具按钮
      * @var string
      */
-    public $tools;
+    public $tools = [];
 
     /**
      * 设置表格单项或多项操作
@@ -61,6 +60,16 @@ class Grid
     public $pager;
 
     /**
+     * 插入到最后面
+     */
+    const BEFORE = 'before';
+
+    /**
+     * 插入到最前面
+     */
+    const AFTER = 'after';
+
+    /**
      * 设置补全字段数据
      * 
      * @param array $fields
@@ -75,10 +84,13 @@ class Grid
      *      'literal'=>''
      * ];
      * 
+     * 
+     * @param string $pos 字段的前后 val='before' or 'after'
+     * @param string $to  具体字段名称，如果空为数组的头和尾
+     *  
      * @return $this
      */
-    public function setField(array $fields = [])
-    {
+    public function setField(array $fields = [], $to = '', $pos = Grid::AFTER) {
 
         $default = [
             'convert' => null,
@@ -87,33 +99,76 @@ class Grid
             'literal' => ''
         ];
 
+        $that_fields = $this->fields;
+
+        $insert = [];
         foreach ($fields as $key => $value) {
 
             if (is_int($key)) {
 
-                if (isset($this->fields[$value])) {
+                if (isset($that_fields[$value])) {
+
+                    if ($to) {
+                        $insert[$value] = $that_fields[$value];
+                        unset($that_fields[$value]);
+                    }
                     continue;
                 }
 
-                $this->fields[$value] = $default;
-                $this->fields[$value]['literal'] = $value;
+                $insert[$value] = $default;
+                $insert[$value]['literal'] = $value;
                 continue;
             }
 
-            if (isset($this->fields[$key])) {
-                $this->fields[$key] = array_merge($this->fields[$key], $value);
-            } else {
-                $this->fields[$key] = array_merge($default, $value);
+            if (isset($that_fields[$key])) {
+
+                if ($to) {
+                    $insert[$key] = array_merge($that_fields[$key], $value);
+                    unset($that_fields[$key]);
+                    continue;
+                }
+
+                $that_fields[$key] = array_merge($that_fields[$key], $value);
+                continue;
             }
 
-            if ($this->fields[$key]['literal'] == '') {
-                $this->fields[$key]['literal'] = $key;
-            }
-
-            if ($this->fields[$key]['primary'] === true) {
-                $this->primary = $key;
+            $insert[$key] = array_merge($default, $value);
+            if ($insert[$key]['literal'] == '') {
+                $insert[$key]['literal'] = $key;
             }
         }
+
+        $head = [];
+        foreach ($that_fields as $k => $v) {
+            if ($k == $to) {
+                break;
+            }
+
+            $head[$k] = $v;
+        }
+
+        $tail = [];
+        foreach ($that_fields as $k => $v) {
+
+            if ($k == $to) {
+                $tail = [];
+                continue;
+            }
+
+            $tail[$k] = $v;
+        }
+
+        if ($to && $that_fields) {
+            if ($pos === self::AFTER) {
+                $head[$to] = $that_fields[$to];
+            }
+
+            if ($pos === self::BEFORE) {
+                $tail = array_merge([$to => $that_fields[$to]], $tail);
+            }
+        }
+
+        $this->fields = $head + $insert + $tail;
 
         return $this;
     }
@@ -121,15 +176,29 @@ class Grid
     /**
      * 设置过滤表单项
      * 
-     * @param array $container htmls
-     * 
+     * @param array $filters  html tags
      * @return $this
      */
-    public function setFilter(array $filters = [])
-    {
+    public function setFilter(array $filters = []) {
 
         foreach ($filters as $val) {
             $this->filters[] = $val;
+        }
+
+        return $this;
+    }
+
+    /**
+     * 设置表格数据工具
+     * 
+     * @param array $tools htmls
+     * @param string $group 
+     * @return $this
+     */
+    public function setTool(array $tools = [], $gorup = 'default') {
+
+        foreach ($tools as $val) {
+            $this->tools[] = $val;
         }
 
         return $this;
@@ -142,8 +211,7 @@ class Grid
      * 
      * @return string
      */
-    private function tr($row)
-    {
+    private function tr($row) {
         $tds = '';
         foreach ($this->fields as $key => $value) {
 
@@ -171,8 +239,7 @@ class Grid
      * 
      * @return string
      */
-    private function thead()
-    {
+    private function thead() {
         $ths = '';
         foreach ($this->fields as $key => $value) {
 
@@ -191,8 +258,7 @@ class Grid
      * 
      * @return string
      */
-    public function render(callable $make)
-    {
+    public function render(callable $make) {
         $thead = $this->thead();
         $tfoot = '<tfoot></tfoot>';
         $tbody = '<tbody>';
