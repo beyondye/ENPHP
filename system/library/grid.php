@@ -2,26 +2,15 @@
 
 namespace System\Library;
 
+use System\Library\Html;
+
 /**
  * 表格
  * 
  * @author Ding <beyondye@gmail.com>
  */
-class Grid {
-
-    /**
-     * 唯一主键字段
-     * 
-     * @var string
-     */
-    public $primary = '';
-
-    /**
-     * 表格html
-     * 
-     * @var string
-     */
-    public $table = '';
+class Grid
+{
 
     /**
      * 设置需要显示的字段
@@ -42,12 +31,6 @@ class Grid {
     public $tools = [];
 
     /**
-     * 设置表格单项或多项操作
-     * @var string
-     */
-    public $operations;
-
-    /**
      * 设置表格数据源
      * @var array
      */
@@ -60,14 +43,19 @@ class Grid {
     public $pager;
 
     /**
-     * 插入到最后面
+     * 插入到字段前面最后面
      */
-    const BEFORE = 'before';
+    const FIELD_POS_BEFORE = 'before';
 
     /**
      * 插入到最前面
      */
-    const AFTER = 'after';
+    const FIELD_POS_AFTER = 'after';
+
+    /**
+     * 默认工具按钮组
+     */
+    const TOOL_DEFAULT_GROUP = 'default';
 
     /**
      * 设置补全字段数据
@@ -90,7 +78,8 @@ class Grid {
      *  
      * @return $this
      */
-    public function setField(array $fields = [], $to = '', $pos = Grid::AFTER) {
+    public function setField(array $fields = [], string $to = '', string $pos = Grid::FIELD_POS_AFTER)
+    {
 
         $default = [
             'convert' => null,
@@ -159,11 +148,11 @@ class Grid {
         }
 
         if ($to && $that_fields) {
-            if ($pos === self::AFTER) {
+            if ($pos === self::FIELD_POS_AFTER) {
                 $head[$to] = $that_fields[$to];
             }
 
-            if ($pos === self::BEFORE) {
+            if ($pos === self::FIELD_POS_BEFORE) {
                 $tail = array_merge([$to => $that_fields[$to]], $tail);
             }
         }
@@ -179,7 +168,8 @@ class Grid {
      * @param array $filters  html tags
      * @return $this
      */
-    public function setFilter(array $filters = []) {
+    public function setFilter(array $filters = [])
+    {
 
         foreach ($filters as $val) {
             $this->filters[] = $val;
@@ -189,19 +179,44 @@ class Grid {
     }
 
     /**
+     * 返回filter html字符串
+     * 
+     * @param string $gorup
+     * 
+     * @return string
+     */
+    public function filters()
+    {
+        return Html::tags($this->filters);
+    }
+
+    /**
      * 设置表格数据工具
      * 
      * @param array $tools htmls
      * @param string $group 
      * @return $this
      */
-    public function setTool(array $tools = [], $gorup = 'default') {
+    public function setTool(array $tools = [], string $gorup = self::TOOL_DEFAULT_GROUP)
+    {
 
         foreach ($tools as $val) {
-            $this->tools[] = $val;
+            $this->tools[$gorup][] = $val;
         }
 
         return $this;
+    }
+
+    /**
+     * 返回tools html字符串
+     * 
+     * @param string $gorup
+     * 
+     * @return string
+     */
+    public function tools(string $gorup = self::TOOL_DEFAULT_GROUP)
+    {
+        return Html::tags($this->tools[$gorup]);
     }
 
     /**
@@ -211,7 +226,8 @@ class Grid {
      * 
      * @return string
      */
-    private function tr($row) {
+    private function tr($row)
+    {
         $tds = '';
         foreach ($this->fields as $key => $value) {
 
@@ -239,7 +255,8 @@ class Grid {
      * 
      * @return string
      */
-    private function thead() {
+    private function thead()
+    {
         $ths = '';
         foreach ($this->fields as $key => $value) {
 
@@ -254,11 +271,12 @@ class Grid {
     }
 
     /**
-     * 生成表格html
+     * 生成表格
      * 
      * @return string
      */
-    public function render(callable $make) {
+    private function table()
+    {
         $thead = $this->thead();
         $tfoot = '<tfoot></tfoot>';
         $tbody = '<tbody>';
@@ -266,8 +284,16 @@ class Grid {
             $tbody = $tbody . $this->tr($row);
         }
         $tbody . '</tbody>';
-        $this->table = '<table>' . $thead . $tbody . $tfoot . '</table>';
+        return '<table>' . $thead . $tbody . $tfoot . '</table>';
+    }
 
+    /**
+     * 生成表格html
+     * 
+     * @return string
+     */
+    public function render(callable $make)
+    {
         return $make($this);
     }
 
