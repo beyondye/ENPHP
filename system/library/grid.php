@@ -81,11 +81,13 @@ class Grid
     public function setField(array $fields = [], string $to = '', string $pos = Grid::FIELD_POS_AFTER)
     {
 
+        //默认字段值
         $default = [
             'convert' => null,
             'primary' => false,
             'hide' => false,
-            'literal' => ''
+            'literal' => '',
+            'width' => ''
         ];
 
         $that_fields = $this->fields;
@@ -93,6 +95,7 @@ class Grid
         $insert = [];
         foreach ($fields as $key => $value) {
 
+            //如果是一维数组
             if (is_int($key)) {
 
                 if (isset($that_fields[$value])) {
@@ -109,6 +112,7 @@ class Grid
                 continue;
             }
 
+            //如果是二维数组
             if (isset($that_fields[$key])) {
 
                 if ($to) {
@@ -127,6 +131,7 @@ class Grid
             }
         }
 
+        //分拣数组头部元素
         $head = [];
         foreach ($that_fields as $k => $v) {
             if ($k == $to) {
@@ -136,6 +141,7 @@ class Grid
             $head[$k] = $v;
         }
 
+        //分拣尾部元素
         $tail = [];
         foreach ($that_fields as $k => $v) {
 
@@ -147,6 +153,7 @@ class Grid
             $tail[$k] = $v;
         }
 
+        //判断是否默认
         if ($to && $that_fields) {
             if ($pos === self::FIELD_POS_AFTER) {
                 $head[$to] = $that_fields[$to];
@@ -157,6 +164,7 @@ class Grid
             }
         }
 
+        //组合返回新顺序的字段数组
         $this->fields = $head + $insert + $tail;
 
         return $this;
@@ -264,6 +272,11 @@ class Grid
                 continue;
             }
 
+            if ($value['width']) {
+                $ths = $ths . '<th width="' . $value['width'] . '">' . $value['literal'] . '</th>';
+                continue;
+            }
+
             $ths = $ths . '<th>' . $value['literal'] . '</th>';
         }
 
@@ -275,7 +288,7 @@ class Grid
      * 
      * @return string
      */
-    private function table()
+    public function table()
     {
         $thead = $this->thead();
         $tfoot = '<tfoot></tfoot>';

@@ -35,7 +35,7 @@ class Html
      */
     private static function tag(array $param)
     {
-        $param = array_merge(['name' => '', 'elements' => [], 'properties' => []], $param);
+        $param = array_merge(['name' => '', 'text' => '', 'elements' => null, 'properties' => []], $param);
 
         if (in_array($param['name'], self::NO_END_TAGS)) {
             return '<' . $param['name'] . self::properties($param['properties']) . '/>';
@@ -55,6 +55,10 @@ class Html
 
         if (is_string($param['elements'])) {
             return $start . $param['elements'] . $end;
+        }
+
+        if ($param['text']) {
+            return $start . $param['text'] . $end;
         }
 
         return $start . $end;
@@ -80,12 +84,12 @@ class Html
      */
     public static function tags(array $param)
     {
-        $keys=array_keys($param);
-        
-        if(is_int($keys[0])){
+        $keys = array_keys($param);
+
+        if (is_int($keys[0])) {
             return self::elements($param);
         }
-        
+
         return self::tag($param);
     }
 

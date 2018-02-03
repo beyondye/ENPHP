@@ -32,7 +32,7 @@ class Helper
         $html = '';
         $start = 1;
         $end = 0;
-        $info = '<span class="info">共' . $total . '条记录</span>';
+        $info = '<span class="info">共 ' . $total . ' 条记录</span>';
 
         if ($total > $size) {
             $count = ceil($total / $size);
