@@ -5,6 +5,9 @@ namespace System;
 //全局实例初始化数组
 $instances = [];
 
+//全局变量数组
+$vars = [];
+
 //定义常量
 require_once APP_DIR . 'config/' . ENVIRONMENT . '/constans.php';
 
@@ -80,6 +83,11 @@ class System
     {
         if (in_array($name, array('input', 'config', 'output', 'session', 'lang', 'helper'))) {
             return $this->load($name, 'System');
+        }
+
+        if ($name == 'vars') {
+            global $vars;
+            return $vars;
         }
 
         if ($name == 'db') {
@@ -163,11 +171,11 @@ spl_autoload_register(function ($class) {
 $instances['system'] = new \System\System();
 
 if (php_sapi_name() == 'cli') {
-    $_controller = isset($argv[1]) ? $argv[1] : DEFAULT_CONTROLLER;
-    $_action = isset($argv[2]) ? $argv[2] : DEFAULT_ACTION;
+    $vars['controller'] = $_controller = isset($argv[1]) ? $argv[1] : DEFAULT_CONTROLLER;
+    $vars['action'] = $_action = isset($argv[2]) ? $argv[2] : DEFAULT_ACTION;
 } else {
-    $_controller = $instances['system']->input->get(CONTROLLER_KEY_NAME) ? $instances['system']->input->get(CONTROLLER_KEY_NAME) : DEFAULT_CONTROLLER;
-    $_action = $instances['system']->input->get(ACTION_KEY_NAME) ? $instances['system']->input->get(ACTION_KEY_NAME) : DEFAULT_ACTION;
+    $vars['controller'] = $_controller = $instances['system']->input->get(CONTROLLER_KEY_NAME) ? $instances['system']->input->get(CONTROLLER_KEY_NAME) : DEFAULT_CONTROLLER;
+    $vars['action'] = $_action = $instances['system']->input->get(ACTION_KEY_NAME) ? $instances['system']->input->get(ACTION_KEY_NAME) : DEFAULT_ACTION;
 }
 
 $instances['system']->load(str_replace('/', '\\', $_controller), 'Module\\' . ucfirst(MODULE))->$_action();

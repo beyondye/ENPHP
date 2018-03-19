@@ -91,7 +91,7 @@ class Model extends \System\System
     /**
      * 插入数据到表
      * 
-     * @param array|string $where 必须与表字段对应 $where['field_name'=>'field_value']
+     * @param array|string $data 必须与表字段对应 $data['field_name'=>'field_value']
      * 
      * @return boolean
      */
