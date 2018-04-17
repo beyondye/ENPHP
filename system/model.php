@@ -70,7 +70,7 @@ class Model extends \System\System
      */
     public function __construct()
     {
-
+        
     }
 
     /**
@@ -83,9 +83,8 @@ class Model extends \System\System
     public function count($where = [])
     {
         //if (is_array($where)) {
-            return $this->db($this->RDB)->select($this->table, $where, ' COUNT(*) AS ct ')->row()->ct;
+        return $this->db($this->RDB)->select($this->table, $where, ' COUNT(*) AS ct ')->row()->ct;
         //}
-
     }
 
     /**
@@ -98,9 +97,13 @@ class Model extends \System\System
     public function insert($data = [])
     {
         //if (is_array($data)) {
-            return $this->db($this->WDB)->insert($this->table, $data);
+        return $this->db($this->WDB)->insert($this->table, $data);
         //}
+    }
 
+    public function lastid()
+    {
+        return $this->db($this->WDB)->insertId();
     }
 
     /**
@@ -116,13 +119,12 @@ class Model extends \System\System
     public function delete($where = [])
     {
         //if (is_array($where) or is_int($where)) {
-            if (is_int($where)) {
-                $where = [$this->primary => $where];
-            }
+        if (is_int($where)) {
+            $where = [$this->primary => $where];
+        }
 
-            return $this->db($this->WDB)->delete($this->table, $where);
-       // }
-
+        return $this->db($this->WDB)->delete($this->table, $where);
+        // }
     }
 
     /**
@@ -140,13 +142,12 @@ class Model extends \System\System
     {
         //if (is_array($data) && (is_array($where) or is_int($where))) {
 
-            if (is_int($where)) {
-                $where = [$this->primary => $where];
-            }
+        if (is_int($where)) {
+            $where = [$this->primary => $where];
+        }
 
-            return $this->db($this->WDB)->update($this->table, $data, $where);
+        return $this->db($this->WDB)->update($this->table, $data, $where);
         //}
-
     }
 
     /**
@@ -162,9 +163,8 @@ class Model extends \System\System
     public function query($where = [], $fields = [], $orderby = [], $limit = [])
     {
         //if (is_array($where) && is_array($fields) && is_array($orderby) && (is_array($limit) or is_int($limit))) {
-            return $this->db($this->RDB)->select($this->table, $where, $fields, $orderby, $limit)->result();
+        return $this->db($this->RDB)->select($this->table, $where, $fields, $orderby, $limit)->result();
         //}
-
     }
 
     /**
@@ -219,7 +219,7 @@ class Model extends \System\System
             $content = '[';
             foreach ($data as $rs) {
                 $uppername = strtoupper($rs->COLUMN_NAME);
-                $content.="\n'{$rs->COLUMN_NAME}' => [
+                $content .= "\n'{$rs->COLUMN_NAME}' => [
                 'validate' => ['regex' => '{$rs->IS_NULLABLE} {$rs->DATA_TYPE} /^\d+$/|/^\S+$/', 'message' => '{$uppername}{$rs->COLUMN_COMMENT} 不能为空|格式不正确|2-10字符'],
                 'literal' => '{$uppername} {$rs->COLUMN_COMMENT}',
                 'default'=>'{$rs->COLUMN_DEFAULT}',
@@ -246,7 +246,7 @@ class Model extends \System\System
 
         $pass = true;
         foreach ($data as $key => $value) {
-         
+
             if (isset($this->schema[$key]['validate']) && $this->schema[$key]['validate']) {
                 if (is_array($value)) {
                     foreach ($value as $rs) {
