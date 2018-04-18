@@ -142,7 +142,7 @@ class Model extends \System\System
     {
         //if (is_array($data) && (is_array($where) or is_int($where))) {
 
-        if (is_int($where)) {
+        if (is_numeric($where)) {
             $where = [$this->primary => $where];
         }
 
