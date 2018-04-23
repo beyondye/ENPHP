@@ -230,15 +230,70 @@ class Database
         $sql = '';
         if (is_array($where) && count($where) > 0) {
             $where = $this->escape($where);
-            $sql.=" WHERE ";
+            $sql .= " WHERE ";
             $i = 0;
             foreach ($where as $key => $value) {
-                $sql.=($i == 0 ? " `{$key}`='{$value}' " : " AND `{$key}`='{$value}' ");
+                $compare = $this->sqlCompare($key, $value);
+                $sql .= ($i == 0 ? $compare : " AND {$compare} ");
                 $i++;
             }
         }
 
         return $sql;
+    }
+
+    /**
+     * sql比较运算符号解析
+     * 
+     * @param string $key
+     * 
+     * @return string 
+     */
+    private function sqlCompare($key, $value)
+    {
+        $key = trim($key);
+
+        if (strpos($key, '>=')) {
+            $key = str_replace('>=', '', $key);
+            return " `{$key}` >= '{$value}' ";
+        }
+
+        if (strpos($key, '<=')) {
+            $key = str_replace('<=', '', $key);
+            return " `{$key}` <= '{$value}' ";
+        }
+
+        if (strpos($key, '!=')) {
+            $key = str_replace('!=', '', $key);
+            return " `{$key}` != '{$value}' ";
+        }
+
+        if (strpos($key, '<>')) {
+            $key = str_replace('<>', '', $key);
+            return " `{$key}` <> '{$value}' ";
+        }
+
+        if (strpos($key, '>')) {
+            $key = str_replace('>', '', $key);
+            return " `{$key}` > '{$value}' ";
+        }
+
+        if (strpos($key, '<')) {
+            $key = str_replace('<', '', $key);
+            return " `{$key}` < '{$value}' ";
+        }
+
+        if (strpos($key, ' like')) {
+            $key = str_replace(' like', '', $key);
+            return " `{$key}` like '{$value}' ";
+        }
+
+        if (strpos($key, ' in')) {
+            $key = str_replace(' in', '', $key);
+            return " `{$key}` in ({$value}) ";
+        }
+
+        return " `{$key}` = '{$value}' ";
     }
 
     /**
@@ -259,7 +314,7 @@ class Database
             $sql = " ";
             $i = 0;
             foreach ($fields as $value) {
-                $sql.=($i == 0 ? " `$value` " : " , `$value` ");
+                $sql .= ($i == 0 ? " `$value` " : " , `$value` ");
                 $i++;
             }
         }
@@ -282,10 +337,10 @@ class Database
 
         $sql = '';
         if (is_array($fields) && count($fields) > 0) {
-            $sql.=" ORDER BY ";
+            $sql .= " ORDER BY ";
             $i = 0;
             foreach ($fields as $key => $value) {
-                $sql.=($i == 0 ? " `$key` $value " : " , `$key` $value ");
+                $sql .= ($i == 0 ? " `$key` $value " : " , `$key` $value ");
                 $i++;
             }
         }
@@ -313,7 +368,7 @@ class Database
         if (is_array($offset)) {
             return " LIMIT {$offset[0]},{$offset[1]} ";
         }
-        
+
         return '';
     }
 

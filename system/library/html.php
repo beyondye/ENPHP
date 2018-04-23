@@ -126,7 +126,7 @@ class Html
 
             foreach ($param['options'] as $rs) {
                 $rs = (array) $rs;
-                if ($rs[$value] === $param['selected']) {
+                if ($rs[$value] == $param['selected']) {
                     $options .= "<option value=\"{$rs[$value]}\" selected>{$rs[$literal]}</option>";
                 } else {
                     $options .= "<option value=\"{$rs[$value]}\">{$rs[$literal]}</option>";
