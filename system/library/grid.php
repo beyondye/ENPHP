@@ -9,7 +9,8 @@ use System\Library\Html;
  * 
  * @author Ding <beyondye@gmail.com>
  */
-class Grid {
+class Grid
+{
 
     /**
      * 设置需要显示的字段
@@ -77,7 +78,8 @@ class Grid {
      *  
      * @return $this
      */
-    public function setField($fields = [], $to = '', $pos = Grid::FIELD_POS_AFTER) {
+    public function setField($fields = [], $to = '', $pos = Grid::FIELD_POS_AFTER)
+    {
 
         //默认字段值
         $default = [
@@ -174,7 +176,8 @@ class Grid {
      * @param array $filters  html tags
      * @return $this
      */
-    public function setFilter($filters = []) {
+    public function setFilter($filters = [])
+    {
 
         foreach ($filters as $val) {
             $this->filters[] = $val;
@@ -190,7 +193,8 @@ class Grid {
      * 
      * @return string
      */
-    public function filters() {
+    public function filters()
+    {
         return Html::tags($this->filters);
     }
 
@@ -201,7 +205,8 @@ class Grid {
      * @param string $group 
      * @return $this
      */
-    public function setTool($tools = [], $gorup = self::TOOL_DEFAULT_GROUP) {
+    public function setTool($tools = [], $gorup = self::TOOL_DEFAULT_GROUP)
+    {
 
         foreach ($tools as $val) {
             $this->tools[$gorup][] = $val;
@@ -217,7 +222,8 @@ class Grid {
      * 
      * @return string
      */
-    public function tools($gorup = self::TOOL_DEFAULT_GROUP) {
+    public function tools($gorup = self::TOOL_DEFAULT_GROUP)
+    {
         return Html::tags($this->tools[$gorup]);
     }
 
@@ -228,7 +234,8 @@ class Grid {
      * 
      * @return string
      */
-    private function tr($row) {
+    private function tr($row)
+    {
         $tds = '';
         foreach ($this->fields as $key => $value) {
 
@@ -256,7 +263,8 @@ class Grid {
      * 
      * @return string
      */
-    private function thead() {
+    private function thead()
+    {
         $ths = '';
         foreach ($this->fields as $key => $value) {
 
@@ -280,14 +288,15 @@ class Grid {
      * 
      * @return string
      */
-    public function table() {
+    public function table()
+    {
         $thead = $this->thead();
         $tfoot = '<tfoot></tfoot>';
         $tbody = '<tbody>';
         foreach ($this->datasource as $row) {
             $tbody = $tbody . $this->tr($row);
         }
-        $tbody . '</tbody>';
+        $tbody .= '</tbody>';
         return '<table>' . $thead . $tbody . $tfoot . '</table>';
     }
 
@@ -296,7 +305,8 @@ class Grid {
      * 
      * @return string
      */
-    public function render(callable $make) {
+    public function render(callable $make)
+    {
         return $make($this);
     }
 
