@@ -15,16 +15,29 @@ class Input
      * 
      * @param string $name
      * 
-     * @return array|null
+     * @param string $default
+     * 
+     * @return array|string
      */
-    public function get($name = null)
+    public function get($name = null, $default = null)
     {
 
         if ($name === null) {
             return $_GET;
         }
 
-        return isset($_GET[$name]) ? strip_tags($_GET[$name]) : null;
+        if (isset($_GET[$name])) {
+
+            if ($_GET[$name] == '' && $default !== null) {
+
+                return $default;
+            }
+
+            return $_GET[$name];
+        }
+
+
+        return null;
     }
 
     /**
@@ -56,28 +69,11 @@ class Input
     }
 
     /**
-     * 获取cookie数据,不存在返回null，不带参数返回全部
-     * 
-     * @param string $name
-     * 
-     * @return array|null
-     */
-    public function cookie($name = null)
-    {
-
-        if ($name === null) {
-            return $_COOKIE;
-        }
-
-        return isset($_COOKIE[$name]) ? $_COOKIE[$name] : null;
-    }
-
-    /**
      * 判断是否ajax请求
      * 
      * @return bool
      */
-    public function isAjaxRequest()
+    public function isAjax()
     {
 
         if (isset($_SERVER['HTTP_X_REQUESTED_WITH'])) {

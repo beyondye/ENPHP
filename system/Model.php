@@ -4,7 +4,7 @@ namespace System;
 
 /**
  * 
- * @author Ye Ding<beyondye@gmail.com>
+ * @author Ding<beyondye@gmail.com>
  */
 class Model extends \System\System
 {

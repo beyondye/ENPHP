@@ -425,7 +425,8 @@ class Result
                 $rows[] = $row;
             }
         }
-
+        $this->result->close();
+        
         return $rows;
     }
 

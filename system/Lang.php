@@ -5,7 +5,7 @@ namespace System;
 /**
  * 加载语言包
  *
- * @author Ye Ding <beyondye@gmail.com>
+ * @author Ding <beyondye@gmail.com>
  */
 class Lang
 {

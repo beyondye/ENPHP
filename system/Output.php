@@ -5,7 +5,7 @@ namespace System;
 /**
  * 输出类
  * 
- * @author Ye Ding <beyondye@gmail.com>
+ * @author Ding <beyondye@gmail.com>
  */
 class Output extends \System\System
 {
@@ -76,39 +76,7 @@ class Output extends \System\System
         return preg_replace($pattern, $replace, $string);
     }
 
-    /**
-     * 设置cookie输出
-     * 
-     * @param array $data   Cookie数据格式 ['name'=>'value','name2'=>'value2']
-     * @param int $expire   过期秒数基于当前时间戳之上，设置0为关闭浏览器失效
-     * @param string $path
-     * @param string $domain
-     * @param string $secure
-     * @param string $httponly
-     * 
-     * @return boolean
-     */
-    public function cookie($data, $expire = COOKIE_EXPIRE, $path = COOKIE_PATH, $domain = COOKIE_DOMAIN, $secure = COOKIE_SECURE, $httponly = COOKIE_HTTPONLY)
-    {
-        if (!is_array($data)) {
-            return false;
-        }
 
-        $init = [
-            'expire' => intval($expire) == 0 ? 0 : time() + intval($expire),
-            'path' => $path,
-            'domain' => $domain,
-            'secure' => $secure,
-            'httponly' => $httponly
-        ];
-
-        foreach ($data as $key => $val) {
-            $result = array_merge($init, ['name' => $key, 'value' => $val]);
-            setcookie($result['name'], $result['value'], $result['expire'], $result['path'], $result['domain'], $result['secure'], $result['httponly']);
-        }
-
-        return true;
-    }
 
     /**
      * 输入视图
@@ -169,7 +137,7 @@ class Output extends \System\System
      * 
      * @return json string
      */
-    public function message($status, $message, $data = [], $return = false)
+    public function json($status, $message, $data = [], $return = false)
     {
         $content = ['status' => $status, 'message' => $message, 'data' => $data];
 
@@ -207,41 +175,9 @@ class Output extends \System\System
     {
         if (isset($this->httpStatusCode[$http_status_code])) {
             header($this->httpStatusCode[$http_status_code], true);
-        } else {
-            header('Unknown Status');
         }
-    }
-
-    /**
-     * 返回HTTP错误页面
-     * 
-     * @param int $http_status_code http状态码
-     * @param string $heading 错误标题
-     * @param array $data 错误数据 默认['type'=>'404|500|db|php|error','title'=''] 需要对应type建模板视图
-     * 
-     */
-    public function error($http_status_code = 404, $heading = 'Page Not Found', $data = [])
-    {
-        if (isset($this->httpStatusCode[$http_status_code])) {
-            header($this->httpStatusCode[$http_status_code], true);
-        }
-
-        $init = [
-            'type' => (string) $http_status_code,
-            'title' => $heading
-        ];
-
-        $data = array_merge($init, $data);
-
-        if ($this->input->isAjaxRequest()) {
-            $this->message($http_status_code, $heading, $data);
-        } else {
-            if ($data['type'] == '404') {
-                $this->view('errors/404', $data);
-            } else {
-                $this->view('errors/' . $data['type'], $data);
-            }
-        }
+        
+        header('Unknown Status');
     }
 
 }
