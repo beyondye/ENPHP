@@ -73,6 +73,21 @@ class Model extends \System\System
         
     }
 
+    public function all()
+    {
+        return $this->select([]);
+    }
+
+    public function where($where)
+    {
+        return $this->select(['where' => $where]);
+    }
+
+    public function lastid()
+    {
+        return $this->db($this->RDB)->insert_id;
+    }
+
     /**
      * 按条件获取表数据条数
      * 
@@ -82,9 +97,7 @@ class Model extends \System\System
      */
     public function count($where = [])
     {
-        //if (is_array($where)) {
-        return $this->db($this->RDB)->select($this->table, $where, ' COUNT(*) AS ct ')->row()->ct;
-        //}
+        return $this->db($this->RDB)->select($this->table, ['where'=>$where, 'fields'=>' COUNT(*) AS ct '])->row()->ct;
     }
 
     /**
@@ -96,14 +109,8 @@ class Model extends \System\System
      */
     public function insert($data = [])
     {
-        //if (is_array($data)) {
-        return $this->db($this->WDB)->insert($this->table, $data);
-        //}
-    }
 
-    public function lastid()
-    {
-        return $this->db($this->WDB)->insertId();
+        return $this->db($this->WDB)->insert($this->table, $data);
     }
 
     /**
@@ -118,13 +125,12 @@ class Model extends \System\System
      */
     public function delete($where = [])
     {
-        //if (is_array($where) or is_int($where)) {
+
         if (is_int($where)) {
             $where = [$this->primary => $where];
         }
 
         return $this->db($this->WDB)->delete($this->table, $where);
-        // }
     }
 
     /**
@@ -140,53 +146,37 @@ class Model extends \System\System
      */
     public function update($data, $where = [])
     {
-        //if (is_array($data) && (is_array($where) or is_int($where))) {
 
         if (is_numeric($where)) {
             $where = [$this->primary => $where];
         }
 
         return $this->db($this->WDB)->update($this->table, $data, $where);
-        //}
+    }
+
+    /**
+     * 原生sql查询表数据，没有参数返回全部
+     * 
+     * @param string $sql 
+     * 
+     * @return mix
+     */
+    public function query($sql)
+    {
+        return $this->db($this->RDB)->query($sql);
     }
 
     /**
      * 查询表数据，没有参数返回全部
      * 
-     * @param array|string $where 例如：array=['field_name'=>'field_value']
-     * @param array|string $fields 例如：array=[field_name,field_name2]
-     * @param array|string $orderby 例如：array=[field_name=>'desc',field_name2=>'asc']
-     * @param int|array $limit 例如：array=[0,20] int=20
+     * @param array $condtion ['where' => [], 'fields' => [], 'orderby' => [], 'limit' => []]
      * 
      * @return array|object
      */
-    public function query($where = [], $fields = [], $orderby = [], $limit = [])
+    public function select($condtion = [])
     {
-        //if (is_array($where) && is_array($fields) && is_array($orderby) && (is_array($limit) or is_int($limit))) {
-        return $this->db($this->RDB)->select($this->table, $where, $fields, $orderby, $limit)->result();
-        //}
+        return $this->db($this->RDB)->select($this->table, $condtion)->result();
     }
-
-    /**
-     * 查询表数据，没有参数返回全部,参考$this->query方法参数
-     * 
-     * @param array $config ['where' => [], 'fields' => [], 'orderby' => [], 'limit' => []]
-     * 
-     * @return array|object
-     */
-//    public function select($config = [])
-//    {
-//        $init = ['where' => [], 'fields' => [], 'orderby' => [], 'limit' => []];
-//
-//        foreach ($config as $key => $value) {
-//            $init[$key] = $value;
-//        }
-//
-//        //if (is_array($init['where']) && is_array($init['fields']) && is_array($init['orderby']) && (is_array($init['limit']) or is_int($init['limit']))) {
-//            return $this->db($this->RDB)->select($this->table, $init['where'], $init['fields'], $init['orderby'], $init['limit'])->result();
-//        //}
-//
-//    }
 
     /**
      * 通过主键返回一条数据
@@ -197,7 +187,7 @@ class Model extends \System\System
      */
     public function one($primary)
     {
-        $data = $this->query([$this->primary => $primary], [], [], 1);
+        $data = $this->select(['where' => [$this->primary => $primary], 'limit' => 1]);
         return isset($data[0]) ? $data[0] : null;
     }
 

@@ -1,13 +1,13 @@
 <?php
 
-namespace System\Database;
+namespace System\Database\Mysqli;
 
 /**
- * 简单Mysql数据操作类
+ * 数据操作类
  * 
  * @author Ding <beyondye@gmail.com>
  */
-class Database
+class Db
 {
 
     /**
@@ -24,6 +24,19 @@ class Database
      */
     public $config = [];
 
+    public function __get($name)
+    {
+        //返回最新插入id
+        if ($name == 'insert_id') {
+            return $this->db->insert_id;
+        }
+
+        //返回影响行数
+        if ($name == 'affected_rows') {
+            return $this->db->affected_rows;
+        }
+    }
+
     /**
      * 构造函数
      * 
@@ -37,7 +50,7 @@ class Database
         $this->db = new \mysqli($config['host'], $config['username'], $config['password'], $config['database'], $config['port']);
 
         if ($this->db->connect_errno) {
-            exit('Database Connection Error :' . $this->db->connect_errno);
+            exit('Database Connection Error :' . $this->db->connect_error);
         }
 
         $this->db->set_charset($config['charset']);
@@ -59,21 +72,11 @@ class Database
             exit('Database Error : [' . $sql . '] ' . $this->db->error . ' [Code:' . $this->db->errno . ']');
         }
 
-        if (is_object($result)) {
-            return new \System\Database\Result($result);
-        } else {
-            return $result;
+        if ($result === true) {
+            return true;
         }
-    }
 
-    /**
-     * 返回最后插入id
-     * 
-     * @return int 
-     */
-    public function insertId()
-    {
-        return $this->db->insert_id;
+        return new Result($result);
     }
 
     /**
@@ -180,27 +183,18 @@ class Database
      * 查询数据
      * 
      * @param string $table
-     * @param array|string $where
-     * @param array|string $fields
-     * @param array|string $orderby
+     * @param array $condition=['where' => [], 'fields' => [], 'orderby' => [], 'limit' => []]
      * @param int|array $limit
      * 
-     * @return array
+     * @return object array
      */
-    public function select($table, $where = [], $fields = [], $orderby = [], $limit = [])
+    public function select($table, $condtion = [])
     {
-        $sql = "SELECT {$this->sqlField($fields)} FROM {$table} {$this->sqlwhere($where)} {$this->sqlOrderBy($orderby)} {$this->sqlLimit($limit)} ";
-        return $this->query($sql);
-    }
+        $default = ['where' => [], 'fields' => [], 'orderby' => [], 'limit' => []];
+        $condtion = array_merge($default, $condtion);
 
-    /**
-     * 返回前一条执行影响的记录数
-     * 
-     * @return int;
-     */
-    public function affectedRows()
-    {
-        return $this->db->affected_rows;
+        $sql = "SELECT {$this->sqlField($condtion['fields'])} FROM {$table} {$this->sqlwhere($condtion['where'])} {$this->sqlOrderBy($condtion['orderby'])} {$this->sqlLimit($condtion['limit'])} ";
+        return $this->query($sql);
     }
 
     /**
@@ -370,82 +364,6 @@ class Database
         }
 
         return '';
-    }
-
-}
-
-/**
- * 数据查绚结果
- */
-class Result
-{
-
-    /**
-     * 数据集合大小
-     * 
-     * @var int
-     */
-    public $num_rows = 0;
-
-    /**
-     * 查询结果对象实例
-     * 
-     * @var object
-     */
-    public $result = null;
-
-    /**
-     * 构造函数
-     * 
-     * @param object $result 查询结果对象实例
-     */
-    public function __construct($result)
-    {
-        $this->result = $result;
-        $this->num_rows = $result->num_rows;
-    }
-
-    /**
-     * 返回数据集
-     * 
-     * @param string $type 返回结果类型
-     * 
-     * @return array 数据集合
-     */
-    public function result($type = 'object')
-    {
-        $rows = array();
-
-        if ($type == 'array') {
-            while ($row = $this->result->fetch_array(MYSQLI_ASSOC)) {   //MYSQLI_ASSOC
-                $rows[] = $row;
-            }
-        } else {
-            while ($row = $this->result->fetch_object()) {
-                $rows[] = $row;
-            }
-        }
-        $this->result->close();
-        
-        return $rows;
-    }
-
-    /**
-     * 返回数据某一条数据
-     * 
-     * @param int $n 集合数组标
-     * @param string $type 返回类型
-     * 
-     * @return array or object
-     */
-    function row($n = 0, $type = 'object')
-    {
-        $result = $this->result($type);
-        if (isset($result[$n])) {
-            return $result[$n];
-        }
-
-        return null;
     }
 
 }

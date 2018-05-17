@@ -45,6 +45,8 @@ class System
             if (!isset($config[$alias])) {
                 exit("{$name} '{$alias}' Config Not Exist,Please Check Database Config File In '" . ENVIRONMENT . "' Directory.");
             }
+         
+            $class=$namespace.'\\'.$config[$alias]['driver'].'\\Db';
 
             $arguments = $config[$alias];
         } else if ('System\Cache' == $namespace) {
@@ -99,7 +101,7 @@ class System
      */
     public function db($service)
     {
-        return $this->load('database', 'System\\Database', $service);
+        return $this->load('Db', 'System\\Database', $service);
     }
 
     /**
