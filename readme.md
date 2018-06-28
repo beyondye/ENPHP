@@ -2,7 +2,6 @@
 
 运行环境 nginx,php5.6 ,redis, mysqli, mb_string, gd
 
-<br>
 PHP代码编写规范遵循php psr
 换行符使用LF  
 缩进4个空格
@@ -67,11 +66,17 @@ PHP代码编写规范遵循php psr
 类库调用方法实例（仅限controller和model中调用）
 
 核心类调用
+
 $this->input->get('querystring')
+
 $this->input->post('querystring')
+
 $this->cookie->get()
+
 $this->cookie->set()
+
 $this->session->get()
+
 $this->session->set()
 
 model的调用
