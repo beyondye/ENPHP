@@ -80,6 +80,8 @@ $this->model('dir/model_name')->one(id) 返回数据
 
 $this->helper->form->select()   
   
+
+  
 ######视图模板的调用  
 
 $this->output->view('view_name', $data); //输出网页  
@@ -111,8 +113,9 @@ $this->redis->set()
 
 $this->lang->mod_name['key'];  
 $this->lang('en_us')->mod_name['key'];  
+  
  
-######加载配置数据  
+######加载配置数据 
 
 $this->config->data['action_method']  
  
