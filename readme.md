@@ -101,7 +101,6 @@ c為控制器名稱 默認控制器main
 a為方法名稱 默認方法index  
  
 **redis调用方法 
-全部继承原有方法，调用如：  
 
 $this->redis->hset()  默认redis实例服务器  
 $this->redis('write')->hset() Write redis实例服务器  
