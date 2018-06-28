@@ -2,7 +2,7 @@
 
 运行环境 nginx,php5.6 ,redis, mysqli, mb_string, gd
 
-
+<br>
 PHP代码编写规范遵循php psr
 换行符使用LF  
 缩进4个空格
