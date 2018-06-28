@@ -61,7 +61,8 @@ PHP代码编写规范遵循php psr
 
 ** 类库调用方法实例（仅限controller和model中调用）**
 
-** 核心类调用 **
+**核心类调用  
+
 ``` php
 $this->input->get('querystring')  
 $this->input->post('querystring')  
@@ -70,51 +71,64 @@ $this->cookie->set()
 $this->session->get()  
 $this->session->set()  
 ```
+
 **model的调用 
 
+``` php
 $this->model('model_name') 返回对象实例  
 $this->model('dir/model_name') 返回对象实例  
 $this->model('dir/model_name')->one(id) 返回数据  
+ ```
  
-**自定义helper的调用  
+**自定义helper的调用   
 
+``` php
 $this->helper->form->select()   
-  
+```
 
-  
 **视图模板的调用  
 
+``` php
 $this->output->view('view_name', $data); //输出网页  
 $this->output->json()//输出json  
+ ```
  
-**数据库操作 
+**数据库操作  
 
+``` php
 $this->db  自动调用默认数据库  
-$this->db->query(sql) 
+$this->db->query(sql)  
 $this->db('db_name') 调用制定数据库  
 $this->db('db_name')->query()  
+ ```
  
 **入口地址結構 
 
+``` php
 index.php?c=controller_name&a=action_name  
 c為控制器名稱 默認控制器main  
 a為方法名稱 默認方法index  
+
+```
  
 **redis调用方法 
 
+``` php
 $this->redis->hset()  默认redis实例服务器  
 $this->redis('write')->hset() Write redis实例服务器  
 $this->redis->get()  
 $this->redis->set()  
- 
+ ```
  
 **语言包调用  
 
+``` php
 $this->lang->mod_name['key'];  
 $this->lang('en_us')->mod_name['key'];  
-  
+ ```
  
-**加载配置数据 
+**加载配置数据  
 
+``` php
 $this->config->data['action_method']  
- 
+ ```
