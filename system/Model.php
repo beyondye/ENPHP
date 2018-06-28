@@ -97,7 +97,7 @@ class Model extends \System\System
      */
     public function count($where = [])
     {
-        return $this->db($this->RDB)->select($this->table, ['where'=>$where, 'fields'=>' COUNT(*) AS ct '])->row()->ct;
+        return $this->db($this->RDB)->select($this->table, ['where' => $where, 'fields' => ' COUNT(*) AS ct '])->row()->ct;
     }
 
     /**
@@ -198,6 +198,24 @@ class Model extends \System\System
      */
     public function schemaPrecode()
     {
+
+        $data_type = [
+            'bigint' => ['regx' => '/^\d+$/', 'msg' => ''],
+            'char' => ['regx' => '/^\S+$/', 'msg' => ''],
+            'decimal' => ['regx' => '/^[\d\.]+$/', 'msg' => ''],
+            'double' => ['regx' => '/^[\d\.]+$/', 'msg' => ''],
+            'float' => ['regx' => '/^\[d\.]+$/', 'msg' => ''],
+            'int' => ['regx' => '/^\d+$/', 'msg' => ''],
+            'longtext' => ['regx' => '/^\S+$/', 'msg' => ''],
+            'mediumint' => ['regx' => '/^\d+$/', 'msg' => ''],
+            'mediumtext' => ['regx' => '/^\S+$/', 'msg' => ''],
+            'smallint' => ['regx' => '/^\d+$/', 'msg' => ''],
+            'text' => ['regx' => '/^\S+$/', 'msg' => ''],
+            'time' => ['regx' => '/^\d+$/', 'msg' => ''],
+            'tinyint' => ['regx' => '/^\d+$/', 'msg' => ''],
+            'varchar' => ['regx' => '/^\S+$/', 'msg' => '']
+        ];
+
         $data = [];
 
         if ($this->table) {
@@ -208,12 +226,11 @@ class Model extends \System\System
 
             $content = '[';
             foreach ($data as $rs) {
-                $uppername = strtoupper($rs->COLUMN_NAME);
-                $content .= "\n'{$rs->COLUMN_NAME}' => [
-                'validate' => ['regex' => '{$rs->IS_NULLABLE} {$rs->DATA_TYPE} /^\d+$/|/^\S+$/', 'message' => '{$uppername}{$rs->COLUMN_COMMENT} 不能为空|格式不正确|2-10字符'],
-                'literal' => '{$uppername} {$rs->COLUMN_COMMENT}',
+                $content .= "\n'{$rs->COLUMN_NAME}'=> [
+                'validate'=>['regex' =>'{$data_type[$rs->DATA_TYPE]['regx']}', 'message' =>'{$rs->COLUMN_COMMENT}不能为空'],
+                'literal'=>'{$rs->COLUMN_COMMENT}',
                 'default'=>'{$rs->COLUMN_DEFAULT}',
-                'required'=>false|true
+                'required'=>true
             ],  ";
             }
         }
