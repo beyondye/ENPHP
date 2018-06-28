@@ -1,6 +1,6 @@
 <?php
 
-namespace Module\Employee;
+namespace Module\Www;
 
 class Main extends \Inherit\Controller
 {
