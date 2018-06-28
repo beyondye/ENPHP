@@ -59,9 +59,9 @@ PHP代码编写规范遵循php psr
  
 --- 
 
-**类库调用方法实例（仅限controller和model中调用） **
+** 类库调用方法实例（仅限controller和model中调用）**
 
-**核心类调用 **
+** 核心类调用 **
 ``` php
 $this->input->get('querystring')  
 $this->input->post('querystring')  
