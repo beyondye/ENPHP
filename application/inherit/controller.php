@@ -1,6 +1,6 @@
 <?php
 
-namespace Inherit\Backstage;
+namespace Inherit;
 
 /**
  * backstage controller parent class

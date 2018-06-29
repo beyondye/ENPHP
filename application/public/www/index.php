@@ -20,6 +20,6 @@ define('TEMPLATE', 'www');
 define('APP_DIR', realpath('../../') . DIRECTORY_SEPARATOR);
 
 //系统文件目录
-define('SYS_DIR', realpath('../../framework/system') . DIRECTORY_SEPARATOR);
+define('SYS_DIR', realpath('../../../system') . DIRECTORY_SEPARATOR);
 
 require_once SYS_DIR . 'init.php';
