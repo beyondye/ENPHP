@@ -89,4 +89,46 @@ class Helper
         return '<div class="pager">' . $html . $info . '</div>';
     }
 
+    /**
+     * 生成url链接
+     * 
+     * @param array $param
+     * @param string $path
+     * @param string $anchor
+     * 
+     * @return string
+     */
+    function url($param = [], $path = ENTRY, $anchor = '')
+    {
+
+        $anchor = $anchor == '' ? '' : '#' . $anchor;
+
+        $key = '';
+        if (isset($param[CONTROLLER_KEY_NAME]) && isset($param[ACTION_KEY_NAME])) {
+            $key = $param[CONTROLLER_KEY_NAME] . '/' . $param[ACTION_KEY_NAME];
+
+
+            if (isset(URL[MODULE][$key])) {
+
+                $temp = URL[MODULE][$key];
+
+                $url = '';
+                foreach ($param as $k => $v) {
+                    if ($url) {
+                        $url = str_replace('{' . $k . '}', $v, $url);
+                    } else {
+                        $url = str_replace('{' . $k . '}', $v, $temp);
+                    }
+                }
+
+                return $url . $anchor;
+            }
+        }
+
+
+        $query = http_build_query($param) . $anchor;
+
+        return $query ? $path . '?' . $query : $path;
+    }
+
 }

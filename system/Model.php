@@ -181,13 +181,18 @@ class Model extends \System\System
     /**
      * 通过主键返回一条数据
      * 
-     * @param int $id 表主键
+     * @param int|array  表主键或唯一索引数组
      * 
      * @return array
      */
     public function one($primary)
     {
-        $data = $this->select(['where' => [$this->primary => $primary], 'limit' => 1]);
+        if (is_array($primary)) {
+            $data = $this->select(['where' => $primary, 'limit' => 1]);
+        } else {
+            $data = $this->select(['where' => [$this->primary => $primary], 'limit' => 1]);
+        }
+
         return isset($data[0]) ? $data[0] : null;
     }
 
