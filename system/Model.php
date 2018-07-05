@@ -52,11 +52,11 @@ class Model extends \System\System
      */
     public function __get($name)
     {
-        parent::__get($name);
-
         if ($name == 'safe') {
-            return $this->load($name, 'System','', $this->schema);
+            return $this->load($name, 'System', '', $this->schema);
         }
+
+        return parent::__get($name);
     }
 
     /**

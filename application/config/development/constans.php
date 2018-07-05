@@ -31,5 +31,7 @@ define('ENCRYPTION_KEY', 'weryi9878sdftgtbsdfh');
 //默认语言环境
 define('LANG', 'zh_cn');
 
+//url 重写
+define('URL', ['mod_name'=>['controller_name/action_name'=>'/{controller_key}/{action_key}']]);
 
 
