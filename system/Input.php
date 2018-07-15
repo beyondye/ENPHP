@@ -26,16 +26,14 @@ class Input
             return $_GET;
         }
 
-        if (isset($_GET[$name])) {
+        if ($name) {
 
-            if ($_GET[$name] == '' && $default !== null) {
-
-                return $default;
+            if (isset($_GET[$name]) && $_GET[$name] != '') {
+                return $_GET[$name];
             }
 
-            return $_GET[$name];
+            return $default;
         }
-
 
         return null;
     }

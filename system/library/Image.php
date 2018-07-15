@@ -5,18 +5,17 @@ namespace System\Library;
 /**
  * 图片缩放加水印操作类
  * @example
- * 
  * $image= new \System\Library\Image();
-  $image->width=300;
-  $image->source='G:\fw.png';
-  $image->save='G:\fw300.png';
-  $image->fontsize=20;
-  $image->font=APP_DIR.'font/1.ttf';
-  $image->text='www.comdal.codm';
-  $image->watermark=true;
-  //$image->markimg='G:\water.png';
-  $image->resize();
-  echo $image->message;
+ * $image->width=300;
+ * $image->source='G:\fw.png';
+ * $image->save='G:\fw300.png';
+ * $image->fontsize=20;
+ * $image->font=APP_DIR.'font/1.ttf';
+ * $image->text='www.comdal.codm';
+ * $image->watermark=true;
+ * $image->markimg='G:\water.png';
+ * $image->resize();
+ * echo $image->message;
  * 
  * @author Ding<beyondye@gmail.com>
  */

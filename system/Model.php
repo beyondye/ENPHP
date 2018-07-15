@@ -62,22 +62,24 @@ class Model extends \System\System
     /**
      * 获取表全部记录
      * 
+     * @param array $fields 返回字段
      * @return object array
      */
-    public function all()
+    public function all($fields = [])
     {
-        return $this->select([]);
+        return $this->select(['fields' => $fields]);
     }
 
     /**
      * 通过sql where条件获取数据
      * 
-     * @param array $where
+     * @param array $where 条件过滤
+     * @param array $fields 返回字段
      * @return object array
      */
-    public function where($where)
+    public function where($where, $fields = [])
     {
-        return $this->select(['where' => $where]);
+        return $this->select(['where' => $where, 'fields' => $fields]);
     }
 
     /**
