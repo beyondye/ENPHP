@@ -1,6 +1,6 @@
 <?php
 
-namespace System\Database\Mysqli;
+namespace system\database\mysqli;
 
 /**
  * 数据操作类
@@ -140,7 +140,7 @@ class Db
 
             $sql = "UPDATE {$table} SET " . implode(',', $set) . $this->sqlWhere($where);
         } else {
-            $sql = "UPDATE {$table} {$data} " . $this->sqlWhere($where);
+            $sql = "UPDATE {$table} SET {$data} " . $this->sqlWhere($where);
         }
 
         return $this->query($sql);

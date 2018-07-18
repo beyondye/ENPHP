@@ -1,8 +1,8 @@
 <?php
 
-namespace Inherit;
+namespace inherit;
 
-class Model extends \System\Model
+class Model extends \system\Model
 {
 
     public function __construct()

@@ -1,13 +1,11 @@
 <?php
 
-namespace System;
+namespace system;
 
-class Controller extends \System\System
+use system\System;
+
+class Controller extends System
 {
 
-    public function __construct()
-    {
-   
-    }
 
 }

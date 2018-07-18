@@ -1,6 +1,6 @@
 <?php
 
-namespace System\Library;
+namespace system\library;
 
 /**
  * Upload file
@@ -214,7 +214,6 @@ class Upload
             $this->message = self::ERROR_MSG[UPLOAD_ERR_OK];
             return true;
         }
-
 
         $this->code = self::UNKNOW_ERR;
         $this->message = self::ERROR_MSG[self::UNKNOW_ERR];

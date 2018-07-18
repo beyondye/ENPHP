@@ -1,8 +1,8 @@
 <?php
 
-namespace Module\Www;
+namespace module\www;
 
-class Main extends \Inherit\Controller
+class Main extends \inherit\Controller
 {
 
     function index()

@@ -1,6 +1,6 @@
 <?php
 
-namespace System\Library;
+namespace system\library;
 
 /**
  * 图片缩放加水印操作类

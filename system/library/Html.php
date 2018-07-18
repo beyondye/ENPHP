@@ -1,6 +1,6 @@
 <?php
 
-namespace System\Library;
+namespace system\library;
 
 /**
  * 生成html标签

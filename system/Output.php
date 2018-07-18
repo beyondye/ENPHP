@@ -1,13 +1,15 @@
 <?php
 
-namespace System;
+namespace system;
+
+use system\System;
 
 /**
  * 输出类
  * 
  * @author Ding <beyondye@gmail.com>
  */
-class Output extends \System\System
+class Output extends System
 {
 
     /**
@@ -75,8 +77,6 @@ class Output extends \System\System
 
         return preg_replace($pattern, $replace, $string);
     }
-
-
 
     /**
      * 输入视图
@@ -176,7 +176,7 @@ class Output extends \System\System
         if (isset($this->httpStatusCode[$http_status_code])) {
             header($this->httpStatusCode[$http_status_code], true);
         }
-        
+
         header('Unknown Status');
     }
 

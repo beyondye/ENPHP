@@ -1,11 +1,11 @@
 <?php
 
-namespace System;
+namespace system;
 
 /**
  * 输入类
  * 
- * @author Ye Ding <beyondye@gmail.com>
+ * @author Ding <beyondye@gmail.com>
  */
 class Input
 {
@@ -63,7 +63,7 @@ class Input
             return $_POST;
         }
 
-        return isset($_POST[$name]) ? $_POST[$name] : null;
+        return isset($_POST[$name]) ? trim($_POST[$name]) : null;
     }
 
     /**

@@ -1,6 +1,6 @@
 <?php
 
-namespace System;
+namespace system;
 
 /**
  * 会话类
@@ -28,7 +28,7 @@ class Session
      */
     public function set($name, $value = '')
     {
-        if ($value) {
+        if ($value != '') {
             $_SESSION[$name] = $value;
         } else {
             unset($_SESSION[$name]);

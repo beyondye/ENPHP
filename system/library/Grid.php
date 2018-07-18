@@ -1,8 +1,8 @@
 <?php
 
-namespace System\Library;
+namespace system\library;
 
-use System\Library\Html;
+use system\library\Html;
 
 /**
  * 表格

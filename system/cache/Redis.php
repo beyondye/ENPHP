@@ -1,6 +1,6 @@
 <?php
 
-namespace System\Cache;
+namespace system\cache;
 
 /**
  * redis操作

@@ -1,6 +1,6 @@
 <?php
 
-namespace System;
+namespace system;
 
 /**
  * 框架核心类
@@ -26,10 +26,7 @@ class System
     {
         global $instances;
 
-        $name = ucfirst($name);
-        //$namespace=ucwords(str_replace('/', '\\', $namespace),'\\');
         $namespace = str_replace('/', '\\', $namespace);
-
         $handler = $alias ? $alias : $name;
 
         //实例已存在直接返回
@@ -39,7 +36,7 @@ class System
 
         $class = $namespace . '\\' . $name;
 
-        if ('System\Database' == $namespace) {
+        if ('system\database' == $namespace) {
 
             $config = include APP_DIR . 'config/' . ENVIRONMENT . '/database' . EXT;
             if (!isset($config[$alias])) {
@@ -49,7 +46,7 @@ class System
             $class=$namespace.'\\'.$config[$alias]['driver'].'\\Db';
 
             $arguments = $config[$alias];
-        } else if ('System\Cache' == $namespace) {
+        } else if ('system\cache' == $namespace) {
 
             $config = include APP_DIR . 'config/' . ENVIRONMENT . '/redis' . EXT;
             if (!isset($config[$alias])) {
@@ -75,7 +72,7 @@ class System
     public function __get($name)
     {
         if (in_array($name, array('input', 'config', 'output', 'session', 'cookie', 'lang', 'helper'))) {
-            return $this->load($name, 'System');
+            return $this->load(ucfirst($name), 'system');
         }
 
         if ($name == 'vars') {
@@ -84,11 +81,11 @@ class System
         }
 
         if ($name == 'db') {
-            return $this->load('database', 'System\\Database', 'default');
+            return $this->load('Database', 'system\\database', 'default');
         }
 
         if ($name == 'redis') {
-            return $this->load('redis', 'System\\Cache', 'default');
+            return $this->load('Redis', 'system\\cache', 'default');
         }
     }
 
@@ -101,7 +98,7 @@ class System
      */
     public function db($service)
     {
-        return $this->load('Db', 'System\\Database', $service);
+        return $this->load('Db', 'system\\database', $service);
     }
 
     /**
@@ -113,7 +110,7 @@ class System
      */
     public function model($name)
     {
-        return $this->load(str_replace('/', '\\', $name), 'Model');
+        return $this->load(str_replace('/', '\\', $name), 'model');
     }
 
     /**
@@ -125,7 +122,7 @@ class System
      */
     public function redis($service)
     {
-        return $this->load('redis', 'System\Cache', $service);
+        return $this->load('Redis', 'system\cache', $service);
     }
 
     /**
@@ -137,7 +134,7 @@ class System
      */
     public function lang($lang)
     {
-        return $this->load('lang', 'System', 'lang_' . $lang, $lang);
+        return $this->load('Lang', 'system', 'lang_' . $lang, $lang);
     }
 
 }

@@ -1,12 +1,14 @@
 <?php
 
-namespace System;
+namespace system;
+
+use system\System;
 
 /**
  * 
  * @author Ding<beyondye@gmail.com>
  */
-class Model extends \System\System
+class Model extends System
 {
 
     /**
@@ -53,7 +55,7 @@ class Model extends \System\System
     public function __get($name)
     {
         if ($name == 'safe') {
-            return $this->load($name, 'System', 'safe_' . $this->table, $this->schema);
+            return $this->load(ucfirst($name), 'system', 'safe_' . $this->table, $this->schema);
         }
 
         return parent::__get($name);

@@ -13,12 +13,12 @@ require_once APP_DIR . 'config/' . ENVIRONMENT . '/constans.php';
 //autoload  class
 spl_autoload_register(function ($class) {
 
-    $file = strtolower(str_replace('\\', '/', $class));
+    $file = str_replace('\\', '/', $class);
     $dirs = explode('/', $file);
 
     if ($dirs[0] == 'system') {
         unset($dirs[0]);
-        $file = SYS_DIR . implode('/', $dirs) . EXT;
+        $file = SYS_DIR . implode('/', $dirs)  . EXT;
     } else {
         $file = APP_DIR . $file . EXT;
     }
@@ -29,17 +29,17 @@ spl_autoload_register(function ($class) {
 });
 
 //run application
-$instances['system'] = new \System\System();
+$instances['system']['System'] = new \system\System();
 
 if (php_sapi_name() == 'cli') {
     $vars['controller'] = $_controller = isset($argv[1]) ? $argv[1] : DEFAULT_CONTROLLER;
     $vars['action'] = $_action = isset($argv[2]) ? $argv[2] : DEFAULT_ACTION;
 } else {
-    $vars['controller'] = $_controller = $instances['system']->input->get(CONTROLLER_KEY_NAME) ? $instances['system']->input->get(CONTROLLER_KEY_NAME) : DEFAULT_CONTROLLER;
-    $vars['action'] = $_action = $instances['system']->input->get(ACTION_KEY_NAME) ? $instances['system']->input->get(ACTION_KEY_NAME) : DEFAULT_ACTION;
+    $vars['controller'] = $_controller = $instances['system']['System']->input->get(CONTROLLER_KEY_NAME) ? $instances['system']['System']->input->get(CONTROLLER_KEY_NAME) : DEFAULT_CONTROLLER;
+    $vars['action'] = $_action = $instances['system']['System']->input->get(ACTION_KEY_NAME) ? $instances['system']['System']->input->get(ACTION_KEY_NAME) : DEFAULT_ACTION;
 }
 
-$instances['system']->load(str_replace('/', '\\', $_controller), 'Module\\' . ucfirst(MODULE))->$_action();
+$instances['system']['System']->load(str_replace('/', '\\', ucfirst($_controller)), 'module\\' . MODULE)->$_action();
 
 //echo '<pre>',var_dump($instances),'</pre>';
 //close databases

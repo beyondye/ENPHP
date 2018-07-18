@@ -1,11 +1,11 @@
 <?php
 
-namespace Model;
+namespace model;
 
 /**
  * @author Ding <beyondye@gmail.com>
  */
-class Test extends \Inherit\Model
+class Test extends \inherit\Model
 {
 
     public function __construct()

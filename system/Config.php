@@ -1,6 +1,6 @@
 <?php
 
-namespace System;
+namespace system;
 
 /**
  * 加载配置数据

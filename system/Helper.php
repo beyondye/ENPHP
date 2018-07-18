@@ -1,6 +1,6 @@
 <?php
 
-namespace System;
+namespace system;
 
 /**
  * 助手函数
@@ -11,7 +11,7 @@ class Helper
     public function __get($name)
     {
         global $instances;
-        return $instances['system']->load($name, '\Helper');
+        return $instances['system']['System']->load(ucfirst($name), 'helper');
     }
 
     /**

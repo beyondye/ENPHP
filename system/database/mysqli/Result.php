@@ -1,6 +1,6 @@
 <?php
 
-namespace System\Database\Mysqli;
+namespace system\database\mysqli;
 
 /**
  * 数据查绚结果
