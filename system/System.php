@@ -42,11 +42,13 @@ class System
             if (!isset($config[$alias])) {
                 exit("{$name} '{$alias}' Config Not Exist,Please Check Database Config File In '" . ENVIRONMENT . "' Directory.");
             }
-         
-            $class=$namespace.'\\'.$config[$alias]['driver'].'\\Db';
+
+            $class = $namespace . '\\' . $config[$alias]['driver'] . '\\Db';
 
             $arguments = $config[$alias];
-        } else if ('system\cache' == $namespace) {
+        }
+
+        if ('system\cache' == $namespace) {
 
             $config = include APP_DIR . 'config/' . ENVIRONMENT . '/redis' . EXT;
             if (!isset($config[$alias])) {
@@ -71,7 +73,7 @@ class System
      */
     public function __get($name)
     {
-        if (in_array($name, array('input', 'config', 'output', 'session', 'cookie', 'lang', 'helper'))) {
+        if (in_array($name, array('input', 'config', 'output', 'session', 'cookie', 'lang', 'helper', 'security'))) {
             return $this->load(ucfirst($name), 'system');
         }
 

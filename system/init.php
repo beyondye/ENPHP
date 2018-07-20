@@ -18,7 +18,7 @@ spl_autoload_register(function ($class) {
 
     if ($dirs[0] == 'system') {
         unset($dirs[0]);
-        $file = SYS_DIR . implode('/', $dirs)  . EXT;
+        $file = SYS_DIR . implode('/', $dirs) . EXT;
     } else {
         $file = APP_DIR . $file . EXT;
     }
@@ -29,19 +29,30 @@ spl_autoload_register(function ($class) {
 });
 
 //run application
-$instances['system']['System'] = new \system\System();
+$instances['system']['System'] = $sys = new \system\System();
+
+if (USE_TOKEN) {
+    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+        $sys->input->post(TOKEN_INPUT_NAME) === $sys->session->get(TOKEN_SESSION_NAME) ?: exit('Request Failed');
+    }
+}
 
 if (php_sapi_name() == 'cli') {
     $vars['controller'] = $_controller = isset($argv[1]) ? $argv[1] : DEFAULT_CONTROLLER;
     $vars['action'] = $_action = isset($argv[2]) ? $argv[2] : DEFAULT_ACTION;
 } else {
-    $vars['controller'] = $_controller = $instances['system']['System']->input->get(CONTROLLER_KEY_NAME) ? $instances['system']['System']->input->get(CONTROLLER_KEY_NAME) : DEFAULT_CONTROLLER;
-    $vars['action'] = $_action = $instances['system']['System']->input->get(ACTION_KEY_NAME) ? $instances['system']['System']->input->get(ACTION_KEY_NAME) : DEFAULT_ACTION;
+    $vars['controller'] = $_controller = $sys->input->get(CONTROLLER_KEY_NAME, DEFAULT_CONTROLLER);
+    $vars['action'] = $_action = $sys->input->get(ACTION_KEY_NAME, DEFAULT_ACTION);
 }
 
-$instances['system']['System']->load(str_replace('/', '\\', ucfirst($_controller)), 'module\\' . MODULE)->$_action();
+if (preg_match('/^[\w\/]+$/', $_controller) == 0 || preg_match('/^\w+$/', $_action) == 0) {
+    exit('Not Found Action');
+}
 
-//echo '<pre>',var_dump($instances),'</pre>';
+$contrs = explode('/', $_controller);
+$contrs[count($contrs) - 1] = ucfirst(end($contrs));
+$sys->load(join('\\', $contrs), 'module\\' . MODULE)->$_action();
+
 //close databases
 if (isset($instances['database']) && count($instances['database']) > 0) {
     foreach ($instances['database'] as $rs) {

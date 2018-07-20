@@ -15,7 +15,7 @@ class Session
         session_name(SESSION_COOKIE_NAME);
         session_set_cookie_params(SESSION_EXPIRE, COOKIE_PATH, COOKIE_DOMAIN, COOKIE_SECURE, COOKIE_HTTPONLY);
         session_start();
-        // session_regenerate_id();
+        session_regenerate_id();
     }
 
     /**
@@ -47,6 +47,16 @@ class Session
     public function get($name)
     {
         return isset($_SESSION[$name]) ? $_SESSION[$name] : null;
+    }
+
+    /**
+     * 销毁数据
+     * @return bool
+     */
+    public function destroy()
+    {
+        $this->set(SESSION_COOKIE_NAME, '');
+        return session_destroy();
     }
 
 }

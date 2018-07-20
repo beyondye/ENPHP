@@ -150,9 +150,20 @@ class Safe
             return false;
         }
 
+        global $instances;
+
         $given = [];
         foreach ($data as $key => $value) {
             if (isset($this->schema[$key])) {
+
+                if (isset($this->schema[$key]['filter']) && $this->schema[$key]['filter']) {
+
+                    $funcs = explode('|', $this->schema[$key]['filter']);
+                    foreach ($funcs as $fun) {
+                        $value = $instances['system']['System']->security->$fun($value);
+                    }
+                }
+
                 $given[$key] = $value;
             } else {
                 $this->notMemberFields[] = $key;

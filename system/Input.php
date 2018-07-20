@@ -38,6 +38,11 @@ class Input
         return null;
     }
 
+    public function method()
+    {
+        return $_SERVER['REQUEST_METHOD'];
+    }
+
     /**
      * 
      * 获取请求中的body
@@ -60,7 +65,9 @@ class Input
     {
 
         if ($name === null) {
-            return $_POST;
+            return array_map(function($val) {
+                return trim($val);
+            }, $_POST);
         }
 
         return isset($_POST[$name]) ? trim($_POST[$name]) : null;
