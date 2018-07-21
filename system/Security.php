@@ -51,14 +51,84 @@ class Security
      */
     public function token()
     {
-        $token = md5(uniqid());
-
         global $instances;
-        $instances['system']['System']->session->set(TOKEN_SESSION_NAME, $token);
+        $sys = $instances['system']['System'];
+
+        $time = time();
+        $hash = hash_hmac('sha1', $time, ENCRYPTION_KEY);
+
+        $token = base64_encode($time . '|' . $hash);
+
+        $sys->session->set(TOKEN_SESSION_NAME, $hash);
 
         return $token;
     }
-    
-    
+
+    /**
+     * token input 名称
+     * 
+     * @global object $instances
+     * @return string
+     */
+    public function tokenName()
+    {
+        global $instances;
+        $sys = $instances['system']['System'];
+
+        $name = uniqid('_');
+        $sys->session->set(TOKEN_INPUT_NAME, $name);
+
+        return $name;
+    }
+
+    /**
+     * 验证token
+     * 
+     * @global object $instances
+     * @return boolean
+     */
+    function checkToken()
+    {
+        global $instances;
+        $sys = $instances['system']['System'];
+
+        $name = $sys->session->get(TOKEN_INPUT_NAME);
+        if (!$name) {
+            return false;
+        }
+
+        $clienttoken = $sys->input->post($name);
+        if (!$clienttoken) {
+            return false;
+        }
+
+        $clienttoken = explode('|', base64_decode($clienttoken));
+
+        if (count($clienttoken) != 2) {
+            return false;
+        }
+
+        $clienttime = $clienttoken[0];
+        $clienthash = $clienttoken[1];
+
+        if ((intval($clienttime) + TOKEN_EXPIRE) < time()) {
+            return false;
+        }
+
+        $serverhash = $sys->session->get(TOKEN_SESSION_NAME);
+        if ($serverhash == hash_hmac('sha1', $clienttime, ENCRYPTION_KEY)) {
+
+            $sys->session->delete(TOKEN_INPUT_NAME);
+            $sys->session->delete(TOKEN_SESSION_NAME);
+            $sys->session->regenerate();
+            return true;
+        }
+
+        $sys->session->delete(TOKEN_INPUT_NAME);
+        $sys->session->delete(TOKEN_SESSION_NAME);
+        $sys->session->regenerate();
+
+        return false;
+    }
 
 }

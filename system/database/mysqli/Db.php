@@ -356,10 +356,13 @@ class Db
         }
 
         if (is_int($offset)) {
+            //$offset = $offset > 0 ? $offset : 1;
             return " LIMIT $offset ";
         }
 
         if (is_array($offset)) {
+            //$offset[0] = $offset[0] > 0 ? $offset[0] : 1;
+            //$offset[1] = $offset[1] > 0 ? $offset[1] : 1;
             return " LIMIT {$offset[0]},{$offset[1]} ";
         }
 

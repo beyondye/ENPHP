@@ -15,7 +15,7 @@ class Session
         session_name(SESSION_COOKIE_NAME);
         session_set_cookie_params(SESSION_EXPIRE, COOKIE_PATH, COOKIE_DOMAIN, COOKIE_SECURE, COOKIE_HTTPONLY);
         session_start();
-        session_regenerate_id();
+        //session_regenerate_id();
     }
 
     /**
@@ -50,12 +50,48 @@ class Session
     }
 
     /**
-     * 销毁数据
+     * 闪取会话
+     * 
+     * @param string $name
+     * @return string|null;
+     */
+    public function flash($name)
+    {
+        $val = $this->get($name);
+        if ($val == null) {
+            return null;
+        }
+
+        unset($_SESSION[$name]);
+
+        return $val;
+    }
+
+    /**
+     * 删除一个会话
+     * @param void
+     */
+    public function delete($name)
+    {
+        unset($_SESSION[$name]);
+    }
+
+    /**
+     * 重新生成会话id
+     * @return bool
+     */
+    public function regenerate()
+    {
+        return session_regenerate_id();
+    }
+
+    /**
+     * 销毁全部会话数据
      * @return bool
      */
     public function destroy()
     {
-        $this->set(SESSION_COOKIE_NAME, '');
+        setcookie(SESSION_COOKIE_NAME, '', 1, COOKIE_PATH, COOKIE_DOMAIN, COOKIE_SECURE, COOKIE_HTTPONLY);
         return session_destroy();
     }
 

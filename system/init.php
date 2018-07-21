@@ -31,12 +31,6 @@ spl_autoload_register(function ($class) {
 //run application
 $instances['system']['System'] = $sys = new \system\System();
 
-if (USE_TOKEN) {
-    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-        $sys->input->post(TOKEN_INPUT_NAME) === $sys->session->get(TOKEN_SESSION_NAME) ?: exit('Request Failed');
-    }
-}
-
 if (php_sapi_name() == 'cli') {
     $vars['controller'] = $_controller = isset($argv[1]) ? $argv[1] : DEFAULT_CONTROLLER;
     $vars['action'] = $_action = isset($argv[2]) ? $argv[2] : DEFAULT_ACTION;

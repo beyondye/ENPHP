@@ -33,6 +33,7 @@ class Helper
         $start = 1;
         $end = 0;
         $info = '<span class="info">共 ' . $total . ' 条记录</span>';
+        $url= urldecode($url);
 
         if ($total > $size) {
             $count = ceil($total / $size);
@@ -100,34 +101,37 @@ class Helper
      */
     function url($param = [], $path = ENTRY, $anchor = '')
     {
+        global $vars;
 
         $anchor = $anchor == '' ? '' : '#' . $anchor;
 
-        $key = '';
-        if (isset($param[CONTROLLER_KEY_NAME]) && isset($param[ACTION_KEY_NAME])) {
-            $key = $param[CONTROLLER_KEY_NAME] . '/' . $param[ACTION_KEY_NAME];
+        $default = [CONTROLLER_KEY_NAME => $vars['controller'], ACTION_KEY_NAME => $vars['action']];
 
+        $keyarr = $param = array_merge($default, $param);
+        $key = $param[CONTROLLER_KEY_NAME] . '/' . $param[ACTION_KEY_NAME];
 
-            if (isset(URL[MODULE][$key])) {
+        unset($keyarr[CONTROLLER_KEY_NAME]);
+        unset($keyarr[ACTION_KEY_NAME]);
 
-                $temp = URL[MODULE][$key];
-
-                $url = '';
-                foreach ($param as $k => $v) {
-                    if ($url) {
-                        $url = str_replace('{' . $k . '}', $v, $url);
-                    } else {
-                        $url = str_replace('{' . $k . '}', $v, $temp);
-                    }
-                }
-
-                return $url . $anchor;
-            }
+        if ($keyarr) {
+            $key = $key . '/' . join('/', array_keys($keyarr));
         }
 
+        if (array_key_exists($key, URL[MODULE])) {
+
+            $temp = URL[MODULE][$key];
+            $url = '';
+            foreach ($param as $k => $v) {
+                if ($url) {
+                    $url = str_replace('{' . $k . '}', $v, $url);
+                } else {
+                    $url = str_replace('{' . $k . '}', $v, $temp);
+                }
+            }
+            return $url . $anchor;
+        }
 
         $query = http_build_query($param) . $anchor;
-
         return $query ? $path . '?' . $query : $path;
     }
 

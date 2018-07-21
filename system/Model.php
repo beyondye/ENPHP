@@ -215,16 +215,16 @@ class Model extends System
             'char' => ['regx' => '/^\S+$/', 'msg' => ''],
             'decimal' => ['regx' => '/^[\d\.]+$/', 'msg' => ''],
             'double' => ['regx' => '/^[\d\.]+$/', 'msg' => ''],
-            'float' => ['regx' => '/^\[d\.]+$/', 'msg' => ''],
+            'float' => ['regx' => '/^\[\d\.]+$/', 'msg' => ''],
             'int' => ['regx' => '/^\d+$/', 'msg' => ''],
-            'longtext' => ['regx' => '/^\S+$/', 'msg' => ''],
+            'longtext' => ['regx' => '/^\S+[\s\S]+\S+$/', 'msg' => ''],
             'mediumint' => ['regx' => '/^\d+$/', 'msg' => ''],
-            'mediumtext' => ['regx' => '/^\S+$/', 'msg' => ''],
+            'mediumtext' => ['regx' => '/^\S+[\s\S]+\S+$/', 'msg' => ''],
             'smallint' => ['regx' => '/^\d+$/', 'msg' => ''],
-            'text' => ['regx' => '/^\S+$/', 'msg' => ''],
+            'text' => ['regx' => '/^\S+[\s\S]+\S+$/', 'msg' => ''],
             'time' => ['regx' => '/^\d+$/', 'msg' => ''],
             'tinyint' => ['regx' => '/^\d+$/', 'msg' => ''],
-            'varchar' => ['regx' => '/^\S+$/', 'msg' => '']
+            'varchar' => ['regx' => '/^\S+[\s\S]+\S+$/', 'msg' => '']
         ];
 
         $data = [];
@@ -237,8 +237,15 @@ class Model extends System
 
             $content = '[';
             foreach ($data as $rs) {
+
+                $filter = '';
+                if (in_array($rs->DATA_TYPE, ['longtext', 'mediumtext', 'text', 'varchar'])) {
+                    $filter = 'tag|blank';
+                }
+
                 $content .= "\n'{$rs->COLUMN_NAME}'=> [
                 'validate'=>['regex' =>'{$data_type[$rs->DATA_TYPE]['regx']}', 'message' =>'{$rs->COLUMN_COMMENT}不能为空'],
+                 'filter'=>'{$filter}',
                 'literal'=>'{$rs->COLUMN_COMMENT}',
                 'default'=>'{$rs->COLUMN_DEFAULT}',
                 'required'=>true

@@ -29,7 +29,7 @@ define('SESSION_TABLE_NAME', 'sessions');
 define('ENCRYPTION_KEY', 'weryi9878sdftgtbsdfh');
 define('TOKEN_SESSION_NAME', '34efdre');
 define('TOKEN_INPUT_NAME', 'fh40dfk98dkfje');
-define('USE_TOKEN', false);
+define('TOKEN_EXPIRE', 3600);
 
 
 //默认语言环境
