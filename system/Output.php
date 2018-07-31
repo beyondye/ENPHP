@@ -159,7 +159,7 @@ class Output extends System
      */
     public function redirect($uri = '', $http_response_code = 302)
     {
-        header("Location: " . $uri, TRUE, $http_response_code);
+        header("Location: " . $uri, true, $http_response_code);
         exit;
     }
 

@@ -33,7 +33,7 @@ class Helper
         $start = 1;
         $end = 0;
         $info = '<span class="info">共 ' . $total . ' 条记录</span>';
-        $url= urldecode($url);
+        $url = urldecode($url);
 
         if ($total > $size) {
             $count = ceil($total / $size);

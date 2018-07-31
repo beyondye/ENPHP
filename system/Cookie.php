@@ -85,7 +85,7 @@ class Cookie
      */
     public function delete($name)
     {
-        return $this->set($name,'',1);
+        return $this->set($name, '', 1);
     }
 
 }
