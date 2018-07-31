@@ -1,5 +1,5 @@
 <?php
-
+$t1 = microtime(true);
 //全局实例初始化数组
 $instances = [];
 
@@ -61,3 +61,5 @@ if (isset($instances['cache']) && count($instances['cache']) > 0) {
     }
 }
 //echo '<pre>',var_dump(get_included_files()),'</pre>';
+$t2 = microtime(true);
+//echo '<!-- ',round($t2-$t1,3).'s usage: ' . memory_get_usage(),' -->';
