@@ -1,5 +1,5 @@
 <?php
-$t1 = microtime(true);
+
 //全局实例初始化数组
 $instances = [];
 
@@ -40,12 +40,18 @@ if (php_sapi_name() == 'cli') {
 }
 
 if (preg_match('/^[\w\/]+$/', $_controller) == 0 || preg_match('/^\w+$/', $_action) == 0) {
-    exit('Not Found Action');
+    exit('Not Found Action Or Controller');
 }
 
 $contrs = explode('/', $_controller);
 $contrs[count($contrs) - 1] = ucfirst(end($contrs));
-$sys->load(join('\\', $contrs), 'module\\' . MODULE)->$_action();
+$contrins=$sys->load(join('\\', $contrs), 'module\\' . MODULE);
+
+if(!method_exists($contrins,$_action)){
+    exit('Not Found Action');
+}
+
+$contrins->$_action();
 
 //close databases
 if (isset($instances['database']) && count($instances['database']) > 0) {
@@ -61,5 +67,3 @@ if (isset($instances['cache']) && count($instances['cache']) > 0) {
     }
 }
 //echo '<pre>',var_dump(get_included_files()),'</pre>';
-$t2 = microtime(true);
-//echo '<!-- ',round($t2-$t1,3).'s usage: ' . memory_get_usage(),' -->';
