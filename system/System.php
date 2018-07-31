@@ -58,6 +58,10 @@ class System
             $arguments = $config[$alias];
         }
 
+        if(!class_exists($class)){
+            exit(' Not Found '.$class);
+        }
+
         //实例化并返回
         $instances[$namespace][$handler] = new $class($arguments);
 
