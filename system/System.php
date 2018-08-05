@@ -91,7 +91,7 @@ class System
         }
 
         if ($name == 'redis') {
-            return $this->load('Redis', 'system\\cache', 'default');
+            return $this->load('Redis', 'system', 'default');
         }
     }
 
@@ -128,7 +128,7 @@ class System
      */
     public function redis($service)
     {
-        return $this->load('Redis', 'system\cache', $service);
+        return $this->load('Redis', 'system', $service);
     }
 
     /**
