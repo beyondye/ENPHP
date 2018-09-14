@@ -85,6 +85,12 @@ class Cookie
      */
     public function delete($name)
     {
+        if (is_array($name)) {
+            foreach ($name as $k => $v) {
+                $this->delete($v);
+            }
+        }
+
         return $this->set($name, '', 1);
     }
 
