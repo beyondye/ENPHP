@@ -117,7 +117,7 @@ class Helper
             $key = $key . '/' . join('/', array_keys($keyarr));
         }
 
-        if (array_key_exists($key, URL[MODULE])) {
+        if (isset(URL[MODULE])&&array_key_exists($key, URL[MODULE])) {
 
             $temp = URL[MODULE][$key];
             $url = '';
