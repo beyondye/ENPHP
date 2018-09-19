@@ -9,8 +9,9 @@ namespace system\cache;
  */
 class File
 {
+
     /**
-     *默认配置信息
+     * 默认配置信息
      * 
      * @var array
      */
@@ -27,9 +28,7 @@ class File
     function __construct($config)
     {
         $this->config = array_merge($this->config, $config);
-
     }
-
 
     /**
      * 添加或覆盖一个key
@@ -49,9 +48,7 @@ class File
         $file = $this->config['dir'] . $key;
 
         return file_put_contents($file, $data, LOCK_EX);
-
     }
-
 
     /**
      * 加法递增
@@ -205,4 +202,5 @@ class File
 
         return true;
     }
+
 }
