@@ -9,6 +9,7 @@ class Main extends \inherit\Controller
     {
         $data['hello_world']='hello wolrd';
         $this->output->view('main',$data);
+
     }
 
 }
