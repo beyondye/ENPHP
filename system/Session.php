@@ -73,6 +73,12 @@ class Session
      */
     public function delete($name)
     {
+        if (is_array($name)) {
+            foreach ($name as $k => $v) {
+                $this->delete($v);
+            }
+        }
+        
         unset($_SESSION[$name]);
     }
 

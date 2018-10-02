@@ -38,9 +38,25 @@ class Input
         return null;
     }
 
+    /**
+     * 获取请求类型方法
+     * 
+     * @return string
+     */
     public function method()
     {
         return $_SERVER['REQUEST_METHOD'];
+    }
+
+
+    /**
+     * 获取前一页的地址
+     * 
+     * @return string
+     */
+    public function  referer(){
+
+        return $_SERVER['HTTP_REFERER'];
     }
 
     /**

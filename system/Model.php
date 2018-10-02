@@ -245,7 +245,7 @@ class Model extends System
 
                 $content .= "\n'{$rs->COLUMN_NAME}'=> [
                 'validate'=>['regex' =>'{$data_type[$rs->DATA_TYPE]['regx']}', 'message' =>'{$rs->COLUMN_COMMENT}不能为空'],
-                 'filter'=>'{$filter}',
+                'filter'=>'{$filter}',
                 'literal'=>'{$rs->COLUMN_COMMENT}',
                 'default'=>'{$rs->COLUMN_DEFAULT}',
                 'required'=>true
