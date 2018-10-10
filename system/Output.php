@@ -166,7 +166,7 @@ class Output extends System
     /**
      * 设置HTTP状态码
      * 
-     * @param type $http_status_code
+     * @param int $http_status_code
      * 
      * @return void
      * 
@@ -178,6 +178,27 @@ class Output extends System
         }
 
         header('Unknown Status');
+    }
+
+    /**
+     * 错误页面
+     * 
+     * @param string 错误页面模版名 
+     * @param array 数据数组
+     */
+    public function error($name = 'general', $data = ['heading' => 'Error Message', 'message' => 'An error occurred.'])
+    {
+       
+        extract($data);
+
+        ob_start();
+        include APP_DIR . 'error/' . $name . EXT;
+        $_content = ob_get_contents();
+        ob_end_clean();
+        $_content = $this->compress($_content);
+
+        header('Content-Type:text/html;charset=' . CHARSET);
+        echo $_content;
     }
 
 }
