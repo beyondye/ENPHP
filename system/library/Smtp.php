@@ -8,8 +8,10 @@ namespace system\library;
  * @author Ye Ding<beyondye@gmail.com>
  * 
  *例子：
+ 
  * $mail = new Smtp(['server'=>'', 'username' => "", 'password' => "",'port' => 25]); 设置smtp服务器
  * $mail->from("XXXXX"); 设置发件人
+ * $mail->fromname("XXXXX"); 设置发件人名字
  * $mail->to("XXXXX"); 设置收件人，多个收件人，调用多次
  * $mail->cc("XXXX"); 设置抄送，多个抄送，调用多次
  * $mail->bcc("XXXXX"); 设置秘密抄送，多个秘密抄送，调用多次
@@ -44,6 +46,11 @@ class Smtp
      * @var string 发件人
      */
     protected $from;
+
+    /**
+     * @var string 发件人名字
+     */
+    protected $fromname;
 
     /**
      * @var string 收件人
@@ -123,6 +130,18 @@ class Smtp
     public function from($from)
     {
         $this->from = $from;
+        return $this;
+    }
+
+
+    /**
+     * 设置发件人名字
+     * @param string $fromname 发件人名字
+     * @return object
+     */
+    public function fromname($fromname)
+    {
+        $this->fromname = $fromname;
         return $this;
     }
 
@@ -307,7 +326,7 @@ class Smtp
         }
 
         //设置发件人
-        $header .= "FROM:test<" . $this->from . ">\r\n";
+        $header .= "FROM:{$this->fromname}<" . $this->from . ">\r\n";
 
         //设置收件人
         if (is_array($this->to)) {
@@ -367,7 +386,7 @@ class Smtp
      */
     protected function sendCommand($command, $code)
     {
-        echo 'Send command:' . $command . ',expected code:' . $code . '<br />';
+        //echo 'Send command:' . $command . ',expected code:' . $code . '<br />';
         //发送命令给服务器
         try {
             if (socket_write($this->socket, $command, strlen($command))) {
@@ -379,7 +398,7 @@ class Smtp
 
                 //读取服务器返回
                 $data = trim(socket_read($this->socket, 1024));
-                echo 'response:' . $data . '<br /><br />';
+                //echo 'response:' . $data . '<br /><br />';
 
                 if ($data) {
                     $pattern = "/^" . $code . "/";
