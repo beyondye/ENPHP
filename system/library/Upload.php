@@ -56,12 +56,12 @@ class Upload
     /**
      * Data未设置错误码
      */
-    const DATA_ARRAR_NULL = 12;
+    const DATA_ARRAY_NULL = 12;
 
     /**
      * Extension未设置错误码
      */
-    const EXT_ARRAR_NULL = 13;
+    const EXT_ARRAY_NULL = 13;
 
     /**
      * 不合法扩展名错误码
@@ -100,8 +100,8 @@ class Upload
         UPLOAD_ERR_NO_TMP_DIR => '找不到临时文件夹',
         UPLOAD_ERR_CANT_WRITE => '文件写入失败',
         UPLOAD_ERR_EXTENSION => '上传扩展错误',
-        self::DATA_ARRAR_NULL => 'Data未设置',
-        self::EXT_ARRAR_NULL => 'Extension未设置',
+        self::DATA_ARRAY_NULL => 'Data未设置',
+        self::EXT_ARRAY_NULL => 'Extension未设置',
         self::EXT_NAME_ILLEGAL => '扩展名不合法',
         self::DATA_NO_POST => '文件数据不合法',
         self::MKDIR_ERR => '创建文件目录错误',

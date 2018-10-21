@@ -179,9 +179,9 @@ class Model extends System
      * 
      * @return array|object
      */
-    public function select($condtion = [])
+    public function select($condition = [])
     {
-        return $this->db($this->RDB)->select($this->table, $condtion)->result();
+        return $this->db($this->RDB)->select($this->table, $condition)->result();
     }
 
     /**
@@ -200,6 +200,101 @@ class Model extends System
         }
 
         return isset($data[0]) ? $data[0] : null;
+    }
+
+
+    /**
+     * 一对一
+     * 
+     * @param string $model 关联的model
+     * @param string|int $primary_value  主键唯一值
+     * 
+     * @return array|object
+     */
+    public function hasOne($model, $primary_value)
+    {
+        $local = $this->one($primary_value);
+        $foreign = $this->model($model)->one($primary_value);
+
+        if ($local) {
+
+            if ($foreign) {
+
+                foreach ($foreign as $key => $value) {
+                    $local->$key = $value;
+                }
+            }
+
+            return $local;
+        }
+
+        return null;
+    }
+
+    /**
+     * 一对多
+     * 
+     * @param string $model 需要关联的model
+     * 
+     * @param array $where ['foreign_name' => 'local_primary_value']
+     * @subparam string $foreign 外表字段名
+     * @subparam string|int $local_primary_value 本表主键值
+     * 
+     * @param array $condition 参见$this->select()参数
+     * 
+     * @return array|object
+     */
+    public function hasMany($model, $where = [], $condition = [])
+    {
+        if (!$where) {
+            return null;
+        }
+
+        $defaut = ['where' => $where, 'fields' => [], 'orderby' => [], 'limit' => []];
+
+        return $this->model($model)->select(array_merge($defaut, $condition));
+
+    }
+
+    /**
+     * 多对多
+     * 
+     * @param string $model 需要关联的model名称
+     * @param string $relation_model 关系表model名称
+     * @param string $relation_foreign_name 关联表主键名在关系表中的字段名
+     * 
+     * @param array $where ['local_relation_filed_name' => 'local_primary_value']
+     * @subparam string $local_relation_filed_name 本表在关系表字段名
+     * @subparam string|int $local_primary_value 本表主键值
+     * 
+     * @param array $condition 参见$this->select()参数
+     * 
+     * @return array|object
+     */
+    public function belongsTo($model, $relation_model, $relation_foreign_name, $where = [], $condition = [])
+    {
+        if (!$where) {
+            return null;
+        }
+
+        $relation = $this->model($relation_model)->where($where, [$relation_foreign_name]);
+
+        if ($relation) {
+            $primaries = [];
+
+            foreach ($relation as $rs) {
+                $primaries[] = $rs->$relation_foreign_name;
+            }
+
+            $foreign = $this->model($model);
+            $defaut = ['where' => ["{$foreign->primary} in" => join($primaries)], 'fields' => [], 'orderby' => [], 'limit' => []];
+
+            return $foreign->select(array_merge($defaut, $condition));
+
+        }
+
+        return null;
+
     }
 
     /**
