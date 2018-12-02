@@ -74,38 +74,54 @@ define('CONTROLLER_KEY_NAME', 'c');
 define('ACTION_KEY_NAME', 'a');
 ```
 
-
+输出字符编码设置，以便$this->output->view()和$this->output->json()输出
 ```php
-//output编码
 define('CHARSET', 'utf-8');
+```
 
-//cookie
+Cookie相关设置
+```php
 define('COOKIE_DOMAIN', '');
 define('COOKIE_SECURE', false);
 define('COOKIE_PATH', '/');
 define('COOKIE_HTTPONLY', false);
 define('COOKIE_EXPIRE', 0);
+```
 
-//session
+Session设置
+```php
+
+//自定义session cookie名
 define('SESSION_COOKIE_NAME', 'SE');
-define('SESSION_EXPIRE', 0);
-define('SESSION_USE_DATABASE', false);
-define('SESSION_DATABASE_NAME', 'session');
-define('SESSION_TABLE_NAME', 'sessions');
 
-//security
-define('ENCRYPTION_KEY', 'weryi9878sdftgtbsdfh');
-define('TOKEN_SESSION_NAME', '34efdre');
-define('TOKEN_INPUT_NAME', 'fh40dfk98dkfje');
+//session保存时间，0为关闭浏览器即失效，秒为单位
+define('SESSION_EXPIRE', 0);
+```
+
+安全配置
+```php
+//加密安全混淆值
+define('ENCRYPTION_KEY', 'weryi9878sdfddtgtbsdfh');
+
+//表单提交token session 名称
+define('TOKEN_SESSION_NAME', '34efddddre');
+
+//表单token字段名
+define('TOKEN_INPUT_NAME', 'fh40dfk9dd8dkfje');
+
+//token过期时间
 define('TOKEN_EXPIRE', 3600);
 
-
+多语言应用
+```php
 //默认语言环境
 define('LANG', 'zh_cn');
+```
 
+URL重写转换输出，和路由无关，以配合$this->helper->url()使用
+```php
 //url 重写
 define('URL', ['mod_name'=>['controller_name/action_name'=>'/{controller_key}/{action_key}']]);
-
 
 ```
 
