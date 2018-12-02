@@ -11,18 +11,17 @@
 
 > GD2扩展
 
-文档目录索引
---------
+### 文档目录索引
 
 1|2|3|4
 -----|-----|-----|-----
-[入口文件配置](#entry)     | [常量设置](#constans)      | [数据配置](#databaseconfig) | [自定义配置数据字典](#config)
-[全局变量数组](#global)    | [数据库操作](#database)     | [Model数据模型](#model)    | [model数据验证](#modelsafe)
-controller控制器          | View视图            |Helper帮助函数    | input输入
-output输出                |  session会话        |cookie管理     |Lang多语言配置
-Redis缓存            |Security安全         |Upload上传文件      |Html标签生成
-Grid表格生成       |Image图片修饰 |Smtp发送邮件 |Captcha验证码生成
-应用程序目录约束 | | | 
+[入口文件配置](#entry)       | [常量设置](#constans)       | [数据配置](#databaseconfig)  | [自定义配置数据字典](#config)
+[全局变量数组](#global)      | [数据库操作](#database)     | [Model数据模型](#model)      | [Model数据验证](#modelsafe)
+[Controller控制器](#global) | [View视图](#global)        | [Helper帮助函数](#global)    | [Input输入](#global)
+[Output输出](#global)       | [Session会话](#global)     | [Cookie管理](#global)       |[Lang多语言配置](#global)
+[Redis缓存](#global)        | [Security安全](#global)    | [Upload上传文件](#global)    |[Html标签生成](#global)
+[Grid表格生成](#global)      |[Image图片修饰](#global)    |[Smtp发送邮件](#global)       |[Captcha验证码生成](#global)
+[应用程序目录约束](#global) | | | 
 
 ----
 
