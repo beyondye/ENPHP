@@ -1,7 +1,7 @@
 ### ENPHP Framework是一个轻量级，开包即用的PHP框架。
 
 特别适合中小型网站的开发建设，自带数据表验证，多数据库分离支持，常用的库文件。
-以简化那些80%重复功能为目标打造出此框架，如果您厌烦那些重量级，请不妨试试ENPHP Framework。
+以简化那些80%重复功能为目标打造出此框架，如果您厌烦那些重量级框架，请不妨试试ENPHP Framework。
 
 ### 版本依赖
 
@@ -28,6 +28,35 @@
 --------
 
 ##### 入口文件配置
+
+###### 入口文件一般是网站的根目录index文件，具体有几个重要的常量配置。
+
+ 设置运行环境变量，三个值分别为测试环境，产品环境，开发环境。
+```php
+//
+// test,production,development
+define('ENVIRONMENT', 'development');
+```
+
+```php
+//您开发的应用程序目录常量APP_DIR设置
+define('APP_DIR', realpath('app_dir') . DIRECTORY_SEPARATOR);
+```
+
+```php
+//框架系统文件目录常量，可以任意存放到其他文件夹
+define('SYS_DIR', realpath('system_dir') . DIRECTORY_SEPARATOR);
+```
+```php
+//设置controller模块常量，模块必须是APP_DIR目录下module文件夹的子目录
+define('MODULE', 'www');
+```
+
+```php
+//设置模板目录常量，模板必须是APP_DIR目录下template文件夹的子目录
+define('TEMPLATE', 'www');
+
+```
 
 ##### 常量设置
 
