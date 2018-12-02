@@ -59,7 +59,7 @@ define('TEMPLATE', 'www');
 
 ### 常量设置
 
-> 常量文件位置在APP_DIR/config/下面三个子目录test,production,development中的constans.php文件分别按环境设置
+> 常量文件位置在APP_DIR/config/下面三个子目录test,production,development中的constans.php文件分别按环境设置。``````
 
 地址路由配置,以/index.php?c=main&a=index为例子。
 
@@ -152,6 +152,42 @@ define('URL', [
 ```
 
 ### 数据库配置
+
+> 数据库文件位置在APP_DIR/config/下面三个子目录test,production,development中的database.php文件分别按环境设置。
+
+> 暂时只支持mysqli
+
+default为默认数据库，可以直接$this->db访问默认数据库
+
+$this->db('read)访问read数据库
+```php
+
+return [
+    //默认数据库
+    'default' => 
+    [
+        'driver' => 'mysqli',
+        'host' => 'set.database.to.hosts.file',
+        'username' => 'root', 
+        'password' => '123456',
+        'database' => 'dataname',
+        'port' => 3306,
+        'charset' => 'utf8'
+    ],
+    //读数据库
+    'read'=>
+    [
+        'driver' => 'mysqli',
+        'host' => 'set.database.to.hosts.file',
+        'username' => 'root', 
+        'password' => '123456',
+        'database' => 'dataname',
+        'port' => 3306,
+        'charset' => 'utf8'
+    ]
+];
+
+```
 
 ### 自定义配置数据字典
 
