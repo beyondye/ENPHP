@@ -54,7 +54,13 @@
 
 ****输入类 ：system/Input****
 
+获取地址查询字符串
 $this->input->get()
+
+```php
+   //如果var_name为null，就返回默认值default_str
+   $this->input->get('var_name','default_str');
+```
 
 $this->input->post()
 
