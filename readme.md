@@ -49,12 +49,15 @@
 
 #### Helper帮助函数
 
+
+
 #### Input输入
+
 
 获取地址查询字符串
 ```php
-   //如果var_name为null，就返回默认值default_str
-   $this->input->get('var_name','default_str');
+//如果var_name为null，就返回默认值default_str
+$this->input->get('var_name','default_str');
 ```
 获取表单数据
 ```php
@@ -88,6 +91,7 @@ $this->input->referer();
 ```php
 $this->input->method();
 ```
+
 
 #### Output输出
 
