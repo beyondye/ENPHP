@@ -111,6 +111,7 @@ define('TOKEN_INPUT_NAME', 'fh40dfk9dd8dkfje');
 
 //token过期时间
 define('TOKEN_EXPIRE', 3600);
+```
 
 多语言应用
 ```php
