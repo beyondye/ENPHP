@@ -67,12 +67,14 @@ $this->input->post('field_name');
 
 获取v4 IP地址
 ```php
+//如果没有获取成功返回0.0.0.0
 $this->input->ip();
 ```
 
 判断是否ajax请求
 ```php
 //$_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest'
+//返回布尔值
 $this->input->isAjax();
 ```
 
@@ -89,6 +91,7 @@ $this->input->referer();
 
 获取当前请求方法
 ```php
+//返回 POST，GET，OPTION等
 $this->input->method();
 ```
 
