@@ -109,7 +109,7 @@ define('TOKEN_SESSION_NAME', '34efddddre');
 //表单token字段名
 define('TOKEN_INPUT_NAME', 'fh40dfk9dd8dkfje');
 
-//token过期时间
+//token过期时间，秒为单位
 define('TOKEN_EXPIRE', 3600);
 ```
 
