@@ -61,7 +61,7 @@ define('TEMPLATE', 'www');
 
 地址路由配置,以/index.php?c=main&a=index为例子。
 
-c代表控制器类名字，默认名字控制器为Main。
+c代表控制器类名字，默认控制器为Main。
 
 a代表action方法名称，默认action为index。
 
