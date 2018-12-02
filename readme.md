@@ -17,15 +17,15 @@
 -----|-----|-----|-----
 [入口文件配置](#entry)       | [常量设置](#constans)       | [数据配置](#databaseconfig)  | [自定义配置数据字典](#config)
 [全局变量数组](#global)      | [数据库操作](#database)     | [Model数据模型](#model)      | [Model数据验证](#modelsafe)
-[Controller控制器](#global) | [View视图](#global)        | [Helper帮助函数](#global)    | [Input输入](#global)
-[Output输出](#global)       | [Session会话](#global)     | [Cookie管理](#global)       |[Lang多语言配置](#global)
-[Redis缓存](#global)        | [Security安全](#global)    | [Upload上传文件](#global)    |[Html标签生成](#global)
-[Grid表格生成](#global)      |[Image图片修饰](#global)    |[Smtp发送邮件](#global)       |[Captcha验证码生成](#global)
-[应用程序目录约束](#global) | | | 
+[Controller控制器](#cntroller) | [View视图](#view)        | [Helper帮助函数](#helper)    | [Input输入](#input)
+[Output输出](#output)       | [Session会话](#session)     | [Cookie管理](#cookie)       |[Lang多语言配置](#lang)
+[Redis缓存](#redis)        | [Security安全](#security)    | [Upload上传文件](#upload)    |[Html标签生成](#html)
+[Grid表格生成](#grid)      |[Image图片修饰](#image)    |[Smtp发送邮件](#smtp)       |[Captcha验证码生成](#captcha)
+[应用程序目录布局说明](#dir) | | | 
 
 ----
 
-#### 入口文件配置
+#### 入口文件配置{#entry}
 
 #### 常量设置
 
@@ -73,7 +73,7 @@
 
 #### Captcha验证码生成
 
-#### 应用程序目录约束
+#### 应用程序目录布局说明
 
 
 |——system    系统框架程序目录 
