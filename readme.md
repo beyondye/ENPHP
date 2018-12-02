@@ -1,13 +1,12 @@
-### 框架入门介绍
-版本 PHP7+
 
+环境版本 PHP7+
 
 **目录结构（以www应用为列）**
 
----
+-
 
-  
-|——system    系统框架程序目录  
+|——system    系统框架程序目录 
+
 |——application  应用程序目录  
 |————helper   自定义工具帮助库  
 |————library  自定义公共类库  
@@ -16,7 +15,7 @@
 |————document 开发文档目录  
 |————module   程序模块  
 |——————www  模块名  
-|———————main.php 具体controller业务逻辑文件  
+|———————-main.php 具体controller业务逻辑文件  
 
 |————model    model文件目录  
 |——————test.php 具体数据model 
@@ -28,15 +27,15 @@
 |————config    配置文件目录  
 |——————development 开发环境配置  
 |————————database.php 数据库配置文件  
-|————————constance.php 常量配置文件  
+|————————constans.php 常量配置文件  
 |————————redis.php redis配置文件  
 |——————test 开发环境配置  
 |————————database.php   
-|————————constance.php   
+|————————constans.php   
 |————————redis.php   
 |——————production 产品环境配置  
 |————————database.php   
-|————————constance.php   
+|————————constans.php   
 |————————redis.php   
 
 |————inherit    model和controller重写继承目录  
@@ -48,7 +47,7 @@
 |————www   此目录绑域名用  
 |——————index.php    入口文件  
  
---- 
+-
 
 ** 类库调用方法实例（仅限controller和model中调用）**
 
