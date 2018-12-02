@@ -119,10 +119,27 @@ define('TOKEN_EXPIRE', 3600);
 define('LANG', 'zh_cn');
 ```
 
-URL重写转换输出，和路由无关，以配合$this->helper->url()使用
+URL重写转换输出模版，和路由无关，以配合$this->helper->url()使用
 ```php
 //url 重写
 define('URL', ['mod_name'=>['controller_name/action_name'=>'/{controller_key}/{action_key}']]);
+
+
+//例子
+define('URL', [
+    'www' => [ //www表示模块名称
+    
+        'main/index' => '/',  
+        //echo $this->helper->url(['c'=>'main','a'=>'index']) 输出 /
+        
+        'main/lists/type' => '/list/{type}.html',
+         //echo $this->helper->url(['c'=>'main','a'=>'lists','type'=>'2']) 输出 /list/2.html
+        
+        'main/lists/type/page' => '/list/{type}_{page}.html'
+         //echo $this->helper->url(['c'=>'main','a'=>'lists','type'=>'2','page'=>'34']) 输出 /list/2_34.html
+                 
+    ]
+]);
 
 ```
 
