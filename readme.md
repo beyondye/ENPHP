@@ -29,7 +29,7 @@
 
 ### 入口文件配置
 
-> 入口文件一般是网站的根目录index文件，有几个重要的常量配置。
+> 入口文件一般是网站的根目录index.php文件，有几个重要的常量配置。
 
  设置运行环境变量，三个值分别为测试环境，产品环境，开发环境。
 ```php
@@ -42,7 +42,7 @@ define('ENVIRONMENT', 'development');
 define('APP_DIR', realpath('app_dir') . DIRECTORY_SEPARATOR);
 ```
 
-框架系统文件目录常量，可以任意存放到其他文件夹
+框架系统文件目录常量，可以存放到其他地方，以便共用和升级
 ```php
 define('SYS_DIR', realpath('system_dir') . DIRECTORY_SEPARATOR);
 ```
@@ -57,7 +57,7 @@ define('MODULE', 'www');
 define('TEMPLATE', 'www');
 ```
 
-##### 常量设置
+### 常量设置
 
 #### 数据库配置
 
