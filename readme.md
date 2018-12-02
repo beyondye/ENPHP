@@ -1,6 +1,7 @@
 ### ENPHP Framework是一个轻量级，开包即用的PHP框架。
 
-特别适合中小型网站的开发建设，自带数据表验证，多数据库分离支持，常用的库文件。以简化那些80%重复功能为目标打造出此框架，如果您厌烦那些重量级，不妨试试ENPHP Framework。
+特别适合中小型网站的开发建设，自带数据表验证，多数据库分离支持，常用的库文件。
+以简化那些80%重复功能为目标打造出此框架，如果您厌烦那些重量级，请不妨试试ENPHP Framework。
 
 ### 版本依赖
 
@@ -13,7 +14,7 @@
 文档目录索引
 --------
 
--|-|-|-
+1|2|3|4
 -----|-----|-----|-----
 [入口文件配置](#entry)     | [常量设置](#constans)      | [数据配置](#databaseconfig) | [自定义配置数据字典](#config)
 [全局变量数组](#global)    | [数据库操作](#database)     | [Model数据模型](#model)    | [model数据验证](#modelsafe)
@@ -21,7 +22,7 @@ controller控制器          | View视图            |Helper帮助函数    | in
 output输出                |  session会话        |cookie管理     |Lang多语言配置
 Redis缓存            |Security安全         |Upload上传文件      |Html标签生成
 Grid表格生成       |Image图片修饰 |Smtp发送邮件 |Captcha验证码生成
-应用程序目录约束 |-|-|-
+应用程序目录约束 | | | 
 
 ----
 
