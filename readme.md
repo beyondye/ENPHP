@@ -59,7 +59,7 @@ define('TEMPLATE', 'www');
 
 ### 常量设置
 
-> 常量文件位置在APP_DIR/config/下面三个子目录test,production,development中的constans.php文件分别按环境设置。``````
+> 常量文件位置在APP_DIR/config/下面三个子目录test,production,development中的constans.php文件分别按环境设置。
 
 地址路由配置,以/index.php?c=main&a=index为例子。
 
@@ -212,6 +212,21 @@ return ['key2'='val2','key'=>['a','b','c'];
 ```
 
 ### 全局变量数组
+
+全局变量数组有两个，$var和$instances。
+
+```php
+
+//全局实例初始化数组，包含所有已实例化的核心类
+$instances = [];
+
+//全局变量数组，
+//$this->vars 可以直接访问，
+//默认已包含$this->vars['controller']当前控制器值
+//默认已包含$this->vars['action']当前action值
+$vars = [];
+
+```
 
 
 ### 数据库操作
