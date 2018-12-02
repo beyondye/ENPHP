@@ -13,7 +13,7 @@
 
 ### 文档目录索引
 
-1|2|3|4
+&nbsp;|&nbsp;|&nbsp;|&nbsp;
 -----|-----|-----|-----
 [入口文件配置](#entry)       | [常量设置](#constans)       | [数据配置](#databaseconfig)  | [自定义配置数据字典](#config)
 [全局变量数组](#global)      | [数据库操作](#database)     | [Model数据模型](#model)      | [Model数据验证](#modelsafe)
