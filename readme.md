@@ -59,27 +59,77 @@ define('TEMPLATE', 'www');
 
 ### 常量设置
 
-#### 数据库配置
+地址路由配置,以/index.php?c=main&a=index为例子。
 
-#### 自定义配置数据字典
+c代表控制器类名字，默认名字控制器为Main。
+
+a代表action方法名称，默认action为index。
+
+你可以自定义设置这些值。
+
+```php
+define('DEFAULT_CONTROLLER', 'main');
+define('DEFAULT_ACTION', 'index');
+define('CONTROLLER_KEY_NAME', 'c');
+define('ACTION_KEY_NAME', 'a');
+```
+
+
+```php
+//output编码
+define('CHARSET', 'utf-8');
+
+//cookie
+define('COOKIE_DOMAIN', '');
+define('COOKIE_SECURE', false);
+define('COOKIE_PATH', '/');
+define('COOKIE_HTTPONLY', false);
+define('COOKIE_EXPIRE', 0);
+
+//session
+define('SESSION_COOKIE_NAME', 'SE');
+define('SESSION_EXPIRE', 0);
+define('SESSION_USE_DATABASE', false);
+define('SESSION_DATABASE_NAME', 'session');
+define('SESSION_TABLE_NAME', 'sessions');
+
+//security
+define('ENCRYPTION_KEY', 'weryi9878sdftgtbsdfh');
+define('TOKEN_SESSION_NAME', '34efdre');
+define('TOKEN_INPUT_NAME', 'fh40dfk98dkfje');
+define('TOKEN_EXPIRE', 3600);
+
+
+//默认语言环境
+define('LANG', 'zh_cn');
+
+//url 重写
+define('URL', ['mod_name'=>['controller_name/action_name'=>'/{controller_key}/{action_key}']]);
+
+
+```
+
+### 数据库配置
+
+### 自定义配置数据字典
 
 #### 全局变量数组
 
-#### 数据库操作
+### 数据库操作
 
-#### Model数据模型
+### Model数据模型
 
-##### Model数据验证
+### Model数据验证
 
-#### Controller控制器
+### Controller控制器
 
-#### View视图
+### View视图
 
-#### Helper帮助函数
+### Helper帮助函数
 
 
 
-#### Input输入
+### Input输入
 
 
 获取地址查询字符串
@@ -124,31 +174,31 @@ $this->input->method();
 ```
 
 
-#### Output输出
+### Output输出
 
-#### Session会话
+### Session会话
 
-#### Cookie管理
+### Cookie管理
 
-#### Lang多语言配置
+### Lang多语言配置
 
-#### Redis缓存
+### Redis缓存
 
-#### Security安全
+### Security安全
 
-#### Upload上传文件
+### Upload上传文件
 
-#### Html标签生成
+### Html标签生成
 
-#### Grid表格生成
+### Grid表格生成
 
-#### Image图片修饰
+### Image图片修饰
 
-#### Smtp发送邮件
+### Smtp发送邮件
 
-#### Captcha验证码生成
+### Captcha验证码生成
 
-#### 应用程序目录布局说明
+### 应用程序目录布局说明
 
 
 |——system    系统框架程序目录 
