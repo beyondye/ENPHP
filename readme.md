@@ -37,22 +37,22 @@
 define('ENVIRONMENT', 'development');
 ```
 
-您开发的应用程序目录常量APP_DIR设置
+您开发的应用程序目录常量APP_DIR设置。
 ```php
 define('APP_DIR', realpath('app_dir') . DIRECTORY_SEPARATOR);
 ```
 
-框架系统文件目录常量，可以存放到其他地方，以便共用和升级
+框架系统文件目录常量，可以存放到其他地方，以便共用和升级。
 ```php
 define('SYS_DIR', realpath('system_dir') . DIRECTORY_SEPARATOR);
 ```
 
-设置controller模块常量，模块必须是APP_DIR目录下module文件夹的子目录
+设置controller模块常量，模块必须是APP_DIR目录下module文件夹的子目录。
 ```php
 define('MODULE', 'www');
 
 ```
-设置模板目录常量，模板必须是APP_DIR目录下template文件夹的子目录
+设置模板目录常量，模板必须是APP_DIR目录下template文件夹的子目录。
 ```php
 define('TEMPLATE', 'www');
 ```
