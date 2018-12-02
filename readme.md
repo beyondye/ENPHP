@@ -51,22 +51,22 @@
 
 ### 输入类 ：system/Input
 
-获取地址查询字符串:$this->input->get()
-
+##### 获取地址查询字符串
 ```php
    //如果var_name为null，就返回默认值default_str
    $this->input->get('var_name','default_str');
 ```
-
-
-获取表单数据:$this->input->post()
-
+##### 获取表单数据
 ```php
+//字段不存在返回null
 $this->input->post('field_name');
 ```
 
+获取v4 IP地址
 $this->input->ip()
 
+判断是否ajax请求
+//$_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest'
 $this->input->isAjax()
 
 $this->input->body()
