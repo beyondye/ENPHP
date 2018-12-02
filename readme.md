@@ -62,28 +62,33 @@
 $this->input->post('field_name');
 ```
 
-获取v4 IP地址
-$this->input->ip()
-
-判断是否ajax请求
-//$_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest'
-$this->input->isAjax()
-
-$this->input->body()
-
-$this->input->referer()
-
-$this->input->method()
-
-
-``` php
-$this->input->get('querystring')  
-$this->input->post('querystring')  
-$this->cookie->get()   
-$this->cookie->set()  
-$this->session->get()  
-$this->session->set()  
+##### 获取v4 IP地址
+```php
+$this->input->ip();
 ```
+
+###### 判断是否ajax请求
+```php
+//$_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest'
+$this->input->isAjax();
+```
+
+##### 获取原始请求数据
+```php
+$this->input->body();
+```
+
+##### 获取上一个来源地址url
+```php
+//如果没有为空
+$this->input->referer();
+```
+
+##### 获取当前请求方法
+```php
+$this->input->method();
+```
+
 
 **model的调用**
 
