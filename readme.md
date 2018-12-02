@@ -1,5 +1,66 @@
+##### 版本依赖
 
-*需要版本 PHP7+*
+*版本 PHP7+*
+
+*mb_string扩展*
+
+*GD2扩展*
+
+-----
+
+文档目录
+======
+入口文件配置
+
+常量设置
+
+配置文件
+
+自定义配置数据字典
+
+全局变量数组
+
+数据库操作
+
+Model数据模型
+
+   model数据验证
+
+controller控制器
+
+View视图
+
+Helper帮助函数
+
+input输入
+
+output输出
+
+session会话
+
+cookie管理
+
+Lang多语言配置
+
+Redis缓存
+
+Security安全
+
+Upload上传文件
+
+Html标签生成
+
+Grid表格生成
+
+Image图片修饰
+
+Smtp发送邮件
+
+Captcha验证码生成
+
+应用程序目录约束
+
+
 
 目录结构
 -------
@@ -67,7 +128,7 @@ $this->input->post('field_name');
 $this->input->ip();
 ```
 
-###### 判断是否ajax请求
+##### 判断是否ajax请求
 ```php
 //$_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest'
 $this->input->isAjax();
