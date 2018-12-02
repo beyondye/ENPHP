@@ -1,7 +1,7 @@
 
 需要版本 PHP7+
 
-**目录结构（以www应用为列）**
+**目录结构（以www应用为例子）**
 
 ---
 
@@ -49,9 +49,25 @@
  
 ---
 
-** 类库调用方法实例（仅限controller和model中调用）**
+**基础功能** 
 
-**核心类调用**  
+
+****输入类 ：system/Input****
+
+$this->input->get()
+
+$this->input->post()
+
+$this->input->ip()
+
+$this->input->isAjax()
+
+$this->input->body()
+
+$this->input->referer()
+
+$this->input->method()
+
 
 ``` php
 $this->input->get('querystring')  
