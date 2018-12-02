@@ -127,16 +127,20 @@ define('URL', ['mod_name'=>['controller_name/action_name'=>'/{controller_key}/{a
 
 //例子
 define('URL', [
-    'www' => [ //www表示模块名称
+    'www' => [ 
+    //www表示模块名称
     
         'main/index' => '/',  
-        //echo $this->helper->url(['c'=>'main','a'=>'index']) 输出 /
+        //echo $this->helper->url(['c'=>'main','a'=>'index'])
+        //输出 /
         
         'main/lists/type' => '/list/{type}.html',
-         //echo $this->helper->url(['c'=>'main','a'=>'lists','type'=>'2']) 输出 /list/2.html
+         //echo $this->helper->url(['c'=>'main','a'=>'lists','type'=>'2'])
+         //输出 /list/2.html
         
         'main/lists/type/page' => '/list/{type}_{page}.html'
-         //echo $this->helper->url(['c'=>'main','a'=>'lists','type'=>'2','page'=>'34']) 输出 /list/2_34.html
+         //echo $this->helper->url(['c'=>'main','a'=>'lists','type'=>'2','page'=>'34']) 
+         //输出 /list/2_34.html
                  
     ]
 ]);
