@@ -59,6 +59,8 @@ define('TEMPLATE', 'www');
 
 ### 常量设置
 
+> 常量文件位置在APP_DIR/config/下面三个子目录test,production,development中的constans.php文件分别按环境设置
+
 地址路由配置,以/index.php?c=main&a=index为例子。
 
 c代表控制器类名字，默认控制器为Main。
@@ -74,38 +76,78 @@ define('CONTROLLER_KEY_NAME', 'c');
 define('ACTION_KEY_NAME', 'a');
 ```
 
-
+输出字符编码设置，以便$this->output->view()和$this->output->json()输出
 ```php
-//output编码
 define('CHARSET', 'utf-8');
+```
 
-//cookie
+Cookie相关设置
+```php
 define('COOKIE_DOMAIN', '');
 define('COOKIE_SECURE', false);
 define('COOKIE_PATH', '/');
 define('COOKIE_HTTPONLY', false);
 define('COOKIE_EXPIRE', 0);
+```
 
-//session
+Session设置
+```php
+
+//自定义session cookie名
 define('SESSION_COOKIE_NAME', 'SE');
+
+//session保存时间，0为关闭浏览器即失效，秒为单位
 define('SESSION_EXPIRE', 0);
-define('SESSION_USE_DATABASE', false);
-define('SESSION_DATABASE_NAME', 'session');
-define('SESSION_TABLE_NAME', 'sessions');
+```
 
-//security
-define('ENCRYPTION_KEY', 'weryi9878sdftgtbsdfh');
-define('TOKEN_SESSION_NAME', '34efdre');
-define('TOKEN_INPUT_NAME', 'fh40dfk98dkfje');
+安全配置
+```php
+//加密安全混淆值
+define('ENCRYPTION_KEY', 'weryi9878sdfddtgtbsdfh');
+
+//表单提交token session 名称
+define('TOKEN_SESSION_NAME', '34efddddre');
+
+//表单token字段名
+define('TOKEN_INPUT_NAME', 'fh40dfk9dd8dkfje');
+
+//token过期时间，秒为单位
 define('TOKEN_EXPIRE', 3600);
+```
 
-
+多语言应用
+```php
 //默认语言环境
 define('LANG', 'zh_cn');
+```
 
+URL重写转换输出模版，和路由无关，以配合$this->helper->url()使用
+```php
 //url 重写
 define('URL', ['mod_name'=>['controller_name/action_name'=>'/{controller_key}/{action_key}']]);
 
+
+//例子 
+
+//注意$this->helper->url()参数和数组key的顺序
+define('URL', [
+    'www' => [ 
+    //www表示模块名称
+    
+        'main/index' => '/',  
+        //echo $this->helper->url(['c'=>'main','a'=>'index'])
+        //输出 /
+        
+        'main/lists/type' => '/list/{type}.html',
+         //echo $this->helper->url(['c'=>'main','a'=>'lists','type'=>'2'])
+         //输出 /list/2.html
+        
+        'main/lists/type/page' => '/list/{type}_{page}.html'
+         //echo $this->helper->url(['c'=>'main','a'=>'lists','type'=>'2','page'=>'34']) 
+         //输出 /list/2_34.html
+                 
+    ]
+]);
 
 ```
 
@@ -113,7 +155,7 @@ define('URL', ['mod_name'=>['controller_name/action_name'=>'/{controller_key}/{a
 
 ### 自定义配置数据字典
 
-#### 全局变量数组
+### 全局变量数组
 
 ### 数据库操作
 
