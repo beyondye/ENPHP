@@ -125,7 +125,9 @@ URL重写转换输出模版，和路由无关，以配合$this->helper->url()使
 define('URL', ['mod_name'=>['controller_name/action_name'=>'/{controller_key}/{action_key}']]);
 
 
-//例子
+//例子 
+
+//注意$this->helper->url()参数和数组key的顺序
 define('URL', [
     'www' => [ 
     //www表示模块名称
