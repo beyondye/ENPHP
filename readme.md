@@ -162,6 +162,8 @@ default为默认数据库，可以直接$this->db访问默认数据库
 $this->db('read)访问read数据库
 ```php
 
+//例子
+
 return [
     //默认数据库
     'default' => 
@@ -191,7 +193,26 @@ return [
 
 ### 自定义配置数据字典
 
+> 自定义配置数据字典，主要为了应对某些应用较多的元数据存储访问
+
+> 保存于APP_DIR/config目录下面PHP文件内容为数组
+
+以APP_DIR/config/test.php为范例,配合$this->config使用
+
+```php
+//test.php内容
+return ['key2'='val2','key'=>['a','b','c'];
+
+//var_dump $this->config->test
+//输出 ['key2'='val2','key'=>['a','b','c']
+
+//echo $this->config->test['key'][0]
+//输出 a
+
+```
+
 ### 全局变量数组
+
 
 ### 数据库操作
 
