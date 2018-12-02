@@ -27,9 +27,9 @@
 文档内容
 --------
 
-#### 入口文件配置
+##### 入口文件配置
 
-#### 常量设置
+##### 常量设置
 
 #### 数据库配置
 
@@ -50,6 +50,44 @@
 #### Helper帮助函数
 
 #### Input输入
+
+##### 获取地址查询字符串
+```php
+   //如果var_name为null，就返回默认值default_str
+   $this->input->get('var_name','default_str');
+```
+##### 获取表单数据
+```php
+//字段不存在返回null
+$this->input->post('field_name');
+```
+
+##### 获取v4 IP地址
+```php
+$this->input->ip();
+```
+
+##### 判断是否ajax请求
+```php
+//$_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest'
+$this->input->isAjax();
+```
+
+##### 获取原始请求数据
+```php
+$this->input->body();
+```
+
+##### 获取上一个来源地址url
+```php
+//如果没有为空
+$this->input->referer();
+```
+
+##### 获取当前请求方法
+```php
+$this->input->method();
+```
 
 #### Output输出
 
@@ -120,107 +158,3 @@
 |————www   此目录绑域名用  
 |——————index.php    入口文件  
  
-基础功能
--------
-
-### 输入类 ：system/Input
-
-##### 获取地址查询字符串
-```php
-   //如果var_name为null，就返回默认值default_str
-   $this->input->get('var_name','default_str');
-```
-##### 获取表单数据
-```php
-//字段不存在返回null
-$this->input->post('field_name');
-```
-
-##### 获取v4 IP地址
-```php
-$this->input->ip();
-```
-
-##### 判断是否ajax请求
-```php
-//$_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest'
-$this->input->isAjax();
-```
-
-##### 获取原始请求数据
-```php
-$this->input->body();
-```
-
-##### 获取上一个来源地址url
-```php
-//如果没有为空
-$this->input->referer();
-```
-
-##### 获取当前请求方法
-```php
-$this->input->method();
-```
-
-
-**model的调用**
-
-``` php
-$this->model('model_name') 返回对象实例  
-$this->model('dir/model_name') 返回对象实例  
-$this->model('dir/model_name')->one(id) 返回数据  
-```
- 
-**自定义helper的调用** 
-
-``` php
-$this->helper->form->select()   
-```
-
-**视图模板的调用**
-
-``` php
-$this->output->view('view_name', $data); //输出网页  
-$this->output->json()//输出json  
-```
- 
-**数据库操作**
-
-``` php
-$this->db  自动调用默认数据库  
-$this->db->query(sql)  
-$this->db('db_name') 调用制定数据库  
-$this->db('db_name')->query()  
- ```
- 
-***入口地址結構***
-
-``` php
-index.php?c=controller_name&a=action_name  
-c為控制器名稱 默認控制器main  
-a為方法名稱 默認方法index  
-
-```
- 
-**redis调用方法**
-
-``` php
-$this->redis->hset()  默认redis实例服务器  
-$this->redis('write')->hset() Write redis实例服务器  
-$this->redis->get()  
-$this->redis->set()  
- ```
- 
-**语言包调用**
-
-``` php
-$this->lang->mod_name['key'];  
-$this->lang('en_us')->mod_name['key'];  
- ```
- 
-**加载配置数据** 
-
-``` php
-$this->config->data['action_method']  
-```
