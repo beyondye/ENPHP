@@ -13,46 +13,15 @@
 文档目录索引
 --------
 
----|--- | --- |---
+-|-|-|-
 -----|-----|-----|-----
-[入口文件配置](#入口文件配置)|常量设置|配置文件|自定义配置数据字典
-全局变量数组|数据库操作|Model数据模型|model数据验证
-
-
-
-controller控制器
-
-View视图
-
-Helper帮助函数
-
-input输入
-
-output输出
-
-session会话
-
-cookie管理
-
-Lang多语言配置
-
-Redis缓存
-
-Security安全
-
-Upload上传文件
-
-Html标签生成
-
-Grid表格生成
-
-Image图片修饰
-
-Smtp发送邮件
-
-Captcha验证码生成
-
-应用程序目录约束
+[入口文件配置](#entry)     | [常量设置](#constans)      | [数据配置](#databaseconfig) | [自定义配置数据字典](#config)
+[全局变量数组](#global)    | [数据库操作](#database)     | [Model数据模型](#model)    | [model数据验证](#modelsafe)
+controller控制器          | View视图            |Helper帮助函数    | input输入
+output输出                |  session会话        |cookie管理     |Lang多语言配置
+Redis缓存            |Security安全         |Upload上传文件      |Html标签生成
+Grid表格生成       |Image图片修饰 |Smtp发送邮件 |Captcha验证码生成
+应用程序目录约束 |-|-|-
 
 ----
 
