@@ -15,13 +15,13 @@
 
 &nbsp;|&nbsp;|&nbsp;|&nbsp;
 -----|-----|-----|-----
-[入口文件配置](#entry)       | [常量设置](#constans)       | [数据配置](#databaseconfig)  | [自定义配置数据字典](#config)
-[全局变量数组](#global)      | [数据库操作](#database)     | [Model数据模型](#model)      | [Model数据验证](#modelsafe)
-[Controller控制器](#cntroller) | [View视图](#view)        | [Helper帮助函数](#helper)    | [Input输入](#input)
-[Output输出](#output)       | [Session会话](#session)     | [Cookie管理](#cookie)       |[Lang多语言配置](#lang)
-[Redis缓存](#redis)        | [Security安全](#security)    | [Upload上传文件](#upload)    |[Html标签生成](#html)
-[Grid表格生成](#grid)      |[Image图片修饰](#image)    |[Smtp发送邮件](#smtp)       |[Captcha验证码生成](#captcha)
-[应用程序目录布局说明](#dir) | | | 
+[入口文件配置](#入口文件配置)       | [常量设置](#常量设置)       | [数据配置](#数据配置)  | [自定义配置数据字典](#自定义配置数据字典)
+[全局变量数组](#全局变量数组)      | [数据库操作](#数据库操作)     | [Model数据模型](#Model数据模型)      | [Model数据验证](#Model数据验证)
+[Controller控制器](#Controller控制器) | [View视图](#View视图)   | [Helper帮助函数](#Helper帮助函数)    | [Input输入](#Input输入)
+[Output输出](#Output输出)       | [Session会话](#Session会话)   | [Cookie管理](#Cookie管理)       |[Lang多语言配置](#Lang多语言配置)
+[Redis缓存](#Redis缓存)        | [Security安全](#Security安全)  | [Upload上传文件](#Upload上传文件)  |[Html标签生成](#Html标签生成)
+[Grid表格生成](#Grid表格生成)  |[Image图片修饰](#Image图片修饰)  |[Smtp发送邮件](#Smtp发送邮件)   |[Captcha验证码生成](#Captcha验证码生成)
+[应用程序目录布局说明](#应用程序目录布局说明) | | | 
 
 ----
 
@@ -29,7 +29,7 @@
 
 #### 常量设置
 
-#### 配置文件
+#### 数据库配置
 
 #### 自定义配置数据字典
 
