@@ -59,7 +59,7 @@ define('TEMPLATE', 'www');
 
 ### 常量设置
 
-> 常量文件位置在APP_DIR/config/下面三个子目录test,production,development中的constats.php文件分别按环境设置
+> 常量文件位置在APP_DIR/config/下面三个子目录test,production,development中的constans.php文件分别按环境设置
 
 地址路由配置,以/index.php?c=main&a=index为例子。
 
