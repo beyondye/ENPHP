@@ -1,11 +1,5 @@
 ### 框架入门介绍
-
-运行环境 nginx,php5.6 ,redis, mysqli, mb_string, gd 
-
-PHP代码编写规范遵循php psr  
-换行符使用LF   
-缩进4个空格  
-请参考此页面介绍  https://github.com/PizzaLiu/PHP-FIG  
+版本 PHP7+
 
 
 **目录结构（以www应用为列）**
@@ -14,15 +8,12 @@ PHP代码编写规范遵循php psr
 
   
 |——system    系统框架程序目录  
- 
 |——application  应用程序目录  
-
 |————helper   自定义工具帮助库  
 |————library  自定义公共类库  
 |————language  语言包目录  
 |————font 字体目录  
 |————document 开发文档目录  
-
 |————module   程序模块  
 |——————www  模块名  
 |———————main.php 具体controller业务逻辑文件  
@@ -72,28 +63,28 @@ $this->session->get()
 $this->session->set()  
 ```
 
-**model的调用 
+**model的调用**
 
 ``` php
 $this->model('model_name') 返回对象实例  
 $this->model('dir/model_name') 返回对象实例  
 $this->model('dir/model_name')->one(id) 返回数据  
- ```
+```
  
-**自定义helper的调用   
+**自定义helper的调用** 
 
 ``` php
 $this->helper->form->select()   
 ```
 
-**视图模板的调用  
+**视图模板的调用**
 
 ``` php
 $this->output->view('view_name', $data); //输出网页  
 $this->output->json()//输出json  
- ```
+```
  
-**数据库操作  
+**数据库操作**
 
 ``` php
 $this->db  自动调用默认数据库  
@@ -102,7 +93,7 @@ $this->db('db_name') 调用制定数据库
 $this->db('db_name')->query()  
  ```
  
-**入口地址結構 
+***入口地址結構***
 
 ``` php
 index.php?c=controller_name&a=action_name  
@@ -111,7 +102,7 @@ a為方法名稱 默認方法index
 
 ```
  
-**redis调用方法 
+**redis调用方法**
 
 ``` php
 $this->redis->hset()  默认redis实例服务器  
@@ -120,15 +111,15 @@ $this->redis->get()
 $this->redis->set()  
  ```
  
-**语言包调用  
+**语言包调用**
 
 ``` php
 $this->lang->mod_name['key'];  
 $this->lang('en_us')->mod_name['key'];  
  ```
  
-**加载配置数据  
+**加载配置数据** 
 
 ``` php
 $this->config->data['action_method']  
- ```
+```
