@@ -51,40 +51,40 @@
 
 #### Input输入
 
-##### 获取地址查询字符串
+获取地址查询字符串
 ```php
    //如果var_name为null，就返回默认值default_str
    $this->input->get('var_name','default_str');
 ```
-##### 获取表单数据
+获取表单数据
 ```php
 //字段不存在返回null
 $this->input->post('field_name');
 ```
 
-##### 获取v4 IP地址
+获取v4 IP地址
 ```php
 $this->input->ip();
 ```
 
-##### 判断是否ajax请求
+判断是否ajax请求
 ```php
 //$_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest'
 $this->input->isAjax();
 ```
 
-##### 获取原始请求数据
+获取原始请求数据
 ```php
 $this->input->body();
 ```
 
-##### 获取上一个来源地址url
+获取上一个来源地址url
 ```php
 //如果没有为空
 $this->input->referer();
 ```
 
-##### 获取当前请求方法
+获取当前请求方法
 ```php
 $this->input->method();
 ```
