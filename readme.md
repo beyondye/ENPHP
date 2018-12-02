@@ -15,7 +15,7 @@
 
 &nbsp;|&nbsp;|&nbsp;|&nbsp;
 -----|-----|-----|-----
-[入口文件配置](#入口文件配置)       | [常量设置](#常量设置)       | [数据配置](#数据配置)  | [自定义配置数据字典](#自定义配置数据字典)
+[入口文件配置](#入口文件配置)       | [常量设置](#常量设置)       | [数据库配置](#数据库配置)  | [自定义配置数据字典](#自定义配置数据字典)
 [全局变量数组](#全局变量数组)      | [数据库操作](#数据库操作)     | [Model数据模型](#Model数据模型)      | [Model数据验证](#Model数据验证)
 [Controller控制器](#Controller控制器) | [View视图](#View视图)   | [Helper帮助函数](#Helper帮助函数)    | [Input输入](#Input输入)
 [Output输出](#Output输出)       | [Session会话](#Session会话)   | [Cookie管理](#Cookie管理)       |[Lang多语言配置](#Lang多语言配置)
@@ -39,21 +39,21 @@
 
 #### Model数据模型
 
-##### model数据验证
+##### Model数据验证
 
-#### controller控制器
+#### Controller控制器
 
 #### View视图
 
 #### Helper帮助函数
 
-#### input输入
+#### Input输入
 
-#### output输出
+#### Output输出
 
-#### session会话
+#### Session会话
 
-#### cookie管理
+#### Cookie管理
 
 #### Lang多语言配置
 
