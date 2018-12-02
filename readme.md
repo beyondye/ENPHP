@@ -49,7 +49,7 @@
 基础功能
 -------
 
-#输入类 ：system/Input
+### 输入类 ：system/Input
 
 获取地址查询字符串:$this->input->get()
 
