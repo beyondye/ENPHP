@@ -292,7 +292,7 @@ $condition= [
  
 //返回数据句对象
 $recordset=$this->db->select('table1',$condition);
-foreach($recordset as $rs){
+foreach($recordset->result() as $rs){
     echo $rs->f1;
 }
 
