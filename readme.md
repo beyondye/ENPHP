@@ -392,8 +392,6 @@ $this->db('read')->close()；
 > model文件必须放置在APP_DIR/model/目录下，文件名与类名一致，区分大小写。
 
 
-
-
 通过继承\system\Model，我们可以使用框架自带的功能便捷操作数据。
 
 创建一个典型model。
@@ -489,8 +487,8 @@ $this->primary='id';
 > validate['message'] 提示信息
 
 > filter 过滤数据，blank|tag|entity 三个值组合使用，
->> blank把连续多个空白字符转换成一个,
->> tag过滤html标签,
+>> blank把连续多个空白字符转换成一个,<br>
+>> tag过滤html标签,<br>
 >> entity把html标签转换成实体字符。
 
 > literal 字段的字面名字
@@ -544,7 +542,7 @@ foreach($recordset as $rs){
 > $relation_foreign_name 关联表主键名在关系表中的字段名
      
 > $where=['local_relation_filed_name' => 'local_primary_value']
->> $local_relation_filed_name 本表在关系表字段名
+>> $local_relation_filed_name 本表在关系表字段名<br>
 >> $local_primary_value 本表主键值
 
 > $condition 参见$this->select()参数
@@ -586,15 +584,13 @@ if($rs){
 
 一对多获取副表数据,返回对象数据集
 
-     $model 需要关联的model
+> $model 需要关联的model
      
-     $where=['foreign_name' => 'local_primary_value']
-    
-     $foreign 外表字段名
+> $where=['foreign_name' => 'local_primary_value']
+>> $foreign 外表字段名<br>
+>> $local_primary_value 本表主键值
      
-     $local_primary_value 本表主键值
-     
-     $condition 参见$this->select()参数
+> $condition 参见$this->select()参数
 
 ```php
 
