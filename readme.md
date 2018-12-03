@@ -519,7 +519,7 @@ $this->primary='id';
 
 #### $this->all(fields) 方法
 
-获取数据表全部数据集,大表谨慎使用
+获取数据表全部数据集,大表谨慎使用。
 ```php
 
 $recordset=$this->all(['fname1','fname2']);
@@ -556,7 +556,7 @@ $this->belongs($model, $relation_model, $relation_foreign_name, $where, $conditi
 
 #### $this->count(where) 方法
 
-获取数据表数据条数,适合myisam表
+获取数据表数据条数,适合myisam表。
 ```php
 
 //带条件的计算
@@ -569,7 +569,7 @@ $this->count();
 
 #### $this->delete(where) 方法
 
-删除表数据，成功返回影响数不然返回false
+删除表数据，成功返回影响数不然返回false。
 ```php
 $rs=$this->delete(['f1'=>'2']);
 
@@ -582,7 +582,7 @@ if($rs){
 
 #### $this->hasMany() 方法
 
-一对多获取副表数据,返回对象数据集
+一对多获取副表数据,返回对象数据集。
 
 > $model 需要关联的model
      
@@ -598,21 +598,77 @@ $this->hasMany($model, $where, $condition);
 
 ```
 
-$this->hasOne()
+#### $this->hasOne() 方法
 
-$this->insert()
+一对一获取数据,返回一行对象数据。
+```php
 
-$this->lastid()
+//$model 关联的model
+//$primary_value 主键唯一值
 
-$this->one()
+$this->hasOne($model, $primary_value);
 
-$this->query()
+```
 
-$this->select()
+#### $this->insert(data) 方法
 
-$this->update()
+插入数据，返回布尔值。
 
-$this->>where()
+```php
+
+$data=['f1'=>'1','f1'=>'2'];
+
+$rs=$this->insert($data);
+
+if($rs){
+    //插入成功
+}
+
+```
+
+#### $this->lastid() 方法
+
+获取最后插入的自增主键ID。
+```php
+
+$data=['f1'=>'1','f1'=>'2'];
+
+$rs=$this->insert($data);
+
+if($rs){
+    //获取最后插入自增主键
+    echo $this->>lastid();
+}
+
+```
+
+#### $this->one(id) 方法
+
+通过主键数字ID或唯一字段获取一条记录。
+```php
+//如果是主键数字id
+$this->one(12);
+
+//如果是唯一字段
+$this->>one(['uniqname'=>'abc']);
+```
+
+#### $this->query() 方法
+
+执行通用SQL语句,如果是select返回result对象，不然返回布尔值。
+```php
+
+$result=$this->query('select * from table1');
+
+
+
+```
+
+#### $this->select() 方法
+
+#### $this->update() 方法
+
+#### $this->>where() 方法
 
 
 
