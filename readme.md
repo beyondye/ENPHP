@@ -333,7 +333,7 @@ if($rs){
 
 #### $this->db->escape(str) 方法
 
-SQL语句中的特殊字符进行转义
+SQL语句中的特殊字符进行转义，返回转义后字符串。
 ```php
 //参见 http://php.net/manual/zh/mysqli.real-escape-string.php
 $this->db->escape('str');
@@ -373,7 +373,7 @@ if($rs){
 
 关闭数据库链接，返回布尔值。
 
-正常情况下，框架在执行完到最后主动关闭链接，也可以提前手动关闭。
+正常情况下，框架在执行完到最后自动关闭链接，也可以提前手动关闭。
 ```php
 
 //关闭默认数据链接
@@ -386,6 +386,58 @@ $this->db('read')->close()；
 
 
 ### Model数据模型
+
+> 每个model必须于数据库某个表对应。
+
+> model文件必须放置在APP_DIR/model/目录下，文件名与类名一致，区分大小写。
+
+
+通过继承\system\Model，我们可以使用框架自带的功能便捷操作数据。
+
+创建一个典型model。
+```php
+//Tablemodel.php
+
+//命名空间
+namespace model;
+
+//类必须继承一个自定义\inherit\Model类或是系统\system\Model类
+class Tablemodel extends \inherit\Model
+{
+
+    //构造函数必须有
+    public function __construct()
+    {
+    
+        //运行上级构造函数
+        parent::__construct();
+        
+        //必须设置一个数据表
+        $this->table = 'test';
+        
+        //必须设置一个主键
+        $this->primary = 'id';
+
+        //设置一个表的结构，以便验证过滤
+        $this->schema = [
+            'id' => [
+                'validate' => ['regex' => '/^\d+$/', 'message' => 'ID 不能为空'],
+                'literal' => 'ID',
+                'default' => null,
+                'required' => false
+            ],
+            'name' => [
+                'validate' => ['regex' => '/^\S+$/', 'message' => '名称不能为空'],
+                'literal' => '名称',
+                'default' => '',
+                'required' => true
+            ]];
+    }
+
+}
+
+
+```
 
 ### Model数据验证
 
