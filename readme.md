@@ -235,14 +235,14 @@ $vars = [];
 
 > 配置好数据库以后，我们可以 $this->db 调用默认数据库。
 
-> 或者可以$this->db('read')调用一个已配置为'read'的数据。
+> 或者可以$this->db('read')调用一个已配置为'read'的数据库。
 
+
+$this->db->query(sql) 方法
 
 原始sql语句执行，如是select返回数据集，delete，insert，update返回布尔值。
 
 ```php
-
-//查询数据库表
 
 
 //返回一个结果集对象句柄
