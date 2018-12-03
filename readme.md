@@ -582,8 +582,25 @@ if($rs){
 
 ```
 
+#### $this->hasMany() 方法
 
-$this->hasMany()
+一对多获取副表数据,返回对象数据集
+
+     $model 需要关联的model
+     
+     $where=['foreign_name' => 'local_primary_value']
+    
+     $foreign 外表字段名
+     
+     $local_primary_value 本表主键值
+     
+     $condition 参见$this->select()参数
+
+```php
+
+$this->hasMany($model, $where, $condition);
+
+```
 
 $this->hasOne()
 
