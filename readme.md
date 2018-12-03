@@ -480,7 +480,7 @@ $this->primary='id';
 
 #### $this->schema 属性
 
-设置数据表结构，以便验证过滤
+设置数据表结构，以便验证过滤，数组key必须和字段名一致
 
 > validate['regex'] 正则验证字段数据合法性
 
@@ -574,7 +574,7 @@ $this->count();
 $rs=$this->delete(['f1'=>'2']);
 
 if($rs){
-    //返回影响数
+    //删除成功返回影响数
     echo $rs;
 }
 
@@ -653,24 +653,59 @@ $this->one(12);
 $this->>one(['uniqname'=>'abc']);
 ```
 
-#### $this->query() 方法
+#### $this->query(sql) 方法
 
-执行通用SQL语句,如果是select返回result对象，不然返回布尔值。
+执行通用SQL语句,<br>
+如果是select返回基础数据库result对象，<br>
+执行update，insert，delete返回布尔值。
 ```php
 
 $result=$this->query('select * from table1');
 
+```
 
+#### $this->select(condition) 方法
+
+按条件获取表数据对象集,参数为空，返回全部数据。
+```php
+$condition=[
+     'where' => ['f1'=>'2'],
+     'fields' => ['f1','f2'],
+     'orderby' => ['f1'=>'desc','f2'=>'asc'],
+     'limit' => [0,20] //或 'limit'=>20
+   ];
+
+$this->select($condition);
 
 ```
 
-#### $this->select() 方法
 
-#### $this->update() 方法
+#### $this->update(data,where) 方法
 
-#### $this->>where() 方法
+更新数据记录，成功返回影响行数，失败返回false
+```php
 
+$data=['f1'=>2,'f2'=>3];
+$where=['id'=>12];
 
+$rs=$this->>update($data,$where);
+
+if($rs){
+    //修改成功，返回影响行数
+    echo $rs;
+}
+
+```
+
+#### $this->>where(where,fields) 方法
+
+按条件返回数据对象集,主要简化$this->select()
+```php
+$where=['f1'=>'2'];
+$fields=['f1','f2'];
+
+$this->where($where,$fields);
+```
 
 ### Model数据验证
 
