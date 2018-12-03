@@ -11,7 +11,8 @@ class Helper
     public function __get($name)
     {
         global $instances;
-        return $instances['system']['System']->load(ucfirst($name), 'helper');
+        $sys=$instances['system']['System'];
+        return $sys->load(ucfirst($name), 'helper');
     }
 
     /**
@@ -107,14 +108,14 @@ class Helper
 
         $default = [CONTROLLER_KEY_NAME => $vars['controller'], ACTION_KEY_NAME => $vars['action']];
 
-        $keyarr = $param = array_merge($default, $param);
+        $keys = $param = array_merge($default, $param);
         $key = $param[CONTROLLER_KEY_NAME] . '/' . $param[ACTION_KEY_NAME];
 
-        unset($keyarr[CONTROLLER_KEY_NAME]);
-        unset($keyarr[ACTION_KEY_NAME]);
+        unset($keys[CONTROLLER_KEY_NAME]);
+        unset($keys[ACTION_KEY_NAME]);
 
-        if ($keyarr) {
-            $key = $key . '/' . join('/', array_keys($keyarr));
+        if ($keys) {
+            $key = $key . '/' . join('/', array_keys($keys));
         }
 
         if (isset(URL[MODULE])&&array_key_exists($key, URL[MODULE])) {

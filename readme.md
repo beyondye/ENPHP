@@ -16,7 +16,7 @@
 &nbsp;|&nbsp;|&nbsp;|&nbsp;
 -----|-----|-----|-----
 [入口文件配置](#入口文件配置)       | [常量设置](#常量设置)       | [数据库配置](#数据库配置)  | [自定义配置数据字典](#自定义配置数据字典)
-[全局变量数组](#全局变量数组)      | [数据库操作](#数据库操作)     | [Model数据模型](#Model数据模型)      | [Model数据验证](#Model数据验证)
+[全局变量数组](#全局变量数组)      | [数据库基本操作](#数据库基本操作)     | [Model数据模型](#Model数据模型)      | [Model数据验证](#Model数据验证)
 [Controller控制器](#Controller控制器) | [View视图](#View视图)   | [Helper帮助函数](#Helper帮助函数)    | [Input输入](#Input输入)
 [Output输出](#Output输出)       | [Session会话](#Session会话)   | [Cookie管理](#Cookie管理)       |[Lang多语言配置](#Lang多语言配置)
 [Redis缓存](#Redis缓存)        | [Security安全](#Security安全)  | [Upload上传文件](#Upload上传文件)  |[Html标签生成](#Html标签生成)
@@ -229,7 +229,65 @@ $vars = [];
 ```
 
 
-### 数据库操作
+### 数据库基本操作
+
+> 暂时只支持mysqli
+
+> 配置好数据库以后，我们可以 $this->db 调用默认数据库。
+
+> 或者可以$this->db('read')调用一个已配置为'read'的数据。
+
+
+原始sql语句执行，如是select返回数据集，delete，insert，update返回布尔值。
+
+```php
+
+//查询数据库表
+
+
+//返回一个结果集对象句柄
+$result=$this->db->query('select * from table1 where f=2;');
+
+//返回数据的条数，int类型
+$result->num_rows;
+
+//返回结果集其中一条数据，默认第一条以对象形式返回字段
+$result->row();
+
+//以数组形式返回第3条数据
+//$row['f'];
+$row=$result->row(2,'array');
+
+
+//以对象形式返回第4条数据
+//$row->f;
+$row=$result->row(3,'object')
+
+
+//返回数据集，默认对象形式
+$recordset=$result->result();
+foreach($recordset as $rs){
+    echo $rs->f;
+}
+
+//数组形式返回数据集
+$recordset=$result->result('array');
+foreach($recordset as $rs){
+    echo $rs['f'];
+}
+
+```
+
+
+$this->db->select();
+$this->db->insert();
+$this->db->delete();
+$this->db->escape();
+$this->db->replace();
+$this->db->update();
+$this->db->close();
+
+
 
 ### Model数据模型
 
