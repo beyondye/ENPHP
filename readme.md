@@ -392,9 +392,12 @@ $this->db('read')->close()；
 > model文件必须放置在APP_DIR/model/目录下，文件名与类名一致，区分大小写。
 
 
+
+
 通过继承\system\Model，我们可以使用框架自带的功能便捷操作数据。
 
 创建一个典型model。
+
 ```php
 //Tablemodel.php
 
@@ -437,7 +440,45 @@ class Tablemodel extends \inherit\Model
 }
 
 
+//可以这样调用model
+$this->model('Tablemodel')->one(1);
+
 ```
+
+
+$this->RDB
+$this->WDB
+$this->table
+$this->primary
+$this->schema
+
+$this->all()
+
+$this->belongs()
+
+$this->count()
+
+$this->delete()
+
+$this->hasMany()
+
+$this->hasOne()
+
+$this->insert()
+
+$this->lastid()
+
+$this->one()
+
+$this->query()
+
+$this->select()
+
+$this->update()
+
+$this->>where()
+
+
 
 ### Model数据验证
 

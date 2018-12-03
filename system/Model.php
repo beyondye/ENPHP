@@ -5,7 +5,7 @@ namespace system;
 use system\System;
 
 /**
- * 
+ *
  * @author Ding<beyondye@gmail.com>
  */
 class Model extends System
@@ -13,42 +13,42 @@ class Model extends System
 
     /**
      * 操作的表名
-     * 
+     *
      * @var string
      */
     public $table = '';
 
     /**
      * 表主键字段名
-     * 
+     *
      * @var string
      */
     public $primary = '';
 
     /**
      * 表结构
-     * 
+     *
      * @var array
      */
     public $schema = [];
 
     /**
      * 读数据库名
-     * 
+     *
      * @var string
      */
     public $RDB = 'default';
 
     /**
      * 写数据库名
-     * 
+     *
      * @var string
      */
     public $WDB = 'default';
 
     /**
      * 加载safe 字段验证
-     * 
+     *
      * @param string $name
      * @return object
      */
@@ -63,7 +63,7 @@ class Model extends System
 
     /**
      * 获取表全部记录
-     * 
+     *
      * @param array $fields 返回字段
      * @return object array
      */
@@ -74,7 +74,7 @@ class Model extends System
 
     /**
      * 通过sql where条件获取数据
-     * 
+     *
      * @param array $where 条件过滤
      * @param array $fields 返回字段
      * @return object array
@@ -86,7 +86,7 @@ class Model extends System
 
     /**
      * 获取最后插入的主键id
-     * 
+     *
      * @return int
      */
     public function lastid()
@@ -96,9 +96,9 @@ class Model extends System
 
     /**
      * 按条件获取表数据条数
-     * 
+     *
      * @param array|string $where 必须与表字段对应 $where['field_name'=>'field_value']
-     * 
+     *
      * @return int
      */
     public function count($where = [])
@@ -108,9 +108,9 @@ class Model extends System
 
     /**
      * 插入数据到表
-     * 
+     *
      * @param array|string $data 必须与表字段对应 $data['field_name'=>'field_value']
-     * 
+     *
      * @return boolean
      */
     public function insert($data = [])
@@ -121,12 +121,12 @@ class Model extends System
 
     /**
      * 删除表数据
-     * 
-     * @param array|int|string $where 
-     * 
+     *
+     * @param array|int|string $where
+     *
      * array必须与表字段对应 $where['field_name'=>'field_value'],
      * int类型 必须是主键值
-     * 
+     *
      * @return boolean
      */
     public function delete($where = [])
@@ -141,13 +141,13 @@ class Model extends System
 
     /**
      * 更新数据到表
-     * 
+     *
      * @param array|string $data 必须与表字段对应 $data['field_name'=>'field_value']
-     * 
+     *
      * @param array|int|string $where
      * array必须与表字段对应 $where['field_name'=>'field_value'],
      * int类型 必须是主键值
-     * 
+     *
      * @return boolean
      */
     public function update($data, $where = [])
@@ -162,21 +162,28 @@ class Model extends System
 
     /**
      * 原生sql查询表数据，没有参数返回全部
-     * 
-     * @param string $sql 
-     * 
+     *
+     * @param string $sql
+     *
      * @return mix
      */
     public function query($sql)
     {
-        return $this->db($this->RDB)->query($sql);
+        if (!$sql) {
+            return false;
+        }
+
+        $pieces = explode(' ', trim($sql));
+        $db = strtolower($pieces[0]) == 'select' ? $this->RDB : $this->WDB;
+
+        return $this->db($db)->query($sql);
     }
 
     /**
      * 查询表数据，没有参数返回全部
-     * 
+     *
      * @param array $condtion ['where' => [], 'fields' => [], 'orderby' => [], 'limit' => []]
-     * 
+     *
      * @return array|object
      */
     public function select($condition = [])
@@ -186,9 +193,9 @@ class Model extends System
 
     /**
      * 通过主键返回一条数据
-     * 
+     *
      * @param int|array  表主键或唯一索引数组
-     * 
+     *
      * @return array
      */
     public function one($primary)
@@ -205,10 +212,10 @@ class Model extends System
 
     /**
      * 一对一
-     * 
+     *
      * @param string $model 关联的model
-     * @param string|int $primary_value  主键唯一值
-     * 
+     * @param string|int $primary_value 主键唯一值
+     *
      * @return array|object
      */
     public function hasOne($model, $primary_value)
@@ -233,15 +240,15 @@ class Model extends System
 
     /**
      * 一对多
-     * 
+     *
      * @param string $model 需要关联的model
-     * 
+     *
      * @param array $where ['foreign_name' => 'local_primary_value']
      * @subparam string $foreign 外表字段名
      * @subparam string|int $local_primary_value 本表主键值
-     * 
+     *
      * @param array $condition 参见$this->select()参数
-     * 
+     *
      * @return array|object
      */
     public function hasMany($model, $where = [], $condition = [])
@@ -258,17 +265,17 @@ class Model extends System
 
     /**
      * 多对多
-     * 
+     *
      * @param string $model 需要关联的model名称
      * @param string $relation_model 关系表model名称
      * @param string $relation_foreign_name 关联表主键名在关系表中的字段名
-     * 
+     *
      * @param array $where ['local_relation_filed_name' => 'local_primary_value']
      * @subparam string $local_relation_filed_name 本表在关系表字段名
      * @subparam string|int $local_primary_value 本表主键值
-     * 
+     *
      * @param array $condition 参见$this->select()参数
-     * 
+     *
      * @return array|object
      */
     public function belongsTo($model, $relation_model, $relation_foreign_name, $where = [], $condition = [])
@@ -299,7 +306,7 @@ class Model extends System
 
     /**
      * 构造表的预览数据结构，以便于快速编码，必须按照自己需求修改
-     * 
+     *
      * @return string
      */
     public function printSchema()
