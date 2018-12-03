@@ -7,7 +7,7 @@ use system\System;
 /**
  * 输出类
  * 
- * @author Ding <beyondye@gmail.com>
+ * @author Ding<beyondye@gmail.com>
  */
 class Output extends System
 {

@@ -5,7 +5,7 @@ namespace system;
 /**
  * 输入类
  * 
- * @author Ding <beyondye@gmail.com>
+ * @author Ding<beyondye@gmail.com>
  */
 class Input
 {

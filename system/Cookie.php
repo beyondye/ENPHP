@@ -5,7 +5,7 @@ namespace system;
 /**
  * cookie类
  * 
- * @author Ding <beyondye@gmail.com>
+ * @author Ding<beyondye@gmail.com>
  */
 class Cookie
 {

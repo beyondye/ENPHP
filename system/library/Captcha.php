@@ -5,7 +5,7 @@ namespace system\library;
 /**
  * 生成验证码
  * 
- * @author Ding <beyondye@gmail.com>
+ * @author Ding<beyondye@gmail.com>
  */
 class Captcha
 {

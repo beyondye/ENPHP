@@ -5,7 +5,7 @@ namespace system\library;
 /**
  * 生成html标签
  * 
- * @author Ding <beyondye@gmail.com>
+ * @author Ding<beyondye@gmail.com>
  */
 class Html
 {

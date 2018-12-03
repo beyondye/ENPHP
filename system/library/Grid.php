@@ -7,7 +7,7 @@ use system\library\Html;
 /**
  * 表格
  * 
- * @author Ding <beyondye@gmail.com>
+ * @author Ding<beyondye@gmail.com>
  */
 class Grid
 {

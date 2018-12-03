@@ -5,7 +5,7 @@ namespace system;
 /**
  * 加载配置数据
  * 
- * @author Ye Ding<beyondye@gmail.com>
+ * @author Ding<beyondye@gmail.com>
  */
 class Config
 {

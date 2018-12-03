@@ -5,7 +5,7 @@ namespace system\database\mysqli;
 /**
  * 数据操作类
  * 
- * @author Ding <beyondye@gmail.com>
+ * @author Ding<beyondye@gmail.com>
  */
 class Db
 {

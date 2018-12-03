@@ -5,7 +5,7 @@ namespace system;
 /**
  * redis操作
  *
- * @author Ye Ding <beyondye@gmail.com>
+ * @author Ding<beyondye@gmail.com>
  * 
  */
 class Redis extends \Redis

@@ -5,7 +5,7 @@ namespace system\library;
 /**
  * SMTP邮件发送, 支持发送纯文本邮件和HTML格式的邮件
  * 
- * @author Ye Ding<beyondye@gmail.com>
+ * @author Ding<beyondye@gmail.com>
  * 
  *例子：
  

@@ -25,7 +25,7 @@ class Helper
      * 
      * @return string
      */
-    function pager($size, $total, $page, $url, $visible = 5)
+    public function pager($size, $total, $page, $url, $visible = 5)
     {
         $previous = $page - 1;
         $next = $page + 1;
@@ -99,7 +99,7 @@ class Helper
      * 
      * @return string
      */
-    function url($param = [], $path = ENTRY, $anchor = '')
+    public function url($param = [], $path = ENTRY, $anchor = '')
     {
         global $vars;
 

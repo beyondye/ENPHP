@@ -5,7 +5,7 @@ namespace system;
 /**
  * 框架核心类
  * 
- * @author Ding <beyondye@gmail.com>
+ * @author Ding<beyondye@gmail.com>
  */
 class System
 {
