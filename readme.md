@@ -277,8 +277,27 @@ foreach($recordset as $rs){
 
 ```
 
+#### $this->db->select(table,condition) 方法
 
-$this->db->select();
+查询数据库表返回数据集对象
+```php
+
+//查询条件
+$condition= [
+     'where' => ['f1'=>'2','f3>'=>'3','f4!='=>'8'], //where条件
+     'fields' => ['f1','f2','f3'],//返回字段
+     'orderby' => ['f1'=>'desc','f2'=>'asc'], //排序
+     'limit' => [0,20] //返回数据条数
+  ];
+ 
+//返回数据句对象
+$recordset=$this->db->select('table1',$condition);
+foreach($recordset as $rs){
+    echo $rs->f1;
+}
+
+```
+
 $this->db->insert();
 $this->db->delete();
 $this->db->escape();

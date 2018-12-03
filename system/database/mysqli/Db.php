@@ -188,12 +188,12 @@ class Db
      * 
      * @return object array
      */
-    public function select($table, $condtion = [])
+    public function select($table, $condition = [])
     {
         $default = ['where' => [], 'fields' => [], 'orderby' => [], 'limit' => []];
-        $condtion = array_merge($default, $condtion);
+        $condition = array_merge($default, $condition);
 
-        $sql = "SELECT {$this->sqlField($condtion['fields'])} FROM {$table} {$this->sqlwhere($condtion['where'])} {$this->sqlOrderBy($condtion['orderby'])} {$this->sqlLimit($condtion['limit'])} ";
+        $sql = "SELECT {$this->sqlField($condition['fields'])} FROM {$table} {$this->sqlwhere($condition['where'])} {$this->sqlOrderBy($condition['orderby'])} {$this->sqlLimit($condition['limit'])} ";
         return $this->query($sql);
     }
 
