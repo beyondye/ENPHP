@@ -287,7 +287,7 @@ $condition= [
      'where' => ['f1'=>'2','f3>'=>'3','f4!='=>'8'], //where条件,支持运算符>,<,<>,!=,=,in,like,>=,<=
      'fields' => ['f1','f2','f3'],//返回字段
      'orderby' => ['f1'=>'desc','f2'=>'asc'], //排序
-     'limit' => [0,20] //返回数据条数
+     'limit' => [0,20] //返回数据条数 ，也可以是一个int值，如：limit=>10
   ];
  
 //返回数据句对象
@@ -303,12 +303,31 @@ foreach($recordset->result() as $rs){
 插入数据到数据库表，返回布尔值。
 ```php
 
+//需要插入的数据
+$data=['f1'=>'1','f2'=>'2'];
+
+
+$rs=$this->db->insert('table1',$data)；
+if($rs){
+   //插入成功，返回最后一条插入语句产生的自增ID
+   $this->db->insert_id;
+}
+
 ```
 
 #### $this->db->delete(table,where) 方法
 
 删除数据集，返回布尔值
 ```php
+//删除条件
+$data=['f1'=>'1','f2'=>'2'];
+
+
+$rs=$this->db->delete('table1',$data)；
+if($rs){
+   //删除成功，返回影响数据行数
+   $this->db->affected_rows;
+}
 
 ```
 
@@ -316,27 +335,52 @@ foreach($recordset->result() as $rs){
 
 SQL语句中的特殊字符进行转义
 ```php
-
+//参见 http://php.net/manual/zh/mysqli.real-escape-string.php
+$this->db->escape('str');
 ```
 
 #### $this->db->replace(table,data) 方法
 
 数据集主键如果存在就替换不然插入新数据，返回布尔值。
 ```php
+//需要插入或替换的数据，如果主键primary=1已存在，即替换本条数据，不然插入新数据。
+$data=['primary'=>1,'f1'=>'1','f2'=>'2'];
+
+$rs=$this->db->replace('table1',$data)；
 
 ```
 
-#### $this->db->update(table,where)
+#### $this->db->update(table,data,where) 方法
 
 更新数据，返回布尔值。
 ```php
+
+$data=['f1'=>'3','f3'=>'1'];
+$where=['id'=>2];
+
+$rs=$this->db->update('table1',$data,$where);
+
+if($rs){
+   //更新成功，返回影响数据行数
+   $this->db->affected_rows;
+ 
+}
+
 
 ```
 
 #### $this->db->close() 方法
 
 关闭数据库链接，返回布尔值。
+
+正常情况下，框架在执行完到最后主动关闭链接，也可以提前手动关闭。
 ```php
+
+//关闭默认数据链接
+$this->db->close()；
+
+//关闭read数据链接
+$this->db('read')->close()；
 
 ```
 
