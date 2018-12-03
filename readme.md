@@ -446,11 +446,78 @@ $this->model('Tablemodel')->one(1);
 ```
 
 
-$this->RDB
-$this->WDB
-$this->table
-$this->primary
-$this->schema
+#### $this->RDB 属性
+
+设置读数据库，默认为default数据库
+```php
+
+$this->RDB='read_database';
+
+```
+
+#### $this->WDB 属性
+
+设置写数据库，默认为default数据库
+```php
+
+$this->RDB='write_database';
+
+```
+
+#### $this->table 属性
+
+设置model对应数据表
+```php
+
+$this->table='table1';
+
+```
+
+#### $this->primary 属性
+
+设置数据表主键字段
+```php
+$this->primary='id';
+```
+
+#### $this->schema 属性
+
+设置数据表结构，以便验证过滤
+
+> validate['regex'] 正则验证字段数据合法性
+
+>validate['message'] 提示信息
+
+> filter 过滤数据，blank|tag|entity 三个值组合使用，
+>> blank把连续多个空白字符转换成一个
+>> tag过滤html标签
+>> entity把html标签转换成实体字符
+
+> literal 字段的字面名字
+
+> default 字段默认值
+
+> required 是否必须填写字段
+
+```php
+
+      $this->schema = [
+            'id' => [
+                'validate' => ['regex' => '/^\d+$/', 'message' => 'ID 不能为空'],
+                'literal' => 'ID',
+                'default' => null,
+                'required' => false
+            ],
+            'name' => [
+                'validate' => ['regex' => '/^\S+$/', 'message' => '名称不能为空'],
+                'filter'=>'blank|tag|entity'
+                'literal' => '名称',
+                'default' => '',
+                'required' => true
+            ]
+      ];
+
+```
 
 $this->all()
 
