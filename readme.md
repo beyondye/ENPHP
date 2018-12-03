@@ -3,7 +3,7 @@
 特别适合中小型网站的开发建设，自带数据表验证，多数据库分离支持，常用的库文件。
 以简化那些80%重复功能为目标打造出此框架，如果您厌烦那些重量级框架，请不妨试试ENPHP Framework。
 
-### 版本依赖
+### 版本库依赖
 
 > 版本 PHP7+
 
@@ -759,15 +759,30 @@ var_dump($this->notMemberFields);
 
 ```
 
-#### $this->safe->complete(dat) 方法
+#### $this->safe->complete(data) 方法
 验证是否缺少必要字段，<br>
 缺少的必要字段保存于$this->incompleteFields<br>
 返回布尔值
 ```php
+//假如$this->schema包含字段f1,f2必须填写不能为空
 
+//注意$data没有包含字段f2
+$data=['f1'=>'val'];
+
+//验证完整性
+$result=$this->safe->complete($data);
+
+if($result){
+   //通过完整性验证
+}else{
+    //没有通过验证
+
+    var_dump($this->incompleteFields);
+    //输出['f2']
+}
 ```
 
-#### $this->safe->merge() 方法
+#### $this->safe->merge(data) 方法
 与schema默认数据合并，并且清理不存在于schema里面的字段，<br>
 不是成员的字段保存于$this->notMemberFields<br>
 返回合并及清理的数据
@@ -775,7 +790,7 @@ var_dump($this->notMemberFields);
 
 ```
 
-#### $this->safe->validate() 方法
+#### $this->safe->validate(data) 方法
 验证数据合法性，非法字段保存于$this->illegalFields<br>
 返回布尔值
 ```php
