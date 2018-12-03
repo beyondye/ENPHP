@@ -637,7 +637,7 @@ $rs=$this->insert($data);
 
 if($rs){
     //获取最后插入自增主键
-    echo $this->>lastid();
+    echo $this->lastid();
 }
 
 ```
@@ -650,7 +650,7 @@ if($rs){
 $this->one(12);
 
 //如果是唯一字段
-$this->>one(['uniqname'=>'abc']);
+$this->one(['uniqname'=>'abc']);
 ```
 
 #### $this->query(sql) 方法
@@ -688,7 +688,7 @@ $this->select($condition);
 $data=['f1'=>2,'f2'=>3];
 $where=['id'=>12];
 
-$rs=$this->>update($data,$where);
+$rs=$this->update($data,$where);
 
 if($rs){
     //修改成功，返回影响行数
@@ -697,9 +697,9 @@ if($rs){
 
 ```
 
-#### $this->>where(where,fields) 方法
+#### $this->where(where,fields) 方法
 
-按条件返回数据对象集,主要简化$this->select()
+按条件返回数据对象集,主要为了简化$this->select()
 ```php
 $where=['f1'=>'2'];
 $fields=['f1','f2'];
@@ -707,7 +707,81 @@ $fields=['f1','f2'];
 $this->where($where,$fields);
 ```
 
+#### $this->safe 属性
+验证过滤入库字段数据，返回system/Safe实例。
+
+> 具体参见 文档Model数据验证部分
+
+```php
+
+//可以在控制器这样调用
+$this->model('Tablemodel')->safe->clear($data);
+
+```
+
+
 ### Model数据验证
+> Model数据验证，为了用户输入数据的合法性，<br>
+> 提供了几个实用方法函数以配合Model的$this->schema属性使用。
+
+#### $this->safe->illegalFields 属性
+> 接受返回验证不通过非法字段名数组
+
+#### $this->safe->notMemberFields 属性
+> 接受返回不在表字段中的非法字段名数组
+
+#### $this->safe->incompleteFields 属性
+> 接受返回未完成及必须填写的字段名数组
+
+#### $this->safe->clear(data) 方法
+清理不存在于schema里面的字段，<br>
+不是成员的字段保存于$this->notMemberFields<br>
+返回清理后的数据
+```php
+
+//清理之前的数据
+$beforedata=[
+     //假如nomember不存在于$this->schema中，将被清理掉
+    'notmember'=>'val',
+    //假如f1字段名存在于$this->schema
+    'f1'=>'val'
+];
+
+
+//清理之后
+$afterdata=$this->safe->clear($data);
+
+//输出['f1'=>'val']
+var_dump($afterdata);
+
+//输出不是成员字段名['notmember']
+var_dump($this->notMemberFields);
+
+```
+
+#### $this->safe->complete(dat) 方法
+验证是否缺少必要字段，<br>
+缺少的必要字段保存于$this->incompleteFields<br>
+返回布尔值
+```php
+
+```
+
+#### $this->safe->merge() 方法
+与schema默认数据合并，并且清理不存在于schema里面的字段，<br>
+不是成员的字段保存于$this->notMemberFields<br>
+返回合并及清理的数据
+```php
+
+```
+
+#### $this->safe->validate() 方法
+验证数据合法性，非法字段保存于$this->illegalFields<br>
+返回布尔值
+```php
+
+```
+
 
 ### Controller控制器
 
