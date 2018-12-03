@@ -298,42 +298,42 @@ foreach($recordset->result() as $rs){
 
 ```
 
-#### $this->db->insert(table,data)
+#### $this->db->insert(table,data) 方法
 
 插入数据到数据库表，返回布尔值。
 ```php
 
 ```
 
-#### $this->db->delete()
+#### $this->db->delete(table,where) 方法
 
 删除数据集，返回布尔值
 ```php
 
 ```
 
-#### $this->db->escape()
+#### $this->db->escape(str) 方法
 
 SQL语句中的特殊字符进行转义
 ```php
 
 ```
 
-#### $this->db->replace()
+#### $this->db->replace(table,data) 方法
 
 数据集主键如果存在就替换不然插入新数据，返回布尔值。
 ```php
 
 ```
 
-#### $this->db->update()
+#### $this->db->update(table,where)
 
 更新数据，返回布尔值。
 ```php
 
 ```
 
-####$this->db->close()
+#### $this->db->close() 方法
 
 关闭数据库链接，返回布尔值。
 ```php
