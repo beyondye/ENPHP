@@ -519,9 +519,43 @@ $this->primary='id';
 
 ```
 
-$this->all()
+#### $this->all(fields) 方法
 
-$this->belongs()
+获取数据表全部数据集,大表谨慎使用
+```php
+
+$recordset=$this->all(['fname1','fname2']);
+
+//注意直接返回数据集，而不是result对象
+foreach($recordset as $rs){
+    echo $rs->fname1;
+}
+
+```
+
+#### $this->belongs(model, relation_model, relation_foreign_name, where, condition) 方法
+
+多对多获取表数据,返回对象数据集
+
+> $model 需要关联的model名称
+
+> $relation_model 关系表model名称
+     
+> $relation_foreign_name 关联表主键名在关系表中的字段名
+     
+> $where=['local_relation_filed_name' => 'local_primary_value']
+>> $local_relation_filed_name 本表在关系表字段名
+>> $local_primary_value 本表主键值
+
+> $condition 参见$this->select()参数
+     
+     
+```php
+
+$this->>belongs($model, $relation_model, $relation_foreign_name, $where, $condition);
+
+```
+
 
 $this->count()
 
