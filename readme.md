@@ -240,7 +240,7 @@ $vars = [];
 
 #### $this->db->query(sql) 方法
 
-原始sql语句执行，如是select返回数据集，delete，insert，update返回布尔值。
+原始SQL语句执行，如是select返回数据集，delete，insert，update返回布尔值。
 
 ```php
 
@@ -279,12 +279,12 @@ foreach($recordset as $rs){
 
 #### $this->db->select(table,condition) 方法
 
-查询数据库表返回数据集对象
+查询数据库表返回数据集对象。
 ```php
 
 //查询条件
 $condition= [
-     'where' => ['f1'=>'2','f3>'=>'3','f4!='=>'8'], //where条件
+     'where' => ['f1'=>'2','f3>'=>'3','f4!='=>'8'], //where条件,支持运算符>,<,<>,!=,=,in,like,>=,<=
      'fields' => ['f1','f2','f3'],//返回字段
      'orderby' => ['f1'=>'desc','f2'=>'asc'], //排序
      'limit' => [0,20] //返回数据条数
@@ -298,13 +298,47 @@ foreach($recordset->result() as $rs){
 
 ```
 
-$this->db->insert();
-$this->db->delete();
-$this->db->escape();
-$this->db->replace();
-$this->db->update();
-$this->db->close();
+#### $this->db->insert(table,data)
 
+插入数据到数据库表，返回布尔值。
+```php
+
+```
+
+#### $this->db->delete()
+
+删除数据集，返回布尔值
+```php
+
+```
+
+#### $this->db->escape()
+
+SQL语句中的特殊字符进行转义
+```php
+
+```
+
+#### $this->db->replace()
+
+数据集主键如果存在就替换不然插入新数据，返回布尔值。
+```php
+
+```
+
+#### $this->db->update()
+
+更新数据，返回布尔值。
+```php
+
+```
+
+####$this->db->close()
+
+关闭数据库链接，返回布尔值。
+```php
+
+```
 
 
 ### Model数据模型
