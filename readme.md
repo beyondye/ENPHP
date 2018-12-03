@@ -490,7 +490,9 @@ $this->primary='id';
 
 > filter 过滤数据，blank|tag|entity 三个值组合使用，
 >> blank把连续多个空白字符转换成一个
+
 >> tag过滤html标签
+
 >> entity把html标签转换成实体字符
 
 > literal 字段的字面名字
