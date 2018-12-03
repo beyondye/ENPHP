@@ -201,10 +201,10 @@ return [
 
 ```php
 //test.php内容
-return ['key2'='val2','key'=>['a','b','c'];
+return ['key2'=>'val2','key'=>['a','b','c'];
 
 //var_dump $this->config->test
-//输出 ['key2'='val2','key'=>['a','b','c']
+//输出 ['key2'=>'val2','key'=>['a','b','c']
 
 //echo $this->config->test['key'][0]
 //输出 a
