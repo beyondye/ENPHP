@@ -552,14 +552,36 @@ foreach($recordset as $rs){
      
 ```php
 
-$this->>belongs($model, $relation_model, $relation_foreign_name, $where, $condition);
+$this->belongs($model, $relation_model, $relation_foreign_name, $where, $condition);
 
 ```
 
+#### $this->count(where) 方法
 
-$this->count()
+获取数据表数据条数,适合myisam表
+```php
 
-$this->delete()
+//带条件的计算
+$this->count(['field'=>'val']);
+
+//获取表总条数
+$this->count();
+
+```
+
+#### $this->delete(where) 方法
+
+删除表数据，成功返回影响数不然返回false
+```php
+$rs=$this->delete(['f1'=>'2']);
+
+if($rs){
+    //返回影响数
+    echo $rs;
+}
+
+```
+
 
 $this->hasMany()
 

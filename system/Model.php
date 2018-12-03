@@ -115,7 +115,6 @@ class Model extends System
      */
     public function insert($data = [])
     {
-
         return $this->db($this->WDB)->insert($this->table, $data);
     }
 
@@ -127,16 +126,21 @@ class Model extends System
      * array必须与表字段对应 $where['field_name'=>'field_value'],
      * int类型 必须是主键值
      *
-     * @return boolean
+     * @return boolean|int 删除成功返回影响行数不然返回false
      */
     public function delete($where = [])
     {
 
-        if (is_int($where)) {
+        if (is_numeric($where)) {
             $where = [$this->primary => $where];
         }
 
-        return $this->db($this->WDB)->delete($this->table, $where);
+        if ($this->db($this->WDB)->delete($this->table, $where)) {
+
+            return $this->db($this->WDB)->affected_rows;
+        }
+
+        return false;
     }
 
     /**
@@ -148,7 +152,7 @@ class Model extends System
      * array必须与表字段对应 $where['field_name'=>'field_value'],
      * int类型 必须是主键值
      *
-     * @return boolean
+     * @return boolean|int 更新成功返回影响行数不然返回false
      */
     public function update($data, $where = [])
     {
@@ -157,7 +161,12 @@ class Model extends System
             $where = [$this->primary => $where];
         }
 
-        return $this->db($this->WDB)->update($this->table, $data, $where);
+        if ($this->db($this->WDB)->update($this->table, $data, $where)) {
+
+            return $this->db($this->WDB)->affected_rows;
+        }
+
+        return false;
     }
 
     /**
