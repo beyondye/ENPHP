@@ -677,10 +677,23 @@ if($result){
 ```
 
 #### $this->safe->merge(data) 方法
-与schema默认数据合并，并且清理不存在于schema里面的字段，<br>
+与schema默认数据覆盖合并，并且清理不存在于schema里面的字段，<br>
 不是成员的字段保存于$this->notMemberFields<br>
 返回合并及清理的数据
 ```php
+//假如$this->schema中存在f1字段，默认值等于val1
+
+//注意f1现在的值为val2
+$data=['f1'=>'val2','notmember'=>'valxx'];
+
+//合并覆盖数据并清理非成员字段
+$result=$this->safe->merge($data);
+
+//输出['f1'=>'val2']
+var_dump($result);
+
+//输出不是成员字段名['notmember']
+var_dump($this->notMemberFields);
 
 ```
 
@@ -688,9 +701,23 @@ if($result){
 验证数据合法性，非法字段保存于$this->illegalFields<br>
 返回布尔值
 ```php
+//假如$this->schema中字段f1必须为int类型
 
+//注意f1是字符串
+$data=['f1'=>'val'];
+
+//验证合法性
+$result=$this->safe->validate($data);
+
+if($result){
+   //通过合法性验证
+}else{
+    //没有通过验证
+
+    var_dump($this->illegalFields);
+    //输出['f1']
+}
 ```
-
 
 ### Controller控制器
 
@@ -702,42 +729,52 @@ if($result){
 
 ### Input输入
 
-
-获取地址查询字符串
+#### $this->input->get() 方法
+获取地址查询字符串值，不填参数返回全部数据数组
 ```php
 //如果var_name为null，就返回默认值default_str
 $this->input->get('var_name','default_str');
+
+//返回全部数据
+$this->input->get();
 ```
-获取表单数据
+#### $this->input->post() 方法
+获取表单数据，没有参数返回全部表单字段数组
 ```php
 //字段不存在返回null
 $this->input->post('field_name');
-```
 
+//返回全部
+$this->input->post();
+```
+#### $this->input->ip() 方法
 获取v4 IP地址
 ```php
 //如果没有获取成功返回0.0.0.0
 $this->input->ip();
 ```
-
-判断是否ajax请求
+#### $this->input->isAjax() 方法
+判断是否ajax请求，前端必须带HTTP_X_REQUESTED_WITH请求头部<br>
+返回布尔值
 ```php
 //$_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest'
-//返回布尔值
 $this->input->isAjax();
 ```
-
-获取原始请求数据
+#### $this->input->body() 方法
+获取原始请求数据,一般用于API接口
 ```php
 $this->input->body();
 ```
-
-获取上一个来源地址url
+#### $this->input->referer() 方法
+获取上一个来源地址url，以便重定向
 ```php
 //如果没有为空
-$this->input->referer();
-```
+$prev_url=$this->input->referer();
 
+//重定向
+$this->>output->redirect($prev_url);
+```
+##### $this->input->method() 方法
 获取当前请求方法
 ```php
 //返回 POST，GET，OPTION等
