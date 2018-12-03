@@ -5,10 +5,8 @@
 
 ### 版本库依赖
 
-> 版本 PHP7+
-
-> mb_string扩展
-
+> 版本 PHP7+<br>
+> mb_string扩展<br>
 > GD2扩展
 
 ### 文档目录索引
@@ -61,12 +59,9 @@ define('TEMPLATE', 'www');
 
 > 常量文件位置在APP_DIR/config/下面三个子目录test,production,development中的constans.php文件分别按环境设置。
 
-地址路由配置,以/index.php?c=main&a=index为例子。
-
-c代表控制器类名字，默认控制器为Main。
-
-a代表action方法名称，默认action为index。
-
+地址路由配置,以/index.php?c=main&a=index为例子。<br>
+c代表控制器类名字，默认控制器为Main。<br>
+a代表action方法名称，默认action为index。<br>
 你可以自定义设置这些值。
 
 ```php
@@ -126,7 +121,6 @@ URL重写转换输出模版，和路由无关，以配合$this->helper->url()使
 //url 重写
 define('URL', ['mod_name'=>['controller_name/action_name'=>'/{controller_key}/{action_key}']]);
 
-
 //例子 
 
 //注意$this->helper->url()参数和数组key的顺序
@@ -148,20 +142,16 @@ define('URL', [
                  
     ]
 ]);
-
 ```
 
 ### 数据库配置
 
-> 数据库文件位置在APP_DIR/config/下面三个子目录test,production,development中的database.php文件分别按环境设置。
-
+> 数据库文件位置在APP_DIR/config/下面三个子目录test,production,development中的database.php文件分别按环境设置。<br>
 > 暂时只支持mysqli
 
-default为默认数据库，可以直接$this->db访问默认数据库
-
+default为默认数据库，可以直接$this->db访问默认数据库<br>
 $this->db('read)访问read数据库
 ```php
-
 //例子
 
 return [
@@ -176,6 +166,7 @@ return [
         'port' => 3306,
         'charset' => 'utf8'
     ],
+    
     //读数据库
     'read'=>
     [
@@ -188,17 +179,14 @@ return [
         'charset' => 'utf8'
     ]
 ];
-
 ```
 
 ### 自定义配置数据字典
 
-> 自定义配置数据字典，主要为了应对某些应用较多的元数据存储访问
-
+> 自定义配置数据字典，主要为了应对某些应用较多的元数据存储访问<br>
 > 保存于APP_DIR/config目录下面PHP文件内容为数组
 
 以APP_DIR/config/test.php为范例,配合$this->config使用
-
 ```php
 //test.php内容
 return ['key2'=>'val2','key'=>['a','b','c'];
@@ -208,15 +196,11 @@ return ['key2'=>'val2','key'=>['a','b','c'];
 
 //echo $this->config->test['key'][0]
 //输出 a
-
 ```
 
 ### 全局变量数组
-
 全局变量数组有两个，$var和$instances。
-
 ```php
-
 //全局实例初始化数组，包含所有已实例化的核心类
 $instances = [];
 
@@ -225,25 +209,19 @@ $instances = [];
 //默认已包含$this->vars['controller']当前控制器值
 //默认已包含$this->vars['action']当前action值
 $vars = [];
-
 ```
 
 
 ### 数据库基本操作
 
-> 暂时只支持mysqli
-
-> 配置好数据库以后，我们可以 $this->db 调用默认数据库。
-
+> 暂时只支持mysqli<br>
+> 配置好数据库以后，我们可以 $this->db 调用默认数据库。<br>
 > 或者可以$this->db('read')调用一个已配置为'read'的数据库。
 
-
 #### $this->db->query(sql) 方法
-
 原始SQL语句执行，如是select返回数据集，delete，insert，update返回布尔值。
 
 ```php
-
 //返回一个结果集对象句柄
 $result=$this->db->query('select * from table1 where f=2;');
 
@@ -274,14 +252,11 @@ $recordset=$result->result('array');
 foreach($recordset as $rs){
     echo $rs['f'];
 }
-
 ```
 
 #### $this->db->select(table,condition) 方法
-
 查询数据库表返回数据集对象。
 ```php
-
 //查询条件
 $condition= [
      'where' => ['f1'=>'2','f3>'=>'3','f4!='=>'8'], //where条件,支持运算符>,<,<>,!=,=,in,like,>=,<=
@@ -295,44 +270,35 @@ $recordset=$this->db->select('table1',$condition);
 foreach($recordset->result() as $rs){
     echo $rs->f1;
 }
-
 ```
 
 #### $this->db->insert(table,data) 方法
-
 插入数据到数据库表，返回布尔值。
 ```php
-
 //需要插入的数据
 $data=['f1'=>'1','f2'=>'2'];
-
 
 $rs=$this->db->insert('table1',$data)；
 if($rs){
    //插入成功，返回最后一条插入语句产生的自增ID
    $this->db->insert_id;
 }
-
 ```
 
 #### $this->db->delete(table,where) 方法
-
 删除数据集，返回布尔值
 ```php
 //删除条件
 $data=['f1'=>'1','f2'=>'2'];
-
 
 $rs=$this->db->delete('table1',$data)；
 if($rs){
    //删除成功，返回影响数据行数
    $this->db->affected_rows;
 }
-
 ```
 
 #### $this->db->escape(str) 方法
-
 SQL语句中的特殊字符进行转义，返回转义后字符串。
 ```php
 //参见 http://php.net/manual/zh/mysqli.real-escape-string.php
@@ -340,21 +306,17 @@ $this->db->escape('str');
 ```
 
 #### $this->db->replace(table,data) 方法
-
 数据集主键如果存在就替换不然插入新数据，返回布尔值。
 ```php
 //需要插入或替换的数据，如果主键primary=1已存在，即替换本条数据，不然插入新数据。
 $data=['primary'=>1,'f1'=>'1','f2'=>'2'];
 
 $rs=$this->db->replace('table1',$data)；
-
 ```
 
 #### $this->db->update(table,data,where) 方法
-
 更新数据，返回布尔值。
 ```php
-
 $data=['f1'=>'3','f3'=>'1'];
 $where=['id'=>2];
 
@@ -365,17 +327,12 @@ if($rs){
    $this->db->affected_rows;
  
 }
-
-
 ```
 
 #### $this->db->close() 方法
-
-关闭数据库链接，返回布尔值。
-
+关闭数据库链接，返回布尔值。<br>
 正常情况下，框架在执行完到最后自动关闭链接，也可以提前手动关闭。
 ```php
-
 //关闭默认数据链接
 $this->db->close()；
 
@@ -387,15 +344,11 @@ $this->db('read')->close()；
 
 ### Model数据模型
 
-> 每个model必须于数据库某个表对应。
-
+> 每个model必须于数据库某个表对应。<br>
 > model文件必须放置在APP_DIR/model/目录下，文件名与类名一致，区分大小写。
 
-
-通过继承\system\Model，我们可以使用框架自带的功能便捷操作数据。
-
+通过继承\system\Model，我们可以使用框架自带的功能便捷操作数据。<br>
 创建一个典型model。
-
 ```php
 //Tablemodel.php
 
@@ -437,49 +390,36 @@ class Tablemodel extends \inherit\Model
 
 }
 
-
 //可以这样调用model
 $this->model('Tablemodel')->one(1);
-
 ```
 
 
 #### $this->RDB 属性
-
 设置读数据库，默认为default数据库
 ```php
-
 $this->RDB='read_database';
-
 ```
 
 #### $this->WDB 属性
-
 设置写数据库，默认为default数据库
 ```php
-
 $this->RDB='write_database';
-
 ```
 
 #### $this->table 属性
-
 设置model对应数据表
 ```php
-
 $this->table='table1';
-
 ```
 
 #### $this->primary 属性
-
 设置数据表主键字段
 ```php
 $this->primary='id';
 ```
 
 #### $this->schema 属性
-
 设置数据表结构，以便验证过滤，数组key必须和字段名一致
 
 > validate['regex'] 正则验证字段数据合法性
@@ -498,7 +438,6 @@ $this->primary='id';
 > required 是否必须填写字段
 
 ```php
-
       $this->schema = [
             'id' => [
                 'validate' => ['regex' => '/^\d+$/', 'message' => 'ID 不能为空'],
@@ -514,14 +453,11 @@ $this->primary='id';
                 'required' => true
             ]
       ];
-
 ```
 
 #### $this->all(fields) 方法
-
 获取数据表全部数据集,大表谨慎使用。
 ```php
-
 $recordset=$this->all(['fname1','fname2']);
 
 //注意直接返回数据集，而不是result对象
@@ -532,7 +468,6 @@ foreach($recordset as $rs){
 ```
 
 #### $this->belongs(model, relation_model, relation_foreign_name, where, condition) 方法
-
 多对多获取表数据,返回对象数据集
 
 > $model 需要关联的model名称
@@ -546,8 +481,7 @@ foreach($recordset as $rs){
 >> $local_primary_value 本表主键值
 
 > $condition 参见$this->select()参数
-     
-     
+
 ```php
 
 $this->belongs($model, $relation_model, $relation_foreign_name, $where, $condition);
@@ -555,67 +489,50 @@ $this->belongs($model, $relation_model, $relation_foreign_name, $where, $conditi
 ```
 
 #### $this->count(where) 方法
-
 获取数据表数据条数,适合myisam表。
 ```php
-
 //带条件的计算
 $this->count(['field'=>'val']);
 
 //获取表总条数
 $this->count();
-
 ```
 
 #### $this->delete(where) 方法
-
 删除表数据，成功返回影响数不然返回false。
 ```php
 $rs=$this->delete(['f1'=>'2']);
-
 if($rs){
     //删除成功返回影响数
     echo $rs;
 }
-
 ```
 
 #### $this->hasMany() 方法
-
 一对多获取副表数据,返回对象数据集。
-
 > $model 需要关联的model
      
 > $where=['foreign_name' => 'local_primary_value']
 >> $foreign 外表字段名<br>
 >> $local_primary_value 本表主键值
-     
+
 > $condition 参见$this->select()参数
 
 ```php
-
 $this->hasMany($model, $where, $condition);
-
 ```
 
 #### $this->hasOne() 方法
-
 一对一获取数据,返回一行对象数据。
 ```php
-
 //$model 关联的model
 //$primary_value 主键唯一值
-
 $this->hasOne($model, $primary_value);
-
 ```
 
 #### $this->insert(data) 方法
-
 插入数据，返回布尔值。
-
 ```php
-
 $data=['f1'=>'1','f1'=>'2'];
 
 $rs=$this->insert($data);
@@ -623,14 +540,11 @@ $rs=$this->insert($data);
 if($rs){
     //插入成功
 }
-
 ```
 
 #### $this->lastid() 方法
-
 获取最后插入的自增主键ID。
 ```php
-
 $data=['f1'=>'1','f1'=>'2'];
 
 $rs=$this->insert($data);
@@ -639,11 +553,9 @@ if($rs){
     //获取最后插入自增主键
     echo $this->lastid();
 }
-
 ```
 
 #### $this->one(id) 方法
-
 通过主键数字ID或唯一字段获取一条记录。
 ```php
 //如果是主键数字id
@@ -654,18 +566,14 @@ $this->one(['uniqname'=>'abc']);
 ```
 
 #### $this->query(sql) 方法
-
 执行通用SQL语句,<br>
 如果是select返回基础数据库result对象，<br>
 执行update，insert，delete返回布尔值。
 ```php
-
 $result=$this->query('select * from table1');
-
 ```
 
 #### $this->select(condition) 方法
-
 按条件获取表数据对象集,参数为空，返回全部数据。
 ```php
 $condition=[
@@ -676,15 +584,11 @@ $condition=[
    ];
 
 $this->select($condition);
-
 ```
 
-
 #### $this->update(data,where) 方法
-
 更新数据记录，成功返回影响行数，失败返回false
 ```php
-
 $data=['f1'=>2,'f2'=>3];
 $where=['id'=>12];
 
@@ -694,29 +598,22 @@ if($rs){
     //修改成功，返回影响行数
     echo $rs;
 }
-
 ```
 
 #### $this->where(where,fields) 方法
-
 按条件返回数据对象集,主要为了简化$this->select()
 ```php
 $where=['f1'=>'2'];
 $fields=['f1','f2'];
-
 $this->where($where,$fields);
 ```
 
 #### $this->safe 属性
 验证过滤入库字段数据，返回system/Safe实例。
-
 > 具体参见 文档Model数据验证部分
-
 ```php
-
 //可以在控制器这样调用
 $this->model('Tablemodel')->safe->clear($data);
-
 ```
 
 
@@ -738,7 +635,6 @@ $this->model('Tablemodel')->safe->clear($data);
 不是成员的字段保存于$this->notMemberFields<br>
 返回清理后的数据
 ```php
-
 //清理之前的数据
 $beforedata=[
      //假如nomember不存在于$this->schema中，将被清理掉
@@ -746,7 +642,6 @@ $beforedata=[
     //假如f1字段名存在于$this->schema
     'f1'=>'val'
 ];
-
 
 //清理之后
 $afterdata=$this->safe->clear($data);
@@ -756,7 +651,6 @@ var_dump($afterdata);
 
 //输出不是成员字段名['notmember']
 var_dump($this->notMemberFields);
-
 ```
 
 #### $this->safe->complete(data) 方法
