@@ -25,11 +25,35 @@
 文档内容
 ====
 
+### 保留属性及函数方法
+> 不推荐覆盖，除非你了解全局代码。
+
+#### 保留的属性
+    $this->input
+    $this->config
+    $this->output
+    $this->session
+    $this->cookie
+    $this->lang
+    $this->helper
+    $this->security
+    $this->redis
+    $this->vars
+    $this->db
+
+#### 保留的方法函数
+    $this->db()
+    $this->lang()
+    $this->load()
+    $this->model()
+    $this->redis()
+
+
 ### 入口文件配置
 
 > 入口文件一般是网站的根目录index.php文件，有几个重要的常量配置。
 
- 设置运行环境变量，三个值分别为测试环境，产品环境，开发环境。
+设置运行环境变量，三个值分别为测试环境，产品环境，开发环境。
 ```php
 // test,production,development
 define('ENVIRONMENT', 'development');
@@ -390,7 +414,7 @@ class Tablemodel extends \inherit\Model
 
 }
 
-//可以这样调用model
+//我们可以这样调用model
 $this->model('Tablemodel')->one(1);
 ```
 
@@ -721,6 +745,45 @@ if($result){
 
 ### Controller控制器
 
+#### 创建一个控制器
+> 控制器文件必须放置在APP_DIR/module/module_name目录下，文件名必须和类名一致。
+
+> 必须继承system/Controller。
+
+创建一个控制器，以APP_DIR/module/www/Testcontroller.php为例。
+```php
+//命名空间
+namespace module\www;
+
+//Testcontroller继承自定的inherit/Controller或system/Controller
+class Testcontroller extends \inherit\Controller
+{
+    public function index()
+    {
+        $data['hello_world']='hello wolrd';
+        
+        //调用一个model
+        $this->model('Testmodel')->select();
+        
+        //获取表单全部字段数据
+        $postdata=$this->input->post();
+        
+        //清理不是schema成员字段
+        $afterdata=$this->model('Testmodel')->safe->clear($data);
+        
+        //插入表单提交的数据到数据库
+        $this->model('Testmodel')->insert($afterdata);
+
+        //视图输出
+        $this->output->view('main',$data);
+    }
+}
+```
+
+
+
+
+
 ### View视图
 
 ### Helper帮助函数
@@ -772,9 +835,9 @@ $this->input->body();
 $prev_url=$this->input->referer();
 
 //重定向
-$this->>output->redirect($prev_url);
+$this->output->redirect($prev_url);
 ```
-##### $this->input->method() 方法
+#### $this->input->method() 方法
 获取当前请求方法
 ```php
 //返回 POST，GET，OPTION等
