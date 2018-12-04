@@ -780,11 +780,35 @@ class Testcontroller extends \inherit\Controller
 }
 ```
 
-
-
-
-
 ### View视图
+> 视图模板文件必须放置APP_DIR/template/module_name/目录下面
+
+> 模板文件都是标准的原生php与htm混合代码，框架没有专门的模板功能
+
+例如我们创建一个APP_DIR/template/www/test.php，www为module模块名。
+```php
+<html>
+    <head><title><?php echo $title; ?></title></head>
+    <body>
+        <h1>
+            <?php echo $heading; ?>
+        </h1>
+        <div><?php echo $content; ?></div>
+    </body>
+</html>
+```
+我们可以在控制器里调用模板。<br>
+比如下面代码：
+```php
+
+//模板变量
+$data=['title'=>'网页标题','heading'=>'小标题','content'=>'内容'];
+
+//只需要填写文件名，支持子目录
+$this->output->view('test'，$data);
+
+```
+
 
 ### Helper帮助函数
 
