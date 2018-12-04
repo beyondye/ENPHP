@@ -880,6 +880,42 @@ $this->helper->url(['a'=>'lists','p1'=>'1','p2'=>2],'/mod/list.php','anchor');
 //输出 /index.php?c=main&a=lists&p1=1&p2=2#anchor
 ```
 
+#### $this->helper->pager($size, $total, $page, $url, $visible = 5) 方法
+
+框架自带分页方法
+```php
+//每个页面10条数据
+$size=10;
+
+//数据总数
+$total=100;
+
+//当前页码
+$page=$this->input->get('page',1);
+
+//地址模板
+$url='/index/list/<%page%>.html';
+
+//显示多少个页码链接
+$visible=5;
+
+$pager=$this->helper->pager($size, $total, $page, $url, $visible);
+
+echo $pager;
+//输出
+//<div class="pager">
+//<a class="number" href="/index/list/1.html">1</a>
+//<a class="number " href="/index/list/2.html">2</a>
+//<a class="number " href="/index/list/3.html">3</a>
+//<a class="number " href="/index/list/4.html">4</a>
+//<a class="number " href="/index/list/5.html">5</a>
+//<span class="ellipsis">...</span>
+//<a  class="number" href="/index/list/27">27</a>
+//<a href="/index/list/2.html" class="next">下一页</a>
+//<span class="info">共 402 条记录</span>
+//</div>
+```
+
 ### Input输入
 
 #### $this->input->get() 方法
