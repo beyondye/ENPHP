@@ -372,7 +372,7 @@ $this->db('read')->close()；
 > model文件必须放置在APP_DIR/model/目录下，文件名与类名一致，区分大小写。
 
 通过继承\system\Model，我们可以使用框架自带的功能便捷操作数据。<br>
-创建一个典型model。
+例如我们创建APP_DIR/model/Tablemodel.php。
 ```php
 //Tablemodel.php
 
@@ -800,19 +800,85 @@ class Testcontroller extends \inherit\Controller
 我们可以在控制器里调用模板。<br>
 比如下面代码：
 ```php
-
 //模板变量
 $data=['title'=>'网页标题','heading'=>'小标题','content'=>'内容'];
 
 //只需要填写文件名，支持子目录
 $this->output->view('test'，$data);
-
 ```
 
-
 ### Helper帮助函数
+> 自定义帮助函数文件必须放置APP_DIR/helper/目录下面
 
+> 必须以类的形式组织功能函数
 
+#### 自定义helper函数方法
+例如我们创建APP_DIR/helper/Testhelper.php
+```php
+//命名空间
+namespace helper;
+
+//我可以继承\system\System,以便使用框架内建属性和函数方法,如果不需要可以忽略
+class Testhelper extends \system\System
+{
+    public function returntex($param){
+    
+      //只有继承\system\System才能调用此方法
+      $this->input->get('str');
+      
+      return $param;
+    }
+}
+//我们可以在控制器，视图，model里面这样调用
+//$this->helper->testhelper->returntex('str');
+```
+
+#### $this->helper->url(param,path,anchor) 方法
+
+> 此方法框架自带
+
+>参数说明
+>>param   查询字符串数组 <br>
+>>path    入口文件路径 <br>
+>>anchor  锚点
+
+配合常量URL使用，返回被匹配的URL地址字符串
+```php
+//注意$this->helper->url()参数和数组key的顺序
+define('URL', [
+    'www' => [ 
+    //www表示模块名称
+    
+        'main/index' => '/',  
+        //echo $this->helper->url(['c'=>'main','a'=>'index'])
+        //输出 /
+        
+        'main/lists/type' => '/list/{type}.html',
+         //echo $this->helper->url(['c'=>'main','a'=>'lists','type'=>'2'])
+         //输出 /list/2.html
+        
+        'main/lists/type/page' => '/list/{type}_{page}.html'
+         //echo $this->helper->url(['c'=>'main','a'=>'lists','type'=>'2','page'=>'34']) 
+         //输出 /list/2_34.html
+                 
+    ]
+]);
+```
+
+不匹配URL常量返回
+```php
+//假如入口文件为index.php 
+
+$this->helper->url();
+//输出 /index.php?c=main&a=index
+
+$this->helper->url(['p1'=>'1','p2'=>2]);
+//输出 /index.php?c=main&a=index&p1=1&p2=2
+
+//注意a参数和/mod/list.php以及anchor
+$this->helper->url(['a'=>'lists','p1'=>'1','p2'=>2],'/mod/list.php','anchor');
+//输出 /index.php?c=main&a=lists&p1=1&p2=2#anchor
+```
 
 ### Input输入
 
