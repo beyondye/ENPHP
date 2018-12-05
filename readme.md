@@ -29,25 +29,24 @@
 > 不推荐覆盖，除非你了解全局代码。
 
 #### 保留的属性
-    $this->input
-    $this->config
-    $this->output
-    $this->session
-    $this->cookie
-    $this->lang
-    $this->helper
-    $this->security
-    $this->redis
-    $this->vars
-    $this->db
+    $this->input //输入类实例
+    $this->config //配置类实例
+    $this->output //输出类实例
+    $this->session //会话类实例
+    $this->cookie //cookie类实例
+    $this->lang //默认多语言类实例
+    $this->helper //帮助类实例
+    $this->security //安全类实例
+    $this->redis //redis类实例
+    $this->vars //全局变量数组
+    $this->db //默认数据库实例
 
 #### 保留的方法函数
-    $this->db()
-    $this->lang()
-    $this->load()
-    $this->model()
-    $this->redis()
-
+    $this->db() //自定义数据库并返回实例
+    $this->lang() //自定义语言类并返回实例
+    $this->load() //加载类并返回实例
+    $this->model() //加载model并返回实例
+    $this->redis() //自定义redis并返回实例
 
 ### 入口文件配置
 
@@ -596,7 +595,7 @@ if($rs){
 }
 ```
 
-#### $this->one(id) 方法
+#### $this->one($id) 方法
 通过主键数字ID或唯一字段获取一条记录。
 ```php
 //如果是主键数字id
