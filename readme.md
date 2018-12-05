@@ -1076,8 +1076,35 @@ $this->output->view('test',$data);
 $result=$this->output->view('test',$data,true,true);
 echo $result
 ```
-
 ### Session会话
+
+#### $this->session->delete($name) 方法
+删除一个会话元素，可以同时删除多个,没有返回值。
+```php
+//设置一个session元素
+$this->session->set('name','bob');
+$this->session->set('name2','foo');
+
+//删除，
+$this->session->delete('name');
+
+//删除多个
+$this->session->delete(['name','name2']);
+```
+#### $this->session->destroy() 方法
+注销当前会话，返回布尔值。
+
+#### $this->session->flash($name) 方法
+取得某个会话字段的值之后删除此会话字段，字段不存在返回null。
+
+#### $this->session->get($name) 方法
+取得某个会话字段，字段不存在返回null。
+
+#### $this->session->set($name,$value='') 方法
+设置一个会话字段，永远返回true。
+
+#### $this->session->regenerate() 方法
+使用新生成的会话ID更新现有会话ID。
 
 ### Cookie管理
 
