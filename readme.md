@@ -1140,8 +1140,13 @@ $this->cookie->delete(['name1','name2','name3']);
 
 >> $httponly 是否http只读，默认值COOKIE_HTTPONLY常量
 
-
 #### $this->cookie->many($data, $expire = COOKIE_EXPIRE, $path = COOKIE_PATH, $domain = COOKIE_DOMAIN, $secure = COOKIE_SECURE, $httponly = COOKIE_HTTPONLY) 方法
+设置多个cookie,返回bool值。
+
+> 参数说明
+>> $data是一个数组，例如$data=['name'=>'val','name2'>'val2'].
+>> 其它参数参考 $this->cookie->set()方法
+
 
 ### Lang多语言配置
 
