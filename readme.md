@@ -242,7 +242,7 @@ $vars = [];
 > 配置好数据库以后，我们可以 $this->db 调用默认数据库。<br>
 > 或者可以$this->db('read')调用一个已配置为'read'的数据库。
 
-#### $this->db->query(sql) 方法
+#### $this->db->query($sql) 方法
 原始SQL语句执行，如是select返回数据集，delete，insert，update返回布尔值。
 
 ```php
@@ -278,8 +278,11 @@ foreach($recordset as $rs){
 }
 ```
 
-#### $this->db->select(table,condition) 方法
+#### $this->db->select($table,$condition=[]) 方法
 查询数据库表返回数据集对象。
+> 参数说明
+>> $table 数据表名称<br>
+>> $condition 查询条件数组，如果为空返回全部
 ```php
 //查询条件
 $condition= [
@@ -296,8 +299,11 @@ foreach($recordset->result() as $rs){
 }
 ```
 
-#### $this->db->insert(table,data) 方法
+#### $this->db->insert($table,$data) 方法
 插入数据到数据库表，返回布尔值。
+>参数说明
+>> $table 数据表名称 <br>
+>> $data  插入表的数据数组
 ```php
 //需要插入的数据
 $data=['f1'=>'1','f2'=>'2'];
@@ -309,8 +315,11 @@ if($rs){
 }
 ```
 
-#### $this->db->delete(table,where) 方法
+#### $this->db->delete($table,$where=[]) 方法
 删除数据集，返回布尔值
+> 参数说明
+>> $table 数据表名称<br>
+>> $where where条件数组，为空删除全部，谨慎使用！
 ```php
 //删除条件
 $data=['f1'=>'1','f2'=>'2'];
@@ -322,15 +331,18 @@ if($rs){
 }
 ```
 
-#### $this->db->escape(str) 方法
+#### $this->db->escape($str) 方法
 SQL语句中的特殊字符进行转义，返回转义后字符串。
 ```php
 //参见 http://php.net/manual/zh/mysqli.real-escape-string.php
 $this->db->escape('str');
 ```
 
-#### $this->db->replace(table,data) 方法
+#### $this->db->replace($table,$data) 方法
 数据集主键如果存在就替换不然插入新数据，返回布尔值。
+> 参数说明
+>> $table 数据表名称<br>
+>> $data 需要操作的数据数组
 ```php
 //需要插入或替换的数据，如果主键primary=1已存在，即替换本条数据，不然插入新数据。
 $data=['primary'=>1,'f1'=>'1','f2'=>'2'];
@@ -338,8 +350,12 @@ $data=['primary'=>1,'f1'=>'1','f2'=>'2'];
 $rs=$this->db->replace('table1',$data)；
 ```
 
-#### $this->db->update(table,data,where) 方法
-更新数据，返回布尔值。
+#### $this->db->update($table,$data,$where=[]) 方法
+更新数据，返回布尔值或影响行数。
+>参数说明
+>> $table 数据表名称<br>
+>> $data 需要更新的数据数组<br>
+>> $where where条件，为空更新全部
 ```php
 $data=['f1'=>'3','f3'=>'1'];
 $where=['id'=>2];
@@ -479,7 +495,7 @@ $this->primary='id';
       ];
 ```
 
-#### $this->all(fields) 方法
+#### $this->all($fields) 方法
 获取数据表全部数据集,大表谨慎使用。
 ```php
 $recordset=$this->all(['fname1','fname2']);
@@ -491,20 +507,19 @@ foreach($recordset as $rs){
 
 ```
 
-#### $this->belongs(model, relation_model, relation_foreign_name, where, condition) 方法
+#### $this->belongs($model, $relation_model, $relation_foreign_name, $where, $condition) 方法
 多对多获取表数据,返回对象数据集
 
-> $model 需要关联的model名称
+> 参数说明
+>> $model 需要关联的model名称<br>
+>> $relation_model 关系表model名称<br>
+>> $relation_foreign_name 关联表主键名在关系表中的字段名<br>
 
-> $relation_model 关系表model名称
-     
-> $relation_foreign_name 关联表主键名在关系表中的字段名
-     
-> $where=['local_relation_filed_name' => 'local_primary_value']
->> $local_relation_filed_name 本表在关系表字段名<br>
->> $local_primary_value 本表主键值
+>> $where=['local_relation_filed_name' => 'local_primary_value']
+>>> $local_relation_filed_name 本表在关系表字段名<br>
+>>> $local_primary_value 本表主键值
 
-> $condition 参见$this->select()参数
+>> $condition 参见$this->select()参数
 
 ```php
 
@@ -512,7 +527,7 @@ $this->belongs($model, $relation_model, $relation_foreign_name, $where, $conditi
 
 ```
 
-#### $this->count(where) 方法
+#### $this->count($where=[]) 方法
 获取数据表数据条数,适合myisam表。
 ```php
 //带条件的计算
@@ -522,7 +537,7 @@ $this->count(['field'=>'val']);
 $this->count();
 ```
 
-#### $this->delete(where) 方法
+#### $this->delete($where=[]) 方法
 删除表数据，成功返回影响数不然返回false。
 ```php
 $rs=$this->delete(['f1'=>'2']);
@@ -532,29 +547,31 @@ if($rs){
 }
 ```
 
-#### $this->hasMany() 方法
+#### $this->hasMany($model,$where,$condition=[]) 方法
 一对多获取副表数据,返回对象数据集。
-> $model 需要关联的model
+> 参数说明
+>> $model 需要关联的model
      
-> $where=['foreign_name' => 'local_primary_value']
->> $foreign 外表字段名<br>
->> $local_primary_value 本表主键值
+>> $where=['foreign_name' => 'local_primary_value']
+>>> $foreign 外表字段名<br>
+>>> $local_primary_value 本表主键值
 
-> $condition 参见$this->select()参数
+>> $condition 参见$this->select()参数
 
 ```php
 $this->hasMany($model, $where, $condition);
 ```
 
-#### $this->hasOne() 方法
+#### $this->hasOne($model,$primary_value) 方法
 一对一获取数据,返回一行对象数据。
+> 参数说明
+>> $model 关联的model
+>> $primary_value 主键唯一值
 ```php
-//$model 关联的model
-//$primary_value 主键唯一值
 $this->hasOne($model, $primary_value);
 ```
 
-#### $this->insert(data) 方法
+#### $this->insert($data=[]) 方法
 插入数据，返回布尔值。
 ```php
 $data=['f1'=>'1','f1'=>'2'];
@@ -589,7 +606,7 @@ $this->one(12);
 $this->one(['uniqname'=>'abc']);
 ```
 
-#### $this->query(sql) 方法
+#### $this->query($sql) 方法
 执行通用SQL语句,<br>
 如果是select返回基础数据库result对象，<br>
 执行update，insert，delete返回布尔值。
@@ -597,7 +614,7 @@ $this->one(['uniqname'=>'abc']);
 $result=$this->query('select * from table1');
 ```
 
-#### $this->select(condition) 方法
+#### $this->select($condition=[]) 方法
 按条件获取表数据对象集,参数为空，返回全部数据。
 ```php
 $condition=[
@@ -610,7 +627,7 @@ $condition=[
 $this->select($condition);
 ```
 
-#### $this->update(data,where) 方法
+#### $this->update($data,$where=[]) 方法
 更新数据记录，成功返回影响行数，失败返回false
 ```php
 $data=['f1'=>2,'f2'=>3];
@@ -624,7 +641,7 @@ if($rs){
 }
 ```
 
-#### $this->where(where,fields) 方法
+#### $this->where($where,$fields=[]) 方法
 按条件返回数据对象集,主要为了简化$this->select()
 ```php
 $where=['f1'=>'2'];
@@ -654,7 +671,7 @@ $this->model('Tablemodel')->safe->clear($data);
 #### $this->safe->incompleteFields 属性
 > 接受返回未完成及必须填写的字段名数组
 
-#### $this->safe->clear(data) 方法
+#### $this->safe->clear($data) 方法
 清理不存在于schema里面的字段，<br>
 不是成员的字段保存于$this->notMemberFields<br>
 返回清理后的数据
@@ -677,7 +694,7 @@ var_dump($afterdata);
 var_dump($this->notMemberFields);
 ```
 
-#### $this->safe->complete(data) 方法
+#### $this->safe->complete($data) 方法
 验证是否缺少必要字段，<br>
 缺少的必要字段保存于$this->incompleteFields<br>
 返回布尔值
@@ -700,7 +717,7 @@ if($result){
 }
 ```
 
-#### $this->safe->merge(data) 方法
+#### $this->safe->merge($data) 方法
 与schema默认数据覆盖合并，并且清理不存在于schema里面的字段，<br>
 不是成员的字段保存于$this->notMemberFields<br>
 返回合并及清理的数据
@@ -721,7 +738,7 @@ var_dump($this->notMemberFields);
 
 ```
 
-#### $this->safe->validate(data) 方法
+#### $this->safe->validate($data) 方法
 验证数据合法性，非法字段保存于$this->illegalFields<br>
 返回布尔值
 ```php
@@ -833,13 +850,13 @@ class Testhelper extends \system\System
 //$this->helper->testhelper->returntex('str');
 ```
 
-#### $this->helper->url(param,path,anchor) 方法
+#### $this->helper->url($param=[],$path=ENTRY,$anchor='') 方法
 
 > 此方法框架自带
 
 >参数说明
 >>param   查询字符串数组 <br>
->>path    入口文件路径 <br>
+>>path    入口文件路径，默认值 ENTRY常量值 <br>
 >>anchor  锚点
 
 配合常量URL使用，返回被匹配的URL地址字符串
@@ -984,13 +1001,13 @@ echo $result;
 //输出 <b style="">str</b><div>ste</div>
 ```
 
-#### $this->output->error($name,$data) 方法
+#### $this->output->error($name = 'general', $data =[]) 方法
 
 > 错误页面模板必须放置在APP_DIR/error/目录下面
 
 > 参数说明
->> $name模板文件名<br>
->> $data变量数据数组
+>> $name模板文件名，默认模板 genrnal<br>
+>> $data变量数据数组，默认数组 $data=['heading' => 'Error Message', 'message' => 'An error occurred.']
 
 错误页面设置,自动echo内容
 ```php
@@ -1000,7 +1017,7 @@ $this->output->error();
 //自定义错误页面，假如APP_DIR/error/404.php已存在
 $this->output->error('404',['title'=>'Not Found']);
 ```
-#### $this->output->json($status, $message, $data, $return) 方法
+#### $this->output->json($status, $message, $data=[], $return=false) 方法
 输出json格式数据
 
 > 参数说明
@@ -1017,7 +1034,7 @@ $this->output->json('1002','操作成功',['data'=>'val','data2'=>'val2']);
 $result=$this->output->json('1002','操作成功',['data'=>'val','data2'=>'val2'],true);
 echo $result;
 ```
-#### $this->output->redirect($uri, $http_response_code) 方法
+#### $this->output->redirect($uri, $http_response_code=302) 方法
 请求重定向
 
 > 参数说明
