@@ -17,7 +17,7 @@ class Output extends System
      *
      * @var array
      */
-    public $httpStatusCode = [
+    private $httpStatusCode = [
         100 => "HTTP/1.1 100 Continue",
         101 => "HTTP/1.1 101 Switching Protocols",
         200 => "HTTP/1.1 200 OK",
@@ -79,7 +79,7 @@ class Output extends System
     }
 
     /**
-     * 输入视图
+     * 输出视图
      *
      * @staticvar array $_vars
      *

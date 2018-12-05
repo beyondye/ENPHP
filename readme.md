@@ -784,7 +784,7 @@ class Testcontroller extends \inherit\Controller
 > 视图模板文件必须放置APP_DIR/template/module_name/目录下面
 
 > 模板文件都是标准的原生php与htm混合代码，框架没有专门的模板功能
-
+#### 创建视图模板
 例如我们创建一个APP_DIR/template/www/test.php，www为module模块名。
 ```php
 <html>
@@ -970,8 +970,96 @@ $this->output->redirect($prev_url);
 $this->input->method();
 ```
 
-
 ### Output输出
+
+#### $this->output->compress($string) 方法
+删除html多余空白字符<br>
+返回处理之后的字符串
+```php
+$string='<b style=""    >  str </b><div>   ste  </div>';
+
+$result=$this->output->compress($string);
+
+echo $result;
+//输出 <b style="">str</b><div>ste</div>
+```
+
+#### $this->output->error($name,$data) 方法
+
+> 错误页面模板必须放置在APP_DIR/error/目录下面
+
+> 参数说明
+>> $name模板文件名<br>
+>> $data变量数据数组
+
+错误页面设置,自动echo内容
+```php
+//通用错误页面,
+$this->output->error();
+
+//自定义错误页面，假如APP_DIR/error/404.php已存在
+$this->output->error('404',['title'=>'Not Found']);
+```
+#### $this->output->json($status, $message, $data, $return) 方法
+输出json格式数据
+
+> 参数说明
+>> $status 设置一个状态码<br>
+>> $message 设置一个状态消息字符串<br>
+>> $data 需要输出的数组数据，默认为空数组<br>
+>> $return 设置布尔值，是否返回内容自定义echo输出，默认自动echo内容<br>
+
+```php
+$this->output->json('1002','操作成功',['data'=>'val','data2'=>'val2']);
+//输出 {'status':'1002','message':'操作成功','data':{'data1':'val','data2':'val2'}}
+
+//有返回值的自定义输出
+$result=$this->output->json('1002','操作成功',['data'=>'val','data2'=>'val2'],true);
+echo $result;
+```
+#### $this->output->redirect($uri, $http_response_code) 方法
+请求重定向
+
+> 参数说明
+>> $uri 重定向地址<br>
+>> $http_response_code  http头响应码，默认值为302
+
+```php
+//转到index.php，默认响应码302
+$this->output->redirect('/index.php');
+
+//重定向到404页面
+$this->output->redirect('/notfound.php',404);
+```
+
+#### $this->output->status($http_status_code) 方法
+设置响应头
+```php
+$this->output->status('404');
+//如同 header('HTTP/1.1 404 Not Found',true)
+```
+#### $this->output->view($view, $data = [], $return = false, $compress = false) 方法
+输出视图,自动echo输出。
+
+> 参数说明
+>> $view 视图模板文件名称<br>
+>> $data 视图变量数据数组<br>
+>> $return 是否返回内容自动输出，默认值false<br>
+>> $compress 是否压缩HTML，默认值false
+
+```php
+//假如已存在APP_DIR/template/www/test.php
+
+//模板数据
+$data['var1'=>'val','var2'=>'val'];
+
+//框架自动echo输出，
+$this->output->view('test',$data);
+
+//返回自定义echo输出，并压缩html
+$result=$this->output->view('test',$data,true,true);
+echo $result
+```
 
 ### Session会话
 
