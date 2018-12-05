@@ -30,13 +30,13 @@ class Cookie
     /**
      * 设置cookie输出
      *
-     * @param sring $name Cookie name
-     * @param sting $value Cookie value
+     * @param string $name Cookie name
+     * @param string $value Cookie value
      * @param int $expire 过期秒数基于当前时间戳之上，设置0为关闭浏览器失效
-     * @param string $path
-     * @param string $domain
-     * @param string $secure
-     * @param string $httponly
+     * @param string $path cookie有效路径
+     * @param string $domain cookie有效域名
+     * @param boolean $secure 是否必须https
+     * @param boolean $httponly http唯一读取cookie
      *
      * @return boolean
      */
@@ -55,10 +55,10 @@ class Cookie
      *
      * @param array $data Cookie数据格式 ['name'=>'value','name2'=>'value2']
      * @param int $expire 过期秒数基于当前时间戳之上，设置0为关闭浏览器失效
-     * @param string $path
-     * @param string $domain
-     * @param string $secure
-     * @param string $httponly
+     * @param string $path 有效路径
+     * @param string $domain 有效域名
+     * @param boolean $secure 是否https传输
+     * @param boolean $httponly http读唯一
      *
      * @return boolean
      */
@@ -80,8 +80,8 @@ class Cookie
     /**
      * 删除一个cookie
      *
-     * @param type $name
-     * @return type
+     * @param string $name
+     * @return bool
      */
     public function delete($name)
     {

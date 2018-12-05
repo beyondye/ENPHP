@@ -1108,6 +1108,24 @@ $this->session->delete(['name','name2']);
 
 ### Cookie管理
 
+#### $this->cookie->delete($name) 方法
+删除一个或多个cookie,参数接受一个字符串或一个数组,返回bool值
+```php
+//删除某个cookie
+$this->cookie->delete('name');
+
+//删除多个cookie
+$this->cookie->delete(['name1','name2','name3']);
+```
+
+#### $this->cookie->get($name) 方法
+
+
+#### $this->cookie->set($name, $value, $expire = COOKIE_EXPIRE, $path = COOKIE_PATH, $domain = COOKIE_DOMAIN, $secure = COOKIE_SECURE, $httponly = COOKIE_HTTPONLY) 方法
+
+
+#### $this->cookie->many($data, $expire = COOKIE_EXPIRE, $path = COOKIE_PATH, $domain = COOKIE_DOMAIN, $secure = COOKIE_SECURE, $httponly = COOKIE_HTTPONLY) 方法
+
 ### Lang多语言配置
 
 ### Redis缓存
