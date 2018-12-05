@@ -1109,7 +1109,7 @@ $this->session->delete(['name','name2']);
 ### Cookie管理
 
 #### $this->cookie->delete($name) 方法
-删除一个或多个cookie,参数接受一个字符串或一个数组,返回bool值
+删除一个或多个cookie,参数接受一个字符串或一个数组,返回布尔值。
 ```php
 //删除某个cookie
 $this->cookie->delete('name');
@@ -1119,9 +1119,26 @@ $this->cookie->delete(['name1','name2','name3']);
 ```
 
 #### $this->cookie->get($name) 方法
-
+获取一个cookie值，如果$name不存在返回null。
 
 #### $this->cookie->set($name, $value, $expire = COOKIE_EXPIRE, $path = COOKIE_PATH, $domain = COOKIE_DOMAIN, $secure = COOKIE_SECURE, $httponly = COOKIE_HTTPONLY) 方法
+设置一个cookie,返回布尔值。
+
+参数说明
+
+>> $name cookie名字
+
+>> $value cookie值
+
+>> $expire 过期时间，如果设置0，关闭浏览器失效，默认值COOKIE_EXPIRE常量
+
+>> $path 有效路径，默认值COOKIE_PATH常量
+
+>> $domain 有效域名，默认值COOKIE_DOMAIN常量
+
+>> $secure 是否https，默认值COOKIE_SECURE常量
+
+>> $httponly 是否http只读，默认值COOKIE_HTTPONLY常量
 
 
 #### $this->cookie->many($data, $expire = COOKIE_EXPIRE, $path = COOKIE_PATH, $domain = COOKIE_DOMAIN, $secure = COOKIE_SECURE, $httponly = COOKIE_HTTPONLY) 方法
