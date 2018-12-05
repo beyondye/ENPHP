@@ -4,7 +4,7 @@ namespace system;
 
 /**
  * cookie类
- * 
+ *
  * @author Ding<beyondye@gmail.com>
  */
 class Cookie
@@ -12,9 +12,9 @@ class Cookie
 
     /**
      * 获取cookie数据,不存在返回null，不带参数返回全部
-     * 
+     *
      * @param string $name
-     * 
+     *
      * @return array|null
      */
     public function get($name = null)
@@ -29,15 +29,15 @@ class Cookie
 
     /**
      * 设置cookie输出
-     * 
-     * @param sring $name   Cookie name
-     * @param sting $value  Cookie value
-     * @param int $expire   过期秒数基于当前时间戳之上，设置0为关闭浏览器失效
+     *
+     * @param sring $name Cookie name
+     * @param sting $value Cookie value
+     * @param int $expire 过期秒数基于当前时间戳之上，设置0为关闭浏览器失效
      * @param string $path
      * @param string $domain
      * @param string $secure
      * @param string $httponly
-     * 
+     *
      * @return boolean
      */
     public function set($name, $value, $expire = COOKIE_EXPIRE, $path = COOKIE_PATH, $domain = COOKIE_DOMAIN, $secure = COOKIE_SECURE, $httponly = COOKIE_HTTPONLY)
@@ -52,14 +52,14 @@ class Cookie
 
     /**
      * 设置cookie输出
-     * 
-     * @param array $data   Cookie数据格式 ['name'=>'value','name2'=>'value2']
-     * @param int $expire   过期秒数基于当前时间戳之上，设置0为关闭浏览器失效
+     *
+     * @param array $data Cookie数据格式 ['name'=>'value','name2'=>'value2']
+     * @param int $expire 过期秒数基于当前时间戳之上，设置0为关闭浏览器失效
      * @param string $path
      * @param string $domain
      * @param string $secure
      * @param string $httponly
-     * 
+     *
      * @return boolean
      */
     public function many($data, $expire = COOKIE_EXPIRE, $path = COOKIE_PATH, $domain = COOKIE_DOMAIN, $secure = COOKIE_SECURE, $httponly = COOKIE_HTTPONLY)
@@ -79,7 +79,7 @@ class Cookie
 
     /**
      * 删除一个cookie
-     * 
+     *
      * @param type $name
      * @return type
      */

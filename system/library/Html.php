@@ -4,12 +4,11 @@ namespace system\library;
 
 /**
  * 生成html标签
- * 
+ *
  * @author Ding<beyondye@gmail.com>
  */
 class Html
 {
-
     /**
      * 无闭合标签，需要自行添加
      */
@@ -22,7 +21,7 @@ class Html
 
     /**
      * 生成单个标签
-     * 
+     *
      * @param array $param
      * @example
      * $param=[
@@ -30,7 +29,7 @@ class Html
      *      'properties'=>['name'=>''],
      *      'elements'=>[['name'='','elements'=[],'properties'=>[]]
      * ]
-     * 
+     *
      * @return string 返回html代码
      */
     private static function tag(array $param)
@@ -66,7 +65,7 @@ class Html
 
     /**
      * 一次处理多个标签
-     * 
+     *
      * @param array $param
      * @example
      * $param=[[
@@ -79,7 +78,7 @@ class Html
      *      'properties'=>['name'=>''],
      *      'elements'=>[['name'='','elements'=[],'properties'=>[]]
      * ]]'
-     * 
+     *
      * @return string 返回html代码
      */
     public static function tags(array $param)
@@ -95,10 +94,9 @@ class Html
 
     /**
      * 构造表单select
-     * 
+     *
      * @param array $param 参见example
-     * 
-     * @example 
+     * @example
      * $param=[
      *      'name'=>'select',
      *      'options' => $this->menu->read('parent_id=0', 'id,name'),
@@ -107,7 +105,7 @@ class Html
      *      'selected' => $this->input->get('parent_id'),
      *      'properties' => array('name' => 'parent_id')
      * ]
-     * 
+     *
      * @return string 返回select html代码
      */
     private static function select(array $param)
@@ -125,7 +123,7 @@ class Html
             $literal = $param['model']['literal'];
 
             foreach ($param['options'] as $rs) {
-                $rs = (array) $rs;
+                $rs = (array)$rs;
                 if ($rs[$value] == $param['selected']) {
                     $options .= "<option value=\"{$rs[$value]}\" selected>{$rs[$literal]}</option>";
                 } else {
@@ -139,9 +137,9 @@ class Html
 
     /**
      * 生成表单input
-     * 
+     *
      * @param array $param 参见$this->tag()
-     * 
+     *
      * @return string
      */
     private static function input(array $param)
@@ -153,9 +151,9 @@ class Html
 
     /**
      * 构造子标签
-     * 
+     *
      * @param array $elements
-     * 
+     *
      * @return string
      */
     private static function elements($elements)
@@ -177,8 +175,9 @@ class Html
 
     /**
      * 遍历标签属性
-     * 
+     *
      * @param array $properties
+     *
      * @return string
      */
     private static function properties($properties)

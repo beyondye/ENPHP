@@ -12,7 +12,7 @@ class Lang
 
     /**
      * 加载语言对应数据
-     * 
+     *
      * @var array
      */
     public $mod = [];
@@ -28,9 +28,9 @@ class Lang
 
     /**
      * 覆盖修改__get
-     * 
+     *
      * @param sting $mod 语言模块名字
-     * 
+     *
      * @return string
      */
     function __get($mod)

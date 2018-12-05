@@ -4,22 +4,21 @@ namespace system;
 
 /**
  * 框架核心类
- * 
+ *
  * @author Ding<beyondye@gmail.com>
  */
 class System
 {
-
     /**
      * 加载类并返回类实例
-     * 
+     *
      * @global array $instances 全局实例数组
-     * 
+     *
      * @param string $name 类名称
      * @param string $namespace 类所在模块命名空间和目录路径一致
      * @param string $alias 实例别名
      * @param string|array $arguments 类构造函数参数
-     * 
+     *
      * @return array 类实例数组
      */
     public function load($name, $namespace, $alias = '', $arguments = '')
@@ -70,9 +69,9 @@ class System
 
     /**
      * 覆盖__get
-     * 
+     *
      * @param string $name 类名
-     * 
+     *
      * @return object
      */
     public function __get($name)
@@ -97,9 +96,9 @@ class System
 
     /**
      * 通过方法返回数据库连接实例
-     * 
+     *
      * @param string $service
-     * 
+     *
      * @return object
      */
     public function db($service)
@@ -109,9 +108,9 @@ class System
 
     /**
      * 调用model
-     * 
+     *
      * @param string $name
-     * 
+     *
      * @return object
      */
     public function model($name)
@@ -121,9 +120,9 @@ class System
 
     /**
      * 调用redis
-     * 
+     *
      * @param string $service
-     * 
+     *
      * @return object
      */
     public function redis($service)
@@ -133,9 +132,9 @@ class System
 
     /**
      * 加载语言包
-     * 
+     *
      * @param string $lang
-     * 
+     *
      * @return object
      */
     public function lang($lang)

@@ -5,12 +5,12 @@ namespace system;
 use system\System;
 
 /**
+ * model基类
  *
  * @author Ding<beyondye@gmail.com>
  */
 class Model extends System
 {
-
     /**
      * 操作的表名
      *

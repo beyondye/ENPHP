@@ -6,24 +6,23 @@ namespace system;
  * redis操作
  *
  * @author Ding<beyondye@gmail.com>
- * 
+ *
  */
 class Redis extends \Redis
 {
-
     /**
      * redis配置信息
-     * 
+     *
      * @var array
      */
     public $config = ['host' => '', 'port' => 6379, 'password' => '', 'database' => 0, 'timeout' => 30, 'serialization' => true];
 
     /**
-     * 
+     *
      * redis 构造函数
-     * 
+     *
      * @param array $config
-     * 
+     *
      * @return \Redis
      */
     function __construct($config)

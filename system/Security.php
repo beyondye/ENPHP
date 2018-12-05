@@ -12,8 +12,8 @@ class Security
 
     /**
      * 转化标签为实体
-     * 
-     * @param string  $str
+     *
+     * @param string $str
      * @return string
      */
     public function entity($str)
@@ -23,7 +23,7 @@ class Security
 
     /**
      * 删除php和html标签
-     * 
+     *
      * @param string $str
      * @return string
      */
@@ -34,7 +34,7 @@ class Security
 
     /**
      * 多个空格转换成一个
-     * 
+     *
      * @param string $str
      * @return string
      */
@@ -45,7 +45,7 @@ class Security
 
     /**
      * 生成表单token，同一个上下文只能有一个token
-     * 
+     *
      * @global object array $instances
      * @return string
      */
@@ -66,7 +66,7 @@ class Security
 
     /**
      * token input 名称
-     * 
+     *
      * @global object $instances
      * @return string
      */
@@ -83,7 +83,7 @@ class Security
 
     /**
      * 验证token
-     * 
+     *
      * @global object $instances
      * @return boolean
      */

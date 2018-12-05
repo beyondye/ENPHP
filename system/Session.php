@@ -4,7 +4,7 @@ namespace system;
 
 /**
  * 会话类
- * 
+ *
  * @author Ding<beyondye@gmail.com>
  */
 class Session
@@ -20,10 +20,10 @@ class Session
 
     /**
      * 设置会话
-     * 
+     *
      * @param string $name
      * @param string $value
-     * 
+     *
      * @return boolean
      */
     public function set($name, $value = '')
@@ -39,9 +39,9 @@ class Session
 
     /**
      * 获取会话
-     * 
+     *
      * @param string $name
-     * 
+     *
      * @return string|null
      */
     public function get($name)
@@ -51,7 +51,7 @@ class Session
 
     /**
      * 闪取会话
-     * 
+     *
      * @param string $name
      * @return string|null;
      */
@@ -78,7 +78,7 @@ class Session
                 $this->delete($v);
             }
         }
-        
+
         unset($_SESSION[$name]);
     }
 

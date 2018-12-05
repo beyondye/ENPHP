@@ -3,16 +3,15 @@
 namespace system\library;
 
 /**
- * Upload file
+ * 上传文件
  *
  * @author Ding<beyondye@gmail.com>
  */
 class Upload
 {
-
     /**
      * 保存物理文件夹目录
-     * 
+     *
      * @var string
      */
     public $dir;
@@ -111,7 +110,7 @@ class Upload
 
     /**
      * 构造函数
-     * 
+     *
      * @param array $config
      */
     public function __construct($config = ['dir' => '', 'filename' => '', 'data' => [], 'extension' => []])
@@ -124,7 +123,7 @@ class Upload
 
     /**
      * 获取扩展名
-     * 
+     *
      * @return str
      */
     private function getExt()
@@ -135,7 +134,7 @@ class Upload
 
     /**
      * 判断扩展名是否合法
-     * 
+     *
      * @return boolean
      */
     private function isExt()
@@ -159,7 +158,7 @@ class Upload
 
     /**
      * 执行上传操作
-     * 
+     *
      * @return boolean
      */
     public function execute()

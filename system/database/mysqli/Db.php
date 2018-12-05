@@ -4,7 +4,7 @@ namespace system\database\mysqli;
 
 /**
  * 数据操作类
- * 
+ *
  * @author Ding<beyondye@gmail.com>
  */
 class Db
@@ -12,14 +12,14 @@ class Db
 
     /**
      * 保存数据库连接句柄
-     * 
+     *
      * @var object
      */
     private $db = null;
 
     /**
      * 数据库配置信息
-     * 
+     *
      * @var array
      */
     public $config = [];
@@ -39,7 +39,7 @@ class Db
 
     /**
      * 构造函数
-     * 
+     *
      * @param array $config 连接参数数组
      */
     public function __construct($config = [])
@@ -58,9 +58,9 @@ class Db
 
     /**
      * sql查询
-     * 
+     *
      * @param string $sql
-     * 
+     *
      * @return \System\Database\Result
      */
     public function query($sql)
@@ -81,9 +81,9 @@ class Db
 
     /**
      * 转义字符串
-     * 
+     *
      * @param string|array $string
-     * 
+     *
      * @return string|array
      */
     public function escape($string)
@@ -102,10 +102,10 @@ class Db
 
     /**
      * 添加数据到数据库
-     * 
+     *
      * @param string $table 表名
      * @param array $data 数组键值对应
-     * 
+     *
      * @return boolean
      */
     public function insert($table, $data)
@@ -122,11 +122,11 @@ class Db
 
     /**
      * 更新数据
-     * 
+     *
      * @param string $table
      * @param array $data
      * @param array|string $where
-     * 
+     *
      * @return boolean
      */
     public function update($table, $data, $where = [])
@@ -148,10 +148,10 @@ class Db
 
     /**
      *  replace
-     * 
+     *
      * @param string $table
      * @param array $data
-     * 
+     *
      * @return boolean
      */
     public function replace($table, $data)
@@ -167,10 +167,10 @@ class Db
 
     /**
      * 删除数据
-     * 
+     *
      * @param string $table
      * @param array|string $where
-     * 
+     *
      * @return boolean
      */
     public function delete($table, $where = [])
@@ -181,11 +181,11 @@ class Db
 
     /**
      * 查询数据
-     * 
+     *
      * @param string $table
-     * @param array $condition=['where' => [], 'fields' => [], 'orderby' => [], 'limit' => []]
+     * @param array $condition =['where' => [], 'fields' => [], 'orderby' => [], 'limit' => []]
      * @param int|array $limit
-     * 
+     *
      * @return object array
      */
     public function select($table, $condition = [])
@@ -199,7 +199,7 @@ class Db
 
     /**
      * 关闭连接
-     * 
+     *
      * @return void
      */
     public function close()
@@ -209,9 +209,9 @@ class Db
 
     /**
      * 构造 sql where 字符串
-     * 
+     *
      * @param array $where
-     * 
+     *
      * @return string
      */
     private function sqlWhere($where = [])
@@ -238,10 +238,10 @@ class Db
 
     /**
      * sql比较运算符号解析
-     * 
+     *
      * @param string $key
-     * 
-     * @return string 
+     *
+     * @return string
      */
     private function sqlCompare($key, $value)
     {
@@ -292,9 +292,9 @@ class Db
 
     /**
      * 构造sql select字段
-     * 
+     *
      * @param array $fields
-     * 
+     *
      * @return string
      */
     private function sqlField($fields)
@@ -318,9 +318,9 @@ class Db
 
     /**
      * 构造sql order by
-     * 
+     *
      * @param array|string $fields
-     * 
+     *
      * @return string
      */
     private function sqlOrderBy($fields)
@@ -344,9 +344,9 @@ class Db
 
     /**
      * 构造sql limit
-     * 
+     *
      * @param init|array $offset
-     * 
+     *
      * @return string
      */
     private function sqlLimit($offset)

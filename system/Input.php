@@ -4,7 +4,7 @@ namespace system;
 
 /**
  * 输入类
- * 
+ *
  * @author Ding<beyondye@gmail.com>
  */
 class Input
@@ -12,11 +12,11 @@ class Input
 
     /**
      * 获取查询字符串,不存在返回null，不带参数返回全部
-     * 
+     *
      * @param string $name
-     * 
+     *
      * @param string $default
-     * 
+     *
      * @return array|string
      */
     public function get($name = null, $default = null)
@@ -40,7 +40,7 @@ class Input
 
     /**
      * 获取请求类型方法
-     * 
+     *
      * @return string
      */
     public function method()
@@ -51,18 +51,19 @@ class Input
 
     /**
      * 获取前一页的地址
-     * 
+     *
      * @return string
      */
-    public function  referer(){
+    public function referer()
+    {
 
         return $_SERVER['HTTP_REFERER'];
     }
 
     /**
-     * 
+     *
      * 获取请求中的body
-     * 
+     *
      * @return string
      */
     public function body()
@@ -72,16 +73,16 @@ class Input
 
     /**
      * 获取post数据,不存在返回null，不带参数返回全部
-     * 
+     *
      * @param string $name
-     * 
+     *
      * @return array|null
      */
     public function post($name = null)
     {
 
         if ($name === null) {
-            return array_map(function($val) {
+            return array_map(function ($val) {
                 return trim($val);
             }, $_POST);
         }
@@ -91,7 +92,7 @@ class Input
 
     /**
      * 判断是否ajax请求
-     * 
+     *
      * @return bool
      */
     public function isAjax()
@@ -106,8 +107,8 @@ class Input
 
     /**
      * 获取ip
-     * 
-     * @return $ipaddress string 
+     *
+     * @return $ipaddress string
      */
     public function ip()
     {

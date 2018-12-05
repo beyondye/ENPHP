@@ -3,7 +3,8 @@
 namespace system;
 
 /**
- * 
+ * model数据验证过滤
+ *
  * @author Ding<beyondye@gmail.com>
  */
 class Safe
@@ -18,30 +19,30 @@ class Safe
 
     /**
      * 验证的不合法字段
-     * 
+     *
      * @var array
      */
     public $illegalFields = [];
 
     /**
      * 缺少的必要字段
-     * 
+     *
      * @var array
      */
     public $incompleteFields = [];
 
     /**
      * 不是数据库的字段
-     * 
+     *
      * @var array
      */
     public $notMemberFields = [];
 
     /**
      * 验证数据合法性，非法字段保存于$this->illegalFields
-     * 
+     *
      * @param array $data 需要和schema key名一致
-     * 
+     *
      * @return boolean
      */
     public function validate($data)
@@ -73,9 +74,9 @@ class Safe
 
     /**
      * 验证是否缺少必要字段，缺少的必要字段保存于$this->incompleteFields
-     * 
+     *
      * @param array $data 比较数据
-     * 
+     *
      * @return boolean
      */
     public function complete($data)
@@ -104,10 +105,10 @@ class Safe
 
     /**
      * 与schema默认数据合并，并且清理不存在于schema里面的字段，不是成员的字段保存于$this->notMemberFields
-     * 
+     *
      * @param array $data 并入schema的数据
      * @param array $without 不需要的字段
-     * 
+     *
      * @return array 与schema默认合并后的数据
      */
     public function merge($data, $without = [])
@@ -138,9 +139,9 @@ class Safe
 
     /**
      * 清理不存在于schema里面的字段，不是成员的字段保存于$this->notMemberFields
-     * 
+     *
      * @param array $data 需要清理的数据
-     * 
+     *
      * @return array 清理后后的数据
      */
     public function clear($data)

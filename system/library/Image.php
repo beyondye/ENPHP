@@ -4,6 +4,7 @@ namespace system\library;
 
 /**
  * 图片缩放加水印操作类
+ *
  * @example
  * $image= new \System\Library\Image();
  * $image->width=300;
@@ -16,12 +17,11 @@ namespace system\library;
  * $image->markimg='G:\water.png';
  * $image->resize();
  * echo $image->message;
- * 
+ *
  * @author Ding<beyondye@gmail.com>
  */
 class Image
 {
-
     /**
      * 缩放宽度
      * @var int
@@ -30,20 +30,20 @@ class Image
 
     /**
      * 缩放高度
-     * 
+     *
      * @var int
      */
     public $height;
 
     /**
      * 源文件地址
-     * @var string 
+     * @var string
      */
     public $source;
 
     /**
      * 保存到目标文件地址
-     * @var string 
+     * @var string
      */
     public $save;
 
@@ -55,37 +55,37 @@ class Image
 
     /**
      * 是否加水印
-     * @var bool 
+     * @var bool
      */
     public $watermark = false;
 
     /**
      * 字体地址
-     * @var string 
+     * @var string
      */
     public $font;
 
     /**
      * 字体文本大小
-     * @var string 
+     * @var string
      */
     public $fontsize = 12;
 
     /**
      * 水印文字
-     * @var string 
+     * @var string
      */
     public $text;
 
     /**
      * 水印图片
-     * @var string 
+     * @var string
      */
     public $markimg;
 
     /**
      * 运行状态码
-     * @var int 
+     * @var int
      */
     public $code;
 
@@ -97,7 +97,7 @@ class Image
 
     /**
      * 当前文件扩展名
-     * @var string 
+     * @var string
      */
     private $ext;
 
@@ -180,7 +180,7 @@ class Image
 
     /**
      * 载入源文件图片
-     * 
+     *
      * @return resource
      */
     private function create()
@@ -219,6 +219,7 @@ class Image
 
     /**
      * 获取源文件扩展名
+     *
      * @return bool
      */
     private function ext()
@@ -240,7 +241,7 @@ class Image
 
     /**
      * 保存数据到文件
-     * 
+     *
      * @param type $image
      * @return boolean
      */
@@ -262,7 +263,7 @@ class Image
 
     /**
      * 图片缩放操作
-     * 
+     *
      * @return boolean
      */
     public function resize()
@@ -317,7 +318,7 @@ class Image
 
     /**
      * 给缩放图片加水印
-     * 
+     *
      * @param resource $image
      * @return boolean
      */
@@ -360,7 +361,7 @@ class Image
         $black = imagecolorallocate($image, 0, 0, 0);
 
         $box = imageftbbox($this->fontsize, 0, $this->font, $this->text);
-        $stringwidth = $box[0] + ($swidth - $box[4] );
+        $stringwidth = $box[0] + ($swidth - $box[4]);
 
         imagettftext($image, $this->fontsize, 0, $stringwidth - 5, $sheight - 5, $black, $this->font, $this->text);
         imagettftext($image, $this->fontsize, 0, $stringwidth - 4, $sheight - 4, $white, $this->font, $this->text);

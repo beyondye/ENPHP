@@ -5,13 +5,12 @@ namespace system\library;
 use system\library\Html;
 
 /**
- * 表格
- * 
+ * 生成html表格
+ *
  * @author Ding<beyondye@gmail.com>
  */
 class Grid
 {
-
     /**
      * 设置需要显示的字段
      * @var array
@@ -59,23 +58,23 @@ class Grid
 
     /**
      * 设置补全字段数据
-     * 
+     *
      * @param array $fields
-     * @example 
+     * @example
      * $fields=['id'=>['primary'=>true,'literal'=>'ID'],'name','time']
-     * 
-     * 
+     *
+     *
      * $default = [
      *      'convert' => null,
      *      'primary' => false,
      *      'hide' => false,
      *      'literal'=>''
      * ];
-     * 
-     * 
+     *
+     *
      * @param string $pos 字段的前后 val='before' or 'after'
-     * @param string $to  具体字段名称，如果空为数组的头和尾
-     *  
+     * @param string $to 具体字段名称，如果空为数组的头和尾
+     *
      * @return $this
      */
     public function setField($fields = [], $to = '', $pos = Grid::FIELD_POS_AFTER)
@@ -172,8 +171,8 @@ class Grid
 
     /**
      * 设置过滤表单项
-     * 
-     * @param array $filters  html tags
+     *
+     * @param array $filters html tags
      * @return $this
      */
     public function setFilter($filters = [])
@@ -188,9 +187,9 @@ class Grid
 
     /**
      * 返回filter html字符串
-     * 
+     *
      * @param string $gorup
-     * 
+     *
      * @return string
      */
     public function filters()
@@ -200,9 +199,10 @@ class Grid
 
     /**
      * 设置表格数据工具
-     * 
+     *
      * @param array $tools htmls
-     * @param string $group 
+     * @param string $group
+     *
      * @return $this
      */
     public function setTool($tools = [], $gorup = self::TOOL_DEFAULT_GROUP)
@@ -217,9 +217,9 @@ class Grid
 
     /**
      * 返回tools html字符串
-     * 
+     *
      * @param string $gorup
-     * 
+     *
      * @return string
      */
     public function tools($gorup = self::TOOL_DEFAULT_GROUP)
@@ -229,9 +229,9 @@ class Grid
 
     /**
      * 生成表格行
-     * 
+     *
      * @param object $row
-     * 
+     *
      * @return string
      */
     private function tr($row)
@@ -260,7 +260,7 @@ class Grid
 
     /**
      * 生成表格头部
-     * 
+     *
      * @return string
      */
     private function thead()
@@ -285,7 +285,7 @@ class Grid
 
     /**
      * 生成表格
-     * 
+     *
      * @return string
      */
     public function table()
@@ -302,7 +302,7 @@ class Grid
 
     /**
      * 生成表格html
-     * 
+     *
      * @return string
      */
     public function render(callable $make)

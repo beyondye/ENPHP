@@ -45,9 +45,9 @@ if (preg_match('/^[\w\/]+$/', $_controller) == 0 || preg_match('/^\w+$/', $_acti
 
 $contrs = explode('/', $_controller);
 $contrs[count($contrs) - 1] = ucfirst(end($contrs));
-$contrins=$sys->load(join('\\', $contrs), 'module\\' . MODULE);
+$contrins = $sys->load(join('\\', $contrs), 'module\\' . MODULE);
 
-if(!method_exists($contrins,$_action)){
+if (!method_exists($contrins, $_action)) {
     exit('Not Found Action');
 }
 

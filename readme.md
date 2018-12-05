@@ -877,7 +877,7 @@ $this->helper->url(['p1'=>'1','p2'=>2]);
 
 //注意a参数和/mod/list.php以及anchor
 $this->helper->url(['a'=>'lists','p1'=>'1','p2'=>2],'/mod/list.php','anchor');
-//输出 /index.php?c=main&a=lists&p1=1&p2=2#anchor
+//输出 /mod/list.php?c=main&a=lists&p1=1&p2=2#anchor
 ```
 
 #### $this->helper->pager($size, $total, $page, $url, $visible = 5) 方法

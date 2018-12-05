@@ -4,93 +4,92 @@ namespace system\library;
 
 /**
  * 生成验证码
- * 
+ *
  * @author Ding<beyondye@gmail.com>
  */
 class Captcha
 {
-
     /**
      * 字体路径
-     * @var string 
+     * @var string
      */
     public $fontPath;
 
     /**
      * 图片数据
-     * @var string 
+     * @var string
      */
     private $image;
 
     /**
      * 生成几位验证码
-     * @var int 
+     * @var int
      */
     public $charLen = 4;
 
     /**
      * 验证码字符
-     * @var array 
+     * @var array
      */
     private $arrChr = array();
 
     /**
      * 图宽片
-     * @var int 
+     * @var int
      */
     public $width = 100;
 
     /**
      * 图片高
-     * @var int 
+     * @var int
      */
     public $height = 30;
 
     /**
      * 验证码文本
-     * @var string 
+     * @var string
      */
     private $text = '';
 
     /**
      * 背景色
-     * @var string 
+     * @var string
      */
     public $bgcolor = "#ffffff";
 
     /**
      * 生成杂点
-     * @var bool 
+     * @var bool
      */
     private $showNoisePix = true;
 
     /**
      * 生成杂点数量
-     * @var int 
+     * @var int
      */
     private $noiseNumPix = 80;
 
     /**
      * 生成杂线
-     * @var bool 
+     * @var bool
      */
     private $showNoiseLine = true;
 
     /**
      * 生成杂线数量
-     * @var int 
+     * @var int
      */
     private $noiseNumLine = 2;
 
     /**
      * 边框，当杂点、线一起作用的时候，边框容易受干扰
-     * @var int 
+     * @var int
      */
     private $showBorder = true;
 
     /**
      * 边框颜色
-     * @var string 
+     * @var string
      */
     public $borderColor = "#cccccc";
 
@@ -141,7 +140,7 @@ class Captcha
 
     /**
      * 创建验证码图片
-     * 
+     *
      * @return void
      */
     public function create()
@@ -169,7 +168,7 @@ class Captcha
             $randsize = rand($size - $size / 10, $size + $size / 10);
             $location = $left + ($i * $size + $size / 10);
 
-            imagettftext($this->image, $randsize, rand(- 18, 18), $location, rand($size - $size / 10, $size + $size / 10) + 2, $textColor, $font, $randText);
+            imagettftext($this->image, $randsize, rand(-18, 18), $location, rand($size - $size / 10, $size + $size / 10) + 2, $textColor, $font, $randText);
         }
 
         if ($this->showNoisePix == true) {
@@ -190,7 +189,7 @@ class Captcha
 
     /**
      * 输出显示
-     * 
+     *
      * @return void
      */
     public function show()
@@ -202,7 +201,7 @@ class Captcha
 
     /**
      * 获取验证码文本
-     * 
+     *
      * @return text
      */
     public function getCode()

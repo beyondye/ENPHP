@@ -4,7 +4,7 @@ namespace system\database\mysqli;
 
 /**
  * 数据查绚结果
- * 
+ *
  * @author Ding<beyondye@gmail.com>
  */
 class Result
@@ -12,21 +12,21 @@ class Result
 
     /**
      * 数据集合大小
-     * 
+     *
      * @var int
      */
     public $num_rows = 0;
 
     /**
      * 查询结果对象实例
-     * 
+     *
      * @var object
      */
     public $result = null;
 
     /**
      * 构造函数
-     * 
+     *
      * @param object $result 查询结果对象实例
      */
     public function __construct($result)
@@ -37,9 +37,9 @@ class Result
 
     /**
      * 返回数据集
-     * 
+     *
      * @param string $type 返回结果类型
-     * 
+     *
      * @return array 数据集合
      */
     public function result($type = 'object')
@@ -62,13 +62,13 @@ class Result
 
     /**
      * 返回数据某一条数据
-     * 
+     *
      * @param int $n 集合数组标
      * @param string $type 返回类型
-     * 
+     *
      * @return array or object
      */
-    function row($n = 0, $type = 'object')
+    public function row($n = 0, $type = 'object')
     {
         $result = $this->result($type);
         if (isset($result[$n])) {

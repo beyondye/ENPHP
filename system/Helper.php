@@ -11,19 +11,19 @@ class Helper
     public function __get($name)
     {
         global $instances;
-        $sys=$instances['system']['System'];
+        $sys = $instances['system']['System'];
         return $sys->load(ucfirst($name), 'helper');
     }
 
     /**
      * 分页函数
-     * 
-     * @param int $size  每页数据条数
+     *
+     * @param int $size 每页数据条数
      * @param int $total 数据总数
      * @param int $page 当前页码
      * @param string $url 链接url模板 如：index.php?page=<%page%>&tail=0
      * @param int $visible 可见页码
-     * 
+     *
      * @return string
      */
     public function pager($size, $total, $page, $url, $visible = 5)
@@ -93,11 +93,11 @@ class Helper
 
     /**
      * 生成url链接
-     * 
+     *
      * @param array $param
      * @param string $path
      * @param string $anchor
-     * 
+     *
      * @return string
      */
     public function url($param = [], $path = ENTRY, $anchor = '')
@@ -118,7 +118,7 @@ class Helper
             $key = $key . '/' . join('/', array_keys($keys));
         }
 
-        if (isset(URL[MODULE])&&array_key_exists($key, URL[MODULE])) {
+        if (isset(URL[MODULE]) && array_key_exists($key, URL[MODULE])) {
 
             $temp = URL[MODULE][$key];
             $url = '';

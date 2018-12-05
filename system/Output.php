@@ -6,7 +6,7 @@ use system\System;
 
 /**
  * 输出类
- * 
+ *
  * @author Ding<beyondye@gmail.com>
  */
 class Output extends System
@@ -14,7 +14,7 @@ class Output extends System
 
     /**
      * http状态码
-     * 
+     *
      * @var array
      */
     public $httpStatusCode = [
@@ -61,9 +61,9 @@ class Output extends System
 
     /**
      * 压缩HTML
-     * 
+     *
      * @param string $string
-     * 
+     *
      * @return string
      */
     public function compress($string)
@@ -80,14 +80,14 @@ class Output extends System
 
     /**
      * 输入视图
-     * 
+     *
      * @staticvar array $_vars
-     * 
+     *
      * @param string $_view 视图名称
      * @param array $_data 视图数据
      * @param boolean $_return 是否返回内容
      * @param boolean $_compress 是否压缩HTML
-     * 
+     *
      * @return string
      */
     public function view($_view, $_data = [], $_return = false, $_compress = false)
@@ -129,12 +129,12 @@ class Output extends System
 
     /**
      * 输出json数据
-     * 
-     * @param int $status  自定义状态码
+     *
+     * @param int $status 自定义状态码
      * @param string $message 状态简单描述
      * @param array $data 需要返回的数据
      * @param bool $return 是否直接返回内容
-     * 
+     *
      * @return json string
      */
     public function json($status, $message, $data = [], $return = false)
@@ -151,10 +151,10 @@ class Output extends System
 
     /**
      * 重定向地址
-     * 
-     * @param string $uri  地址
+     *
+     * @param string $uri 地址
      * @param int $http_response_code HTTP状态码
-     * 
+     *
      * @return void
      */
     public function redirect($uri = '', $http_response_code = 302)
@@ -165,11 +165,11 @@ class Output extends System
 
     /**
      * 设置HTTP状态码
-     * 
+     *
      * @param int $http_status_code
-     * 
+     *
      * @return void
-     * 
+     *
      */
     public function status($http_status_code)
     {
@@ -182,13 +182,13 @@ class Output extends System
 
     /**
      * 错误页面
-     * 
-     * @param string 错误页面模版名 
+     *
+     * @param string 错误页面模版名
      * @param array 数据数组
      */
     public function error($name = 'general', $data = ['heading' => 'Error Message', 'message' => 'An error occurred.'])
     {
-       
+
         extract($data);
 
         ob_start();

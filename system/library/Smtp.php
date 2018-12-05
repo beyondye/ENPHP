@@ -4,11 +4,10 @@ namespace system\library;
 
 /**
  * SMTP邮件发送, 支持发送纯文本邮件和HTML格式的邮件
- * 
+ *
  * @author Ding<beyondye@gmail.com>
- * 
+ *
  *例子：
- 
  * $mail = new Smtp(['server'=>'', 'username' => "", 'password' => "",'port' => 25]); 设置smtp服务器
  * $mail->from("XXXXX"); 设置发件人
  * $mail->fromname("XXXXX"); 设置发件人名字
@@ -99,11 +98,11 @@ class Smtp
 
     /**
      * 设置邮件传输代理
-     * 
-     * @param string $config['server'] 代理服务器的ip或者域名
-     * @param string $config['username'] 认证账号
-     * @param string $config['password'] 认证密码
-     * @param int $config['port'] 代理服务器的端口，smtp默认25号端口
+     *
+     * @param string $config ['server'] 代理服务器的ip或者域名
+     * @param string $config ['username'] 认证账号
+     * @param string $config ['password'] 认证密码
+     * @param int $config ['port'] 代理服务器的端口，smtp默认25号端口
      */
     public function __construct($config = [])
     {
@@ -147,7 +146,7 @@ class Smtp
 
     /**
      * 设置收件人，多个收件人，连续调用多次.
-     * 
+     *
      * @param string $to 收件人地址
      * @return object
      */
@@ -173,7 +172,7 @@ class Smtp
 
     /**
      * 设置抄送，多个抄送，连续调用多次.
-     * 
+     *
      * @param string $cc 抄送地址
      * @return object
      */
@@ -195,7 +194,7 @@ class Smtp
 
     /**
      * 设置秘密抄送，多个秘密抄送，连续调用多次
-     * 
+     *
      * @param string $bcc 秘密抄送地址
      * @return object
      */
@@ -217,7 +216,7 @@ class Smtp
 
     /**
      * 设置邮件附件
-     * 
+     *
      * @param string $attachment 附件，文件地址
      * @return object
      */
@@ -231,7 +230,7 @@ class Smtp
 
     /**
      * 设置邮件主题
-     * 
+     *
      * @param string $subject 邮件主题
      * @return object
      */
@@ -243,7 +242,7 @@ class Smtp
 
     /**
      * 设置邮件mime信息
-     * 
+     *
      * @param string $mime 是否是纯文本邮件，默认否
      * @return object
      */
@@ -255,7 +254,7 @@ class Smtp
 
     /**
      * 设置邮件主体内容
-     * 
+     *
      * @param string $body 邮件主体内容
      * @return object
      */
@@ -267,7 +266,7 @@ class Smtp
 
     /**
      * 发送邮件
-     * 
+     *
      * @return boolean
      */
     public function send()
@@ -291,7 +290,7 @@ class Smtp
 
     /**
      * 返回错误信息
-     * 
+     *
      * @return string
      */
     public function error()
@@ -304,7 +303,7 @@ class Smtp
 
     /**
      * 返回mail命令
-     * 
+     *
      * @return array
      */
     protected function getCommand()
@@ -383,6 +382,8 @@ class Smtp
      * @param string $command 发送到服务器的smtp命令
      * @param int $code 期望服务器返回的响应吗
      * @param boolean
+     *
+     * @return void
      */
     protected function sendCommand($command, $code)
     {
@@ -423,7 +424,7 @@ class Smtp
 
     /**
      * 读取附件文件内容，返回base64编码后的文件内容
-     * 
+     *
      * @return mixed
      */
     protected function readFile()
@@ -438,7 +439,7 @@ class Smtp
 
     /**
      * 建立到服务器的网络连接
-     * 
+     *
      * @return boolean
      */
     private function socket()
@@ -468,7 +469,7 @@ class Smtp
 
     /**
      * 关闭socket
-     * 
+     *
      * @return boolean
      */
     private function close()
