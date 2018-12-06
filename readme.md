@@ -1229,8 +1229,45 @@ $this->redis->get('key');
 //调用一个自定义redis服务
 $this->redis('queue')->get('key');
 ```
-
 ### Security安全
+> 此类提供了一些常用的安全方法函数
+
+#### $this->security->blank($str) 方法
+把多个空白字符转换成一个空白字符,已被model验证引用。
+```php
+$str='  dd    dd        d  ';
+echo $this->security->blank($str);
+// 输出 ' dd dd d '
+```
+#### $this->security->entity($str) 方法
+把html标签转换成实体字符,已被model验证引用。
+> 如同php内建函数 htmlspecialchars($str, ENT_QUOTES | ENT_HTML401, CHARSET);
+
+
+#### $this->security->tag($str) 方法
+清理html标签,已被model验证引用。
+> 如同php内建函数strip_tags($str)
+
+
+#### $this->security->token() 方法
+生成一个表单token值，返回字符串。
+```php
+<input name="_tokenname_" value="<?php echo $this->security->token() ?>" />
+```
+#### $this->security->tokenName() 方法
+生成一个表单token名字，返回字符串。
+```php
+<input name="<?php echo $this->security->tokenName() ?>" value="<?php echo $this->security->token() ?>" />
+```
+#### $this->security->checkToken() 方法
+验证一个被提交上来的token是否有效,返回布尔值。
+```php
+if($this->security->checkToken()){
+
+    //token 有效
+
+}
+```
 
 ### Upload上传文件
 
@@ -1246,7 +1283,7 @@ $this->redis('queue')->get('key');
 
 ### 应用程序目录布局说明
 
-
+```
 |——system    系统框架程序目录 
 
 |——application  应用程序目录  
@@ -1289,3 +1326,4 @@ $this->redis('queue')->get('key');
 |————www   此目录绑域名用  
 |——————index.php    入口文件  
  
+```
