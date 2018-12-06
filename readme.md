@@ -1335,6 +1335,47 @@ if ($upload->execute()) {
 ### Image图片修饰
 
 ### Smtp发送邮件
+SMTP邮件发送, 支持发送纯文本邮件和HTML格式的邮件
+
+#### 代码例子
+```php
+//设置smtp服务器
+$mail = new \system\library\Smtp([
+    'server'=>'smtp.qq.com',
+    'username' => "name",
+    'password' => "123456",
+    'port' => 25
+  ]); 
+
+//设置发件人
+$mail->from("XXXXX"); 
+
+//设置发件人名字
+$mail->fromname("XXXXX"); 
+
+//设置收件人，多个收件人，调用多次
+$mail->to("XXXXX"); 
+
+//设置抄送，多个抄送，调用多次
+$mail->cc("XXXX"); 
+
+//设置秘密抄送，多个秘密抄送，调用多次
+$mail->bcc("XXXXX"); 
+
+//设置邮件主题
+$mail->subject("test"); 
+
+//设置邮件内容
+$mail->body("<b>test</b>");
+
+//发送邮件，返回布尔值
+if($mail->send()){
+    //发送成功
+}else{
+    //发送失败，返回错误信息
+    $mail->error();
+}
+```
 
 ### Captcha验证码生成
 
