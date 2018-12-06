@@ -1434,39 +1434,39 @@ $authcode->show();
 ### 应用程序目录布局说明
 > 带*号的目录必须设置
 ```
-|---system 系统框架程序目录 
-└---application 应用程序目录  
-    |---helper   自定义工具帮助库*  
-    |---library  自定义公共类库  
-    |---language 语言包目录*
-    |---font     字体目录*
-    |---document 开发文档目录  
-    |---module   控制器模块*
-    |    └---www  应用模块名  
-    |       └---main.php 具体controller业务逻辑文件  
-    |---model model文件目录*
-    |   └---test.php 具体数据model 
-    |---template  视图模板文件*
-    |   └---www  模块名   
-    |       └---main.php 具体模板文件  
-    |---config 配置文件目录*
-    |   |---development 开发环境配置  
-    |   |   |---database.php 数据库配置文件  
-    |   |   |---constans.php 常量配置文件  
-    |   |   └---redis.php redis配置文件  
-    |   |---test 开发环境配置  
-    |   |   |---database.php   
-    |   |   |---constans.php   
-    |   |   └---redis.php   
-    |   └---production 产品环境配置  
-    |       |---database.php   
-    |       |---constans.php   
-    |       └---redis.php   
-    |---inherit model和controller重写继承目录*
-    |   |---controller.php   
-    |   └---model.php   
-    └---public  应用程序入口目录  
-        |---static 静态文件资源  
-        └---www  此目录绑域名用  
-            └---index.php 入口文件  
+|--system 系统框架程序目录 
+└--application 应用程序目录  
+    |--helper   自定义工具帮助库*  
+    |--library  自定义公共类库  
+    |--language 语言包目录*
+    |--font     字体目录*
+    |--document 开发文档目录  
+    |--module   控制器模块*
+    |    └--www  应用模块名  
+    |       └--main.php 具体controller业务逻辑文件  
+    |--model model文件目录*
+    |   └--test.php 具体数据model 
+    |--template  视图模板文件*
+    |   └--www  模块名   
+    |       └--main.php 具体模板文件  
+    |--config 配置文件目录*
+    |   |--development 开发环境配置  
+    |   |   |--database.php 数据库配置文件  
+    |   |   |--constans.php 常量配置文件  
+    |   |   └--redis.php redis配置文件  
+    |   |--test 开发环境配置  
+    |   |   |--database.php   
+    |   |   |--constans.php   
+    |   |   └--redis.php   
+    |   └--production 产品环境配置  
+    |       |--database.php   
+    |       |--constans.php   
+    |       └--redis.php   
+    |--inherit model和controller重写继承目录*
+    |   |--controller.php   
+    |   └--model.php   
+    └--public  应用程序入口目录  
+        |--static 静态文件资源  
+        └--www  此目录绑域名用  
+            └--index.php 入口文件  
 ```
