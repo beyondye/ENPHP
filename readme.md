@@ -1310,7 +1310,7 @@ $upload = new \system\library\Upload();
 $upload->extension = ['jpg', 'gif', 'png', 'jpge'];
 
 //设置上传保存目录
-$upload->dir = $_SERVER['DOCUMENT_ROOT'] . '/' .date('y/nd/');
+$upload->dir = $_SERVER['DOCUMENT_ROOT'] . '/upload/' .date('y/nd/');
 
 //接受表单数据字段
 $upload->data = $_FILES['filedata'];
@@ -1322,6 +1322,7 @@ $upload->filename = uniqid();
 if ($upload->execute()) {
     echo $upload->code; // 输出 '0'
     echo $upload->message; //输出 '上传成功'
+    echo $upload->filename; //输出完成的文件名+最终扩展名
     return;
 }
 
