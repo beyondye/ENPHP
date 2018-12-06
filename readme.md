@@ -52,27 +52,28 @@
 
 > 入口文件一般是网站的根目录index.php文件，有几个重要的常量配置。
 
+#### 运行环境设置
 设置运行环境变量，三个值分别为测试环境，产品环境，开发环境。
 ```php
 // test,production,development
 define('ENVIRONMENT', 'development');
 ```
-
+#### 应用目录设置
 您开发的应用程序目录常量APP_DIR设置。
 ```php
 define('APP_DIR', realpath('app_dir') . DIRECTORY_SEPARATOR);
 ```
-
+#### 框架目录设置
 框架系统文件目录常量，可以存放到其他地方，以便共用和升级。
 ```php
 define('SYS_DIR', realpath('system_dir') . DIRECTORY_SEPARATOR);
 ```
-
+#### 控制器模块设置
 设置controller模块常量，模块必须是APP_DIR目录下module文件夹的子目录。
 ```php
 define('MODULE', 'www');
-
 ```
+#### 模板视图目录设置
 设置模板目录常量，模板必须是APP_DIR目录下template文件夹的子目录。
 ```php
 define('TEMPLATE', 'www');
@@ -82,33 +83,42 @@ define('TEMPLATE', 'www');
 
 > 常量文件位置在APP_DIR/config/下面三个子目录test,production,development中的constans.php文件分别按环境设置。
 
+#### 地址路由
 地址路由配置,以/index.php?c=main&a=index为例子。<br>
 c代表控制器类名字，默认控制器为Main。<br>
 a代表action方法名称，默认action为index。<br>
 你可以自定义设置这些值。
-
 ```php
 define('DEFAULT_CONTROLLER', 'main');
 define('DEFAULT_ACTION', 'index');
 define('CONTROLLER_KEY_NAME', 'c');
 define('ACTION_KEY_NAME', 'a');
 ```
-
+#### 字符编码
 输出字符编码设置，以便$this->output->view()和$this->output->json()输出
 ```php
 define('CHARSET', 'utf-8');
 ```
 
-Cookie相关设置
+#### Cookie相关设置
 ```php
-define('COOKIE_DOMAIN', '');
+//有效域名
+define('COOKIE_DOMAIN', 'test.com'); 
+
+//是否https发送
 define('COOKIE_SECURE', false);
+
+//有效路径
 define('COOKIE_PATH', '/');
+
+//http只读
 define('COOKIE_HTTPONLY', false);
+
+//过期时间秒
 define('COOKIE_EXPIRE', 0);
 ```
 
-Session设置
+#### Session设置
 ```php
 
 //自定义session cookie名
@@ -118,7 +128,7 @@ define('SESSION_COOKIE_NAME', 'SE');
 define('SESSION_EXPIRE', 0);
 ```
 
-安全配置
+#### 安全配置
 ```php
 //加密安全混淆值
 define('ENCRYPTION_KEY', 'weryi9878sdfddtgtbsdfh');
@@ -133,12 +143,12 @@ define('TOKEN_INPUT_NAME', 'fh40dfk9dd8dkfje');
 define('TOKEN_EXPIRE', 3600);
 ```
 
-多语言应用
+#### 多语言应用
 ```php
 //默认语言环境
 define('LANG', 'zh_cn');
 ```
-
+#### URL转换
 URL重写转换输出模版，和路由无关，以配合$this->helper->url()使用
 ```php
 //url 重写
@@ -915,10 +925,12 @@ $url='/index/list/<%page%>.html';
 //显示多少个页码链接
 $visible=5;
 
+//调用pager
 $pager=$this->helper->pager($size, $total, $page, $url, $visible);
 
 echo $pager;
-//输出
+//输出HTML
+//
 //<div class="pager">
 //<a class="number" href="/index/list/1.html">1</a>
 //<a class="number " href="/index/list/2.html">2</a>
@@ -926,9 +938,9 @@ echo $pager;
 //<a class="number " href="/index/list/4.html">4</a>
 //<a class="number " href="/index/list/5.html">5</a>
 //<span class="ellipsis">...</span>
-//<a  class="number" href="/index/list/27">27</a>
+//<a  class="number" href="/index/list/10">10</a>
 //<a href="/index/list/2.html" class="next">下一页</a>
-//<span class="info">共 402 条记录</span>
+//<span class="info">共 100 条记录</span>
 //</div>
 ```
 
@@ -1144,13 +1156,79 @@ $this->cookie->delete(['name1','name2','name3']);
 设置多个cookie,返回bool值。
 
 > 参数说明
->> $data是一个数组，例如$data=['name'=>'val','name2'>'val2'].
+>> $data是一个数组，例如$data=['name'=>'val','name2'>'val2']. <br>
 >> 其它参数参考 $this->cookie->set()方法
 
-
 ### Lang多语言配置
+> 语言包必须放置APP_DIR/language目录下面。
+
+
+#### 怎么创建语言包
+
+我们以en_us和zh_cn为例：<br>
+创建英文APP_DIR/language/en_us/test.php
+```php
+<?php
+return ['test'=>'test','good'=>'very good'];
+```
+
+创建中文APP_DIR/language/zh_cn/test.php
+```php
+<?php
+return ['test'=>'测试','good'=>'非常好'];
+```
+
+#### 调用语言包
+```php
+echo $this->lang('zh_cn')->test['good'];
+//输出 非常好
+
+echo $this->lang('en_us')->test['good'];
+//输出 very good
+
+//如果设置了LANG常量为zh_cn，我们可以这样调用
+echo $this->lang->test['good'];
+// 输出 非常好
+```
 
 ### Redis缓存
+> 必须安装redis扩展才能使用
+
+#### 配置redis服务器
+放置配置文件redis.php到APP_DIR/config/development(test 或 production)目录下。<br>
+文件代码内容：
+```php
+<?php
+return [
+    //默认
+    'default' => [
+        'host' => 'set.redis.to.hosts.file', 
+        'port' => 6379, 
+        'password' => '', 
+        'database' => 0, 
+        'timeout' => 30, 
+        'serialization' => true //是否自动序列化
+        ],
+    //队列服务器
+    'queue' => [
+        'host' => 'set.redis.to.hosts.file', 
+        'port' => 6379, 
+        'password' => '', 
+        'database' => 0, 
+        'timeout' => 30, 
+        'serialization' => true //是否自动序列化
+        ]
+];
+```
+#### 调用redis服务
+所有方法函数和属性均继承原生redis模块
+```php
+//如果设置了default服务器，我们可以这样调用
+$this->redis->get('key');
+
+//调用一个自定义redis服务
+$this->redis('queue')->get('key');
+```
 
 ### Security安全
 
