@@ -1251,12 +1251,12 @@ echo $this->security->blank($str);
 
 #### $this->security->token() 方法
 生成一个表单token值，返回字符串。
-```php
+```html
 <input name="_tokenname_" value="<?php echo $this->security->token() ?>" />
 ```
 #### $this->security->tokenName() 方法
 生成一个表单token名字，返回字符串。
-```php
+```html
 <input name="<?php echo $this->security->tokenName() ?>" value="<?php echo $this->security->token() ?>" />
 ```
 #### $this->security->checkToken() 方法
@@ -1270,6 +1270,62 @@ if($this->security->checkToken()){
 ```
 
 ### Upload上传文件
+
+#### 类方法及属性说明
+
+```php
+//设置保存目录
+$upload->dir='/www/upload';
+
+//设置被允许的文件类型数组
+$upload->extension=['jpg','gif'];
+
+//设置接受表单数据字段
+$upload->data=$_FILES['filedata'];
+
+//自定文件名，如果不填写，将自动设置。
+$upload->filename='filename';
+
+//设置上传文件夹权限码，默认0777
+$upload->mode='0777';
+
+//必要属性设置完毕，执行上传处理，返回布尔值。
+$upload->execute();
+
+//执行完结果返回状态码
+$upload->code;
+// 详细请查看 $upload::ERROR_MSG
+
+//执行完结果返回消息提示
+$upload->message;
+// 详细请查看 $upload::ERROR_MSG
+```
+
+#### 代码例子
+```php
+//实例上传类
+$upload = new \system\library\Upload();
+
+//设置被允许的文件扩展
+$upload->extension = ['jpg', 'gif', 'png', 'jpge'];
+
+//设置上传保存目录
+$upload->dir = $_SERVER['DOCUMENT_ROOT'] . '/' .date('y/nd/');
+
+//接受表单数据字段
+$upload->data = $_FILES['filedata'];
+
+//自定义生成一个文件名
+$upload->filename = uniqid();
+
+//执行上传操作
+if ($upload->execute()) {
+    echo $upload->code; // 输出 '0'
+    echo $upload->message; //输出 '上传成功'
+    return;
+}
+
+```
 
 ### Html标签生成
 
