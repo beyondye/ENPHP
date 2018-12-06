@@ -1376,52 +1376,97 @@ if($mail->send()){
     $mail->error();
 }
 ```
-
 ### Captcha验证码生成
+
+#### $captcha->bgcolor 属性
+设置验证码背景16进制颜色
+```php
+$captcha->bgcolor='#333333';
+```
+#### $captcha->showBorder 属性
+设置是否显示边框，布尔值
+```php
+$captcha->showBorder=true;
+```
+
+#### $captcha->borderColor 属性
+设置验证码边框16进制颜色
+```php
+$captcha->borderColor='#cccccc';
+```
+#### $captcha->charLen 属性
+设置验证码的位数
+```php
+$captcha->charLen=4;
+```
+#### $captcha->fontPath 属性
+设置字体放置目录,绝对路径，默认目录APP_DIR/font/
+```php
+$captcha->fontPath=APP_DIR.'/font/';
+```
+#### $captcha->width 属性
+设置图片宽度，单位像素
+
+#### $captcha->height 属性
+设置图片高度，单位像素
+
+#### $captcha->getCode() 方法
+获取生成的文字，以便保存到session
+
+#### $captcha->create() 方法
+生成渲染图像
+
+#### $captcha->show() 方法
+发送显示到浏览器
+
+#### 简单代码例子
+```php
+//假如地址 index.php?c=captcha&a=showimg
+
+$authcode = new \system\library\Captcha();
+$authcode->create();
+$this->session->set('authcode', $authcode->getCode());
+$authcode->show();
+
+//html img标签显示 <img src="index.php?c=captcha&a=showimg" />
+```
 
 ### 应用程序目录布局说明
 
 ```
-|——system    系统框架程序目录 
-
-|——application  应用程序目录  
-|————helper   自定义工具帮助库  
-|————library  自定义公共类库  
-|————language  语言包目录  
-|————font 字体目录  
-|————document 开发文档目录  
-|————module   程序模块  
-|——————www  模块名  
-|———————-main.php 具体controller业务逻辑文件  
-
-|————model    model文件目录  
-|——————test.php 具体数据model 
-  
-|————template  视图模板文件  
-|——————www  模块名   
-|————————main.php 具体模板文件  
-  
-|————config    配置文件目录  
-|——————development 开发环境配置  
-|————————database.php 数据库配置文件  
-|————————constans.php 常量配置文件  
-|————————redis.php redis配置文件  
-|——————test 开发环境配置  
-|————————database.php   
-|————————constans.php   
-|————————redis.php   
-|——————production 产品环境配置  
-|————————database.php   
-|————————constans.php   
-|————————redis.php   
-
-|————inherit    model和controller重写继承目录  
-|————————controller.php   
-|————————model.php   
-  
-|——public    应用程序入口目录  
-|————static    静态文件资源  
-|————www   此目录绑域名用  
-|——————index.php    入口文件  
- 
+|---system 系统框架程序目录 
+|---application 应用程序目录  
+    |---helper   自定义工具帮助库  
+    |---library  自定义公共类库  
+    |---language 语言包目录  
+    |---font     字体目录  
+    |---document 开发文档目录  
+    |---module   程序模块  
+    |    |---www  模块名  
+    |       |---main.php 具体controller业务逻辑文件  
+    |---model model文件目录  
+    |   |---test.php 具体数据model 
+    |---template  视图模板文件  
+    |   |---www  模块名   
+    |       |---main.php 具体模板文件  
+    |---config 配置文件目录  
+    |   |---development 开发环境配置  
+    |   |   |---database.php 数据库配置文件  
+    |   |   |---constans.php 常量配置文件  
+    |   |   |---redis.php redis配置文件  
+    |   |---test 开发环境配置  
+    |   |   |---database.php   
+    |   |   |---constans.php   
+    |   |   |---redis.php   
+    |   |---production 产品环境配置  
+    |   |    |---database.php   
+    |   |    |---constans.php   
+    |   |    |---redis.php   
+    |   |---inherit  model和controller重写继承目录  
+    |   |   |---controller.php   
+    |   |   |---model.php   
+    |---public  应用程序入口目录  
+        |---static 静态文件资源  
+        |---www  此目录绑域名用  
+            |---index.php 入口文件  
 ```

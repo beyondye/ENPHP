@@ -83,9 +83,9 @@ class Captcha
 
     /**
      * 边框，当杂点、线一起作用的时候，边框容易受干扰
-     * @var int
+     * @var bool
      */
-    private $showBorder = true;
+    public $showBorder = true;
 
     /**
      * 边框颜色
