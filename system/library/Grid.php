@@ -35,11 +35,6 @@ class Grid
      */
     public $datasource = [];
 
-    /**
-     * 设置当前页码
-     * @var int
-     */
-    public $pager;
 
     /**
      * 插入到字段前面最后面

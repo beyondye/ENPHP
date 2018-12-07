@@ -1371,6 +1371,17 @@ echo $html->tags($param);
 ```
 
 ### Grid表格生成
+待优化
+#### $grid->fields
+#### $grid->setField()
+#### $grid->filters
+#### $grid->filters()
+#### $grid->setFilter()
+#### $this->tools
+#### $this->tools()
+#### $grid->setTool()
+#### $grid->table()
+
 
 ### Image图片修饰
 对图片进行加水印和缩放操作
