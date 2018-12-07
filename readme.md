@@ -1333,6 +1333,55 @@ if ($upload->execute()) {
 ### Grid表格生成
 
 ### Image图片修饰
+对图片进行加水印和缩放操作
+
+#### 简单代码例子
+```php
+//创建实例
+$image= new \System\Library\Image();
+
+//设置图片宽度
+$image->width=300;
+
+//设置图片高度
+$image->height=300;
+
+//源文件路径
+$image->source='G:\fw.png';
+
+//处理之后保存路径
+$image->save='G:\fw300.png';
+
+//水印字体大小
+$image->fontsize=20;
+
+//字体文件路径
+$image->font=APP_DIR.'font/1.ttf';
+
+//图片质量
+$image->quality=90;
+
+//文本水印
+$image->text='text';
+
+//是否开启水印功能，默认false
+$image->watermark=true;
+
+//水印文件地址，图片优先
+$image->markimg='G:\water.png';
+
+//处理图片，返回布尔值
+if($image->resize()){
+
+    //处理结果状态码
+    $image->code;
+    
+    //处理结果返回信息
+    $image->message;
+}
+
+//具体状态码和状态信息请查看 $image::MAG 常量
+```
 
 ### Smtp发送邮件
 SMTP邮件发送, 支持发送纯文本邮件和HTML格式的邮件
@@ -1432,7 +1481,7 @@ $authcode->show();
 ```
 
 ### 应用程序目录布局说明
-> 带*号的目录必须设置
+> application目录带*号的目录必须设置
 ```
 |--system 系统框架程序目录 
 └--application 应用程序目录  
