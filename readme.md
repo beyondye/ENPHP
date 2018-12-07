@@ -1330,6 +1330,46 @@ if ($upload->execute()) {
 
 ### Html标签生成
 
+生成html标签
+
+#### 简单代码例子
+```php
+//参数数组
+$param=[
+    [
+        //标签名p
+        'name'='p',
+        
+        //标签的属性
+        'properties'=>['name'=>'ptag'],
+        
+        //子标签元素
+        'elements'=>[
+            [
+                'name'='i',
+                'properties'=>['name'=>'itag']
+            ]
+    ],
+    [   //标签div
+        'name'='div',
+        
+        //标签属性
+        'properties'=>['name'=>'pdiv'],
+    ]
+];
+
+//创建类实例
+$html= new \System\Library\Html();
+
+//生成标签
+echo $html->tags($param);
+//输出 
+//<p name="ptag">
+//    <i name="itag"></i>
+//</p>
+//<div name="pdiv"></div>
+```
+
 ### Grid表格生成
 
 ### Image图片修饰
