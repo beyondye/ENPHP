@@ -287,7 +287,7 @@ class Model extends System
      *
      * @return array|object
      */
-    public function belongsTo($model, $relation_model, $relation_foreign_name, $where = [], $condition = [])
+    public function belongs($model, $relation_model, $relation_foreign_name, $where = [], $condition = [])
     {
         if (!$where) {
             return null;
