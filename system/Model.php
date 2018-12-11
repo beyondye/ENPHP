@@ -303,7 +303,7 @@ class Model extends System
             }
 
             $foreign = $this->model($model);
-            $defaut = ['where' => ["{$foreign->primary} in" => join($primaries)], 'fields' => [], 'orderby' => [], 'limit' => []];
+            $defaut = ['where' => ["{$foreign->primary} in" => join(',',$primaries)], 'fields' => [], 'orderby' => [], 'limit' => []];
 
             return $foreign->select(array_merge($defaut, $condition));
 
