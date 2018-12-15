@@ -5,7 +5,7 @@ namespace module\www;
 class Main extends \inherit\Controller
 {
 
-    function index()
+    public function index()
     {
         $data['hello_world']='hello wolrd';
 

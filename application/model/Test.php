@@ -23,6 +23,7 @@ class Test extends \inherit\Model
             ],
             'name' => [
                 'validate' => ['regex' => '/^\S+$/', 'message' => '名称不能为空'],
+                'filter'=>'tag|entity',
                 'literal' => '名称',
                 'default' => '',
                 'required' => true

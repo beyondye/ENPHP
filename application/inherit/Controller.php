@@ -3,7 +3,6 @@
 namespace inherit;
 
 /**
- * backstage controller parent class
  * 
  * @author Ding <beyondye@gmail.com>
  */

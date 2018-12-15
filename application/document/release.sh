@@ -1,7 +1,6 @@
 #!/bin/sh
 #
-# funo.in release script
-# author: beyondye@gmail.com
+# release script
 #
 
 # config

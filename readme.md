@@ -453,7 +453,7 @@ $this->RDB='read_database';
 #### $this->WDB 属性
 设置写数据库，默认为default数据库
 ```php
-$this->RDB='write_database';
+$this->WDB='write_database';
 ```
 
 #### $this->table 属性
