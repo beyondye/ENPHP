@@ -130,17 +130,11 @@ class Model extends System
      */
     public function delete($where = [])
     {
-
         if (is_numeric($where)) {
             $where = [$this->primary => $where];
         }
 
-        if ($this->db($this->WDB)->delete($this->table, $where)) {
-
-            return $this->db($this->WDB)->affected_rows;
-        }
-
-        return false;
+        return $this->db($this->WDB)->delete($this->table, $where);
     }
 
     /**
@@ -156,19 +150,12 @@ class Model extends System
      */
     public function update($data, $where = [])
     {
-
         if (is_numeric($where)) {
             $where = [$this->primary => $where];
         }
 
-        if ($this->db($this->WDB)->update($this->table, $data, $where)) {
-
-            return $this->db($this->WDB)->affected_rows;
-        }
-
-        return false;
+        return $this->db($this->WDB)->update($this->table, $data, $where);
     }
-
     /**
      * 原生sql查询表数据，没有参数返回全部
      *
@@ -303,7 +290,7 @@ class Model extends System
             }
 
             $foreign = $this->model($model);
-            $defaut = ['where' => ["{$foreign->primary} in" => join(',',$primaries)], 'fields' => [], 'orderby' => [], 'limit' => []];
+            $defaut = ['where' => ["{$foreign->primary} in" => join(',', $primaries)], 'fields' => [], 'orderby' => [], 'limit' => []];
 
             return $foreign->select(array_merge($defaut, $condition));
 

@@ -547,11 +547,11 @@ $this->count();
 ```
 
 #### $this->delete($where=[]) 方法
-删除表数据，成功返回影响数不然返回false。
+删除表数据，成功返回true不然返回false。
 ```php
 $rs=$this->delete(['f1'=>'2']);
 if($rs){
-    //删除成功返回影响数
+    //删除成功返回true
     echo $rs;
 }
 ```
@@ -637,7 +637,7 @@ $this->select($condition);
 ```
 
 #### $this->update($data,$where=[]) 方法
-更新数据记录，成功返回影响行数，失败返回false
+更新数据记录，成功返回true，失败返回false
 ```php
 $data=['f1'=>2,'f2'=>3];
 $where=['id'=>12];
@@ -645,7 +645,7 @@ $where=['id'=>12];
 $rs=$this->update($data,$where);
 
 if($rs){
-    //修改成功，返回影响行数
+    //修改成功，返回影响true
     echo $rs;
 }
 ```
