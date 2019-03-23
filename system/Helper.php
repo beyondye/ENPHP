@@ -21,7 +21,7 @@ class Helper
      * @param int $size 每页数据条数
      * @param int $total 数据总数
      * @param int $page 当前页码
-     * @param string $url 链接url模板 如：index.php?page=<%page%>&tail=0
+     * @param string $url 链接url模板 如：backstage.php?page=<%page%>&tail=0
      * @param int $visible 可见页码
      *
      * @return string

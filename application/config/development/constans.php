@@ -1,5 +1,4 @@
 <?php
-
 //route
 define('DEFAULT_CONTROLLER', 'main');
 define('DEFAULT_ACTION', 'index');
@@ -12,7 +11,7 @@ define('EXT', '.php');
 define('CHARSET', 'utf-8');
 
 //cookie
-define('COOKIE_DOMAIN', '');
+define('COOKIE_DOMAIN', 'dev.yiyao.com');
 define('COOKIE_SECURE', false);
 define('COOKIE_PATH', '/');
 define('COOKIE_HTTPONLY', false);
@@ -21,9 +20,6 @@ define('COOKIE_EXPIRE', 0);
 //session
 define('SESSION_COOKIE_NAME', 'SE');
 define('SESSION_EXPIRE', 0);
-define('SESSION_USE_DATABASE', false);
-define('SESSION_DATABASE_NAME', 'session');
-define('SESSION_TABLE_NAME', 'sessions');
 
 //security
 define('ENCRYPTION_KEY', 'weryi9878sdftgtbsdfh');
@@ -31,11 +27,19 @@ define('TOKEN_SESSION_NAME', '34efdre');
 define('TOKEN_INPUT_NAME', 'fh40dfk98dkfje');
 define('TOKEN_EXPIRE', 3600);
 
+//认证方式，cookie,jwt,session
+if (!defined('AUTH_TYPE')) {
+    define('AUTH_TYPE', 'session');
+}
+define('AUTH_SECRET', 'dsd#@4ddz!ds'); //加密密钥
+define('AUTH_NAME', 'auth');            //认证名称
+define('AUTH_JWT_EXPIRE', 600);        //jwt存活时间,秒为单位
+define('AUTH_JWT_MODE', 'header');     //jwt数据过载方式，header或url
+define('AUTH_COOKIE_EXPIRE', 0);       //认证cookie存活时间
+
 
 //默认语言环境
 define('LANG', 'zh_cn');
 
 //url 重写
-define('URL', ['mod_name'=>['controller_name/action_name'=>'/{controller_key}/{action_key}']]);
-
-
+define('URL', ['mod_name' => ['controller_name/action_name' => '/{controller_key}/{action_key}']]);

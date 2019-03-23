@@ -76,22 +76,27 @@ class System
      */
     public function __get($name)
     {
-        if (in_array($name, array('input', 'config', 'output', 'session', 'cookie', 'lang', 'helper', 'security'))) {
-            return $this->load(ucfirst($name), 'system');
+        switch ($name) {
+            case 'input';
+            case 'config';
+            case 'output';
+            case 'session';
+            case 'cookie';
+            case 'lang';
+            case 'helper';
+            case 'security';
+                return $this->load(ucfirst($name), 'system');
+            case 'vars';
+                global $vars;
+                return $vars;
+            case 'db';
+                return $this->load('Database', 'system\\database', 'default');
+            case 'redis';
+                return $this->load('Redis', 'system', 'default');
+            case 'auth';
+                return Auth::instance();
         }
 
-        if ($name == 'vars') {
-            global $vars;
-            return $vars;
-        }
-
-        if ($name == 'db') {
-            return $this->load('Database', 'system\\database', 'default');
-        }
-
-        if ($name == 'redis') {
-            return $this->load('Redis', 'system', 'default');
-        }
     }
 
     /**
