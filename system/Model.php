@@ -313,7 +313,7 @@ class Model extends System
             'char' => ['regx' => '/^\S+$/', 'msg' => ''],
             'decimal' => ['regx' => '/^[\d\.]+$/', 'msg' => ''],
             'double' => ['regx' => '/^[\d\.]+$/', 'msg' => ''],
-            'float' => ['regx' => '/^\[\d\.]+$/', 'msg' => ''],
+            'float' => ['regx' => '/^\d[\d\.]+$/', 'msg' => ''],
             'int' => ['regx' => '/^\d+$/', 'msg' => ''],
             'longtext' => ['regx' => '/^\S+[\s\S]+\S+$/', 'msg' => ''],
             'mediumint' => ['regx' => '/^\d+$/', 'msg' => ''],
