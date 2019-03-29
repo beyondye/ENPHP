@@ -106,7 +106,7 @@ class System
      *
      * @return object
      */
-    public function db($service)
+    protected function db($service)
     {
         return $this->load('Db', 'system\\database', $service);
     }
@@ -118,7 +118,7 @@ class System
      *
      * @return object
      */
-    public function model($name)
+    protected function model($name)
     {
         return $this->load(str_replace('/', '\\', $name), 'model');
     }
@@ -130,7 +130,7 @@ class System
      *
      * @return object
      */
-    public function redis($service)
+    protected function redis($service)
     {
         return $this->load('Redis', 'system', $service);
     }
@@ -142,7 +142,7 @@ class System
      *
      * @return object
      */
-    public function lang($lang)
+    protected function lang($lang)
     {
         return $this->load('Lang', 'system', 'lang_' . $lang, $lang);
     }
