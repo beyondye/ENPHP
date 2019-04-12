@@ -86,7 +86,8 @@ class Session extends AbstractAuth
     //清除认证
     public function remove()
     {
-        unset($_SESSION[AUTH_NAME]);
+        global $instances;
+        $instances['system']['System']->session->delete(AUTH_NAME);
         return true;
     }
 
