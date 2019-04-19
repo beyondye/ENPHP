@@ -369,4 +369,9 @@ class Db
         return '';
     }
 
+    function __destruct()
+    {
+        $this->close();
+    }
+
 }

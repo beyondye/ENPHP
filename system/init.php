@@ -53,17 +53,4 @@ if (!method_exists($contrins, $_action)) {
 
 $contrins->$_action();
 
-//close databases
-if (isset($instances['database']) && count($instances['database']) > 0) {
-    foreach ($instances['database'] as $rs) {
-        $rs->close();
-    }
-}
-
-//close cache
-if (isset($instances['cache']) && count($instances['cache']) > 0) {
-    foreach ($instances['cache'] as $rs) {
-        $rs->close();
-    }
-}
 //echo '<pre>',var_dump(get_included_files()),'</pre>';

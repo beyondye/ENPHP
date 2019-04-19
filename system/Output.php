@@ -17,7 +17,7 @@ class Output extends System
      *
      * @var array
      */
-    private $httpStatusCode = [
+    const HTTP_STATUS_CODE = [
         100 => "HTTP/1.1 100 Continue",
         101 => "HTTP/1.1 101 Switching Protocols",
         200 => "HTTP/1.1 200 OK",
@@ -173,8 +173,8 @@ class Output extends System
      */
     public function status($http_status_code)
     {
-        if (isset($this->httpStatusCode[$http_status_code])) {
-            header($this->httpStatusCode[$http_status_code], true);
+        if (isset(self::HTTP_STATUS_CODE[$http_status_code])) {
+            header(self::HTTP_STATUS_CODE[$http_status_code], true);
         }
 
         header('Unknown Status');

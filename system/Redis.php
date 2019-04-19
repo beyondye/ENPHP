@@ -59,4 +59,9 @@ class Redis extends \Redis
         }
     }
 
+    function __destruct()
+    {
+        $this->close();
+    }
+
 }
