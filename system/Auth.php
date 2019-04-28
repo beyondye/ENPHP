@@ -21,6 +21,7 @@ class Auth
 
         }
 
+
         if (AUTH_TYPE == 'jwt') {
 
             $ins = new auth\Jwt();

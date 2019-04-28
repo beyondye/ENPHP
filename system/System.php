@@ -28,36 +28,6 @@ class System
         }
 
 
-        if ('system\\database\\mysqli\\Db' == $class) {
-
-            $config = include APP_DIR . 'config/' . ENVIRONMENT . '/database' . EXT;
-            if (!isset($config[$arguments])) {
-                exit("{$name} '{$arguments}' Config Not Exist,Please Check Database Config File In '" . ENVIRONMENT . "' Directory.");
-            }
-
-            $arguments = $config[$arguments];
-        }
-
-        if ('system\\cache' == $class) {
-
-            $config = include APP_DIR . 'config/' . ENVIRONMENT . '/cache' . EXT;
-            if (!isset($config[$arguments])) {
-                exit("{$class} '{$arguments}' Config Not Exist,Please Check Cache Config File In '" . ENVIRONMENT . "' Directory.");
-            }
-
-            $arguments = $config[$arguments];
-        }
-
-        if ('system\\redis' == $class) {
-
-            $config = include APP_DIR . 'config/' . ENVIRONMENT . '/redis' . EXT;
-            if (!isset($config[$arguments])) {
-                exit("{$class} '{$arguments}' Config Not Exist,Please Check Redis Config File In '" . ENVIRONMENT . "' Directory.");
-            }
-
-            $arguments = $config[$arguments];
-        }
-
         if (!class_exists($class)) {
             exit(' Not Found ' . $class);
         }
@@ -91,13 +61,13 @@ class System
                 global $vars;
                 return $vars;
             case 'db';
-                return $this->db('default');
+                return Database::instance('default');
             case 'redis';
-                return $this->redis('default');
+                return Redis::instance('default');
             case 'auth';
                 return Auth::instance();
             case 'cache';
-                return $this->cache('default');
+                return Cache::instance('default');
         }
 
     }
@@ -111,7 +81,7 @@ class System
      */
     protected function db($service)
     {
-        return $this->load('system\\database\\mysqli\\Db', $service);
+        return Database::instance($service);
     }
 
     /**
@@ -123,7 +93,7 @@ class System
      */
     protected function model($name)
     {
-        return $this->load('model\\'.str_replace('/', '\\', $name));
+        return $this->load('model\\' . str_replace('/', '\\', $name));
     }
 
     /**
@@ -135,7 +105,7 @@ class System
      */
     protected function redis($service)
     {
-        return $this->load('system\\Redis', $service);
+        return Redis::instance($service);
     }
 
     /**
@@ -159,7 +129,7 @@ class System
      */
     protected function cache($service)
     {
-        return $this->load('system\\Cache', $service);
+        return Cache::instance($service);
 
     }
 

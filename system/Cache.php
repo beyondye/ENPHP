@@ -11,35 +11,33 @@ namespace system;
 class Cache
 {
 
-    public static function instance()
+    public static function instance($service)
     {
-        static $ins = null;
+        static $ins = [];
 
-        if ($ins) {
+        if (isset($ins[$service])) {
+            return $ins[$service];
+        }
 
-            return $ins;
+        $config = include APP_DIR . 'config/' . ENVIRONMENT . '/cache' . EXT;
+        if (!isset($config[$service])) {
+            exit(" '{$service}' Config Not Exist,Please Check Cache Config File In '" . ENVIRONMENT . "' Directory.");
+        }
+
+        $arguments = $config[$service];
+
+
+        if ($arguments['driver'] == 'file') {
+
+            $ins[$service] = new cache\File($arguments);
+
+        } else if ($arguments['driver'] == 'redis') {
+
+            $ins[$service] = new cache\Redis($arguments);
 
         }
 
-        if (AUTH_TYPE == 'jwt') {
-
-            $ins = new auth\Jwt();
-
-        } else if (AUTH_TYPE == 'cookie') {
-
-            $ins = new auth\Cookie();
-
-        } else if (AUTH_TYPE == 'session') {
-
-            $ins = new auth\Session();
-
-        } else {
-
-            $ins = null;
-
-        }
-
-        return $ins;
+        return $ins[$service];
     }
 
 }

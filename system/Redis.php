@@ -59,9 +59,40 @@ class Redis extends \Redis
         }
     }
 
+    /**
+     * 类销毁
+     */
     function __destruct()
     {
         $this->close();
+    }
+
+    /**
+     * 返回实列对象
+     *
+     * @param string $service
+     *
+     * @return object
+     */
+    public static function instance($service)
+    {
+
+        static $ins = [];
+
+        if (isset($ins[$service])) {
+            return $ins[$service];
+        }
+
+        $config = include APP_DIR . 'config/' . ENVIRONMENT . '/redis' . EXT;
+        if (!isset($config[$service])) {
+            exit(" '{$service}' Config Not Exist,Please Check Redis Config File In '" . ENVIRONMENT . "' Directory.");
+        }
+
+        $arguments = $config[$service];
+        $ins[$service] = new self($arguments);
+
+        return $ins[$service];
+
     }
 
 }
