@@ -4,25 +4,25 @@ namespace system\cache;
 
 /**
  * file cache class
- * 
+ *
  * @author Ding<beyondye@gmail.com>
  */
-class File
+class File extends AbstractCache
 {
 
     /**
      * 默认配置信息
-     * 
+     *
      * @var array
      */
-    public $config = ['dir' => APP_DIR . '/cache/', 'driver' => 'file'];
+    public $config = ['dir' => APP_DIR . 'cache/', 'driver' => 'file'];
 
     /**
-     * 
+     *
      * 构造函数
-     * 
+     *
      * @param array $config
-     * 
+     *
      * @return void
      */
     function __construct($config)
@@ -32,11 +32,11 @@ class File
 
     /**
      * 添加或覆盖一个key
-     * 
+     *
      * @param $key
      * @param $value
      * @param $expire default 0 second lifetime forever
-     * 
+     *
      * @return bool
      */
     public function set($key, $value, $expire = 0)
@@ -52,10 +52,10 @@ class File
 
     /**
      * 加法递增
-     * 
+     *
      * @param $key
      * @param int $value
-     * 
+     *
      * @return mixed
      */
     public function increment($key, $value = 1)
@@ -84,10 +84,10 @@ class File
 
     /**
      * 减法递增
-     * 
+     *
      * @param $key
      * @param int $value
-     * 
+     *
      * @return mixed
      */
     public function decrement($key, $value = 1)
@@ -116,9 +116,9 @@ class File
 
     /**
      * 删除一个key，同事会删除缓存文件
-     * 
+     *
      * @param $key
-     * 
+     *
      * @return bool
      */
     public function delete($key)
@@ -134,7 +134,7 @@ class File
 
     /**
      * 清楚所有缓存
-     * 
+     *
      * @return mixed
      */
     public function flush()
@@ -156,9 +156,9 @@ class File
 
     /**
      * 获取数据
-     * 
+     *
      * @param $key
-     * 
+     *
      * @return bool|mixed|string
      */
     public function get($key)
@@ -182,7 +182,7 @@ class File
 
     /**
      * 检查key是否过期
-     * 
+     *
      * @param $data
      * @return bool
      */
@@ -201,6 +201,13 @@ class File
         }
 
         return true;
+    }
+
+
+
+    public function tags($keys = [])
+    {
+        // TODO: Implement tags() method.
     }
 
 }

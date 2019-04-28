@@ -11,8 +11,8 @@ class Helper
     public function __get($name)
     {
         global $instances;
-        $sys = $instances['system']['System'];
-        return $sys->load(ucfirst($name), 'helper');
+        $sys = $instances['system\\System'];
+        return $sys->load('helper\\'.ucfirst($name));
     }
 
     /**

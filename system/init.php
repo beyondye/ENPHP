@@ -29,7 +29,7 @@ spl_autoload_register(function ($class) {
 });
 
 //run application
-$instances['system']['System'] = $sys = new \system\System();
+$instances['system\\System'] = $sys = new \system\System();
 
 if (php_sapi_name() == 'cli') {
     $vars['controller'] = $_controller = isset($argv[1]) ? $argv[1] : DEFAULT_CONTROLLER;
@@ -45,7 +45,7 @@ if (preg_match('/^[\w\/]+$/', $_controller) == 0 || preg_match('/^\w+$/', $_acti
 
 $contrs = explode('/', $_controller);
 $contrs[count($contrs) - 1] = ucfirst(end($contrs));
-$contrins = $sys->load(join('\\', $contrs), 'module\\' . MODULE);
+$contrins = $sys->load('module\\' . MODULE.'\\'.join('\\', $contrs));
 
 if (!method_exists($contrins, $_action)) {
     exit('Not Found Action');

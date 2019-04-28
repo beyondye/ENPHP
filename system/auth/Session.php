@@ -75,7 +75,7 @@ class Session extends AbstractAuth
         $payload = json_encode(['status' => 'ok', 'data' => $data]);
 
         global $instances;
-        $instances['system']['System']->session->set(AUTH_NAME, $payload);
+        $instances['system\\System']->session->set(AUTH_NAME, $payload);
 
         $this->_data = $payload;
 

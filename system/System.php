@@ -3,7 +3,7 @@
 namespace system;
 
 /**
- * 框架核心类
+ * Framework Core Class
  *
  * @author Ding<beyondye@gmail.com>
  */
@@ -14,47 +14,48 @@ class System
      *
      * @global array $instances 全局实例数组
      *
-     * @param string $name 类名称
-     * @param string $namespace 类所在模块命名空间和目录路径一致
-     * @param string $alias 实例别名
+     * @param string $class 类名称
      * @param string|array $arguments 类构造函数参数
      *
      * @return array 类实例数组
      */
-    public function load($name, $namespace, $alias = '', $arguments = '')
+    public function load($class, $arguments = '')
     {
         global $instances;
 
-        $namespace = str_replace('/', '\\', $namespace);
-        $handler = $alias ? $alias : $name;
-
-        //实例已存在直接返回
-        if (isset($instances[$namespace][$handler])) {
-            return $instances[$namespace][$handler];
+        if (isset($instances[$class])) {
+            return $instances[$class];
         }
 
-        $class = $namespace . '\\' . $name;
 
-        if ('system\database' == $namespace) {
+        if ('system\\database\\mysqli\\Db' == $class) {
 
             $config = include APP_DIR . 'config/' . ENVIRONMENT . '/database' . EXT;
-            if (!isset($config[$alias])) {
-                exit("{$name} '{$alias}' Config Not Exist,Please Check Database Config File In '" . ENVIRONMENT . "' Directory.");
+            if (!isset($config[$arguments])) {
+                exit("{$name} '{$arguments}' Config Not Exist,Please Check Database Config File In '" . ENVIRONMENT . "' Directory.");
             }
 
-            $class = $namespace . '\\' . $config[$alias]['driver'] . '\\Db';
-
-            $arguments = $config[$alias];
+            $arguments = $config[$arguments];
         }
 
-        if ('system\cache' == $namespace) {
+        if ('system\\cache' == $class) {
 
-            $config = include APP_DIR . 'config/' . ENVIRONMENT . '/redis' . EXT;
-            if (!isset($config[$alias])) {
-                exit("{$name} '{$alias}' Config Not Exist,Please Check Redis Config File In '" . ENVIRONMENT . "' Directory.");
+            $config = include APP_DIR . 'config/' . ENVIRONMENT . '/cache' . EXT;
+            if (!isset($config[$arguments])) {
+                exit("{$class} '{$arguments}' Config Not Exist,Please Check Cache Config File In '" . ENVIRONMENT . "' Directory.");
             }
 
-            $arguments = $config[$alias];
+            $arguments = $config[$arguments];
+        }
+
+        if ('system\\redis' == $class) {
+
+            $config = include APP_DIR . 'config/' . ENVIRONMENT . '/redis' . EXT;
+            if (!isset($config[$arguments])) {
+                exit("{$class} '{$arguments}' Config Not Exist,Please Check Redis Config File In '" . ENVIRONMENT . "' Directory.");
+            }
+
+            $arguments = $config[$arguments];
         }
 
         if (!class_exists($class)) {
@@ -62,9 +63,9 @@ class System
         }
 
         //实例化并返回
-        $instances[$namespace][$handler] = new $class($arguments);
+        $instances[$class] = new $class($arguments);
 
-        return $instances[$namespace][$handler];
+        return $instances[$class];
     }
 
     /**
@@ -85,16 +86,18 @@ class System
             case 'lang';
             case 'helper';
             case 'security';
-                return $this->load(ucfirst($name), 'system');
+                return $this->load('system\\' . ucfirst($name));
             case 'vars';
                 global $vars;
                 return $vars;
             case 'db';
-                return $this->load('Database', 'system\\database', 'default');
+                return $this->db('default');
             case 'redis';
-                return $this->load('Redis', 'system', 'default');
+                return $this->redis('default');
             case 'auth';
                 return Auth::instance();
+            case 'cache';
+                return $this->cache('default');
         }
 
     }
@@ -108,7 +111,7 @@ class System
      */
     protected function db($service)
     {
-        return $this->load('Db', 'system\\database', $service);
+        return $this->load('system\\database\\mysqli\\Db', $service);
     }
 
     /**
@@ -120,7 +123,7 @@ class System
      */
     protected function model($name)
     {
-        return $this->load(str_replace('/', '\\', $name), 'model');
+        return $this->load('model\\'.str_replace('/', '\\', $name));
     }
 
     /**
@@ -132,7 +135,7 @@ class System
      */
     protected function redis($service)
     {
-        return $this->load('Redis', 'system', $service);
+        return $this->load('system\\Redis', $service);
     }
 
     /**
@@ -144,7 +147,20 @@ class System
      */
     protected function lang($lang)
     {
-        return $this->load('Lang', 'system', 'lang_' . $lang, $lang);
+        return $this->load('system\\Lang', $lang);
+    }
+
+    /**
+     * 加载缓存
+     *
+     * @param string $service
+     *
+     * @return object
+     */
+    protected function cache($service)
+    {
+        return $this->load('system\\Cache', $service);
+
     }
 
 }
