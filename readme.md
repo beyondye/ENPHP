@@ -44,7 +44,6 @@
 #### 保留的方法函数
     $this->db() //自定义数据库并返回实例
     $this->lang() //自定义语言类并返回实例
-    $this->load() //加载类并返回实例
     $this->model() //加载model并返回实例
     $this->redis() //自定义redis并返回实例
 
@@ -232,11 +231,8 @@ return ['key2'=>'val2','key'=>['a','b','c'];
 ```
 
 ### 全局变量数组
-全局变量数组有两个，$var和$instances。
+全局变量数组$var。
 ```php
-//全局实例初始化数组，包含所有已实例化的核心类
-$instances = [];
-
 //全局变量数组，
 //$this->vars 可以直接访问，
 //默认已包含$this->vars['controller']当前控制器值

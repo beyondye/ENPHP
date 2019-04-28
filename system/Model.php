@@ -55,7 +55,7 @@ class Model extends System
     public function __get($name)
     {
         if ($name == 'safe') {
-            return $this->load('system\\'.ucfirst($name), $this->schema);
+            return load('system\\Safe', $this->schema);
         }
 
         return parent::__get($name);

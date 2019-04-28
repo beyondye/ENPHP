@@ -10,9 +10,7 @@ class Helper
 
     public function __get($name)
     {
-        global $instances;
-        $sys = $instances['system\\System'];
-        return $sys->load('helper\\'.ucfirst($name));
+        return load('helper\\'.ucfirst($name));
     }
 
     /**

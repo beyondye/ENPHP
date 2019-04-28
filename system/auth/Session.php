@@ -15,8 +15,7 @@ class Session extends AbstractAuth
     //验证数据合法性
     public function verify()
     {
-        global $instances;
-        $sys = $instances['system']['System'];
+        global $sys;
 
         $session = $sys->session->get(AUTH_NAME);
 
@@ -74,8 +73,8 @@ class Session extends AbstractAuth
 
         $payload = json_encode(['status' => 'ok', 'data' => $data]);
 
-        global $instances;
-        $instances['system\\System']->session->set(AUTH_NAME, $payload);
+        global $sys;
+        $sys->session->set(AUTH_NAME, $payload);
 
         $this->_data = $payload;
 
@@ -86,8 +85,8 @@ class Session extends AbstractAuth
     //清除认证
     public function remove()
     {
-        global $instances;
-        $instances['system']['System']->session->delete(AUTH_NAME);
+        global $sys;
+        $sys->session->delete(AUTH_NAME);
         return true;
     }
 

@@ -51,8 +51,7 @@ class Security
      */
     public function token()
     {
-        global $instances;
-        $sys = $instances['system']['System'];
+        global $sys;
 
         $time = time();
         $hash = hash_hmac('sha1', $time, ENCRYPTION_KEY);
@@ -67,13 +66,12 @@ class Security
     /**
      * token input 名称
      *
-     * @global object $instances
+     * @global object $sys
      * @return string
      */
     public function tokenName()
     {
-        global $instances;
-        $sys = $instances['system']['System'];
+        global $sys;
 
         $name = uniqid('_');
         $sys->session->set(TOKEN_INPUT_NAME, $name);
@@ -84,13 +82,12 @@ class Security
     /**
      * 验证token
      *
-     * @global object $instances
+     * @global object $sys
      * @return boolean
      */
     function checkToken()
     {
-        global $instances;
-        $sys = $instances['system']['System'];
+        global $sys;
 
         $name = $sys->session->get(TOKEN_INPUT_NAME);
         if (!$name) {

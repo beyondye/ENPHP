@@ -142,7 +142,7 @@ class Safe
      *
      * @param array $data 需要清理的数据
      *
-     * @return array 清理后后的数据
+     * @return array|bool 清理后后的数据
      */
     public function clear($data)
     {
@@ -151,7 +151,7 @@ class Safe
             return false;
         }
 
-        global $instances;
+        global $sys;
 
         $given = [];
         foreach ($data as $key => $value) {
@@ -161,7 +161,7 @@ class Safe
 
                     $funcs = explode('|', $this->schema[$key]['filter']);
                     foreach ($funcs as $fun) {
-                        $value = $instances['system']['System']->security->$fun($value);
+                        $value = $sys->security->$fun($value);
                     }
                 }
 

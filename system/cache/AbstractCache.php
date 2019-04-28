@@ -3,7 +3,7 @@
 namespace system\cache;
 
 
-class AbstractCache
+abstract class AbstractCache
 {
 
     /**
