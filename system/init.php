@@ -2,7 +2,7 @@
 
 //global variable
 $vars = [];
-$sys=null;
+$sys = null;
 require_once APP_DIR . 'config/' . ENVIRONMENT . '/constans.php';
 
 //load single class
@@ -21,6 +21,21 @@ function load($class, $arguments = '')
     $instances[$class] = new $class($arguments);
 
     return $instances[$class];
+}
+
+//running profiler
+function profiler($type, $mark, $desc = '')
+{
+
+    if (false === PROFILER) {
+        return false;
+    }
+
+    $profiler = \system\Profiler::instance();
+    $profiler->$type($mark, $desc);
+
+    return true;
+
 }
 
 
@@ -65,6 +80,9 @@ if (!method_exists($ins, $action)) {
     exit('Not Found Action');
 }
 
+profiler('benchmark', 'running', 'Action Run Time');
 $ins->$action();
+profiler('benchmark', 'running');
+profiler('memory','Running Memory');
 
 //echo '<pre>',var_dump(get_included_files()),'</pre>';

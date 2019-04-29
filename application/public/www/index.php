@@ -10,6 +10,9 @@ date_default_timezone_set('PRC');
 // test,production,development
 define('ENVIRONMENT', 'development');
 
+//开启运行分析
+define('PROFILER',false);
+
 //设置controller模块
 define('MODULE', 'www');
 

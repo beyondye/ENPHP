@@ -43,3 +43,6 @@ define('LANG', 'zh_cn');
 
 //url 重写
 define('URL', ['mod_name' => ['controller_name/action_name' => '/{controller_key}/{action_key}']]);
+
+//profiler log file path
+define('PROFILER_LOG_FILE', APP_DIR . 'log/profiler.log');

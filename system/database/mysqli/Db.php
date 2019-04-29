@@ -2,6 +2,8 @@
 
 namespace system\database\mysqli;
 
+use function PHPSTORM_META\type;
+
 /**
  * 数据操作类
  *
@@ -65,9 +67,10 @@ class Db
      */
     public function query($sql)
     {
+        profiler('benchmark', 'queries', $sql);
         $result = $this->db->query($sql);
+        profiler('benchmark', 'queries');
 
-        // var_dump($sql);
         if ($this->db->errno) {
             exit('Database Error : [' . $sql . '] ' . $this->db->error . ' [Code:' . $this->db->errno . ']');
         }
