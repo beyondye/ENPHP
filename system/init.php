@@ -80,9 +80,8 @@ if (!method_exists($ins, $action)) {
     exit('Not Found Action');
 }
 
-profiler('benchmark', 'running', 'Action Run Time');
+profiler('benchmark', 'running', 'Action');
 $ins->$action();
 profiler('benchmark', 'running');
-profiler('memory','Running Memory');
 
 //echo '<pre>',var_dump(get_included_files()),'</pre>';
