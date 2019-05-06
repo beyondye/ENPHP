@@ -10,12 +10,21 @@ namespace system\cache;
 class File extends AbstractCache
 {
 
+    //start time
+    const START_TIME = 1557149377;
+
     /**
      * 默认配置信息
      *
      * @var array
      */
-    public $config = ['dir' => APP_DIR . 'cache/', 'driver' => 'file'];
+    protected $config = ['dir' => APP_DIR . 'cache/', 'mode' => 0777];
+
+
+    /**
+     * @var array
+     */
+    protected $tags = [];
 
     /**
      *
@@ -25,10 +34,25 @@ class File extends AbstractCache
      *
      * @return void
      */
-    function __construct($config)
+    public function __construct($config)
     {
         $this->config = array_merge($this->config, $config);
     }
+
+    /**
+     * route file path
+     *
+     * @param string $key
+     * @param string $base
+     *
+     * @return string
+     */
+    protected function route($key)
+    {
+        $hash = substr(md5($key), 0, 2);
+        return $this->config['dir'] . $hash . '/' . $key;
+    }
+
 
     /**
      * 添加或覆盖一个key
@@ -39,15 +63,31 @@ class File extends AbstractCache
      *
      * @return bool
      */
-    public function set($key, $value, $expire = 0)
+    public function set($key, $value = '', $expire = 0)
     {
 
-        $data = ['data' => $value, 'time' => time(), 'expire' => $expire];
-        $data = json_encode($data);
+        $this->setTags($key);
 
-        $file = $this->config['dir'] . $key;
+        $file = $this->route($key);
+
+        if (!file_exists($file)) {
+
+            $parts = explode('/', $file);
+            array_pop($parts);
+            $dir = '';
+            foreach ($parts as $part) {
+                if (!is_dir($dir .= "/$part")) {
+                    mkdir($dir, $this->config['mode']);
+                }
+            }
+
+        }
+
+        $data = ['data' => $value, 'time' => time() - self::START_TIME, 'expire' => intval($expire)];
+        $data = serialize($data);
 
         return file_put_contents($file, $data, LOCK_EX);
+
     }
 
     /**
@@ -66,7 +106,7 @@ class File extends AbstractCache
 
             $result = $this->set($key, $value);
             if ($result === false) {
-                return false;
+                return $result;
             }
 
             return $value;
@@ -76,7 +116,7 @@ class File extends AbstractCache
 
         $result = $this->set($key, $item);
         if ($result === false) {
-            return false;
+            return $result;
         }
 
         return $item;
@@ -98,7 +138,7 @@ class File extends AbstractCache
 
             $result = $this->set($key, $value);
             if ($result === false) {
-                return false;
+                return $result;
             }
 
             return $value;
@@ -108,7 +148,7 @@ class File extends AbstractCache
 
         $result = $this->set($key, $item);
         if ($result === false) {
-            return false;
+            return $result;
         }
 
         return $item;
@@ -123,7 +163,7 @@ class File extends AbstractCache
      */
     public function delete($key)
     {
-        $file = $this->config['dir'] . $key;
+        $file = $this->route($key);
 
         if (file_exists($file)) {
             return unlink($file);
@@ -133,25 +173,39 @@ class File extends AbstractCache
     }
 
     /**
-     * 清楚所有缓存
+     *  清除所有缓存
      *
-     * @return mixed
+     * @return boolean
      */
     public function flush()
     {
-        $dir = $this->config['dir'];
-        $files = scandir($dir);
 
-        foreach ($files as $file) {
-
-            if (is_dir($dir . $file)) {
-                continue;
-            }
-
-            unlink($dir . $file);
+        if ($this->flushTags()) {
+            return true;
         }
 
-        return ture;
+        if (!is_dir($this->config['dir'])) {
+            return true;
+        }
+
+        return $this->delTree($this->config['dir']);
+
+    }
+
+    /**
+     * delete dir tree
+     *
+     * @param string $dir
+     *
+     * @return bool
+     */
+    private function delTree($dir)
+    {
+        $files = array_diff(scandir($dir), array('.', '..'));
+        foreach ($files as $file) {
+            (is_dir("$dir/$file")) ? $this->delTree("$dir/$file") : unlink("$dir/$file");
+        }
+        return rmdir($dir);
     }
 
     /**
@@ -163,21 +217,32 @@ class File extends AbstractCache
      */
     public function get($key)
     {
-        $file = $this->config['dir'] . $key;
+
+        if (!$this->getTags($key)) {
+            return false;
+        }
+
+        $file = $this->route($key);
+
+        if (!file_exists($file)) {
+            return false;
+        }
+
         $data = file_get_contents($file);
 
         if ($data) {
 
-            $data = json_decode($data);
-            if (!$this->expire($data)) {
+            $data = unserialize($data);
+
+            if ($this->expire($data) === true) {
                 $this->delete($key);
-                return fasle;
+                return false;
             }
 
             return $data['data'];
         }
 
-        return flase;
+        return false;
     }
 
     /**
@@ -186,28 +251,133 @@ class File extends AbstractCache
      * @param $data
      * @return bool
      */
-    private function expire($data)
+    protected function expire($data)
     {
-        $now = time();
-        $expire = intval($data['expire']);
-        $time = intval($data['time']);
+        $now = time() - self::START_TIME;
+        $expire = $data['expire'];
+        $time = $data['time'];
 
         if ($expire === 0) {
+            return false;
+        }
+
+        if (($expire + $time) < $now) {
             return true;
         }
 
-        if ($expire + $time > $now) {
+        return false;
+    }
+
+
+    /**
+     * set tags
+     *
+     * @param string $key
+     *
+     * @return void
+     */
+    private function setTags($key)
+    {
+        if ($this->tags) {
+            $tags = $this->tags;
+            $this->tags = [];
+
+            foreach ($tags as $tag) {
+
+                $tag = $tag . '__private';
+                $data = $this->get($tag);
+
+                if ($data === false) {
+                    $data = [];
+                    $data[] = $key;
+                    $this->set($tag, $data);
+                }
+
+                if (is_array($data) && in_array($key, $data) == false) {
+                    $data[] = $key;
+                    $this->set($tag, $data);
+                }
+
+            }
+        }
+
+    }
+
+    /**
+     * get tags cache
+     *
+     * @param string $key
+     *
+     * @return bool
+     */
+    private function getTags($key)
+    {
+        if ($this->tags) {
+
+            $tags = $this->tags;
+            $this->tags = [];
+
+            foreach ($tags as $tag) {
+                $tag = $tag . '__private';
+                $data = $this->get($tag);
+
+                if ($data && in_array($key, $data)) {
+                    return true;
+                }
+
+            }
+
             return false;
         }
 
         return true;
+
     }
 
-
-
-    public function tags($keys = [])
+    /**
+     * flush tags
+     *
+     * @return bool
+     */
+    private function flushTags()
     {
-        // TODO: Implement tags() method.
+        if ($this->tags) {
+
+            $tags = $this->tags;
+            $this->tags = [];
+
+            foreach ($tags as $tag) {
+
+                $tag = $tag . '__private';
+                $data = $this->get($tag);
+
+                if (is_array($data)) {
+
+                    foreach ($data as $key) {
+                        $this->delete($key);
+                    }
+                }
+
+                $this->delete($tag);
+
+            }
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * get tags cache
+     *
+     * @param array $tags
+     *
+     * @return $this|AbstractCache
+     */
+    public function tags($tags = [])
+    {
+        $this->tags = $tags;
+        return $this;
     }
 
 }

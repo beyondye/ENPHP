@@ -63,7 +63,7 @@ class Db
      *
      * @param string $sql
      *
-     * @return \System\Database\Result
+     * @return Result | boolean
      */
     public function query($sql)
     {
