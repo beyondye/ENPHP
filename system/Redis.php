@@ -15,7 +15,7 @@ class Redis extends \Redis
      *
      * @var array
      */
-    public $config = ['host' => '', 'port' => 6379, 'password' => '', 'database' => 0, 'timeout' => 30, 'serialization' => true];
+    public $config = ['host' => '127.0.0.1', 'port' => 6379, 'password' => '', 'database' => 0, 'timeout' => 30, 'serialization' => true];
 
     /**
      *

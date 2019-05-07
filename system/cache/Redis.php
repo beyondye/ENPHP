@@ -5,7 +5,7 @@ namespace system\cache;
 /**
  * redis缓存
  *
- * @author Ye Ding <beyondye@gmail.com>
+ * @author Ding <beyondye@gmail.com>
  *
  */
 class Redis extends AbstractCache
@@ -16,8 +16,18 @@ class Redis extends AbstractCache
      *
      * @var array
      */
-    public $config = ['host' => '127.0.0.1', 'port' => 6379, 'password' => '', 'database' => 0, 'timeout' => 30, 'serialization' => true];
+    public $config = ['service' => 'default'];
 
+
+    /**
+     * @var null|object
+     */
+    private $redis = null;
+
+    /**
+     * @var array
+     */
+    private $tags = [];
 
     /**
      *
@@ -29,27 +39,29 @@ class Redis extends AbstractCache
      */
     function __construct($config)
     {
+        global $sys;
         $this->config = array_merge($this->config, $config);
+        $this->redis = $sys->redis($this->config['service']);
     }
 
     /**
      * 添加或覆盖一个key
      *
-     * @param $key
-     * @param $value
-     * @param $expire default 0 second lifetime forever
+     * @param string $key
+     * @param mixed $value
+     * @param int $expire default 0 second lifetime forever
      *
      * @return bool
      */
     public function set($key, $value, $expire = 0)
     {
+        $this->setTags($key);
 
-        $data = ['data' => $value, 'time' => time(), 'expire' => $expire];
-        $data = json_encode($data);
+        if ($expire) {
+            return $this->redis->set($key, $value, $expire);
+        }
 
-        $file = $this->config['dir'] . $key;
-
-        return file_put_contents($file, $data, LOCK_EX);
+        return $this->redis->set($key, $value);
     }
 
     /**
@@ -62,26 +74,7 @@ class Redis extends AbstractCache
      */
     public function increment($key, $value = 1)
     {
-        $item = $this->get($key);
-
-        if ($item === false) {
-
-            $result = $this->set($key, $value);
-            if ($result === false) {
-                return false;
-            }
-
-            return $value;
-        }
-
-        $item = $item + $value;
-
-        $result = $this->set($key, $item);
-        if ($result === false) {
-            return false;
-        }
-
-        return $item;
+        return $this->redis->incr($key, $value);
     }
 
     /**
@@ -94,121 +87,145 @@ class Redis extends AbstractCache
      */
     public function decrement($key, $value = 1)
     {
-        $item = $this->get($key);
-
-        if ($item === false) {
-
-            $result = $this->set($key, $value);
-            if ($result === false) {
-                return false;
-            }
-
-            return $value;
-        }
-
-        $item = $item - $value;
-
-        $result = $this->set($key, $item);
-        if ($result === false) {
-            return false;
-        }
-
-        return $item;
+        return $this->redis->decr($key, $value);
     }
 
     /**
-     * 删除一个key，同事会删除缓存文件
+     * 删除一个key
      *
-     * @param $key
+     * @param string|array $key
      *
      * @return bool
      */
     public function delete($key)
     {
-        $file = $this->config['dir'] . $key;
-
-        if (file_exists($file)) {
-            return unlink($file);
-        }
-
-        return true;
+        return $this->redis->delete($key);
     }
 
     /**
      * 清楚所有缓存
      *
-     * @return mixed
+     * @return bool
      */
     public function flush()
     {
-        $dir = $this->config['dir'];
-        $files = scandir($dir);
-
-        foreach ($files as $file) {
-
-            if (is_dir($dir . $file)) {
-                continue;
-            }
-
-            unlink($dir . $file);
+        if ($this->flushTags()) {
+            return true;
         }
 
-        return ture;
+        return $this->redis->flushDb();
     }
 
     /**
      * 获取数据
      *
-     * @param $key
+     * @param string $key
      *
-     * @return bool|mixed|string
+     * @return mixed
      */
     public function get($key)
     {
-        $file = $this->config['dir'] . $key;
-        $data = file_get_contents($file);
-
-        if ($data) {
-
-            $data = json_decode($data);
-            if (!$this->expire($data)) {
-                $this->delete($key);
-                return fasle;
-            }
-
-            return $data['data'];
+        if (!$this->getTags($key)) {
+            return false;
         }
 
-        return flase;
+        return $this->redis->get($key);
+    }
+
+
+    /**
+     * set tags
+     *
+     * @param string $key
+     *
+     * @return void
+     */
+    private function setTags($key)
+    {
+        if ($this->tags) {
+            $tags = $this->tags;
+            $this->tags = [];
+
+            foreach ($tags as $tag) {
+                $tag = $tag . '__private';
+                $this->redis->sAdd($tag, $key);
+            }
+        }
+
     }
 
     /**
-     * 检查key是否过期
+     * get tags cache
      *
-     * @param $data
+     * @param string $key
+     *
      * @return bool
      */
-    private function expire($data)
+    private function getTags($key)
     {
-        $now = time();
-        $expire = intval($data['expire']);
-        $time = intval($data['time']);
+        if ($this->tags) {
 
-        if ($expire === 0) {
-            return true;
-        }
+            $tags = $this->tags;
+            $this->tags = [];
 
-        if ($expire + $time > $now) {
+            foreach ($tags as $tag) {
+                $tag = $tag . '__private';
+                if ($this->redis->sIsMember($tag, $key)) {
+                    return true;
+                }
+
+            }
+
             return false;
         }
 
         return true;
+
     }
 
-
-    public function tags($keys = [])
+    /**
+     * flush tags
+     *
+     * @return bool
+     */
+    private function flushTags()
     {
-        // TODO: Implement tags() method.
+        if ($this->tags) {
+
+            $tags = $this->tags;
+            $this->tags = [];
+
+            foreach ($tags as $tag) {
+
+                $tag = $tag . '__private';
+                $data = $this->redis->sMembers($tag);
+
+                if (is_array($data)) {
+                    foreach ($data as $key) {
+                        $this->redis->delete($key);
+                    }
+                }
+
+                $this->redis->delete($tag);
+
+            }
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * set tags
+     *
+     * @param array $tags
+     * @return $this|AbstractCache
+     */
+    public function tags($tags = [])
+    {
+        $this->tags = $tags;
+
+        return $this;
     }
 
 }

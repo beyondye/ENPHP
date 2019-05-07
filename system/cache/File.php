@@ -43,7 +43,6 @@ class File extends AbstractCache
      * route file path
      *
      * @param string $key
-     * @param string $base
      *
      * @return string
      */
@@ -57,9 +56,9 @@ class File extends AbstractCache
     /**
      * 添加或覆盖一个key
      *
-     * @param $key
-     * @param $value
-     * @param $expire default 0 second lifetime forever
+     * @param string $key
+     * @param mixed $value
+     * @param int $expire default 0 second lifetime forever
      *
      * @return bool
      */
@@ -98,7 +97,7 @@ class File extends AbstractCache
      *
      * @return mixed
      */
-    public function increment($key, $value = 1)
+    public function increment($key, $value = 0)
     {
         $item = $this->get($key);
 
@@ -130,7 +129,7 @@ class File extends AbstractCache
      *
      * @return mixed
      */
-    public function decrement($key, $value = 1)
+    public function decrement($key, $value = 0)
     {
         $item = $this->get($key);
 
@@ -155,14 +154,24 @@ class File extends AbstractCache
     }
 
     /**
-     * 删除一个key，同事会删除缓存文件
+     * 删除一个key
      *
-     * @param $key
+     * @param int|array $key
      *
      * @return bool
      */
     public function delete($key)
     {
+
+        if (is_array($key)) {
+            foreach ($key as $k) {
+                $this->delete($k);
+            }
+
+            return true;
+        }
+
+
         $file = $this->route($key);
 
         if (file_exists($file)) {
