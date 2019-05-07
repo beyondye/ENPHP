@@ -223,7 +223,11 @@ class Redis extends AbstractCache
      */
     public function tags($tags = [])
     {
-        $this->tags = $tags;
+        if (is_array($tags)) {
+            $this->tags = $tags;
+        } else {
+            $this->tags[] = $tags;
+        }
 
         return $this;
     }
