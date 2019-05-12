@@ -26,6 +26,9 @@ function load($class, $arguments = '')
 //running profiler
 function profiler($type, $mark, $desc = '')
 {
+    if (!defined('PROFILER')) {
+        return false;
+    }
 
     if (false === PROFILER) {
         return false;

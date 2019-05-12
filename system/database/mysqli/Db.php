@@ -244,6 +244,8 @@ class Db
      *
      * @param string $key
      *
+     * @param string $value
+     *
      * @return string
      */
     private function sqlCompare($key, $value)
@@ -251,42 +253,42 @@ class Db
         $key = trim($key);
 
         if (strpos($key, '>=')) {
-            $key = str_replace('>=', '', $key);
+            $key = trim(str_replace('>=', '', $key));
             return " `{$key}` >= '{$value}' ";
         }
 
         if (strpos($key, '<=')) {
-            $key = str_replace('<=', '', $key);
+            $key = trim(str_replace('<=', '', $key));
             return " `{$key}` <= '{$value}' ";
         }
 
         if (strpos($key, '!=')) {
-            $key = str_replace('!=', '', $key);
+            $key = trim(str_replace('!=', '', $key));
             return " `{$key}` != '{$value}' ";
         }
 
         if (strpos($key, '<>')) {
-            $key = str_replace('<>', '', $key);
+            $key = trim(str_replace('<>', '', $key));
             return " `{$key}` <> '{$value}' ";
         }
 
         if (strpos($key, '>')) {
-            $key = str_replace('>', '', $key);
+            $key = trim(str_replace('>', '', $key));
             return " `{$key}` > '{$value}' ";
         }
 
         if (strpos($key, '<')) {
-            $key = str_replace('<', '', $key);
+            $key = trim(str_replace('<', '', $key));
             return " `{$key}` < '{$value}' ";
         }
 
         if (strpos($key, ' like')) {
-            $key = str_replace(' like', '', $key);
+            $key = trim(str_replace(' like', '', $key));
             return " `{$key}` like '{$value}' ";
         }
 
         if (strpos($key, ' in')) {
-            $key = str_replace(' in', '', $key);
+            $key = trim(str_replace(' in', '', $key));
             return " `{$key}` in ({$value}) ";
         }
 
