@@ -2,7 +2,6 @@
 
 namespace system\database\mysqli;
 
-use function PHPSTORM_META\type;
 
 /**
  * 数据操作类
