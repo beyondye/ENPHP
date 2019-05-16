@@ -11,7 +11,7 @@ define('EXT', '.php');
 define('CHARSET', 'utf-8');
 
 //cookie
-define('COOKIE_DOMAIN', 'dev.yiyao.com');
+define('COOKIE_DOMAIN', '');
 define('COOKIE_SECURE', false);
 define('COOKIE_PATH', '/');
 define('COOKIE_HTTPONLY', false);
