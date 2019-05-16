@@ -48,7 +48,9 @@ class Db
         //$config = array('host' => '', 'username' => '', 'password' => '', 'database' => '', 'port' => '', 'charset' => '');
         $this->config = $config;
 
+        profiler('benchmark', 'database',$config['host']);
         $this->db = new \mysqli($config['host'], $config['username'], $config['password'], $config['database'], $config['port']);
+        profiler('benchmark', 'database');
 
         if ($this->db->connect_errno) {
             exit('Database Connection Error :' . $this->db->connect_error);
@@ -114,10 +116,10 @@ class Db
     {
         $data = $this->escape($data);
 
-        $keys = implode('`,`', array_keys($data));
+        $keys = implode(',', array_keys($data));
         $values = implode("','", array_values($data));
 
-        $sql = "INSERT INTO {$table}(`{$keys}`) VALUES('{$values}')";
+        $sql = "INSERT INTO {$table}({$keys}) VALUES('{$values}')";
 
         return $this->query($sql);
     }
@@ -136,8 +138,10 @@ class Db
         if (is_array($data)) {
 
             $data = $this->escape($data);
+
+            $set=[];
             foreach ($data as $key => $value) {
-                $set[] = " `{$key}`='{$value}' ";
+                $set[] = $key . "='{$value}'";
             }
 
             $sql = "UPDATE {$table} SET " . implode(',', $set) . $this->sqlWhere($where);
@@ -160,10 +164,10 @@ class Db
     {
         $data = $this->escape($data);
 
-        $keys = implode('`,`', array_keys($data));
+        $keys = implode(',', array_keys($data));
         $values = implode("','", array_values($data));
 
-        $sql = "REPLACE INTO {$table}(`{$keys}`) VALUES('{$values}')";
+        $sql = "REPLACE INTO {$table}({$keys}) VALUES('{$values}')";
         return $this->query($sql);
     }
 
@@ -177,7 +181,7 @@ class Db
      */
     public function delete($table, $where = [])
     {
-        $sql = "DELETE FROM " . $table . $this->sqlwhere($where);
+        $sql = 'DELETE FROM ' . $table . $this->sqlwhere($where);
         return $this->query($sql);
     }
 
@@ -185,17 +189,26 @@ class Db
      * 查询数据
      *
      * @param string $table
-     * @param array $condition =['where' => [], 'fields' => [], 'orderby' => [], 'limit' => []]
+     * @param array $condition =['where' => [], 'groupby' => [] ,'having' => [] ,'fields' => [], 'orderby' => [], 'limit' => []]
      * @param int|array $limit
      *
      * @return object array
      */
     public function select($table, $condition = [])
     {
-        $default = ['where' => [], 'fields' => [], 'orderby' => [], 'limit' => []];
+        $default = ['where' => [], 'fields' => [], 'groupby' => [], 'having' => [], 'orderby' => [], 'limit' => []];
         $condition = array_merge($default, $condition);
 
-        $sql = "SELECT {$this->sqlField($condition['fields'])} FROM {$table} {$this->sqlwhere($condition['where'])} {$this->sqlOrderBy($condition['orderby'])} {$this->sqlLimit($condition['limit'])} ";
+        $sql = 'SELECT '
+            . $this->sqlField($condition['fields'])
+            . ' FROM '
+            . $table
+            . $this->sqlwhere($condition['where'])
+            . $this->sqlGroupBy($condition['groupby'])
+            . $this->sqlHaving($condition['having'])
+            . $this->sqlOrderBy($condition['orderby'])
+            . $this->sqlLimit($condition['limit']);
+
         return $this->query($sql);
     }
 
@@ -220,17 +233,17 @@ class Db
     {
 
         if (is_string($where) && trim($where) != '') {
-            return " WHERE " . $where;
+            return ' WHERE ' . $this->escape($where);
         }
 
         $sql = '';
         if (is_array($where) && count($where) > 0) {
             $where = $this->escape($where);
-            $sql .= " WHERE ";
+            $sql .= ' WHERE ';
             $i = 0;
             foreach ($where as $key => $value) {
                 $compare = $this->sqlCompare($key, $value);
-                $sql .= ($i == 0 ? $compare : " AND {$compare} ");
+                $sql .= ($i == 0 ? $compare : ' AND ' . $compare);
                 $i++;
             }
         }
@@ -253,45 +266,45 @@ class Db
 
         if (strpos($key, '>=')) {
             $key = trim(str_replace('>=', '', $key));
-            return " `{$key}` >= '{$value}' ";
+            return "{$key}>='{$value}'";
         }
 
         if (strpos($key, '<=')) {
             $key = trim(str_replace('<=', '', $key));
-            return " `{$key}` <= '{$value}' ";
+            return "{$key}<='{$value}'";
         }
 
         if (strpos($key, '!=')) {
             $key = trim(str_replace('!=', '', $key));
-            return " `{$key}` != '{$value}' ";
+            return "{$key}!='{$value}'";
         }
 
         if (strpos($key, '<>')) {
             $key = trim(str_replace('<>', '', $key));
-            return " `{$key}` <> '{$value}' ";
+            return "{$key}<>'{$value}'";
         }
 
         if (strpos($key, '>')) {
             $key = trim(str_replace('>', '', $key));
-            return " `{$key}` > '{$value}' ";
+            return "{$key}>'{$value}'";
         }
 
         if (strpos($key, '<')) {
             $key = trim(str_replace('<', '', $key));
-            return " `{$key}` < '{$value}' ";
+            return "{$key}<'{$value}'";
         }
 
         if (strpos($key, ' like')) {
             $key = trim(str_replace(' like', '', $key));
-            return " `{$key}` like '{$value}' ";
+            return "{$key} like '{$value}'";
         }
 
         if (strpos($key, ' in')) {
             $key = trim(str_replace(' in', '', $key));
-            return " `{$key}` in ({$value}) ";
+            return "{$key} in ({$value})";
         }
 
-        return " `{$key}` = '{$value}' ";
+        return "{$key}='{$value}'";
     }
 
     /**
@@ -307,12 +320,12 @@ class Db
             return $fields;
         }
 
-        $sql = ' * ';
+        $sql = '*';
         if (is_array($fields) && count($fields) > 0) {
-            $sql = " ";
+            $sql = '';
             $i = 0;
             foreach ($fields as $value) {
-                $sql .= ($i == 0 ? " `$value` " : " , `$value` ");
+                $sql .= ($i == 0 ? $value : ',' . $value);
                 $i++;
             }
         }
@@ -330,15 +343,15 @@ class Db
     private function sqlOrderBy($fields)
     {
         if (is_string($fields) && trim($fields) != '') {
-            return " ORDER BY " . $fields;
+            return ' ORDER BY ' . $fields;
         }
 
         $sql = '';
         if (is_array($fields) && count($fields) > 0) {
-            $sql .= " ORDER BY ";
+            $sql .= ' ORDER BY ';
             $i = 0;
             foreach ($fields as $key => $value) {
-                $sql .= ($i == 0 ? " `$key` $value " : " , `$key` $value ");
+                $sql .= ($i == 0 ? $key . ' ' . $value : ',' . $key . ' ' . $value);
                 $i++;
             }
         }
@@ -349,7 +362,7 @@ class Db
     /**
      * 构造sql limit
      *
-     * @param init|array $offset
+     * @param int|array $offset
      *
      * @return string
      */
@@ -373,6 +386,64 @@ class Db
         return '';
     }
 
+    /**
+     * 构造sql group by数据分组
+     *
+     * @param array|string $fields
+     *
+     * @return string
+     */
+    private function sqlGroupBy($fields)
+    {
+
+        if (is_string($fields) && trim($fields) != '') {
+            return ' GROUP BY ' . $fields;
+        }
+
+        $sql = '';
+        if (is_array($fields) && count($fields) > 0) {
+            $sql .= ' GROUP BY ';
+            $i = 0;
+            foreach ($fields as $value) {
+                $sql .= ($i == 0 ? $value : ',' . $value);
+                $i++;
+            }
+        }
+
+        return $sql;
+    }
+
+    /**
+     * sql having
+     *
+     * @param int|array $having
+     *
+     * @return string
+     */
+    private function sqlHaving($having)
+    {
+
+        if (is_string($having) && trim($having) != '') {
+            return ' HAVING ' . $this->escape($having);
+        }
+
+        $sql = '';
+        if (is_array($having) && count($having) > 0) {
+            $having = $this->escape($having);
+            $sql .= ' HAVING ';
+            $i = 0;
+            foreach ($having as $key => $value) {
+                $compare = $this->sqlCompare($key, $value);
+                $sql .= ($i == 0 ? $compare : ' AND ' . $compare);
+                $i++;
+            }
+        }
+
+        return $sql;
+
+    }
+
+    //destruct
     function __destruct()
     {
         $this->close();

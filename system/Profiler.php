@@ -97,7 +97,7 @@ class Profiler
 
         foreach ($this->marks as $key => $val) {
 
-            $content = $content . "\n # " . ucfirst($key) . " # \n";
+            $content = $content . "\n # " . ucfirst($key) . " #";
             if (is_array($val)) {
                 foreach ($val as $k => $v) {
                     $content = $content . "\n" . $v;

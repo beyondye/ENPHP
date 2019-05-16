@@ -60,6 +60,8 @@ spl_autoload_register(function ($class) {
     }
 });
 
+profiler('benchmark', 'running', 'Action');
+
 //run application
 $sys = new \system\System();
 
@@ -76,15 +78,15 @@ if (preg_match('/^[\w\/]+$/', $controller) == 0 || preg_match('/^\w+$/', $action
 }
 
 $controller = explode('/', $controller);
-$controller[array_key_last($controller)] = ucfirst(end($controller));
+$controller[count($controller) - 1] = ucfirst(end($controller));
 $ins = load('module\\' . MODULE . '\\' . join('\\', $controller));
 
 if (!method_exists($ins, $action)) {
     exit('Not Found Action');
 }
 
-profiler('benchmark', 'running', 'Action');
 $ins->$action();
+
 profiler('benchmark', 'running');
 
 //echo '<pre>',var_dump(get_included_files()),'</pre>';
