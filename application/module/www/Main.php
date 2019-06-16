@@ -7,9 +7,9 @@ class Main extends \inherit\Controller
 
     public function index()
     {
-        $data['hello_world']='hello wolrd';
+        $data['hello_world'] = 'hello wolrd';
 
-        $this->output->view('main',$data);
+        $this->output->view('main', $data);
 
     }
 

@@ -233,7 +233,7 @@ class Db
     {
 
         if (is_string($where) && trim($where) != '') {
-            return ' WHERE ' . $this->escape($where);
+            return ' WHERE ' . $where;
         }
 
         $sql = '';
