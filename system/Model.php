@@ -349,9 +349,11 @@ class Model extends System
                 'required'=>true
             ],  ";
             }
+
+            return $content . '];';
         }
 
-        return $content . '];';
+        return 'Table No Exist';
     }
 
 }
