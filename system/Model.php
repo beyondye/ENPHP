@@ -118,6 +118,19 @@ class Model extends System
         return $this->db($this->WDB)->insert($this->table, $data);
     }
 
+
+    /**
+     * 新建数据行或已存在即替换
+     *
+     * @param array|string $data 必须与表字段对应 $data['field_name'=>'field_value']
+     *
+     * @return boolean
+     */
+    public function replace($data = [])
+    {
+        return $this->db($this->WDB)->replace($this->table, $data);
+    }
+
     /**
      * 删除表数据
      *
