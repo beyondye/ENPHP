@@ -3,7 +3,13 @@
 //global variable
 $vars = [];
 $sys = null;
-require_once APP_DIR . 'config/' . ENVIRONMENT . '/constans.php';
+
+//include constant file
+if (CONST_FILE) {
+    include APP_DIR . 'config/' . ENVIRONMENT . '/' . CONST_FILE . '.php';
+} else {
+    include APP_DIR . 'config/' . ENVIRONMENT . '/constant.php';
+}
 
 //load single class
 function load($class, $arguments = '')
@@ -38,7 +44,6 @@ function profiler($type, $mark, $desc = '')
     $profiler->$type($mark, $desc);
 
     return true;
-
 }
 
 
