@@ -262,7 +262,7 @@ class Db
      */
     private function sqlCompare($key, $value)
     {
-        $key = trim($key);
+        $key = strtolower(trim($key));
 
         if (strpos($key, '>=')) {
             $key = trim(str_replace('>=', '', $key));
