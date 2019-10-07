@@ -12,21 +12,23 @@ if (CONST_FILE) {
 }
 
 //load single class
-function load($class, $arguments = '')
+function load($class, $arguments = '', $alias = '')
 {
     static $instances;
 
-    if (isset($instances[$class])) {
-        return $instances[$class];
+    $alias = $class . '_as_' . $alias;
+
+    if (isset($instances[$alias])) {
+        return $instances[$alias];
     }
 
     if (!class_exists($class)) {
         exit(' Not Found ' . $class);
     }
 
-    $instances[$class] = new $class($arguments);
+    $instances[$alias] = new $class($arguments);
 
-    return $instances[$class];
+    return $instances[$alias];
 }
 
 //running profiler
