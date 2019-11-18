@@ -38,8 +38,6 @@ class System
                 return Cache::instance('default');
         }
 
-        return null;
-
     }
 
     /**
