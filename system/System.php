@@ -101,4 +101,17 @@ class System
 
     }
 
+    /**
+     * Service
+     * @param $name
+     * @return string
+     *
+     */
+    public function service($name)
+    {
+
+        return load('service\\' . str_replace('/', '\\', $name));
+
+    }
+
 }
