@@ -66,7 +66,7 @@ class Output extends System
      *
      * @return string
      */
-    public function compress($string)
+    public function compress(string $string)
     {
         $string = str_replace("\r\n", '', $string);
         $string = str_replace("\n", '', $string);
@@ -90,7 +90,7 @@ class Output extends System
      *
      * @return string
      */
-    public function view($_view, $_data = [], $_return = false, $_compress = false)
+    public function view(string $_view, array $_data = [], bool $_return = false, bool $_compress = false)
     {
         static $_vars = [];
         $_vars = array_merge($_vars, $_data);
@@ -135,9 +135,9 @@ class Output extends System
      * @param array $data 需要返回的数据
      * @param bool $return 是否直接返回内容
      *
-     * @return json string
+     * @return string
      */
-    public function json($status, $message, $data = [], $return = false)
+    public function json(int $status, string $message, array $data = [], bool $return = false)
     {
         $content = ['status' => $status, 'message' => $message, 'data' => $data];
 
@@ -157,7 +157,7 @@ class Output extends System
      *
      * @return void
      */
-    public function redirect($uri = '', $http_response_code = 302)
+    public function redirect(string $uri = '', int $http_response_code = 302)
     {
         header("Location: " . $uri, true, $http_response_code);
         exit;
@@ -171,7 +171,7 @@ class Output extends System
      * @return void
      *
      */
-    public function status($http_status_code)
+    public function status(int $http_status_code)
     {
         if (isset(self::HTTP_STATUS_CODE[$http_status_code])) {
             header(self::HTTP_STATUS_CODE[$http_status_code], true);
@@ -185,8 +185,10 @@ class Output extends System
      *
      * @param string 错误页面模版名
      * @param array 数据数组
+     *
+     * @return void
      */
-    public function error($name = 'general', $data = ['heading' => 'Error Message', 'message' => 'An error occurred.'])
+    public function error(string $name = 'general', array $data = ['heading' => 'Error Message', 'message' => 'An error occurred.'])
     {
 
         extract($data);

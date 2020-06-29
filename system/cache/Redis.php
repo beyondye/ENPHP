@@ -53,7 +53,7 @@ class Redis extends AbstractCache
      *
      * @return bool
      */
-    public function set($key, $value, $expire = 0)
+    public function set(string $key, $value, int $expire = 0)
     {
         $this->setTags($key);
 
@@ -67,12 +67,12 @@ class Redis extends AbstractCache
     /**
      * 加法递增
      *
-     * @param $key
+     * @param string $key
      * @param int $value
      *
      * @return mixed
      */
-    public function increment($key, $value = 1)
+    public function increment(string $key, int $value = 1)
     {
         return $this->redis->incr($key, $value);
     }
@@ -80,12 +80,12 @@ class Redis extends AbstractCache
     /**
      * 减法递增
      *
-     * @param $key
+     * @param string $key
      * @param int $value
      *
      * @return mixed
      */
-    public function decrement($key, $value = 1)
+    public function decrement(string $key, int $value = 1)
     {
         return $this->redis->decr($key, $value);
     }
@@ -123,7 +123,7 @@ class Redis extends AbstractCache
      *
      * @return mixed
      */
-    public function get($key)
+    public function get(string $key)
     {
         if (!$this->getTags($key)) {
             return false;
@@ -140,7 +140,7 @@ class Redis extends AbstractCache
      *
      * @return void
      */
-    private function setTags($key)
+    private function setTags(string $key)
     {
         if ($this->tags) {
             $tags = $this->tags;
@@ -161,7 +161,7 @@ class Redis extends AbstractCache
      *
      * @return bool
      */
-    private function getTags($key)
+    private function getTags(string $key)
     {
         if ($this->tags) {
 
@@ -219,9 +219,10 @@ class Redis extends AbstractCache
      * set tags
      *
      * @param array $tags
+     *
      * @return $this|AbstractCache
      */
-    public function tags($tags = [])
+    public function tags(array $tags = [])
     {
         if (is_array($tags)) {
             $this->tags = $tags;

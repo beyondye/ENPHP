@@ -169,12 +169,13 @@ class Model extends System
 
         return $this->db($this->WDB)->update($this->table, $data, $where);
     }
+
     /**
      * 原生sql查询表数据，没有参数返回全部
      *
      * @param string $sql
      *
-     * @return mix
+     * @return array|boolean
      */
     public function query($sql)
     {
@@ -191,11 +192,11 @@ class Model extends System
     /**
      * 查询表数据，没有参数返回全部
      *
-     * @param array $condtion ['where' => [], 'fields' => [], 'orderby' => [], 'limit' => []]
+     * @param array $condition
      *
      * @return array|object
      */
-    public function select($condition = [])
+    public function select(array $condition = ['where' => [], 'fields' => [], 'orderby' => [], 'limit' => []])
     {
         return $this->db($this->RDB)->select($this->table, $condition)->result();
     }
@@ -205,7 +206,7 @@ class Model extends System
      *
      * @param int|array  表主键或唯一索引数组
      *
-     * @return array
+     * @return object|null
      */
     public function one($primary)
     {
@@ -266,9 +267,9 @@ class Model extends System
             return null;
         }
 
-        $defaut = ['where' => $where, 'fields' => [], 'orderby' => [], 'limit' => []];
+        $default = ['where' => $where, 'fields' => [], 'orderby' => [], 'limit' => []];
 
-        return $this->model($model)->select(array_merge($defaut, $condition));
+        return $this->model($model)->select(array_merge($default, $condition));
 
     }
 
@@ -303,8 +304,8 @@ class Model extends System
             }
 
             $foreign = $this->model($model);
-            
-            $default = array_merge(['where' => [], 'fields' => [], 'orderby' => [], 'limit' => []],$condition);
+
+            $default = array_merge(['where' => [], 'fields' => [], 'orderby' => [], 'limit' => []], $condition);
             $default['where'][$foreign->primary . ' in'] = join(',', $primaries);
 
             return $foreign->select($default);

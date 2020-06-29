@@ -11,7 +11,7 @@ namespace system;
 class Cache
 {
 
-    public static function instance($service)
+    public static function instance(string $service)
     {
         static $ins = [];
 

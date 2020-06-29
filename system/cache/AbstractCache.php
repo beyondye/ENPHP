@@ -15,7 +15,7 @@ abstract class AbstractCache
      *
      * @return bool
      */
-    abstract protected function set($key, $value, $expire = 0);
+    abstract protected function set(string $key, $value, int $expire = 0);
 
     /**
      * 加法递增
@@ -25,7 +25,7 @@ abstract class AbstractCache
      *
      * @return int
      */
-    abstract protected function increment($key, $value = 1);
+    abstract protected function increment(string $key, int $value = 1);
 
 
     /**
@@ -36,7 +36,7 @@ abstract class AbstractCache
      *
      * @return int
      */
-    abstract protected function decrement($key, $value = 1);
+    abstract protected function decrement(string $key, int $value = 1);
 
 
     /**
@@ -46,7 +46,7 @@ abstract class AbstractCache
      *
      * @return bool
      */
-    abstract protected function delete($key);
+    abstract protected function delete(string $key);
 
     /**
      * 清楚所有缓存
@@ -62,7 +62,7 @@ abstract class AbstractCache
      *
      * @return mixed
      */
-    abstract protected function get($key);
+    abstract protected function get(string $key);
 
     /**
      * 设置缓存标签
@@ -70,6 +70,6 @@ abstract class AbstractCache
      * @param array $keys
      * @return $this
      */
-    abstract protected function tags($keys = []);
+    abstract protected function tags(array $keys = []);
 
 }

@@ -23,9 +23,8 @@ class Redis extends \Redis
      *
      * @param array $config
      *
-     * @return \Redis
      */
-    function __construct($config)
+    function __construct(array $config)
     {
         parent::__construct();
 
@@ -74,7 +73,7 @@ class Redis extends \Redis
      *
      * @return object
      */
-    public static function instance($service)
+    public static function instance(string $service)
     {
 
         static $ins = [];

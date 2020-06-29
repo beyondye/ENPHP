@@ -10,7 +10,7 @@ namespace system;
 class Database
 {
 
-    public static function instance($service)
+    public static function instance(string $service)
     {
         static $ins = [];
 

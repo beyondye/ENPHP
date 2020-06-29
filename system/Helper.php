@@ -10,7 +10,7 @@ class Helper
 
     public function __get($name)
     {
-        return load('helper\\'.ucfirst($name));
+        return load('helper\\' . ucfirst($name));
     }
 
     /**
@@ -24,7 +24,7 @@ class Helper
      *
      * @return string
      */
-    public function pager($size, $total, $page, $url, $visible = 5)
+    public function pager(int $size, int $total, int $page, string $url, int $visible = 5)
     {
         $previous = $page - 1;
         $next = $page + 1;
@@ -98,7 +98,7 @@ class Helper
      *
      * @return string
      */
-    public function url($param = [], $path = ENTRY, $anchor = '')
+    public function url(array $param = [], string $path = ENTRY, string $anchor = '')
     {
         global $vars;
 

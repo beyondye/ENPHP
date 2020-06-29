@@ -48,7 +48,7 @@ class Profiler
      * @param string $mark
      * @param string $desc
      */
-    public function benchmark($mark, $desc = '')
+    public function benchmark(string $mark, string $desc = '')
     {
 
         static $marks = [];
@@ -75,7 +75,7 @@ class Profiler
      * @param string $mark
      * @param string $desc
      */
-    public function memory($mark, $desc = '')
+    public function memory(string $mark, string $desc = '')
     {
         $unit = array('Byte', 'KB', 'MB', 'GB', 'TB', 'PB');
         $size = memory_get_usage();

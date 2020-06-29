@@ -42,7 +42,7 @@ class Result
      *
      * @return array 数据集合
      */
-    public function result($type = 'object')
+    public function result(string $type = 'object')
     {
         $rows = [];
 
@@ -68,7 +68,7 @@ class Result
      *
      * @return array or object
      */
-    public function row($n = 0, $type = 'object')
+    public function row(int $n = 0, string $type = 'object')
     {
         $result = $this->result($type);
         if (isset($result[$n])) {

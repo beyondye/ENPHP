@@ -46,7 +46,7 @@ class File extends AbstractCache
      *
      * @return string
      */
-    protected function route($key)
+    protected function route(string $key)
     {
         $hash = substr(md5($key), 0, 2);
         return $this->config['dir'] . $hash . '/' . $key;
@@ -62,7 +62,7 @@ class File extends AbstractCache
      *
      * @return bool
      */
-    public function set($key, $value = '', $expire = 0)
+    public function set(string $key, $value = '', int $expire = 0)
     {
 
         $this->setTags($key);
@@ -92,12 +92,12 @@ class File extends AbstractCache
     /**
      * 加法递增
      *
-     * @param $key
+     * @param string $key
      * @param int $value
      *
      * @return mixed
      */
-    public function increment($key, $value = 0)
+    public function increment(string $key, int $value = 0)
     {
         $item = $this->get($key);
 
@@ -124,12 +124,12 @@ class File extends AbstractCache
     /**
      * 减法递增
      *
-     * @param $key
+     * @param string $key
      * @param int $value
      *
      * @return mixed
      */
-    public function decrement($key, $value = 0)
+    public function decrement(string $key, int $value = 0)
     {
         $item = $this->get($key);
 
@@ -208,7 +208,7 @@ class File extends AbstractCache
      *
      * @return bool
      */
-    private function delTree($dir)
+    private function delTree(string $dir)
     {
         $files = array_diff(scandir($dir), array('.', '..'));
         foreach ($files as $file) {
@@ -220,11 +220,11 @@ class File extends AbstractCache
     /**
      * 获取数据
      *
-     * @param $key
+     * @param string $key
      *
      * @return bool|mixed|string
      */
-    public function get($key)
+    public function get(string $key)
     {
 
         if (!$this->getTags($key)) {
@@ -257,10 +257,11 @@ class File extends AbstractCache
     /**
      * 检查key是否过期
      *
-     * @param $data
+     * @param array $data
+     *
      * @return bool
      */
-    protected function expire($data)
+    protected function expire(array $data)
     {
         $now = time() - self::START_TIME;
         $expire = $data['expire'];
@@ -285,7 +286,7 @@ class File extends AbstractCache
      *
      * @return void
      */
-    private function setTags($key)
+    private function setTags(string $key)
     {
         if ($this->tags) {
             $tags = $this->tags;
@@ -319,7 +320,7 @@ class File extends AbstractCache
      *
      * @return bool
      */
-    private function getTags($key)
+    private function getTags(string $key)
     {
         if ($this->tags) {
 
@@ -383,7 +384,7 @@ class File extends AbstractCache
      *
      * @return $this|AbstractCache
      */
-    public function tags($tags = [])
+    public function tags(array $tags = [])
     {
         if (is_array($tags)) {
             $this->tags = $tags;

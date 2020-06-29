@@ -26,7 +26,7 @@ class Session
      *
      * @return boolean
      */
-    public function set($name, $value = '')
+    public function set(string $name, string $value = '')
     {
         if ($value != '') {
             $_SESSION[$name] = $value;
@@ -44,7 +44,7 @@ class Session
      *
      * @return string|null
      */
-    public function get($name)
+    public function get(string $name)
     {
         return isset($_SESSION[$name]) ? $_SESSION[$name] : null;
     }
@@ -53,9 +53,10 @@ class Session
      * 闪取会话
      *
      * @param string $name
+     *
      * @return string|null;
      */
-    public function flash($name)
+    public function flash(string $name)
     {
         $val = $this->get($name);
         if ($val == null) {
@@ -69,7 +70,10 @@ class Session
 
     /**
      * 删除一个会话
-     * @param void
+     *
+     * @param array|string $name
+     *
+     * @return void
      */
     public function delete($name)
     {

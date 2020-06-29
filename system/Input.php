@@ -108,7 +108,7 @@ class Input
     /**
      * 获取ip
      *
-     * @return $ipaddress string
+     * @return string
      */
     public function ip()
     {

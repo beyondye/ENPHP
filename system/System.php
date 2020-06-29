@@ -47,7 +47,7 @@ class System
      *
      * @return object
      */
-    public function db($service)
+    public function db(string $service)
     {
         return Database::instance($service);
     }
@@ -59,7 +59,7 @@ class System
      *
      * @return object
      */
-    public function model($name)
+    public function model(string $name)
     {
         return load('model\\' . str_replace('/', '\\', $name));
     }
@@ -71,7 +71,7 @@ class System
      *
      * @return object
      */
-    public function redis($service)
+    public function redis(string $service)
     {
         return Redis::instance($service);
     }
@@ -83,7 +83,7 @@ class System
      *
      * @return object
      */
-    public function lang($lang)
+    public function lang(string $lang)
     {
         return load('system\\Lang', $lang);
     }
@@ -95,7 +95,7 @@ class System
      *
      * @return object
      */
-    public function cache($service)
+    public function cache(string $service)
     {
         return Cache::instance($service);
 
@@ -103,11 +103,13 @@ class System
 
     /**
      * Service
+     *
      * @param $name
+     *
      * @return string
      *
      */
-    public function service($name)
+    public function service(string $name)
     {
 
         return load('service\\' . str_replace('/', '\\', $name));

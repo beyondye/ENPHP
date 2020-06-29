@@ -12,7 +12,7 @@ if (CONST_FILE) {
 }
 
 //load single class
-function load($class, $arguments = '', $alias = '')
+function load(string $class, string $arguments = '', string $alias = '')
 {
     static $instances;
 
@@ -32,7 +32,7 @@ function load($class, $arguments = '', $alias = '')
 }
 
 //running profiler
-function profiler($type, $mark, $desc = '')
+function profiler(string $type, string $mark, string $desc = '')
 {
     if (!defined('PROFILER')) {
         return false;

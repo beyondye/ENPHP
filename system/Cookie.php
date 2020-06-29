@@ -17,7 +17,7 @@ class Cookie
      *
      * @return array|null
      */
-    public function get($name = null)
+    public function get(string $name = null)
     {
 
         if ($name === null) {
@@ -40,7 +40,13 @@ class Cookie
      *
      * @return boolean
      */
-    public function set($name, $value, $expire = COOKIE_EXPIRE, $path = COOKIE_PATH, $domain = COOKIE_DOMAIN, $secure = COOKIE_SECURE, $httponly = COOKIE_HTTPONLY)
+    public function set(string $name,
+                        string $value,
+                        int $expire = COOKIE_EXPIRE,
+                        string $path = COOKIE_PATH,
+                        string $domain = COOKIE_DOMAIN,
+                        bool $secure = COOKIE_SECURE,
+                        bool $httponly = COOKIE_HTTPONLY)
     {
         if (!$name) {
             return false;
@@ -62,7 +68,12 @@ class Cookie
      *
      * @return boolean
      */
-    public function many($data, $expire = COOKIE_EXPIRE, $path = COOKIE_PATH, $domain = COOKIE_DOMAIN, $secure = COOKIE_SECURE, $httponly = COOKIE_HTTPONLY)
+    public function many(array $data,
+                         int $expire = COOKIE_EXPIRE,
+                         string $path = COOKIE_PATH,
+                         string $domain = COOKIE_DOMAIN,
+                         bool $secure = COOKIE_SECURE,
+                         bool $httponly = COOKIE_HTTPONLY)
     {
         if (!is_array($data)) {
             return false;
@@ -81,9 +92,10 @@ class Cookie
      * 删除一个cookie
      *
      * @param string $name
+     *
      * @return bool
      */
-    public function delete($name)
+    public function delete(string $name)
     {
         if (is_array($name)) {
             foreach ($name as $k => $v) {

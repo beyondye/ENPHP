@@ -48,7 +48,7 @@ class Db
         //$config = array('host' => '', 'username' => '', 'password' => '', 'database' => '', 'port' => '', 'charset' => '');
         $this->config = $config;
 
-        profiler('benchmark', 'database',$config['host']);
+        profiler('benchmark', 'database', $config['host']);
         $this->db = new \mysqli($config['host'], $config['username'], $config['password'], $config['database'], $config['port']);
         profiler('benchmark', 'database');
 
@@ -66,7 +66,7 @@ class Db
      *
      * @return Result | boolean
      */
-    public function query($sql)
+    public function query(string $sql)
     {
         profiler('benchmark', 'queries', $sql);
         $result = $this->db->query($sql);
@@ -112,7 +112,7 @@ class Db
      *
      * @return boolean
      */
-    public function insert($table, $data)
+    public function insert(string $table, array $data)
     {
         $data = $this->escape($data);
 
@@ -133,13 +133,13 @@ class Db
      *
      * @return boolean
      */
-    public function update($table, $data, $where = [])
+    public function update(string $table, array $data, array $where = [])
     {
         if (is_array($data)) {
 
             $data = $this->escape($data);
 
-            $set=[];
+            $set = [];
             foreach ($data as $key => $value) {
                 $set[] = $key . "='{$value}'";
             }
@@ -160,7 +160,7 @@ class Db
      *
      * @return boolean
      */
-    public function replace($table, $data)
+    public function replace(string $table, array $data)
     {
         $data = $this->escape($data);
 
@@ -179,7 +179,7 @@ class Db
      *
      * @return boolean
      */
-    public function delete($table, $where = [])
+    public function delete(string $table, array $where = [])
     {
         $sql = 'DELETE FROM ' . $table . $this->sqlwhere($where);
         return $this->query($sql);
@@ -189,12 +189,11 @@ class Db
      * 查询数据
      *
      * @param string $table
-     * @param array $condition =['where' => [], 'groupby' => [] ,'having' => [] ,'fields' => [], 'orderby' => [], 'limit' => []]
-     * @param int|array $limit
+     * @param array $condition @subparam int|array $limit
      *
      * @return object array
      */
-    public function select($table, $condition = [])
+    public function select($table, $condition = ['where' => [], 'groupby' => [], 'having' => [], 'fields' => [], 'orderby' => [], 'limit' => []])
     {
         $default = ['where' => [], 'fields' => [], 'groupby' => [], 'having' => [], 'orderby' => [], 'limit' => []];
         $condition = array_merge($default, $condition);
@@ -229,7 +228,7 @@ class Db
      *
      * @return string
      */
-    private function sqlWhere($where = [])
+    private function sqlWhere(array $where = [])
     {
 
         if (is_string($where) && trim($where) != '') {
@@ -260,7 +259,7 @@ class Db
      *
      * @return string
      */
-    private function sqlCompare($key, $value)
+    private function sqlCompare(string $key, string $value)
     {
         $key = strtolower(trim($key));
 
@@ -314,7 +313,7 @@ class Db
      *
      * @return string
      */
-    private function sqlField($fields)
+    private function sqlField(array $fields)
     {
         if (is_string($fields) && trim($fields) != '') {
             return $fields;

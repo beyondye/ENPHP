@@ -45,7 +45,7 @@ class Safe
      *
      * @return boolean
      */
-    public function validate($data)
+    public function validate(array $data)
     {
         if (!$data) {
             return false;
@@ -79,7 +79,7 @@ class Safe
      *
      * @return boolean
      */
-    public function complete($data)
+    public function complete(array $data)
     {
         if (!is_array($data)) {
             return false;
@@ -109,9 +109,9 @@ class Safe
      * @param array $data 并入schema的数据
      * @param array $without 不需要的字段
      *
-     * @return array 与schema默认合并后的数据
+     * @return array|boolean 与schema默认合并后的数据
      */
-    public function merge($data, $without = [])
+    public function merge(array $data, array $without = [])
     {
 
         if (!is_array($data)) {
@@ -144,7 +144,7 @@ class Safe
      *
      * @return array|bool 清理后后的数据
      */
-    public function clear($data)
+    public function clear(array $data)
     {
 
         if (!is_array($data)) {

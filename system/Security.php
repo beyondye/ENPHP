@@ -16,7 +16,7 @@ class Security
      * @param string $str
      * @return string
      */
-    public function entity($str)
+    public function entity(string $str)
     {
         return htmlspecialchars($str, ENT_QUOTES | ENT_HTML401, CHARSET);
     }
@@ -27,7 +27,7 @@ class Security
      * @param string $str
      * @return string
      */
-    public function tag($str)
+    public function tag(string $str)
     {
         return strip_tags($str);
     }
@@ -38,7 +38,7 @@ class Security
      * @param string $str
      * @return string
      */
-    public function blank($str)
+    public function blank(string $str)
     {
         return preg_replace('/[\s]+/is', ' ', $str);
     }

@@ -29,7 +29,7 @@ abstract class AbstractAuth
     abstract protected function create(array $data = []);
 
     //获取认证信息
-    abstract protected function data($assoc = false);
+    abstract protected function data(bool $assoc = false);
 
     //获取认证数据ID
     abstract protected function id();

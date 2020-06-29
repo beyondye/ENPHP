@@ -83,7 +83,7 @@ class Jwt extends AbstractAuth
     }
 
     //获取jwt数据
-    public function data($assoc = false)
+    public function data(bool $assoc = false)
     {
         if (!isset($this->_data)) {
             return null;
