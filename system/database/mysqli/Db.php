@@ -224,11 +224,11 @@ class Db
     /**
      * 构造 sql where 字符串
      *
-     * @param array $where
+     * @param array|string $where
      *
      * @return string
      */
-    private function sqlWhere(array $where = [])
+    private function sqlWhere($where = [])
     {
 
         if (is_string($where) && trim($where) != '') {
@@ -309,11 +309,11 @@ class Db
     /**
      * 构造sql select字段
      *
-     * @param array $fields
+     * @param array|string $fields
      *
      * @return string
      */
-    private function sqlField(array $fields)
+    private function sqlField($fields)
     {
         if (is_string($fields) && trim($fields) != '') {
             return $fields;
