@@ -132,12 +132,12 @@ class Output extends System
      *
      * @param int $status 自定义状态码
      * @param string $message 状态简单描述
-     * @param array $data 需要返回的数据
+     * @param array|object $data 需要返回的数据
      * @param bool $return 是否直接返回内容
      *
      * @return string
      */
-    public function json(int $status, string $message, array $data = [], bool $return = false)
+    public function json(int $status, string $message, $data = [], bool $return = false)
     {
         $content = ['status' => $status, 'message' => $message, 'data' => $data];
 

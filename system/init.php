@@ -12,7 +12,7 @@ if (CONST_FILE) {
 }
 
 //load single class
-function load(string $class, string $arguments = '', string $alias = '')
+function load(string $class, $arguments = '', string $alias = '')
 {
     static $instances;
 
