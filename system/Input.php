@@ -17,7 +17,7 @@ class Input
      *
      * @param string $default
      *
-     * @return array|string
+     * @return array|string|null
      */
     public function get($name = null, $default = null)
     {
@@ -76,18 +76,30 @@ class Input
      *
      * @param string $name
      *
-     * @return array|null
+     * @return array|null|string
      */
     public function post($name = null)
     {
+        $func = function ($val) {
+
+            if (is_array($val)) {
+                return array_map(function ($v) {
+                    return trim($v);
+                }, $val);
+            }
+
+            return trim($val);
+        };
 
         if ($name === null) {
-            return array_map(function ($val) {
-                return trim($val);
-            }, $_POST);
+            return array_map($func, $_POST);
         }
 
-        return isset($_POST[$name]) ? trim($_POST[$name]) : null;
+        if (!isset($_POST[$name])) {
+            return null;
+        }
+
+        return $func($_POST[$name]);
     }
 
     /**
