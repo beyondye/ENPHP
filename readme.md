@@ -13,18 +13,43 @@ ENPHP非常适合中小型web应用的开发设计，内置数据验证，多数
 #### 常量配置
 |||||
 |---|---|---|---|
-|[入口文件配置](#入口文件配置)       | [常量设置](#常量设置)       | [数据库配置](#数据库配置)  | [全局变量数组](#全局变量数组)|
-||||||
+|[入口文件配置](#入口文件配置)| [常量设置](#常量设置)       | [数据库配置](#数据库配置)  | [全局变量数组](#全局变量数组)|
 
-#### 数据操作
+
+#### 框架基本使用
+||||
+|---|---|---|
+|[Controller控制器](#Controller控制器) | [View视图](#View视图)| [Model数据模型](#Model数据模型)| 
+
+
+#### 框架核心组建
 |||||
 |---|---|---|---|
-|[数据库基本操作](#数据库基本操作)     | [Model数据模型](#Model数据模型)      | [Model数据验证](#Model数据验证) |  |
-|[Controller控制器](#Controller控制器) | [View视图](#View视图)   | [Helper帮助函数](#Helper帮助函数)    | [Input输入](#Input输入)|
-|[Output输出](#Output输出)       | [Session会话](#Session会话)   | [Cookie管理](#Cookie管理)       |[Lang多语言配置](#Lang多语言配置)|
-|[Redis缓存](#Redis缓存)        | [Security安全](#Security安全)  | [Upload上传文件](#Upload上传文件)  |[Html标签生成](#Html标签生成)|
-|[Grid表格生成](#Grid表格生成)  |[Image图片修饰](#Image图片修饰)  |[Smtp发送邮件](#Smtp发送邮件)   |[Captcha验证码生成](#Captcha验证码生成)|
+| [Input输入](#Input输入)| [Output输出](#Output输出)  | [Session会话](#Session会话)   | [Cookie管理](#Cookie管理)|
+
+
+#### 数据库操作
+||||
+|---|---|---|
+|[数据库基本操作](#数据库基本操作)| [Model数据对象](#Model数据对象)| [Model数据验证](#Model数据验证) |
+
+
+#### 缓存
+|||
+|---|---|
+|[Redis缓存](#Redis缓存) | [Cache缓存](#Cache缓存) |
+
+#### 安全认证
+||||
+|---|---|---|
+|[Authorize认证](#Authorize认证) | [Security安全](#Security安全)  | [Captcha验证码生成](#Captcha验证码生成)|
 ||||||
+
+#### 库函数
+||||
+|---|---|---|
+|[Upload上传文件](#Upload上传文件)  |[Html标签生成](#Html标签生成)|[Grid表格生成](#Grid表格生成) |
+|[Image图片修饰](#Image图片修饰)  |[Smtp发送邮件](#Smtp发送邮件)   |[Captcha验证码生成](#Captcha验证码生成)|
 
 
 文档内容
@@ -414,17 +439,13 @@ $db->close()；
 //命名空间
 namespace model;
 
-//类必须继承一个自定义\inherit\Model类或是系统\system\Model类
-class Tablemodel extends \inherit\Model
+//类必须继承系统\system\Model类
+class Tablemodel extends \system\Model
 {
 
     //构造函数必须有
     public function __construct()
     {
-    
-        //运行上级构造函数
-        parent::__construct();
-        
         //必须设置一个数据表
         $this->table = 'test';
         
@@ -434,25 +455,29 @@ class Tablemodel extends \inherit\Model
         //设置一个表的结构，以便验证过滤
         $this->schema = [
             'id' => [
-                'validate' => ['regex' => '/^\d+$/', 'message' => 'ID 不能为空'],
-                'literal' => 'ID',
+                'rules' => 'num',
+                'label' => 'ID',
                 'default' => null,
                 'required' => false
             ],
             'name' => [
-                'validate' => ['regex' => '/^\S+$/', 'message' => '名称不能为空'],
-                'literal' => '名称',
+                'validate' => ''required|string|filter:html',
+                'label' => '名称',
                 'default' => '',
                 'required' => true
             ]];
     }
 
 }
-
-//我们可以这样调用model
-$this->model('Tablemodel')->one(1);
 ```
+```php
+use model\Tablemodel;
+ 
+//我们可以这样调用model
+$model=new Tablemodel();
+$model->one(1);
 
+```
 
 #### $this->RDB 属性
 设置读数据库，默认为default数据库
@@ -526,26 +551,6 @@ foreach($recordset as $rs){
 
 ```
 
-#### $this->belongs($model, $relation_model, $relation_foreign_name, $where, $condition) 方法
-多对多获取表数据,返回对象数据集
-
-> 参数说明
->> $model 需要关联的model名称<br>
->> $relation_model 关系表model名称<br>
->> $relation_foreign_name 关联表主键名在关系表中的字段名<br>
-
->> $where=['local_relation_filed_name' => 'local_primary_value']
->>> $local_relation_filed_name 本表在关系表字段名<br>
->>> $local_primary_value 本表主键值
-
->> $condition 参见$this->select()参数
-
-```php
-
-$this->belongs($model, $relation_model, $relation_foreign_name, $where, $condition);
-
-```
-
 #### $this->count($where=[]) 方法
 获取数据表数据条数,适合myisam表。
 ```php
@@ -566,29 +571,6 @@ if($rs){
 }
 ```
 
-#### $this->hasMany($model,$where,$condition=[]) 方法
-一对多获取副表数据,返回对象数据集。
-> 参数说明
->> $model 需要关联的model
-     
->> $where=['foreign_name' => 'local_primary_value']
->>> $foreign 外表字段名<br>
->>> $local_primary_value 本表主键值
-
->> $condition 参见$this->select()参数
-
-```php
-$this->hasMany($model, $where, $condition);
-```
-
-#### $this->hasOne($model,$primary_value) 方法
-一对一获取数据,返回一行对象数据。
-> 参数说明
->> $model 关联的model
->> $primary_value 主键唯一值
-```php
-$this->hasOne($model, $primary_value);
-```
 
 #### $this->insert($data=[]) 方法
 插入数据，返回布尔值。
