@@ -2,14 +2,16 @@
 
 namespace module\www;
 
-class Main extends \inherit\Controller
+use system\Output;
+
+class Main extends \system\Controller
 {
 
     public function index()
     {
         $data['hello_world'] = 'hello wolrd';
 
-        $this->output->view('main', $data);
+        Output::view('main', $data);
 
     }
 

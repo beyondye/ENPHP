@@ -13,10 +13,10 @@ define('ENVIRONMENT', 'development');
 define('PROFILER', true);
 
 //设置controller模块
-define('MODULE', 'www');
+define('MODULE', 'account');
 
 //设置模板
-define('TEMPLATE', 'www');
+define('TEMPLATE', 'account');
 
 //应用程序目录
 define('APP_DIR', realpath('../../') . DIRECTORY_SEPARATOR);
@@ -27,7 +27,7 @@ define('SYS_DIR', realpath('../../system') . DIRECTORY_SEPARATOR);
 //入口地址
 define('ENTRY', $_SERVER['PHP_SELF']);
 
-//常量配置文件名
+//常量配置
 define('CONST_FILE', '');
 
 //初始脚本

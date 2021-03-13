@@ -1,51 +1,35 @@
-### ENPHP Framework是一个轻量级的，开包即用的PHP框架。
+### ENPHP Framework是一个轻量级的，开包即用的PHP开源框架
 
-特别适合中小型网站的开发建设，自带数据表验证，多数据库分离支持，常用的库文件。
-以简化那些80%重复功能为目标打造出此框架，如果您厌烦重量级框架，请试试ENPHP Framework。
+ENPHP非常适合中小型web应用的开发设计，内置数据验证，多数据库分离，Redis，数据缓存，会话认证，中间件等支持及常用的库函数。
+以优化80%重复功能为目标设计的全栈框架。
 
 ### 版本库依赖
 
-> 版本 PHP7+<br>
-> mb_string扩展<br>
-> GD2扩展
+> PHP7+<br>
+> mb_string扩展
 
 ### 文档目录索引
 
-&nbsp;|&nbsp;|&nbsp;|&nbsp;
------|-----|-----|-----
-[入口文件配置](#入口文件配置)       | [常量设置](#常量设置)       | [数据库配置](#数据库配置)  | [自定义配置数据字典](#自定义配置数据字典)
-[全局变量数组](#全局变量数组)      | [数据库基本操作](#数据库基本操作)     | [Model数据模型](#Model数据模型)      | [Model数据验证](#Model数据验证)
-[Controller控制器](#Controller控制器) | [View视图](#View视图)   | [Helper帮助函数](#Helper帮助函数)    | [Input输入](#Input输入)
-[Output输出](#Output输出)       | [Session会话](#Session会话)   | [Cookie管理](#Cookie管理)       |[Lang多语言配置](#Lang多语言配置)
-[Redis缓存](#Redis缓存)        | [Security安全](#Security安全)  | [Upload上传文件](#Upload上传文件)  |[Html标签生成](#Html标签生成)
-[Grid表格生成](#Grid表格生成)  |[Image图片修饰](#Image图片修饰)  |[Smtp发送邮件](#Smtp发送邮件)   |[Captcha验证码生成](#Captcha验证码生成)
-[应用程序目录布局说明](#应用程序目录布局说明) | | | 
+#### 常量配置
+|||||
+|---|---|---|---|
+|[入口文件配置](#入口文件配置)       | [常量设置](#常量设置)       | [数据库配置](#数据库配置)  | [全局变量数组](#全局变量数组)|
+||||||
+
+#### 数据操作
+|||||
+|---|---|---|---|
+|[数据库基本操作](#数据库基本操作)     | [Model数据模型](#Model数据模型)      | [Model数据验证](#Model数据验证) |  |
+|[Controller控制器](#Controller控制器) | [View视图](#View视图)   | [Helper帮助函数](#Helper帮助函数)    | [Input输入](#Input输入)|
+|[Output输出](#Output输出)       | [Session会话](#Session会话)   | [Cookie管理](#Cookie管理)       |[Lang多语言配置](#Lang多语言配置)|
+|[Redis缓存](#Redis缓存)        | [Security安全](#Security安全)  | [Upload上传文件](#Upload上传文件)  |[Html标签生成](#Html标签生成)|
+|[Grid表格生成](#Grid表格生成)  |[Image图片修饰](#Image图片修饰)  |[Smtp发送邮件](#Smtp发送邮件)   |[Captcha验证码生成](#Captcha验证码生成)|
+||||||
 
 
 文档内容
 ====
 
-### 保留属性及函数方法
-> 不推荐覆盖，除非你了解全局代码。
-
-#### 保留的属性
-    $this->input //输入类实例
-    $this->config //配置类实例
-    $this->output //输出类实例
-    $this->session //会话类实例
-    $this->cookie //cookie类实例
-    $this->lang //默认多语言类实例
-    $this->helper //帮助类实例
-    $this->security //安全类实例
-    $this->redis //redis类实例
-    $this->vars //全局变量数组
-    $this->db //默认数据库实例
-
-#### 保留的方法函数
-    $this->db() //自定义数据库并返回实例
-    $this->lang() //自定义语言类并返回实例
-    $this->model() //加载model并返回实例
-    $this->redis() //自定义redis并返回实例
 
 ### 入口文件配置
 
@@ -58,17 +42,15 @@
 define('ENVIRONMENT', 'development');
 ```
 #### 应用目录设置
-您开发的应用程序目录常量APP_DIR设置。
 ```php
 define('APP_DIR', realpath('app_dir') . DIRECTORY_SEPARATOR);
 ```
 #### 框架目录设置
-框架系统文件目录常量，可以存放到其他地方，以便共用和升级。
 ```php
 define('SYS_DIR', realpath('system_dir') . DIRECTORY_SEPARATOR);
 ```
-#### 控制器模块设置
-设置controller模块常量，模块必须是APP_DIR目录下module文件夹的子目录。
+#### 控制器模块目录设置
+设置controller模块目录常量，模块必须是APP_DIR目录下module文件夹的子目录。
 ```php
 define('MODULE', 'www');
 ```
@@ -78,7 +60,7 @@ define('MODULE', 'www');
 define('TEMPLATE', 'www');
 ```
 
-### 常量设置
+### 全局常量设置
 
 > 常量文件位置在APP_DIR/config/下面三个子目录test,production,development中的constans.php文件分别按环境设置。
 
@@ -94,7 +76,7 @@ define('CONTROLLER_KEY_NAME', 'c');
 define('ACTION_KEY_NAME', 'a');
 ```
 #### 字符编码
-输出字符编码设置，以便$this->output->view()和$this->output->json()输出
+输出字符编码设置，以便Output::view()和Output::json()输出
 ```php
 define('CHARSET', 'utf-8');
 ```
@@ -127,7 +109,7 @@ define('SESSION_COOKIE_NAME', 'SE');
 define('SESSION_EXPIRE', 0);
 ```
 
-#### 安全配置
+#### 哈希验证配置
 ```php
 //加密安全混淆值
 define('ENCRYPTION_KEY', 'weryi9878sdfddtgtbsdfh');
@@ -142,20 +124,45 @@ define('TOKEN_INPUT_NAME', 'fh40dfk9dd8dkfje');
 define('TOKEN_EXPIRE', 3600);
 ```
 
+
+#### 会话认证配置
+```php
+//认证方式，cookie,jwt,session
+define('AUTH_TYPE', 'session');
+
+//加密密钥
+define('AUTH_SECRET', 'dsd#@4ddz!ds');
+
+//认证名称
+define('AUTH_NAME', 'auth');
+
+//jwt存活时间,秒为单位
+define('AUTH_JWT_EXPIRE', 600);
+
+//jwt数据过载方式，header或url
+define('AUTH_JWT_MODE', 'header');
+
+//认证cookie存活时间
+define('AUTH_COOKIE_EXPIRE', 0);
+```
+
+
 #### 多语言应用
 ```php
 //默认语言环境
 define('LANG', 'zh_cn');
 ```
+
 #### URL转换
-URL重写转换输出模版，和路由无关，以配合$this->helper->url()使用
+URL重写转换输出模版，和路由无关，以配合Helper::url()使用
 ```php
 //url 重写
 define('URL', ['mod_name'=>['controller_name/action_name'=>'/{controller_key}/{action_key}']]);
+```
+例子：
+```php
 
-//例子 
-
-//注意$this->helper->url()参数和数组key的顺序
+//注意Helper::url()参数和数组key的顺序
 define('URL', [
     'www' => [ 
     //www表示模块名称
@@ -176,13 +183,36 @@ define('URL', [
 ]);
 ```
 
+#### 运行分析日志文件配置
+
+```php
+
+//分析器日志文件
+define('PROFILER_LOG_FILE', APP_DIR . 'log/profiler.log');
+
+```
+#### 中间件配置
+```php
+
+define('MIDDLEWARE', [
+
+    //controller运行之前
+    'before' => [
+        'auth' => \middleware\Auth::class,
+        'authorize' => \middleware\Authorize::class
+    ],
+    
+    //controller运行之后
+    'after' => []
+]);
+```
 ### 数据库配置
 
 > 数据库文件位置在APP_DIR/config/下面三个子目录test,production,development中的database.php文件分别按环境设置。<br>
 > 暂时只支持mysqli
 
-default为默认数据库，可以直接$this->db访问默认数据库<br>
-$this->db('read)访问read数据库
+default为默认数据库，可以直接Db::instance()访问默认数据库<br>
+Db::instance('read)访问read数据库
 ```php
 //例子
 
@@ -213,46 +243,35 @@ return [
 ];
 ```
 
-### 自定义配置数据字典
-
-> 自定义配置数据字典，主要为了应对某些应用较多的元数据存储访问<br>
-> 保存于APP_DIR/config目录下面PHP文件内容为数组
-
-以APP_DIR/config/test.php为范例,配合$this->config使用
-```php
-//test.php内容
-return ['key2'=>'val2','key'=>['a','b','c'];
-
-//var_dump $this->config->test
-//输出 ['key2'=>'val2','key'=>['a','b','c']
-
-//echo $this->config->test['key'][0]
-//输出 a
-```
 
 ### 全局变量数组
-全局变量数组$var。
+全局变量数组$var[]
 ```php
-//全局变量数组，
-//$this->vars 可以直接访问，
-//默认已包含$this->vars['controller']当前控制器值
-//默认已包含$this->vars['action']当前action值
-$vars = [];
+
+//默认已包含$vars['controller']当前控制器值
+//默认已包含$vars['action']当前action值
+global $vars;
+
 ```
 
 
 ### 数据库基本操作
 
 > 暂时只支持mysqli<br>
-> 配置好数据库以后，我们可以 $this->db 调用默认数据库。<br>
-> 或者可以$this->db('read')调用一个已配置为'read'的数据库。
+> default为默认数据库，可以直接Db::instance()访问默认数据库<br>
+> Db::instance('read)访问read数据库
 
-#### $this->db->query($sql) 方法
+#### query($sql) 方法
 原始SQL语句执行，如是select返回数据集，delete，insert，update返回布尔值。
 
 ```php
+
+use system/Database as Db;
+
+$db=Db::instance();
+
 //返回一个结果集对象句柄
-$result=$this->db->query('select * from table1 where f=2;');
+$result=$db->query('select * from table1 where f=2;');
 
 //返回数据的条数，int类型
 $result->num_rows;
@@ -283,7 +302,7 @@ foreach($recordset as $rs){
 }
 ```
 
-#### $this->db->select($table,$condition=[]) 方法
+#### select($table,$condition=[]) 方法
 查询数据库表返回数据集对象。
 > 参数说明
 >> $table 数据表名称<br>
@@ -298,13 +317,13 @@ $condition= [
   ];
  
 //返回数据句对象
-$recordset=$this->db->select('table1',$condition);
+$recordset=$db->select('table1',$condition);
 foreach($recordset->result() as $rs){
     echo $rs->f1;
 }
 ```
 
-#### $this->db->insert($table,$data) 方法
+#### insert($table,$data) 方法
 插入数据到数据库表，返回布尔值。
 >参数说明
 >> $table 数据表名称 <br>
@@ -313,14 +332,14 @@ foreach($recordset->result() as $rs){
 //需要插入的数据
 $data=['f1'=>'1','f2'=>'2'];
 
-$rs=$this->db->insert('table1',$data)；
+$rs=$db->insert('table1',$data)；
 if($rs){
    //插入成功，返回最后一条插入语句产生的自增ID
    $this->db->insert_id;
 }
 ```
 
-#### $this->db->delete($table,$where=[]) 方法
+#### delete($table,$where=[]) 方法
 删除数据集，返回布尔值
 > 参数说明
 >> $table 数据表名称<br>
@@ -329,21 +348,21 @@ if($rs){
 //删除条件
 $data=['f1'=>'1','f2'=>'2'];
 
-$rs=$this->db->delete('table1',$data)；
+$rs=$db->delete('table1',$data)；
 if($rs){
    //删除成功，返回影响数据行数
    $this->db->affected_rows;
 }
 ```
 
-#### $this->db->escape($str) 方法
+#### escape($str) 方法
 SQL语句中的特殊字符进行转义，返回转义后字符串。
 ```php
 //参见 http://php.net/manual/zh/mysqli.real-escape-string.php
-$this->db->escape('str');
+$db->escape('str');
 ```
 
-#### $this->db->replace($table,$data) 方法
+#### replace($table,$data) 方法
 数据集主键如果存在就替换不然插入新数据，返回布尔值。
 > 参数说明
 >> $table 数据表名称<br>
@@ -352,10 +371,10 @@ $this->db->escape('str');
 //需要插入或替换的数据，如果主键primary=1已存在，即替换本条数据，不然插入新数据。
 $data=['primary'=>1,'f1'=>'1','f2'=>'2'];
 
-$rs=$this->db->replace('table1',$data)；
+$rs=$db->replace('table1',$data)；
 ```
 
-#### $this->db->update($table,$data,$where=[]) 方法
+#### update($table,$data,$where=[]) 方法
 更新数据，返回布尔值或影响行数。
 >参数说明
 >> $table 数据表名称<br>
@@ -365,7 +384,7 @@ $rs=$this->db->replace('table1',$data)；
 $data=['f1'=>'3','f3'=>'1'];
 $where=['id'=>2];
 
-$rs=$this->db->update('table1',$data,$where);
+$rs=$db->update('table1',$data,$where);
 
 if($rs){
    //更新成功，返回影响数据行数
@@ -374,23 +393,18 @@ if($rs){
 }
 ```
 
-#### $this->db->close() 方法
+#### close() 方法
 关闭数据库链接，返回布尔值。<br>
 正常情况下，框架在执行完到最后自动关闭链接，也可以提前手动关闭。
 ```php
 //关闭默认数据链接
-$this->db->close()；
-
-//关闭read数据链接
-$this->db('read')->close()；
-
+$db->close()；
 ```
 
 
 ### Model数据模型
 
 > 每个model必须于数据库某个表对应。<br>
-> model文件必须放置在APP_DIR/model/目录下，文件名与类名一致，区分大小写。
 
 通过继承\system\Model，我们可以使用框架自带的功能便捷操作数据。<br>
 例如我们创建APP_DIR/model/Tablemodel.php。
@@ -1525,44 +1539,4 @@ $this->session->set('authcode', $authcode->getCode());
 $authcode->show();
 
 //html img标签显示 <img src="index.php?c=captcha&a=showimg" />
-```
-
-### 应用程序目录布局说明
-> application目录带*号的目录必须设置
-```
-|--system 系统框架程序目录 
-└--application 应用程序目录  
-    |--helper   自定义工具帮助库*  
-    |--library  自定义公共类库  
-    |--language 语言包目录*
-    |--font     字体目录*
-    |--document 开发文档目录  
-    |--module   控制器模块*
-    |    └--www  应用模块名  
-    |       └--main.php 具体controller业务逻辑文件  
-    |--model model文件目录*
-    |   └--test.php 具体数据model 
-    |--template  视图模板文件*
-    |   └--www  模块名   
-    |       └--main.php 具体模板文件  
-    |--config 配置文件目录*
-    |   |--development 开发环境配置  
-    |   |   |--database.php 数据库配置文件  
-    |   |   |--constans.php 常量配置文件  
-    |   |   └--redis.php redis配置文件  
-    |   |--test 开发环境配置  
-    |   |   |--database.php   
-    |   |   |--constans.php   
-    |   |   └--redis.php   
-    |   └--production 产品环境配置  
-    |       |--database.php   
-    |       |--constans.php   
-    |       └--redis.php   
-    |--inherit model和controller重写继承目录*
-    |   |--controller.php   
-    |   └--model.php   
-    └--public  应用程序入口目录  
-        |--static 静态文件资源  
-        └--www  此目录绑域名用  
-            └--index.php 入口文件  
 ```

@@ -20,10 +20,11 @@ define('COOKIE_SECURE', false);
 define('COOKIE_PATH', '/');
 
 //cookie http读取
-define('COOKIE_HTTPONLY', false);
+define('COOKIE_HTTPONLY', true);
 
 //cookie过期时间
 define('COOKIE_EXPIRE', 0);
+
 
 //session名称
 define('SESSION_COOKIE_NAME', 'SE');
@@ -31,8 +32,10 @@ define('SESSION_COOKIE_NAME', 'SE');
 //session过期时间
 define('SESSION_EXPIRE', 0);
 
+
 //安全key
 define('ENCRYPTION_KEY', 'weryi9878sdftgtbsdfh');
+
 
 //表单认证session名
 define('TOKEN_SESSION_NAME', '34efdre');
@@ -42,6 +45,7 @@ define('TOKEN_INPUT_NAME', 'fh40dfk98dkfje');
 
 //表单项认证过期时间
 define('TOKEN_EXPIRE', 3600);
+
 
 //认证方式，cookie,jwt,session
 define('AUTH_TYPE', 'session');
@@ -61,11 +65,25 @@ define('AUTH_JWT_MODE', 'header');
 //认证cookie存活时间
 define('AUTH_COOKIE_EXPIRE', 0);
 
+
 //默认语言环境
 define('LANG', 'zh_cn');
 
-//url 重写
-define('URL', ['mod_name' => ['controller_name/action_name' => '/{controller_key}/{action_key}']]);
+//URL重写
+define('URL', [
+    'mod_name' => [
+        'controller_name/action_name' => '/{controller_key}/{action_key}'
+    ]
+]);
 
 //分析器日志文件
 define('PROFILER_LOG_FILE', APP_DIR . 'log/profiler.log');
+
+//中间件设置
+define('MIDDLEWARE', [
+    'before' => [
+        'auth' => \middleware\Auth::class,
+        'authorize' => \middleware\Authorize::class
+    ],
+    'after' => []
+]);
