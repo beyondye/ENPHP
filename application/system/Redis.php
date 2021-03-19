@@ -29,7 +29,6 @@ class Redis extends \Redis
             exit($this->getLastError());
         }
 
-
         if ($config['password']) {
             if ($this->auth($config['password']) == false) {
                 echo "Redis '{$config['host']}' Password Incorrect. \n";
@@ -61,11 +60,9 @@ class Redis extends \Redis
      *
      * @return object
      */
-    public static function instance(string $service='default')
+    public static function instance(string $service = 'default')
     {
-
         static $ins = [];
-
         if (isset($ins[$service])) {
             return $ins[$service];
         }
@@ -77,9 +74,7 @@ class Redis extends \Redis
 
         $arguments = $config[$service];
         $ins[$service] = new self($arguments);
-
         return $ins[$service];
-
     }
 
 }

@@ -114,7 +114,6 @@ class Db
         $values = implode("','", array_values($data));
 
         $sql = "INSERT INTO {$table}({$keys}) VALUES('{$values}')";
-
         return $this->query($sql);
     }
 
@@ -132,7 +131,6 @@ class Db
         if (is_array($data)) {
 
             $data = $this->escape($data);
-
             $set = [];
             foreach ($data as $key => $value) {
                 $set[] = $key . "='{$value}'";
@@ -157,7 +155,6 @@ class Db
     public function replace(string $table, array $data)
     {
         $data = $this->escape($data);
-
         $keys = implode(',', array_keys($data));
         $values = implode("','", array_values($data));
 
@@ -224,7 +221,6 @@ class Db
      */
     private function sqlWhere($where = [])
     {
-
         if (is_string($where) && trim($where) != '') {
             return ' WHERE ' . $where;
         }
@@ -366,13 +362,10 @@ class Db
         }
 
         if (is_int($offset)) {
-            //$offset = $offset > 0 ? $offset : 1;
             return " LIMIT $offset ";
         }
 
         if (is_array($offset)) {
-            //$offset[0] = $offset[0] > 0 ? $offset[0] : 1;
-            //$offset[1] = $offset[1] > 0 ? $offset[1] : 1;
             return " LIMIT {$offset[0]},{$offset[1]} ";
         }
 
@@ -388,7 +381,6 @@ class Db
      */
     private function sqlGroupBy($fields)
     {
-
         if (is_string($fields) && trim($fields) != '') {
             return ' GROUP BY ' . $fields;
         }
@@ -415,7 +407,6 @@ class Db
      */
     private function sqlHaving($having)
     {
-
         if (is_string($having) && trim($having) != '') {
             return ' HAVING ' . $this->escape($having);
         }
@@ -433,7 +424,6 @@ class Db
         }
 
         return $sql;
-
     }
 
     //destruct

@@ -17,7 +17,6 @@ class Session
             session_start();
             $start = true;
         }
-
     }
 
 
@@ -52,7 +51,6 @@ class Session
     public static function get(string $name)
     {
         self::start();
-
         return isset($_SESSION[$name]) ? $_SESSION[$name] : null;
     }
 
@@ -66,7 +64,6 @@ class Session
     public static function flash(string $name)
     {
         $val = self::get($name);
-
         if ($val == null) {
             return null;
         }
@@ -104,7 +101,6 @@ class Session
     public static function regenerate()
     {
         self::start();
-
         return session_regenerate_id();
     }
 

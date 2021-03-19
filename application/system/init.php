@@ -14,9 +14,7 @@ if (CONST_FILE) {
 function load(string $class, $arguments = '', string $alias = '')
 {
     static $instances;
-
     $alias = $class . '_as_' . $alias;
-
     if (isset($instances[$alias])) {
         return $instances[$alias];
     }
@@ -26,7 +24,6 @@ function load(string $class, $arguments = '', string $alias = '')
     }
 
     $instances[$alias] = new $class($arguments);
-
     return $instances[$alias];
 }
 
@@ -50,7 +47,6 @@ function profiler(string $type, string $mark, string $desc = '')
 
 //autoload class
 spl_autoload_register(function ($class) {
-
     $file = str_replace('\\', DIRECTORY_SEPARATOR, $class);
     $file = APP_DIR . $file . EXT;
 

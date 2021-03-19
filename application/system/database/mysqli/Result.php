@@ -40,7 +40,6 @@ class Result
     public function result(string $type = 'object')
     {
         $rows = [];
-
         if ($type == 'array') {
             while ($row = $this->result->fetch_array(MYSQLI_ASSOC)) {   //MYSQLI_ASSOC
                 $rows[] = $row;
@@ -50,6 +49,7 @@ class Result
                 $rows[] = $row;
             }
         }
+
         $this->result->close();
 
         return $rows;

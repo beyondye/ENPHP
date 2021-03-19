@@ -59,19 +59,19 @@ class Validator
 
     /**
      * 设置错误信息
-     * @param $key
-     * @param $ruleKey
+     * @param string $key
+     * @param string $ruleKey
      */
-    private function setError($key, $ruleKey)
+    private function setError(string $key, string $ruleKey)
     {
         $label = $key;
         if (isset($this->rules[$key]['label'])) {
-            $label = is_array($this->rules[$key]['label'])?$this->rules[$key]['label'][0]:$this->rules[$key]['label'];
+            $label = is_array($this->rules[$key]['label']) ? $this->rules[$key]['label'][0] : $this->rules[$key]['label'];
         }
 
         $message = isset($this->template[$ruleKey]) ? $this->template[$ruleKey] : '<%label%>验证错误';
         if (isset($this->rules[$key]['message'])) {
-            $message = is_array($this->rules[$key]['message'])?$this->rules[$key]['message'][0]:$this->rules[$key]['message'];
+            $message = is_array($this->rules[$key]['message']) ? $this->rules[$key]['message'][0] : $this->rules[$key]['message'];
         }
 
         $limit = '';
@@ -93,19 +93,17 @@ class Validator
      * @param array $rules
      * @return $this
      */
-    public function setRules($rules = [])
+    public function setRules(array $rules = [])
     {
         if (empty($rules) || !is_array($rules)) {
             return $this;
         }
 
         foreach ($rules as $key => $val) {
-
             if (is_string($val)) {
                 $this->rules[$key] = $this->toArray($val);
                 continue;
             }
-
             $this->rules[$key] = $val;
         }
 
@@ -123,15 +121,12 @@ class Validator
 
         $funs = [];
         foreach ($parts as $rs) {
-
             $fun = explode(':', $rs);
             if (isset($fun[1])) {
                 $funs[$fun[0]] = explode(',', $fun[1]);
                 continue;
             }
-
             $funs[$fun[0]] = true;
-
         }
 
         return $funs;
@@ -154,9 +149,7 @@ class Validator
         }
 
         $rules = $this->rules;
-
         foreach ($data as $key => $val) {
-
             if (!isset($rules[$key])) {
                 continue;
             }
@@ -180,7 +173,6 @@ class Validator
 
         $pass = true;
         foreach ($data as $key => $val) {
-
             if (!isset($rules[$key])) {
                 continue;
             }
@@ -202,7 +194,7 @@ class Validator
 
             //提前regex验证
             if (isset($rules[$key]['regex'])) {
-                if (!self::regex($val,$rules[$key]['regex'])) {
+                if (!self::regex($val, $rules[$key]['regex'])) {
                     $pass = false;
                     $this->setError($key, 'regex');
                     continue;
@@ -242,11 +234,11 @@ class Validator
 
     /**
      * 自定义政策表达式
-     * @param $var
-     * @param $pattern
+     * @param string $var
+     * @param string $pattern
      * @return bool
      */
-    public static function regex($var, $pattern)
+    public static function regex(string $var, string $pattern)
     {
         return preg_match("{$pattern}", $var) > 0 ? true : false;
     }
@@ -254,7 +246,7 @@ class Validator
 
     /**
      * 是否数组
-     * @param $var
+     * @param mixed $var
      * @return bool
      */
     public static function array($var)
@@ -265,7 +257,7 @@ class Validator
 
     /**
      * 是否字符串
-     * @param $var
+     * @param mixed $var
      * @return bool
      */
     public static function string($var)
@@ -275,17 +267,17 @@ class Validator
 
     /**
      * 是否整型
-     * @param $var
+     * @param mixed $var
      * @return bool
      */
     public static function num($var)
     {
-        return preg_match("/^[\d]+$/", $var) > 0 ? true : false;
+        return preg_match('/^[\d]+$/', $var) > 0 ? true : false;
     }
 
     /**
      * 是否浮点数
-     * @param $var
+     * @param mixed $var
      * @return bool
      */
     public static function float($var)
@@ -296,7 +288,7 @@ class Validator
 
     /**
      * 不为空
-     * @param $var
+     * @param mixed $var
      * @return bool
      */
     public static function required($var)
@@ -398,7 +390,7 @@ class Validator
 
     /**
      * 是否有效的URL地址
-     * @param  string $var
+     * @param string $var
      * @return bool
      */
     public static function url(string $var)
@@ -424,7 +416,6 @@ class Validator
     public static function alphaNumChinese(string $var)
     {
         return preg_match('/^[a-z0-9\x{4e00}-\x{9fa5}]+$/u', $var) > 0 ? true : false;
-
     }
 
     /**
@@ -585,7 +576,6 @@ class Validator
      */
     public static function filter(string $var, ...$set)
     {
-
         if (in_array('trim', $set)) {
             $var = trim($var);
         }
@@ -604,5 +594,4 @@ class Validator
 
         return $var;
     }
-
 }

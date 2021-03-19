@@ -109,7 +109,6 @@ class Smtp
     {
         //$config=['server'=>'', 'username' => "", 'password' => "",'port' => 25]
         $config = array_merge(['port' => 25], $config);
-
         $this->server = $config['server'];
         $this->port = $config['port'];
 
@@ -156,13 +155,10 @@ class Smtp
     public function to($to)
     {
         if (isset($this->to)) {
-
             if (is_string($this->to)) {
-
                 $this->to = array($this->to);
                 $this->to[] = $to;
             } elseif (is_array($this->to)) {
-
                 $this->to[] = $to;
             }
         } else {
@@ -455,7 +451,6 @@ class Smtp
         }
         //创建socket资源
         $this->socket = socket_create(AF_INET, SOCK_STREAM, getprotobyname('tcp'));
-
         if (!$this->socket) {
             $this->errorMessage = socket_strerror(socket_last_error());
             return false;
@@ -483,6 +478,7 @@ class Smtp
             $this->socket->close();
             return true;
         }
+
         $this->errorMessage = "No resource can to be close";
         return false;
     }

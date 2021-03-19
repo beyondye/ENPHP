@@ -14,7 +14,6 @@ class Cookie
      */
     public static function get(string $name = null)
     {
-
         if ($name === null) {
             return $_COOKIE;
         }

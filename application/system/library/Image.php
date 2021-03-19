@@ -203,7 +203,6 @@ class Image
         }
 
         $loadfunc = 'imagecreatefrom' . $this->ext;
-
         if (!function_exists($loadfunc)) {
             $this->message = self::MSG[self::GD_FUCTION_NO_EXSIT];
             $this->code = self::GD_FUCTION_NO_EXSIT;
@@ -211,14 +210,12 @@ class Image
         }
 
         if (!file_exists($this->source)) {
-
             $this->message = self::MSG[self::SOURCE_NO_EXSIT];
             $this->code = self::SOURCE_NO_EXSIT;
             return false;
         }
 
         $source = $loadfunc($this->source);
-
         if ($source) {
             return $source;
         }
@@ -237,7 +234,6 @@ class Image
     {
         $ext_arr = explode('.', $this->source);
         $ext = strtolower(end($ext_arr));
-
         if (in_array($ext, self::ALLOW_EXTENSION)) {
             if ($ext == 'jpg') {
                 $ext = 'jpeg';
@@ -280,14 +276,12 @@ class Image
     public function resize()
     {
         $source = $this->create();
-
         if (!$source) {
             return false;
         }
 
         $width = imagesx($source);
         $height = imagesy($source);
-
         if (intval($this->width) > 0) {
             $this->height = $height / ($width / $this->width);
             $image = imagecreatetruecolor($this->width, $this->height);
@@ -340,7 +334,6 @@ class Image
         $sheight = imagesy($image);
 
         if ($this->markimg) {
-
             if (!file_exists($this->markimg)) {
                 $this->message = self::MSG[self::WATER_FILE_NO_EXSIT];
                 $this->code = self::WATER_FILE_NO_EXSIT;
@@ -350,9 +343,7 @@ class Image
             $markimg = imagecreatefrompng($this->markimg);
             $mwidth = imagesx($markimg);
             $mheight = imagesy($markimg);
-
             imagecopymerge($image, $markimg, $swidth - $mwidth, $sheight - $mheight, 0, 0, $mwidth, $mheight, 30);
-
             return imagedestroy($markimg);
         }
 

@@ -23,7 +23,6 @@ class Jwt extends AbstractAuth
             $jwt = isset($_GET[AUTH_NAME]) ? $_GET[AUTH_NAME] : false;
         }
 
-
         if ($jwt == false) {
             $this->code = self::ERR_DATA_NULL;
             $this->message = self::MSG[self::ERR_DATA_NULL];
@@ -31,7 +30,6 @@ class Jwt extends AbstractAuth
         }
 
         $jwt_arr = explode('.', $jwt);
-
         if (count($jwt_arr) != 3) {
             $this->code = self::ERR_ILLEGAL;
             $this->message = self::MSG[self::ERR_ILLEGAL];
@@ -46,7 +44,6 @@ class Jwt extends AbstractAuth
 
             $now = time();
             $payload_decode_data = json_decode($this->base64url_decode($payload));
-
             if (intval($payload_decode_data->exp) < $now) {
                 $this->code = self::ERR_EXP;
                 $this->message = self::MSG[self::ERR_EXP];
@@ -82,7 +79,6 @@ class Jwt extends AbstractAuth
         }
 
         $decode = $this->base64url_decode($this->_data);
-
         if ($assoc) {
             $data = json_decode($decode, $assoc);
             return $data['data'];
@@ -113,12 +109,9 @@ class Jwt extends AbstractAuth
     public function create(array $data = [])
     {
         $header = $this->base64url_encode(json_encode(['alg' => 'HS256', 'typ' => 'JWT']));
-
         $this->_id = $jwt_id = uniqid('', true);
-
         $expire = time() + AUTH_JWT_EXPIRE;
         $payload = $this->base64url_encode(json_encode(['jti' => $jwt_id, 'exp' => $expire, 'data' => $data]));
-
         $this->_data = $payload;
 
         $signature = hash_hmac('sha256', "{$header}.{$payload}", AUTH_SECRET);

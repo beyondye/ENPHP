@@ -148,7 +148,6 @@ class Upload
         }
 
         $ext = $this->getExt();
-
         if (in_array($ext, $this->extension)) {
             return true;
         }
@@ -192,7 +191,6 @@ class Upload
             $this->message = self::ERROR_MSG[self::DATA_NO_POST];
             return false;
         }
-
 
         if (!$this->createDir($this->dir)) {
             $this->code = self::MKDIR_ERR;

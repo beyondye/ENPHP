@@ -171,7 +171,6 @@ class Grid
      */
     public function setFilter($filters = [])
     {
-
         foreach ($filters as $val) {
             $this->filters[] = $val;
         }
@@ -199,11 +198,9 @@ class Grid
      */
     public function setTool($tools = [], $group = self::TOOL_DEFAULT_GROUP)
     {
-
         foreach ($tools as $val) {
             $this->tools[$group][] = $val;
         }
-
         return $this;
     }
 

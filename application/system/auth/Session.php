@@ -14,7 +14,6 @@ class Session extends AbstractAuth
     public function check()
     {
         $session = \system\Session::get(AUTH_NAME);
-
         if ($session == null) {
             $this->code = self::ERR_DATA_NULL;
             $this->message = self::MSG[self::ERR_DATA_NULL];

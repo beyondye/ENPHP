@@ -5,7 +5,6 @@ namespace system;
 
 class Input
 {
-
     /**
      * 获取查询字符串,不存在返回null，不带参数返回全部
      *
@@ -17,17 +16,14 @@ class Input
      */
     public static function get($name = null, $default = null)
     {
-
         if ($name === null) {
             return $_GET;
         }
 
         if ($name) {
-
             if (isset($_GET[$name]) && $_GET[$name] != '') {
                 return $_GET[$name];
             }
-
             return $default;
         }
 
@@ -52,7 +48,6 @@ class Input
      */
     public static function referer()
     {
-
         return $_SERVER['HTTP_REFERER'];
     }
 
@@ -77,13 +72,11 @@ class Input
     public static function post($name = null)
     {
         $func = function ($val) {
-
             if (is_array($val)) {
                 return array_map(function ($v) {
                     return trim($v);
                 }, $val);
             }
-
             return trim($val);
         };
 
@@ -105,7 +98,6 @@ class Input
      */
     public static function isAjax()
     {
-
         if (isset($_SERVER['HTTP_X_REQUESTED_WITH'])) {
             return ($_SERVER['HTTP_X_REQUESTED_WITH'] === 'XMLHttpRequest');
         } else {
@@ -120,7 +112,6 @@ class Input
      */
     public static function ip()
     {
-
         if (getenv('HTTP_CLIENT_IP')) {
             return getenv('HTTP_CLIENT_IP');
         }
@@ -146,6 +137,11 @@ class Input
         }
 
         return '0.0.0.0';
+    }
+
+    public static function host()
+    {
+        return $_SERVER['HTTP_HOST'];
     }
 
 }

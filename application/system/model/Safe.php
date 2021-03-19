@@ -6,14 +6,12 @@ use system\Validator;
 
 class Safe
 {
-
     /**
      * 表结构
      *
      * @var array
      */
     public $schema = [];
-
 
     /**
      * 验证的不合法字段
@@ -66,7 +64,6 @@ class Safe
 
         $rules = [];
         foreach ($this->schema as $key => $val) {
-
             if (!key_exists('rules', $this->schema[$key])) {
                 continue;
             }
@@ -79,9 +76,7 @@ class Safe
             }
         }
 
-
         $vali = new Validator();
-
         if ($vali->setRules($rules)->validate($data)) {
             $this->data = $vali->data;
             return true;
@@ -90,7 +85,6 @@ class Safe
         $this->illegalFields = $vali->error;
 
         return false;
-
     }
 
     /**
@@ -134,7 +128,6 @@ class Safe
      */
     public function merge(array $data, array $without = [])
     {
-
         if (!is_array($data)) {
             return false;
         }
@@ -148,7 +141,6 @@ class Safe
 
         $given = $this->clear($data);
         $merge = array_merge($fields, $given);
-
         foreach ($without as $rs) {
             if (isset($merge[$rs])) {
                 unset($merge[$rs]);
@@ -182,6 +174,4 @@ class Safe
 
         return $given;
     }
-
-
 }

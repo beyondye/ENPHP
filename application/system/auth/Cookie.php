@@ -16,7 +16,6 @@ class Cookie extends AbstractAuth
     public function check()
     {
         $cookie = isset($_COOKIE[AUTH_NAME]) ? $_COOKIE[AUTH_NAME] : false;
-
         if ($cookie == false) {
             $this->code = self::ERR_DATA_NULL;
             $this->message = self::MSG[self::ERR_DATA_NULL];
@@ -24,7 +23,6 @@ class Cookie extends AbstractAuth
         }
 
         $arr = explode('.', $cookie);
-
         if (count($arr) != 2) {
             $this->code = self::ERR_ILLEGAL;
             $this->message = self::MSG[self::ERR_ILLEGAL];
@@ -33,14 +31,12 @@ class Cookie extends AbstractAuth
 
         $payload = $arr[0];
         $signature = $arr[1];
-
         if (hash_hmac('sha256', $payload, AUTH_SECRET) == $signature) {
 
             $payload_decode_data = json_decode(base64_decode($payload));
 
             $this->_id = $payload_decode_data->id;
             $this->_data = $payload;
-
             $this->code = self::VERIFIED_SUCCESS;
             $this->message = self::MSG[self::VERIFIED_SUCCESS];
 
@@ -51,7 +47,6 @@ class Cookie extends AbstractAuth
         $this->message = self::MSG[self::ERR_ILLEGAL];
 
         return false;
-
     }
 
     /**
@@ -68,7 +63,6 @@ class Cookie extends AbstractAuth
         }
 
         $decode = base64_decode($this->_data);
-
         if ($assoc) {
             $data = json_decode($decode, $assoc);
             return $data['data'];
@@ -125,7 +119,6 @@ class Cookie extends AbstractAuth
     public function remove()
     {
         return setcookie(AUTH_NAME, '', 1, COOKIE_PATH, COOKIE_DOMAIN, COOKIE_SECURE, COOKIE_HTTPONLY);
-
     }
 
 }

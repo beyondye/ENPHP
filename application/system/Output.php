@@ -94,24 +94,19 @@ class Output
         include APP_DIR . 'template/' . TEMPLATE . '/' . $_view . EXT;
 
         if ($_return) {
-
             $_buffer = ob_get_contents();
             ob_end_clean();
-
             if ($_compress) {
                 return self::compress($_buffer);
             }
-
             return $_buffer;
         }
 
         if (ob_get_level() > 2) {
             ob_end_flush();
         } else {
-
             $_content = ob_get_contents();
             ob_end_clean();
-
             if ($_compress) {
                 $_content = self::compress($_content);
             }

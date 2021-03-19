@@ -5,7 +5,6 @@ namespace system;
 
 class Middleware
 {
-
     /**
      * 放置运行之前
      */
@@ -21,7 +20,6 @@ class Middleware
      */
     public static function after()
     {
-
         foreach (MIDDLEWARE['after'] as $key => $value) {
             (new $value())->handle();
         }

@@ -133,7 +133,6 @@ class Redis extends AbstractCache
         if ($this->tags) {
             $tags = $this->tags;
             $this->tags = [];
-
             foreach ($tags as $tag) {
                 $tag = $tag . '__private';
                 $this->redis->sAdd($tag, $key);
@@ -152,23 +151,19 @@ class Redis extends AbstractCache
     private function getTags(string $key)
     {
         if ($this->tags) {
-
             $tags = $this->tags;
             $this->tags = [];
-
             foreach ($tags as $tag) {
                 $tag = $tag . '__private';
                 if ($this->redis->sIsMember($tag, $key)) {
                     return true;
                 }
-
             }
 
             return false;
         }
 
         return true;
-
     }
 
     /**
@@ -184,19 +179,16 @@ class Redis extends AbstractCache
             $this->tags = [];
 
             foreach ($tags as $tag) {
-
                 $tag = $tag . '__private';
                 $data = $this->redis->sMembers($tag);
-
                 if (is_array($data)) {
                     foreach ($data as $key) {
                         $this->redis->delete($key);
                     }
                 }
-
                 $this->redis->delete($tag);
-
             }
+
             return true;
         }
 

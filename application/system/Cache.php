@@ -15,7 +15,6 @@ class Cache
     public static function instance(string $service = 'default')
     {
         static $ins = [];
-
         if (isset($ins[$service])) {
             return $ins[$service];
         }
@@ -26,16 +25,10 @@ class Cache
         }
 
         $arguments = $config[$service];
-
-
         if ($arguments['driver'] == 'file') {
-
             $ins[$service] = new cache\File($arguments);
-
         } else if ($arguments['driver'] == 'redis') {
-
             $ins[$service] = new cache\Redis($arguments);
-
         }
 
         return $ins[$service];

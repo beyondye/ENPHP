@@ -23,7 +23,6 @@ class Helper
         $next = $page + 1;
         $html = '';
         $start = 1;
-
         $info = '<span class="info">共 ' . $total . ' 条记录</span>';
         $url = urldecode($url);
 
@@ -33,11 +32,9 @@ class Helper
             return '<div class="pager">' . $info . '</div>';
         }
 
-
         if ($count <= $visible) {
             $end = $count;
         } else {
-
             if ($page <= ceil($visible / 2)) {
                 $end = $visible;
             } else if ($page > ($count - floor($visible / 2))) {
@@ -96,9 +93,7 @@ class Helper
         global $vars;
 
         $anchor = $anchor == '' ? '' : '#' . $anchor;
-
         $default = [CONTROLLER_KEY_NAME => $vars['controller'], ACTION_KEY_NAME => $vars['action']];
-
         $keys = $param = array_merge($default, $param);
         $key = $param[CONTROLLER_KEY_NAME] . '/' . $param[ACTION_KEY_NAME];
 
@@ -110,7 +105,6 @@ class Helper
         }
 
         if (isset(URL[MODULE]) && array_key_exists($key, URL[MODULE])) {
-
             $temp = URL[MODULE][$key];
             $url = '';
             foreach ($param as $k => $v) {

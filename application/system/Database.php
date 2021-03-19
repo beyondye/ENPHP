@@ -15,7 +15,6 @@ class Database
     public static function instance(string $service = 'default')
     {
         static $ins = [];
-
         if (isset($ins[$service])) {
             return $ins[$service];
         }
@@ -26,11 +25,8 @@ class Database
         }
 
         $arguments = $config[$service];
-
         if ($arguments['driver'] == 'mysqli') {
-
             $ins[$service] = new database\mysqli\Db($arguments);
-
         }
 
         return $ins[$service];

@@ -30,14 +30,12 @@ class Html
     private static function tag(array $param)
     {
         $param = array_merge(['name' => '', 'text' => '', 'elements' => null, 'properties' => []], $param);
-
         if (in_array($param['name'], self::NO_END_TAGS)) {
             return '<' . $param['name'] . self::properties($param['properties']) . '/>';
         }
 
         $start = '';
         $end = '';
-
         if ($param['name']) {
             $start = '<' . $param['name'] . self::properties($param['properties']) . '>';
             $end = '</' . $param['name'] . '>';
@@ -79,7 +77,6 @@ class Html
     public static function tags(array $param)
     {
         $keys = array_keys($param);
-
         if (is_int($keys[0])) {
             return self::elements($param);
         }
@@ -106,7 +103,6 @@ class Html
     private static function select(array $param)
     {
         $param = array_merge(['name' => '', 'properties' => [], 'default' => [], 'model' => [], 'options' => [], 'selected' => ''], $param);
-
         $options = '';
         if ($param['default']) {
             $options .= "<option value=\"{$param['default']['value']}\">{$param['default']['literal']}</option>";
@@ -125,6 +121,7 @@ class Html
                     $options .= "<option value=\"{$rs[$value]}\">{$rs[$literal]}</option>";
                 }
             }
+
         }
 
         return '<select' . self::properties($param['properties']) . '>' . $options . '</select>';
@@ -140,7 +137,6 @@ class Html
     private static function input(array $param)
     {
         $param['properties'] = array_merge(['type' => 'text'], $param['properties']);
-
         return self::tag($param);
     }
 
@@ -155,9 +151,7 @@ class Html
     {
         $str = '';
         foreach ($elements as $value) {
-
             $name = isset($value['name']) ? $value['name'] : '';
-
             if (in_array($name, self::SPECIAL_TAGS)) {
                 $str .= self::$name($value);
             } else {
@@ -183,7 +177,6 @@ class Html
             $str .= ' ' . $key . '="' . $value . '"';
             //}
         }
-
         return $str;
     }
 

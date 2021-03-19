@@ -15,13 +15,10 @@ class Profiler
     public static function instance()
     {
         static $ins = null;
-
         if ($ins) {
             return $ins;
         }
-
         $ins = new self();
-
         return $ins;
     }
 
@@ -45,23 +42,18 @@ class Profiler
      */
     public function benchmark(string $mark, string $desc = '')
     {
-
         static $marks = [];
 
         if (!isset($marks[$mark])) {
             $marks[$mark]['start'] = self::microtime();
             $marks[$mark]['desc'] = $desc;
         } else {
-
             $end = self::microtime();
             $time = round(($end - $marks[$mark]['start']) * 1000, 4);
-
             $this->marks[$mark][] = " {$marks[$mark]['desc']} \n ms: {$time} \n ";
-
             unset($marks[$mark]);
 
         }
-
     }
 
     /**
@@ -85,20 +77,17 @@ class Profiler
      */
     public function __destruct()
     {
-
         $this->memory('Last Memory Usage');
 
         $content = "\n " . $_SERVER['PHP_SELF'] . '?' . $_SERVER['QUERY_STRING'] . ' [' . date('Y-m-d H:i:s', time()) . "] ---------------\n";
 
         foreach ($this->marks as $key => $val) {
-
             $content = $content . "\n # " . ucfirst($key) . " #";
             if (is_array($val)) {
                 foreach ($val as $k => $v) {
                     $content = $content . "\n" . $v;
                 }
             }
-
         }
 
         file_put_contents(PROFILER_LOG_FILE, "{$content}\n\n", FILE_APPEND | LOCK_EX);

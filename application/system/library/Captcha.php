@@ -172,11 +172,9 @@ class Captcha
     {
         $this->image = imageCreate($this->width, $this->height);
         $this->back = $this->getColor($this->bgcolor);
-
         imageFilledRectangle($this->image, 0, 0, $this->width, $this->height, $this->back);
 
         $size = $this->width / $this->charLen - 4;
-
         if ($size > $this->height) {
             $size = $this->height;
         }
@@ -184,7 +182,6 @@ class Captcha
         $left = ($this->width - $this->charLen * ($size + $size / 10)) / $size + 5;
         $code = '';
         for ($i = 0; $i < $this->charLen; $i++) {
-
             $randKey = rand(0, count($this->arrChr) - 1);
             $randText = $this->arrChr[$randKey];
             $code .= $randText;
@@ -192,7 +189,6 @@ class Captcha
             $font = $this->fontPath . '/' . rand(1, 5) . ".ttf";
             $randsize = rand($size - $size / 10, $size + $size / 10);
             $location = $left + ($i * $size + $size / 10);
-
             imagettftext($this->image, $randsize, rand(-18, 18), $location, rand($size - $size / 10, $size + $size / 10) + 2, $textColor, $font, $randText);
         }
 

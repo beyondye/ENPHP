@@ -63,7 +63,6 @@ class File extends AbstractCache
     public function set(string $key, $value = '', int $expire = 0)
     {
         $this->setTags($key);
-
         $file = $this->route($key);
 
         if (!file_exists($file)) {
@@ -96,19 +95,15 @@ class File extends AbstractCache
     public function increment(string $key, int $value = 0)
     {
         $item = $this->get($key);
-
         if ($item === false) {
-
             $result = $this->set($key, $value);
             if ($result === false) {
                 return $result;
             }
-
             return $value;
         }
 
         $item = $item + $value;
-
         $result = $this->set($key, $item);
         if ($result === false) {
             return $result;
@@ -128,19 +123,15 @@ class File extends AbstractCache
     public function decrement(string $key, int $value = 0)
     {
         $item = $this->get($key);
-
         if ($item === false) {
-
             $result = $this->set($key, $value);
             if ($result === false) {
                 return $result;
             }
-
             return $value;
         }
 
         $item = $item - $value;
-
         $result = $this->set($key, $item);
         if ($result === false) {
             return $result;
@@ -158,18 +149,14 @@ class File extends AbstractCache
      */
     public function delete($key)
     {
-
         if (is_array($key)) {
             foreach ($key as $k) {
                 $this->delete($k);
             }
-
             return true;
         }
 
-
         $file = $this->route($key);
-
         if (file_exists($file)) {
             return unlink($file);
         }
@@ -230,7 +217,6 @@ class File extends AbstractCache
         }
 
         $data = file_get_contents($file);
-
         if ($data) {
             $data = unserialize($data);
             if ($this->expire($data) === true) {
@@ -278,14 +264,13 @@ class File extends AbstractCache
     private function setTags(string $key)
     {
         if ($this->tags) {
+
             $tags = $this->tags;
             $this->tags = [];
-
             foreach ($tags as $tag) {
 
                 $tag = $tag . '__private';
                 $data = $this->get($tag);
-
                 if ($data === false) {
                     $data = [];
                     $data[] = $key;
@@ -296,7 +281,6 @@ class File extends AbstractCache
                     $data[] = $key;
                     $this->set($tag, $data);
                 }
-
             }
         }
 
@@ -319,18 +303,15 @@ class File extends AbstractCache
             foreach ($tags as $tag) {
                 $tag = $tag . '__private';
                 $data = $this->get($tag);
-
                 if ($data && in_array($key, $data)) {
                     return true;
                 }
-
             }
 
             return false;
         }
 
         return true;
-
     }
 
     /**
@@ -349,17 +330,15 @@ class File extends AbstractCache
 
                 $tag = $tag . '__private';
                 $data = $this->get($tag);
-
                 if (is_array($data)) {
-
                     foreach ($data as $key) {
                         $this->delete($key);
                     }
                 }
 
                 $this->delete($tag);
-
             }
+
             return true;
         }
 
