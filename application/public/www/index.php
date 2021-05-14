@@ -13,10 +13,10 @@ define('ENVIRONMENT', 'development');
 define('PROFILER', true);
 
 //设置controller模块
-define('MODULE', 'account');
+define('MODULE', 'www');
 
 //设置模板
-define('TEMPLATE', 'account');
+define('TEMPLATE', 'www');
 
 //应用程序目录
 define('APP_DIR', realpath('../../') . DIRECTORY_SEPARATOR);
