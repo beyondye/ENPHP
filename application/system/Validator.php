@@ -40,12 +40,12 @@ class Validator
         'in' => '<%label%>只能是<%limit%>其中之一',
         'nin' => '<%label%>不能是<%limit%>其中之一',
         'same' => '<%label%>和<%limit%>必须一致',
-        'mobile' => '<%label%>错误',
-        'email' => '<%label%>错误',
-        'id' => '<%label%>错误',
-        'ip4' => '<%label%>错误',
-        'ip6' => '<%label%>错误',
-        'url' => '<%label%>错误',
+        'mobile' => '<%label%>格式错误',
+        'email' => '<%label%>格式错误',
+        'id' => '<%label%>格式错误',
+        'ip4' => '<%label%>格式错误',
+        'ip6' => '<%label%>格式错误',
+        'url' => '<%label%>格式错误',
         'array' => '<%label%>必须是数组',
         'float' => '<%label%>必须是浮点数',
         'num' => '<%label%>必须是数字',
@@ -69,7 +69,7 @@ class Validator
             $label = is_array($this->rules[$key]['label']) ? $this->rules[$key]['label'][0] : $this->rules[$key]['label'];
         }
 
-        $message = isset($this->template[$ruleKey]) ? $this->template[$ruleKey] : '<%label%>验证错误';
+        $message = isset($this->template[$ruleKey]) ? $this->template[$ruleKey] : '<%label%><%value%>验证错误';
         if (isset($this->rules[$key]['message'])) {
             $message = is_array($this->rules[$key]['message']) ? $this->rules[$key]['message'][0] : $this->rules[$key]['message'];
         }
@@ -84,7 +84,7 @@ class Validator
             }
         }
 
-        $value = $this->data[$key];
+        $value = is_string($this->data[$key]) ? $this->data[$key] : '类型';
         $this->error[$key] = str_replace(['<%label%>', '<%value%>', '<%limit%>'], [$label, $value, $limit], $message);
     }
 
@@ -194,6 +194,13 @@ class Validator
 
             //提前regex验证
             if (isset($rules[$key]['regex'])) {
+
+                if (!is_string($val)) {
+                    $pass = false;
+                    $this->setError($key, 'regex');
+                    continue;
+                }
+
                 if (!self::regex($val, $rules[$key]['regex'])) {
                     $pass = false;
                     $this->setError($key, 'regex');
