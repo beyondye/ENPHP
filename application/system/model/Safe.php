@@ -14,6 +14,12 @@ class Safe
     public $schema = [];
 
     /**
+     * 验证规则
+     * @var array
+     */
+    public $rules = [];
+
+    /**
      * 验证的不合法字段
      *
      * @var array
@@ -50,6 +56,33 @@ class Safe
     public function __construct($schema)
     {
         $this->schema = $schema;
+        $this->rules = $this->makeRules($schema);
+    }
+
+
+    /**
+     * 生成结构化rules
+     *
+     * @param array $schema
+     * @return array
+     */
+    private function makeRules(array $schema)
+    {
+        $rules = [];
+        foreach ($schema as $key => $val) {
+            if (!is_array($schema[$key]) || !key_exists('rules', $schema[$key])) {
+                continue;
+            }
+
+            $rules[$key] = $schema[$key]['rules'];
+            if (is_string($rules[$key])) {
+                $rules[$key] = $rules[$key] . '|label:' . $schema[$key]['label'];
+            } else {
+                $rules[$key]['label'] = $schema[$key]['label'];
+            }
+        }
+
+        return $rules;
     }
 
     /**
@@ -62,22 +95,8 @@ class Safe
     public function validate(array $data)
     {
 
-        $rules = [];
-        foreach ($this->schema as $key => $val) {
-            if (!key_exists('rules', $this->schema[$key])) {
-                continue;
-            }
-
-            $rules[$key] = $this->schema[$key]['rules'];
-            if (is_string($rules[$key])) {
-                $rules[$key] = $rules[$key] . '|label:' . $this->schema[$key]['label'];
-            } else {
-                $rules[$key]['label'] = $this->schema[$key]['label'];
-            }
-        }
-
         $vali = new Validator();
-        if ($vali->setRules($rules)->validate($data)) {
+        if ($vali->setRules($this->rules)->validate($data)) {
             $this->data = $vali->data;
             return true;
         }
@@ -110,7 +129,7 @@ class Safe
         $pass = true;
         foreach ($required as $rs) {
             if (!key_exists($rs, $data)) {
-                $this->incompleteFields[$rs] = '缺少字段 ['.$this->schema[$rs]['label'].']';
+                $this->incompleteFields[$rs] = '缺少字段 [' . $this->schema[$rs]['label'] . ']';
                 $pass = false;
             }
         }

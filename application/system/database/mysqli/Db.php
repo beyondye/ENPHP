@@ -184,7 +184,7 @@ class Db
      *
      * @return object array
      */
-    public function select($table, $condition = ['where' => [], 'groupby' => [], 'having' => [], 'fields' => [], 'orderby' => [], 'limit' => []])
+    public function select(string $table, array $condition = ['where' => [], 'groupby' => [], 'having' => [], 'fields' => [], 'orderby' => [], 'limit' => []])
     {
         $default = ['where' => [], 'fields' => [], 'groupby' => [], 'having' => [], 'orderby' => [], 'limit' => []];
         $condition = array_merge($default, $condition);
@@ -227,12 +227,39 @@ class Db
 
         $sql = '';
         if (is_array($where) && count($where) > 0) {
-            $where = $this->escape($where);
             $sql .= ' WHERE ';
             $i = 0;
-            foreach ($where as $key => $value) {
-                $compare = $this->sqlCompare($key, $value);
-                $sql .= ($i == 0 ? $compare : ' AND ' . $compare);
+            foreach ($where as $rs) {
+
+                if (!is_array($rs) || count($rs) != 3 || $rs[2] == '') {
+                    continue;
+                }
+
+                if (!in_array(strtolower($rs[1]), ['=', '>', '<', '>=', '<=', '<>', '!=', 'in', 'like', 'between'])) {
+                    continue;
+                }
+
+                $rs[2] = $this->escape($rs[2]);
+
+                $op = strtolower($rs[1]);
+                if ($op == 'in') {
+                    $sub = "{$rs[0]} IN ({$rs[2]})";
+                } elseif ($op == 'like') {
+                    $sub = "{$rs[0]} LIKE '{$rs[2]}'";
+                } elseif ($op == 'between') {
+
+                    $bet = explode(',', $rs[2]);
+                    //var_dump($bet);
+                    if (count($bet) != 2) {
+                        continue;
+                    }
+                    $sub = "{$rs[0]} BETWEEN '{$bet[0]}' AND '{$bet[1]}'";
+
+                } else {
+                    $sub = $rs[0] . $rs[1] . "'{$rs[2]}'";
+                }
+
+                $sql .= ($i == 0 ? $sub : ' AND ' . $sub);
                 $i++;
             }
         }

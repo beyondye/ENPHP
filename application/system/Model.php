@@ -86,7 +86,7 @@ class Model
      */
     public function count($where = [])
     {
-        return DB::instance($this->RDB)->select($this->table, ['where' => $where, 'fields' => ' COUNT(*) AS ct '])->row()->ct;
+        return DB::instance($this->RDB)->select($this->table, ['where' => $where, 'fields' => " COUNT({$this->primary}) AS ct "])->row()->ct;
     }
 
     /**
@@ -196,10 +196,10 @@ class Model
         if (is_array($primary)) {
             $data = $this->select(['where' => $primary, 'fields' => $fields, 'limit' => 1]);
         } else {
-            $data = $this->select(['where' => [$this->primary => $primary], 'fields' => $fields, 'limit' => 1]);
+            $data = $this->select(['where' => [[$this->primary, '=', $primary]], 'fields' => $fields, 'limit' => 1]);
         }
 
-        return isset($data[0]) ? $data[0] : null;
+        return $data[0] ?? null;
     }
 
 }
