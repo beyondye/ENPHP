@@ -127,7 +127,7 @@ class Model
     public function delete($where = [])
     {
         if (is_numeric($where)) {
-            $where = [$this->primary => $where];
+            $where = [$this->primary,'=', $where];
         }
 
         return DB::instance($this->WDB)->delete($this->table, $where);
@@ -147,7 +147,7 @@ class Model
     public function update($data, $where = [])
     {
         if (is_numeric($where)) {
-            $where = [$this->primary => $where];
+            $where = [[$this->primary, '=', $where]];
         }
 
         return DB::instance($this->WDB)->update($this->table, $data, $where);
