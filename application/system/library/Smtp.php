@@ -2,6 +2,8 @@
 
 namespace system\library;
 
+use Exception;
+
 /**
  * SMTP邮件发送, 支持发送纯文本邮件和HTML格式的邮件
  *
@@ -418,7 +420,7 @@ class Smtp
                 $this->errorMessage = "Error:" . socket_strerror(socket_last_error());
                 return false;
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->errorMessage = "Error:" . $e->getMessage();
         }
     }
@@ -475,7 +477,7 @@ class Smtp
     private function close()
     {
         if (isset($this->socket) && is_object($this->socket)) {
-            $this->socket->close();
+            socket_close($this->socket);
             return true;
         }
 
