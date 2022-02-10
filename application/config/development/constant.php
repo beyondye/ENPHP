@@ -70,11 +70,17 @@ define('AUTH_COOKIE_EXPIRE', 0);
 define('LANG', 'zh_cn');
 
 //URL重写
-define('URL', [
-    'mod_name' => [
-        'controller_name/action_name' => '/{controller_key}/{action_key}'
+const URL = [
+    'www/news/category' => [
+        '/' => '/news.html',
+        '/page' => '/news_{page}.html',
+        '/letter' => '/news_{letter}.html',
+        '/letter/page' => '/news_{letter}_{page}.html',
+    ],
+    'www/news/detail' => [
+        '/id' => '/news/{id}.html'
     ]
-]);
+];
 
 //分析器日志文件
 define('PROFILER_LOG_FILE', APP_DIR . 'log/profiler.log');

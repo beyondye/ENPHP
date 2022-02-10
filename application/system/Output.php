@@ -192,4 +192,43 @@ class Output
         echo $_content;
     }
 
+    /**
+     * 生成url链接
+     *
+     * @param string $action
+     * @param array $param
+     * @param string $anchor
+     *
+     * @return string
+     */
+    public static function url(string $action = '', array $param = [], string $anchor = '')
+    {
+        $anchor = $anchor == '' ? '' : '#' . $anchor;
+
+        $key = '/';
+        if ($param) {
+            $key = '/'.join('/', array_keys($param));
+        }
+
+        if (array_key_exists($key, URL[$action])) {
+            $temp = URL[$action][$key];
+            $url = '';
+            foreach ($param as $k => $v) {
+                if ($url) {
+                    $url = str_replace('{' . $k . '}', $v, $url);
+                } else {
+                    $url = str_replace('{' . $k . '}', $v, $temp);
+                }
+            }
+
+            if ($url == '') {
+                $url = $temp;
+            }
+
+            return $url . $anchor;
+        }
+
+        return $anchor;
+    }
+
 }
