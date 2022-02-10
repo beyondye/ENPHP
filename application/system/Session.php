@@ -51,7 +51,7 @@ class Session
     public static function get(string $name)
     {
         self::start();
-        return isset($_SESSION[$name]) ? $_SESSION[$name] : null;
+        return $_SESSION[$name] ?? null;
     }
 
     /**

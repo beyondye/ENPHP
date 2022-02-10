@@ -115,9 +115,6 @@ class Safe
      */
     public function complete(array $data)
     {
-        if (!is_array($data)) {
-            return false;
-        }
 
         $required = [];
         foreach ($this->schema as $key => $value) {
@@ -147,9 +144,6 @@ class Safe
      */
     public function merge(array $data, array $without = [])
     {
-        if (!is_array($data)) {
-            return false;
-        }
 
         $fields = [];
         foreach ($this->schema as $key => $value) {
@@ -178,9 +172,6 @@ class Safe
      */
     public function clear(array $data)
     {
-        if (!is_array($data)) {
-            return false;
-        }
 
         $given = [];
         foreach ($data as $key => $value) {

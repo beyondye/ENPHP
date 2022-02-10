@@ -18,9 +18,9 @@ class Jwt extends AbstractAuth
 
         if (AUTH_JWT_MODE == 'header') {
             $header_name = 'HTTP_' . strtoupper(AUTH_NAME);
-            $jwt = isset($_SERVER[$header_name]) ? $_SERVER[$header_name] : false;
+            $jwt = $_SERVER[$header_name] ?? false;
         } else if (AUTH_JWT_MODE == 'url') {
-            $jwt = isset($_GET[AUTH_NAME]) ? $_GET[AUTH_NAME] : false;
+            $jwt = $_GET[AUTH_NAME] ?? false;
         }
 
         if ($jwt == false) {

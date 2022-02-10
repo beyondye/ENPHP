@@ -18,7 +18,7 @@ class Cookie
             return $_COOKIE;
         }
 
-        return isset($_COOKIE[$name]) ? $_COOKIE[$name] : null;
+        return $_COOKIE[$name] ?? null;
     }
 
     /**
@@ -69,9 +69,6 @@ class Cookie
                                 bool $secure = COOKIE_SECURE,
                                 bool $httponly = COOKIE_HTTPONLY)
     {
-        if (!is_array($data)) {
-            return false;
-        }
 
         $expire = intval($expire) == 0 ? 0 : time() + intval($expire);
 
@@ -85,11 +82,11 @@ class Cookie
     /**
      * 删除一个cookie
      *
-     * @param string $name
+     * @param string|array $name
      *
      * @return bool
      */
-    public static function delete(string $name)
+    public static function delete($name)
     {
         if (is_array($name)) {
             foreach ($name as $k => $v) {

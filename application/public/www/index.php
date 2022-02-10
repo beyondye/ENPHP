@@ -7,16 +7,16 @@ date_default_timezone_set('PRC');
 
 //设置运行环境
 // test,production,development
-define('ENVIRONMENT', 'development');
+const ENVIRONMENT = 'development';
 
 //开启运行分析
-define('PROFILER', true);
+const PROFILER = true;
 
 //设置controller模块
-define('MODULE', 'www');
+const MODULE = 'www';
 
 //设置模板
-define('TEMPLATE', 'www');
+const TEMPLATE = 'www';
 
 //应用程序目录
 define('APP_DIR', realpath('../../') . DIRECTORY_SEPARATOR);
@@ -28,7 +28,7 @@ define('SYS_DIR', realpath('../../system') . DIRECTORY_SEPARATOR);
 define('ENTRY', $_SERVER['PHP_SELF']);
 
 //常量配置
-define('CONST_FILE', '');
+const CONST_FILE = '';
 
 //初始脚本
 require_once SYS_DIR . 'init.php';

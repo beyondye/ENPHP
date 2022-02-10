@@ -69,7 +69,7 @@ class Validator
             $label = is_array($this->rules[$key]['label']) ? $this->rules[$key]['label'][0] : $this->rules[$key]['label'];
         }
 
-        $message = isset($this->template[$ruleKey]) ? $this->template[$ruleKey] : '<%label%><%value%>验证错误';
+        $message = $this->template[$ruleKey] ?? '<%label%><%value%>验证错误';
         if (isset($this->rules[$key]['message'])) {
             $message = is_array($this->rules[$key]['message']) ? $this->rules[$key]['message'][0] : $this->rules[$key]['message'];
         }
@@ -140,7 +140,7 @@ class Validator
      */
     public function validate(array $data)
     {
-        if (!is_array($data) || empty($data)) {
+        if (empty($data)) {
             return true;
         }
 
@@ -216,7 +216,7 @@ class Validator
                 }
 
                 if ($subkey == 'same') {
-                    $val = isset($data[$rules[$key]['same']]) ? $data[$rules[$key]['same']] : $rules[$key]['same'][0];
+                    $val = $data[$rules[$key]['same']] ?? $rules[$key]['same'][0];
                 }
 
                 $param = [];
@@ -247,7 +247,7 @@ class Validator
      */
     public static function regex(string $var, string $pattern)
     {
-        return preg_match("{$pattern}", $var) > 0 ? true : false;
+        return preg_match("{$pattern}", $var) > 0;
     }
 
 
@@ -279,7 +279,7 @@ class Validator
      */
     public static function num($var)
     {
-        return preg_match('/^[\d]+$/', $var) > 0 ? true : false;
+        return preg_match('/^[\d]+$/', $var) > 0;
     }
 
     /**
@@ -327,7 +327,7 @@ class Validator
     public static function len(string $var, int $len)
     {
         $len = intval($len);
-        return (mb_strlen($var) != $len) ? false : true;
+        return !((mb_strlen($var) != $len));
     }
 
     /**
@@ -339,7 +339,7 @@ class Validator
     public static function minLen(string $var, int $len)
     {
         $len = intval($len);
-        return (mb_strlen($var) < $len) ? false : true;
+        return !((mb_strlen($var) < $len));
     }
 
     /**
@@ -351,7 +351,7 @@ class Validator
     public static function maxLen(string $var, int $len)
     {
         $len = intval($len);
-        return (mb_strlen($var) > $len) ? false : true;
+        return !((mb_strlen($var) > $len));
     }
 
 
@@ -362,7 +362,7 @@ class Validator
      */
     public static function mobile(string $var)
     {
-        return preg_match("/^1[3-9][0-9]{9}$/", $var) > 0 ? true : false;
+        return preg_match("/^1[3-9][0-9]{9}$/", $var) > 0;
     }
 
     /**
@@ -372,7 +372,7 @@ class Validator
      */
     public static function email(string $var)
     {
-        return filter_var($var, FILTER_VALIDATE_EMAIL) ? true : false;
+        return (bool)filter_var($var, FILTER_VALIDATE_EMAIL);
     }
 
     /**
@@ -382,7 +382,7 @@ class Validator
      */
     public static function ip6(string $var)
     {
-        return filter_var($var, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6) ? true : false;
+        return (bool)filter_var($var, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6);
     }
 
     /**
@@ -392,7 +392,7 @@ class Validator
      */
     public static function ip4(string $var)
     {
-        return filter_var($var, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4) ? true : false;
+        return (bool)filter_var($var, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4);
     }
 
     /**
@@ -402,7 +402,7 @@ class Validator
      */
     public static function url(string $var)
     {
-        return filter_var($var, FILTER_VALIDATE_URL) ? true : false;
+        return (bool)filter_var($var, FILTER_VALIDATE_URL);
     }
 
     /**
@@ -412,7 +412,7 @@ class Validator
      */
     public static function id(string $var)
     {
-        return preg_match('/(^[1-9]\d{5}(18|19|([23]\d))\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$)|(^[1-9]\d{5}\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{3}$)/', $var) > 0 ? true : false;
+        return preg_match('/(^[1-9]\d{5}(18|19|([23]\d))\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$)|(^[1-9]\d{5}\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{3}$)/', $var) > 0;
     }
 
     /**
@@ -422,7 +422,7 @@ class Validator
      */
     public static function alphaNumChinese(string $var)
     {
-        return preg_match('/^[a-z0-9\x{4e00}-\x{9fa5}]+$/u', $var) > 0 ? true : false;
+        return preg_match('/^[a-z0-9\x{4e00}-\x{9fa5}]+$/u', $var) > 0;
     }
 
     /**
@@ -432,7 +432,7 @@ class Validator
      */
     public static function chinese(string $var)
     {
-        return preg_match('/^[\x{4e00}-\x{9fa5}]+$/u', $var) > 0 ? true : false;
+        return preg_match('/^[\x{4e00}-\x{9fa5}]+$/u', $var) > 0;
     }
 
 
@@ -443,7 +443,7 @@ class Validator
      */
     public static function alpha(string $var)
     {
-        return preg_match("/^([a-z])+$/i", $var) > 0 ? true : false;
+        return preg_match("/^([a-z])+$/i", $var) > 0;
     }
 
     /**
@@ -453,7 +453,7 @@ class Validator
      */
     public static function alphaNum(string $var)
     {
-        return preg_match("/^([a-z0-9])+$/i", $var) > 0 ? true : false;
+        return preg_match("/^([a-z0-9])+$/i", $var) > 0;
     }
 
     /**
@@ -463,7 +463,7 @@ class Validator
      */
     public static function alphaNumDash(string $var)
     {
-        return preg_match("/^([a-z0-9_\-])+$/i", $var) > 0 ? true : false;
+        return preg_match("/^([a-z0-9_\-])+$/i", $var) > 0;
     }
 
     /**

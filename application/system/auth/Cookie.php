@@ -15,7 +15,7 @@ class Cookie extends AbstractAuth
      */
     public function check()
     {
-        $cookie = isset($_COOKIE[AUTH_NAME]) ? $_COOKIE[AUTH_NAME] : false;
+        $cookie = $_COOKIE[AUTH_NAME] ?? false;
         if ($cookie == false) {
             $this->code = self::ERR_DATA_NULL;
             $this->message = self::MSG[self::ERR_DATA_NULL];
