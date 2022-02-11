@@ -5,7 +5,7 @@ namespace system;
 class Profiler
 {
 
-    private $marks = [];
+    public static array $marks = [];
 
     /**
      * single method
@@ -18,9 +18,7 @@ class Profiler
         if ($ins) {
             return $ins;
         }
-
         $ins = new self();
-
         return $ins;
     }
 
@@ -52,7 +50,7 @@ class Profiler
         } else {
             $end = self::microtime();
             $time = round(($end - $marks[$mark]['start']) * 1000, 4);
-            $this->marks[$mark][] = " {$marks[$mark]['desc']} \n ms: {$time} \n ";
+            static::$marks[$mark][] = " {$marks[$mark]['desc']} \n ms: {$time} \n ";
             unset($marks[$mark]);
 
         }
@@ -70,7 +68,7 @@ class Profiler
         $size = memory_get_usage();
         $mem = round($size / pow(1024, ($i = floor(log($size, 1024)))), 2) . ' ' . $unit[$i];
 
-        $this->marks[$mark][] = " Usage: {$mem} \n";
+        self::$marks[$mark][] = " Usage: {$mem} \n";
     }
 
 
@@ -83,7 +81,7 @@ class Profiler
 
         $content = "\n " . $_SERVER['PHP_SELF'] . '?' . $_SERVER['QUERY_STRING'] . ' [' . date('Y-m-d H:i:s', time()) . "] ---------------\n";
 
-        foreach ($this->marks as $key => $val) {
+        foreach (self::$marks as $key => $val) {
             $content = $content . "\n # " . ucfirst($key) . " #";
             if (is_array($val)) {
                 foreach ($val as $k => $v) {
