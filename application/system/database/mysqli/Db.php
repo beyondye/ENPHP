@@ -2,22 +2,22 @@
 
 namespace system\database\mysqli;
 
+use mysqli;
+
 class Db
 {
 
     /**
      * 保存数据库连接句柄
-     *
      * @var object
      */
-    private $db = null;
+    private object $db ;
 
     /**
      * 数据库配置信息
-     *
      * @var array
      */
-    public $config = [];
+    public array $config = [];
 
     public function __get($name)
     {
@@ -34,7 +34,6 @@ class Db
 
     /**
      * 构造函数
-     *
      * @param array $config 连接参数数组
      */
     public function __construct($config = [])
@@ -43,7 +42,7 @@ class Db
         $this->config = $config;
 
         profiler('benchmark', 'database', $config['host']);
-        $this->db = new \mysqli($config['host'], $config['username'], $config['password'], $config['database'], $config['port']);
+        $this->db = new mysqli($config['host'], $config['username'], $config['password'], $config['database'], $config['port']);
         profiler('benchmark', 'database');
 
         if ($this->db->connect_errno) {
@@ -54,11 +53,9 @@ class Db
     }
 
     /**
-     * sql查询
-     *
+     * 有数据sql查询
      * @param string $sql
-     *
-     * @return Result | boolean
+     * @return Result
      */
     public function query(string $sql)
     {
@@ -70,18 +67,32 @@ class Db
             exit('Database Error : [' . $sql . '] ' . $this->db->error . ' [Code:' . $this->db->errno . ']');
         }
 
-        if ($result === true) {
-            return true;
+        return new Result($result);
+    }
+
+
+    /**
+     * 无数据sql查询
+     * @param string $sql
+     * @return bool
+     */
+    public function execute(string $sql)
+    {
+
+        profiler('benchmark', 'executes', $sql);
+        $result = $this->db->query($sql);
+        profiler('benchmark', 'executes');
+
+        if ($this->db->errno) {
+            exit('Database Error : [' . $sql . '] ' . $this->db->error . ' [Code:' . $this->db->errno . ']');
         }
 
-        return new Result($result);
+        return $result;
     }
 
     /**
      * 转义字符串
-     *
      * @param string|array $string
-     *
      * @return string|array
      */
     public function escape($string)
@@ -93,18 +104,14 @@ class Db
             return $string;
         }
 
-        $string = $this->db->real_escape_string($string);
-
-        return $string;
+        return $this->db->real_escape_string($string);
     }
 
     /**
      * 添加数据到数据库
-     *
      * @param string $table 表名
      * @param array $data 数组键值对应
-     *
-     * @return boolean
+     * @return bool
      */
     public function insert(string $table, array $data)
     {
@@ -112,45 +119,37 @@ class Db
 
         $keys = implode(',', array_keys($data));
         $values = implode("','", array_values($data));
+        $sql = "INSERT INTO $table($keys) VALUES('$values')";
 
-        $sql = "INSERT INTO {$table}({$keys}) VALUES('{$values}')";
-        return $this->query($sql);
+        return $this->execute($sql);
     }
 
     /**
      * 更新数据
-     *
      * @param string $table
      * @param array $data
-     * @param array|string $where
-     *
-     * @return boolean
+     * @param array $where
+     * @return bool
      */
     public function update(string $table, array $data, array $where = [])
     {
-        if (is_array($data)) {
+        $data = $this->escape($data);
 
-            $data = $this->escape($data);
-            $set = [];
-            foreach ($data as $key => $value) {
-                $set[] = $key . "='{$value}'";
-            }
-
-            $sql = "UPDATE {$table} SET " . implode(',', $set) . $this->sqlWhere($where);
-        } else {
-            $sql = "UPDATE {$table} SET {$data} " . $this->sqlWhere($where);
+        $set = [];
+        foreach ($data as $key => $value) {
+            $set[] = $key . "='$value'";
         }
 
-        return $this->query($sql);
+        $sql = "UPDATE $table SET " . implode(',', $set) . $this->sqlWhere($where);
+
+        return $this->execute($sql);
     }
 
     /**
-     *  replace
-     *
+     * replace
      * @param string $table
      * @param array $data
-     *
-     * @return boolean
+     * @return bool
      */
     public function replace(string $table, array $data)
     {
@@ -158,31 +157,28 @@ class Db
         $keys = implode(',', array_keys($data));
         $values = implode("','", array_values($data));
 
-        $sql = "REPLACE INTO {$table}({$keys}) VALUES('{$values}')";
-        return $this->query($sql);
+        $sql = "REPLACE INTO $table($keys) VALUES('$values')";
+
+        return $this->execute($sql);
     }
 
     /**
      * 删除数据
-     *
      * @param string $table
-     * @param array|string $where
-     *
+     * @param array $where
      * @return boolean
      */
     public function delete(string $table, array $where = [])
     {
         $sql = 'DELETE FROM ' . $table . $this->sqlwhere($where);
-        return $this->query($sql);
+        return $this->execute($sql);
     }
 
     /**
      * 查询数据
-     *
      * @param string $table
      * @param array $condition @subparam int|array $limit
-     *
-     * @return object array
+     * @return object|array
      */
     public function select(string $table, array $condition = ['where' => [], 'groupby' => [], 'having' => [], 'fields' => [], 'orderby' => [], 'limit' => []])
     {
@@ -204,7 +200,6 @@ class Db
 
     /**
      * 关闭连接
-     *
      * @return void
      */
     public function close()
@@ -214,12 +209,10 @@ class Db
 
     /**
      * 构造 sql where 字符串
-     *
-     * @param array|string $where
-     *
+     * @param array $where
      * @return string
      */
-    private function sqlWhere($where = [])
+    private function sqlWhere(array $where = [])
     {
         if (is_string($where) && trim($where) != '') {
             return ' WHERE ' . $where;
@@ -243,20 +236,20 @@ class Db
 
                 $op = strtolower($rs[1]);
                 if ($op == 'in') {
-                    $sub = "{$rs[0]} IN ({$rs[2]})";
+                    $sub = "$rs[0] IN ($rs[2])";
                 } elseif ($op == 'like') {
-                    $sub = "{$rs[0]} LIKE '{$rs[2]}'";
+                    $sub = "$rs[0] LIKE '$rs[2]'";
                 } elseif ($op == 'between') {
 
                     $bet = explode(',', $rs[2]);
-                    //var_dump($bet);
+
                     if (count($bet) != 2) {
                         continue;
                     }
-                    $sub = "{$rs[0]} BETWEEN '{$bet[0]}' AND '{$bet[1]}'";
+                    $sub = "$rs[0] BETWEEN '$bet[0]' AND '$bet[1]'";
 
                 } else {
-                    $sub = $rs[0] . $rs[1] . "'{$rs[2]}'";
+                    $sub = $rs[0] . $rs[1] . "'$rs[2]'";
                 }
 
                 $sql .= ($i == 0 ? $sub : ' AND ' . $sub);
@@ -269,11 +262,8 @@ class Db
 
     /**
      * sql比较运算符号解析
-     *
      * @param string $key
-     *
      * @param string $value
-     *
      * @return string
      */
     private function sqlCompare(string $key, string $value)
@@ -282,52 +272,50 @@ class Db
 
         if (strpos($key, '>=')) {
             $key = trim(str_replace('>=', '', $key));
-            return "{$key}>='{$value}'";
+            return "$key>='$value'";
         }
 
         if (strpos($key, '<=')) {
             $key = trim(str_replace('<=', '', $key));
-            return "{$key}<='{$value}'";
+            return "$key<='$value'";
         }
 
         if (strpos($key, '!=')) {
             $key = trim(str_replace('!=', '', $key));
-            return "{$key}!='{$value}'";
+            return "$key!='$value'";
         }
 
         if (strpos($key, '<>')) {
             $key = trim(str_replace('<>', '', $key));
-            return "{$key}<>'{$value}'";
+            return "$key<>'$value'";
         }
 
         if (strpos($key, '>')) {
             $key = trim(str_replace('>', '', $key));
-            return "{$key}>'{$value}'";
+            return "$key>'$value'";
         }
 
         if (strpos($key, '<')) {
             $key = trim(str_replace('<', '', $key));
-            return "{$key}<'{$value}'";
+            return "$key<'$value'";
         }
 
         if (strpos($key, ' like')) {
             $key = trim(str_replace(' like', '', $key));
-            return "{$key} like '{$value}'";
+            return "$key like '$value'";
         }
 
         if (strpos($key, ' in')) {
             $key = trim(str_replace(' in', '', $key));
-            return "{$key} in ({$value})";
+            return "$key in ($value)";
         }
 
-        return "{$key}='{$value}'";
+        return "$key='$value'";
     }
 
     /**
      * 构造sql select字段
-     *
      * @param array|string $fields
-     *
      * @return string
      */
     private function sqlField($fields)
@@ -351,9 +339,7 @@ class Db
 
     /**
      * 构造sql order by
-     *
      * @param array|string $fields
-     *
      * @return string
      */
     private function sqlOrderBy($fields)
@@ -377,9 +363,7 @@ class Db
 
     /**
      * 构造sql limit
-     *
      * @param int|array $offset
-     *
      * @return string
      */
     private function sqlLimit($offset)
@@ -393,7 +377,7 @@ class Db
         }
 
         if (is_array($offset)) {
-            return " LIMIT {$offset[0]},{$offset[1]} ";
+            return " LIMIT $offset[0],$offset[1] ";
         }
 
         return '';
@@ -401,9 +385,7 @@ class Db
 
     /**
      * 构造sql group by数据分组
-     *
      * @param array|string $fields
-     *
      * @return string
      */
     private function sqlGroupBy($fields)
@@ -427,9 +409,7 @@ class Db
 
     /**
      * sql having
-     *
      * @param int|array $having
-     *
      * @return string
      */
     private function sqlHaving($having)

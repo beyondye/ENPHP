@@ -8,45 +8,38 @@ class Model
 {
     /**
      * 操作的表名
-     *
      * @var string
      */
-    public $table = '';
+    public string $table = '';
 
     /**
      * 表主键字段名
-     *
      * @var string
      */
-    public $primary = '';
+    public string $primary = '';
 
     /**
      * 表结构
-     *
      * @var array
      */
-    public $schema = [];
+    public array $schema = [];
 
     /**
      * 读数据库名
-     *
      * @var string
      */
-    public $RDB = 'default';
+    public string $RDB = 'default';
 
     /**
      * 写数据库名
-     *
      * @var string
      */
-    public $WDB = 'default';
+    public string $WDB = 'default';
 
 
     /**
      * 获取表全部记录
-     *
      * @param array $fields 返回字段
-     *
      * @return object array
      */
     public function all(array $fields = [])
@@ -56,20 +49,17 @@ class Model
 
     /**
      * 通过sql where条件获取数据
-     *
-     * @param array|string $where 条件过滤
+     * @param array $where 条件过滤
      * @param array $fields 返回字段
-     *
-     * @return object array
+     * @return object|array
      */
-    public function where($where, $fields = [])
+    public function where(array $where, array $fields = [])
     {
         return $this->select(['where' => $where, 'fields' => $fields]);
     }
 
     /**
      * 获取最后插入的主键id
-     *
      * @return int
      */
     public function lastid()
@@ -79,24 +69,20 @@ class Model
 
     /**
      * 按条件获取表数据条数
-     *
-     * @param array|string $where 必须与表字段对应 $where['field_name'=>'field_value']
-     *
+     * @param array $where 必须与表字段对应 $where['field_name'=>'field_value']
      * @return int
      */
-    public function count($where = [])
+    public function count(array $where = [])
     {
         return DB::instance($this->RDB)->select($this->table, ['where' => $where, 'fields' => " COUNT({$this->primary}) AS ct "])->row()->ct;
     }
 
     /**
      * 插入数据到表
-     *
-     * @param array|string $data 必须与表字段对应 $data['field_name'=>'field_value']
-     *
+     * @param array $data 必须与表字段对应 $data['field_name'=>'field_value']
      * @return boolean
      */
-    public function insert($data = [])
+    public function insert(array $data = [])
     {
         return DB::instance($this->WDB)->insert($this->table, $data);
     }
@@ -104,12 +90,10 @@ class Model
 
     /**
      * 新建数据行或已存在即替换
-     *
-     * @param array|string $data 必须与表字段对应 $data['field_name'=>'field_value']
-     *
+     * @param array $data 必须与表字段对应 $data['field_name'=>'field_value']
      * @return boolean
      */
-    public function replace($data = [])
+    public function replace(array $data = [])
     {
         return DB::instance($this->WDB)->replace($this->table, $data);
     }
@@ -117,17 +101,16 @@ class Model
     /**
      * 删除表数据
      *
-     * @param array|int|string $where
-     *
+     * @param array|int $where
      * array必须与表字段对应 $where['field_name'=>'field_value'],
      * int类型 必须是主键值
      *
-     * @return boolean|int 删除成功返回影响行数不然返回false
+     * @return boolean
      */
     public function delete($where = [])
     {
         if (is_numeric($where)) {
-            $where = [$this->primary,'=', $where];
+            $where = [$this->primary, '=', $where];
         }
 
         return DB::instance($this->WDB)->delete($this->table, $where);
@@ -142,7 +125,7 @@ class Model
      * array必须与表字段对应 $where['field_name'=>'field_value'],
      * int类型 必须是主键值
      *
-     * @return boolean|int 更新成功返回影响行数不然返回false
+     * @return boolean
      */
     public function update($data, $where = [])
     {
@@ -154,29 +137,37 @@ class Model
     }
 
     /**
-     * 原生sql查询表数据，没有参数返回全部
-     *
+     * 原生sql查询带返回数据
      * @param string $sql sql语句
-     *
-     * @return array|boolean
+     * @return bool|database\mysqli\Result
      */
-    public function query($sql)
+    public function query(string $sql)
     {
         if (!$sql) {
             return false;
         }
 
-        $pieces = explode(' ', trim($sql));
-        $db = strtolower($pieces[0]) == 'select' ? $this->RDB : $this->WDB;
+        return DB::instance($this->RDB)->query($sql);
+    }
 
-        return DB::instance($db)->query($sql);
+
+    /**
+     * 原生sql查询，不带返回数据
+     * @param string $sql
+     * @return bool
+     */
+    public function execute(string $sql)
+    {
+        if (!$sql) {
+            return false;
+        }
+
+        return DB::instance($this->WDB)->execute($sql);
     }
 
     /**
      * 查询表数据，没有参数返回全部
-     *
      * @param array $condition
-     *
      * @return array|object
      */
     public function select(array $condition = ['where' => [], 'fields' => [], 'orderby' => [], 'limit' => []])
@@ -186,12 +177,11 @@ class Model
 
     /**
      * 通过主键返回一条数据
-     *
      * @param int|array $primary 表主键或唯一索引数组
      * @param array $fields 选择字段
      * @return object|null
      */
-    public function one($primary, $fields = [])
+    public function one($primary, array $fields = [])
     {
         if (is_array($primary)) {
             $data = $this->select(['where' => $primary, 'fields' => $fields, 'limit' => 1]);
