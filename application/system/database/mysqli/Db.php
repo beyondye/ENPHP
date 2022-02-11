@@ -178,7 +178,7 @@ class Db
      * 查询数据
      * @param string $table
      * @param array $condition @subparam int|array $limit
-     * @return object|array
+     * @return Result
      */
     public function select(string $table, array $condition = ['where' => [], 'groupby' => [], 'having' => [], 'fields' => [], 'orderby' => [], 'limit' => []])
     {
