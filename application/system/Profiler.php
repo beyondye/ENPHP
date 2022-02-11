@@ -18,7 +18,10 @@ class Profiler
         if ($ins) {
             return $ins;
         }
-        return new self();
+
+        $ins = new self();
+
+        return $ins;
     }
 
     /**
