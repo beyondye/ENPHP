@@ -87,7 +87,7 @@ class Redis extends AbstractCache
      */
     public function delete($key)
     {
-        return $this->redis->delete($key);
+        return $this->redis->del($key);
     }
 
     /**
@@ -183,10 +183,10 @@ class Redis extends AbstractCache
                 $data = $this->redis->sMembers($tag);
                 if (is_array($data)) {
                     foreach ($data as $key) {
-                        $this->redis->delete($key);
+                        $this->redis->del($key);
                     }
                 }
-                $this->redis->delete($tag);
+                $this->redis->del($tag);
             }
 
             return true;
