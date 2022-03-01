@@ -4,11 +4,7 @@
 $vars = [];
 
 //include constant file
-if (CONST_FILE) {
-    include APP_DIR . 'config/' . ENVIRONMENT . '/' . CONST_FILE . '.php';
-} else {
-    include APP_DIR . 'config/' . ENVIRONMENT . '/constant.php';
-}
+include APP_DIR . 'config/' . ENVIRONMENT . '/' . CONST_FILE . '.php';
 
 //load single class
 function load(string $class, $arguments = '', string $alias = '')
@@ -73,7 +69,7 @@ if (!method_exists($ins, $vars['action'])) {
     exit('Action Not Found');
 }
 
-$act=$vars['action'];
+$act = $vars['action'];
 $ins->$act();
 
 \system\Middleware::after();

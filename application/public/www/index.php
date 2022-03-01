@@ -28,7 +28,7 @@ define('SYS_DIR', realpath('../../system') . DIRECTORY_SEPARATOR);
 define('ENTRY', $_SERVER['PHP_SELF']);
 
 //常量配置
-const CONST_FILE = '';
+const CONST_FILE = 'constant';
 
 //初始脚本
 require_once SYS_DIR . 'init.php';
