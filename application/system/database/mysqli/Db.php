@@ -236,7 +236,8 @@ class Db
 
                 $op = strtolower($rs[1]);
                 if ($op == 'in') {
-                    $sub = "$rs[0] IN ($rs[2])";
+                    $in=str_replace(',',"','",$rs[2]);
+                    $sub = "$rs[0] IN ('$in')";
                 } elseif ($op == 'like') {
                     $sub = "$rs[0] LIKE '$rs[2]'";
                 } elseif ($op == 'between') {
