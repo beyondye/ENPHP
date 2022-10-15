@@ -2,60 +2,135 @@
 
 namespace system;
 
-use \system\Database as DB;
+use Exception;
+use system\Database as DB;
+use system\model\Select;
+use system\model\Safe;
 
 class Model
 {
-    /**
-     * 操作的表名
-     * @var string
-     */
-    public string $table = '';
+    protected string $RDB = 'default';
+    protected string $WDB = 'default';
 
-    /**
-     * 表主键字段名
-     * @var string
-     */
-    public string $primary = '';
+    public string $table;
+    public array $schema;
+    public string $primary;
 
-    /**
-     * 表结构
-     * @var array
-     */
-    public array $schema = [];
+    protected array $objects = [
+        'select' => null,
+    ];
 
-    /**
-     * 读数据库名
-     * @var string
-     */
-    public string $RDB = 'default';
+    const SER_DEFAULT = 0;
+    const  SER_WRITE = 1;
+    const  SER_READ = 2;
 
-    /**
-     * 写数据库名
-     * @var string
-     */
-    public string $WDB = 'default';
-
-
-    /**
-     * 获取表全部记录
-     * @param array $fields 返回字段
-     * @return object array
-     */
-    public function all(array $fields = [])
+    public function setServer($name, $type = self::SER_DEFAULT): void
     {
-        return $this->select(['fields' => $fields]);
+        if ($type == self::SER_READ) {
+            $this->RDB = $name;
+        } else if ($type == self::SER_WRITE) {
+            $this->WDB = $name;
+        } else {
+            $this->WDB = $name;
+            $this->RDB = $name;
+        }
     }
 
-    /**
-     * 通过sql where条件获取数据
-     * @param array $where 条件过滤
-     * @param array $fields 返回字段
-     * @return object|array
-     */
-    public function where(array $where, array $fields = [])
+    public function selectDb($db): bool
     {
-        return $this->select(['where' => $where, 'fields' => $fields]);
+        if (DB::instance($this->RDB)->selectDb($db) &&
+            DB::instance($this->WDB)->selectDb($db)) {
+            return true;
+        }
+
+        return false;
+    }
+
+
+    public function select(string|array $fields = []): object
+    {
+
+        if ($this->objects['select']) {
+            $select = $this->objects['select'];
+        } else {
+            $select = new Select();
+            $select->table = $this->table;
+            $select->schema = $this->schema;
+            $select->primary = $this->primary;
+            $this->objects['select'] = $select;
+        }
+
+        $select->fields = $fields;
+        $select->db = $this->RDB;
+        $select->wheres = [];
+
+        return $select;
+    }
+
+
+    public function delete(array|string|int ...$wheres): bool
+    {
+        $wheres = $this->where($wheres);
+        return DB::instance($this->WDB)->delete($this->table, $wheres);
+    }
+
+
+    public function update(array $data, array|int|string ...$wheres): bool
+    {
+        $safe = new Safe($this->schema);
+        $data = $safe->clear($data);
+
+        if (empty($data)) {
+            throw new Exception('更新数据不能为空');
+        }
+
+        if (!$safe->validate($data)) {
+            if ($safe->illegalFields) {
+                throw new Exception('非法字段数据:' . join(',', $safe->illegalFields));
+            }
+            throw new Exception('没有提交数据');
+        }
+        $data = $safe->data;
+        $_wheres = $this->where($wheres);
+
+        return DB::instance($this->WDB)->update($this->table, $data, $_wheres);
+    }
+
+    public function insert(array $data = []): bool
+    {
+
+        $_data = [];
+        if (empty($data[0])) {
+            $_data[] = $data;
+        } else {
+            $_data = $data;
+        }
+
+        $safe = new Safe($this->schema);
+        $data = [];
+        foreach ($_data as $rs) {
+
+            $rs = $safe->clear($rs);
+            if (empty($rs)) {
+                throw new Exception('新增数据不能为空');
+            }
+
+            if (!$safe->complete($rs)) {
+                throw new Exception('缺少必要字段:' . join(',', $safe->incompleteFields));
+            }
+
+            if (!$safe->validate($rs)) {
+                if ($safe->illegalFields) {
+                    throw new Exception('非法字段数据:' . join(',', $safe->illegalFields));
+                }
+                throw new Exception('没有提交数据');
+            }
+
+            $rs = $safe->data;
+            $data[] = $safe->merge($rs);
+        }
+
+        return DB::instance($this->WDB)->insert($this->table, $data);
     }
 
     /**
@@ -67,129 +142,36 @@ class Model
         return DB::instance($this->WDB)->insert_id;
     }
 
-    /**
-     * 按条件获取表数据条数
-     * @param array $where 必须与表字段对应 $where['field_name'=>'field_value']
-     * @return int
-     */
-    public function count(array $where = [])
-    {
-        return DB::instance($this->RDB)->select($this->table, ['where' => $where, 'fields' => " COUNT({$this->primary}) AS ct "])->row()->ct;
-    }
 
-    /**
-     * 插入数据到表
-     * @param array $data 必须与表字段对应 $data['field_name'=>'field_value']
-     * @return boolean
-     */
-    public function insert(array $data = [])
+    protected function where(array $wheres): array
     {
-        return DB::instance($this->WDB)->insert($this->table, $data);
-    }
+        //var_dump($wheres);
+        $_wheres = [];
+        if (is_numeric($wheres[0])) {
+            $_wheres[] = [$this->primary, '=', $wheres[0]];
+        } else if (is_string($wheres[0])) {
 
+            if (stripos($wheres[0], ',') === false) {
+                $_wheres[] = [$this->primary, '=', $wheres[0]];
+            } else {
+                $_wheres[] = [$this->primary, 'in', $wheres[0]];
+            }
 
-    /**
-     * 新建数据行或已存在即替换
-     * @param array $data 必须与表字段对应 $data['field_name'=>'field_value']
-     * @return boolean
-     */
-    public function replace(array $data = [])
-    {
-        return DB::instance($this->WDB)->replace($this->table, $data);
-    }
+        } else if($wheres[0]){
+            if (is_string($wheres[0][array_key_first($wheres[0])])) {
+                $_wheres= $wheres;
+            } else {
+                $_wheres = $wheres[0];
+            }
 
-    /**
-     * 删除表数据
-     *
-     * @param array|int $where
-     * array必须与表字段对应 $where['field_name'=>'field_value'],
-     * int类型 必须是主键值
-     *
-     * @return boolean
-     */
-    public function delete($where = [])
-    {
-        if (is_numeric($where)) {
-            $where = [$this->primary, '=', $where];
         }
 
-        return DB::instance($this->WDB)->delete($this->table, $where);
+
+        $safe = new Safe($this->schema);
+        $safe->validateWhere($_wheres);
+
+        return $_wheres;
     }
 
-    /**
-     * 更新数据到表
-     *
-     * @param array|string $data 必须与表字段对应 $data['field_name'=>'field_value']
-     *
-     * @param array|int|string $where
-     * array必须与表字段对应 $where['field_name'=>'field_value'],
-     * int类型 必须是主键值
-     *
-     * @return boolean
-     */
-    public function update($data, $where = [])
-    {
-        if (is_numeric($where)) {
-            $where = [[$this->primary, '=', $where]];
-        }
-
-        return DB::instance($this->WDB)->update($this->table, $data, $where);
-    }
-
-    /**
-     * 原生sql查询带返回数据
-     * @param string $sql sql语句
-     * @return bool|database\mysqli\Result
-     */
-    public function query(string $sql)
-    {
-        if (!$sql) {
-            return false;
-        }
-
-        return DB::instance($this->RDB)->query($sql);
-    }
-
-
-    /**
-     * 原生sql查询，不带返回数据
-     * @param string $sql
-     * @return bool
-     */
-    public function execute(string $sql)
-    {
-        if (!$sql) {
-            return false;
-        }
-
-        return DB::instance($this->WDB)->execute($sql);
-    }
-
-    /**
-     * 查询表数据，没有参数返回全部
-     * @param array $condition
-     * @return array|object
-     */
-    public function select(array $condition = ['where' => [], 'fields' => [], 'orderby' => [], 'limit' => []])
-    {
-        return DB::instance($this->RDB)->select($this->table, $condition)->result();
-    }
-
-    /**
-     * 通过主键返回一条数据
-     * @param int|array $primary 表主键或唯一索引数组
-     * @param array $fields 选择字段
-     * @return object|null
-     */
-    public function one($primary, array $fields = [])
-    {
-        if (is_array($primary)) {
-            $data = $this->select(['where' => $primary, 'fields' => $fields, 'limit' => 1]);
-        } else {
-            $data = $this->select(['where' => [[$this->primary, '=', $primary]], 'fields' => $fields, 'limit' => 1]);
-        }
-
-        return $data[0] ?? null;
-    }
 
 }

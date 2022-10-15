@@ -24,13 +24,13 @@ class Redis extends \Redis
 
         $this->config = array_merge($this->config, $config);
 
-        if ($this->pconnect($config['host'], $config['port'], $config['timeout']) == false) {
+        if (!$this->pconnect($config['host'], $config['port'], $config['timeout'])) {
             echo "Redis '{$config['host']}' Connection Failed. \n";
             exit($this->getLastError());
         }
 
         if ($config['password']) {
-            if ($this->auth($config['password']) == false) {
+            if (!$this->auth($config['password'])) {
                 echo "Redis '{$config['host']}' Password Incorrect. \n";
                 exit($this->getLastError());
             }

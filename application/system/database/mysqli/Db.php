@@ -11,7 +11,7 @@ class Db
      * 保存数据库连接句柄
      * @var object
      */
-    private object $db ;
+    private object $db;
 
     /**
      * 数据库配置信息
@@ -50,6 +50,16 @@ class Db
         }
 
         $this->db->set_charset($config['charset']);
+    }
+
+    /**
+     * 改变本次链接操作的数据库
+     * @param string $db
+     * @return bool
+     */
+    public function selectDb(string $db): bool
+    {
+        return $this->db->select_db($db);
     }
 
     /**
@@ -115,11 +125,22 @@ class Db
      */
     public function insert(string $table, array $data)
     {
-        $data = $this->escape($data);
 
-        $keys = implode(',', array_keys($data));
-        $values = implode("','", array_values($data));
-        $sql = "INSERT INTO $table($keys) VALUES('$values')";
+        if (empty($data[0])) {
+            $data = $this->escape($data);
+            $keys = implode(',', array_keys($data));
+            $values = implode("','", array_values($data));
+            $sql = "INSERT INTO $table($keys) VALUES('$values')";
+        } else {
+
+            $keys = implode(',', array_keys($this->escape($data[0])));
+            $values = [];
+            foreach ($data as $rs) {
+                $values[] = implode("','", array_values($this->escape($rs)));
+            }
+
+            $sql = "INSERT INTO $table($keys) VALUES('" . implode("'),('", $values) . "')";
+        }
 
         return $this->execute($sql);
     }
@@ -236,7 +257,7 @@ class Db
 
                 $op = strtolower($rs[1]);
                 if ($op == 'in') {
-                    $in=str_replace(',',"','",$rs[2]);
+                    $in = str_replace(',', "','", $rs[2]);
                     $sub = "$rs[0] IN ('$in')";
                 } elseif ($op == 'like') {
                     $sub = "$rs[0] LIKE '$rs[2]'";

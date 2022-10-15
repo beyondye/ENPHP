@@ -201,7 +201,8 @@ class Validator
                     continue;
                 }
 
-                if (!self::regex($val, $rules[$key]['regex'])) {
+                //var_dump($rules[$key]['regex']);
+                if (!self::regex($val, $rules[$key]['regex'][0])) {
                     $pass = false;
                     $this->setError($key, 'regex');
                     continue;
@@ -227,7 +228,7 @@ class Validator
                     $param[] = $val;
                 }
 
-                if (call_user_func_array(__NAMESPACE__ . '\Validator::' . $subkey, $param) == false) {
+                if (!call_user_func_array(__NAMESPACE__ . '\Validator::' . $subkey, $param)) {
                     $this->setError($key, $subkey);
                     $pass = false;
                 }
@@ -279,7 +280,7 @@ class Validator
      */
     public static function num($var)
     {
-        return preg_match('/^[\d]+$/', $var) > 0;
+        return preg_match('/^\d+$/', $var) > 0;
     }
 
     /**
@@ -326,7 +327,6 @@ class Validator
      */
     public static function len(string $var, int $len)
     {
-        $len = intval($len);
         return !((mb_strlen($var) != $len));
     }
 
@@ -338,7 +338,6 @@ class Validator
      */
     public static function minLen(string $var, int $len)
     {
-        $len = intval($len);
         return !((mb_strlen($var) < $len));
     }
 
@@ -350,7 +349,6 @@ class Validator
      */
     public static function maxLen(string $var, int $len)
     {
-        $len = intval($len);
         return !((mb_strlen($var) > $len));
     }
 

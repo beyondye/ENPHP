@@ -23,12 +23,20 @@ class Helper
         $next = $page + 1;
         $html = '';
         $start = 1;
-        $info = '<span class="info">共 ' . $total . ' 条记录</span>';
+
+        $info = '';
+        if ($total > $size) {
+            $info = '<span class="info">共 ' . $total . ' 条记录</span>';
+        }
+
         $url = urldecode($url);
 
         if ($total > $size) {
             $count = ceil($total / $size);
         } else {
+            if($info==''){
+                return '';
+            }
             return '<div class="pager">' . $info . '</div>';
         }
 
@@ -58,10 +66,10 @@ class Helper
 
         //loop page number
         for (; $start <= $end; $start++) {
-            if ($start == 1) {
-                $html .= str_replace('<%page%>', $start, '<a class="number" href="' . $url . '">' . $start . '</a>');
+            if ($page == $start ) {
+                $html .= str_replace('<%page%>', $start, '<span class="number current">' . $start . '</span>');
             } else {
-                $html .= str_replace('<%page%>', $start, '<a class="number ' . ($page == $start ? 'current' : '') . '" href="' . $url . '">' . $start . '</a>');
+                $html .= str_replace('<%page%>', $start, '<a class="number" href="' . $url . '">' . $start . '</a>');
             }
         }
 
@@ -75,6 +83,9 @@ class Helper
             $html .= str_replace('<%page%>', $next, '<a href="' . $url . '" class="next">下一页</a>');
         }
 
+        if ($html . $info == '') {
+            return '';
+        }
         //info and return
         return '<div class="pager">' . $html . $info . '</div>';
     }

@@ -143,5 +143,4 @@ class Input
     {
         return $_SERVER['HTTP_HOST'];
     }
-
 }

@@ -2,6 +2,7 @@
 
 namespace system\model;
 
+use Exception;
 use system\Validator;
 
 class Safe
@@ -66,19 +67,19 @@ class Safe
      * @param array $schema
      * @return array
      */
-    private function makeRules(array $schema)
+    private function makeRules(array $schema): array
     {
         $rules = [];
         foreach ($schema as $key => $val) {
-            if (!is_array($schema[$key]) || !key_exists('rules', $schema[$key])) {
+            if (!is_array($val) || !key_exists('rules', $val)) {
                 continue;
             }
 
-            $rules[$key] = $schema[$key]['rules'];
+            $rules[$key] = $val['rules'];
             if (is_string($rules[$key])) {
-                $rules[$key] = $rules[$key] . '|label:' . $schema[$key]['label'];
+                $rules[$key] = $rules[$key] . '|label:' . $val['label'];
             } else {
-                $rules[$key]['label'] = $schema[$key]['label'];
+                $rules[$key]['label'] = $val['label'];
             }
         }
 
@@ -92,7 +93,7 @@ class Safe
      *
      * @return boolean
      */
-    public function validate(array $data)
+    public function validate(array $data): bool
     {
 
         $vali = new Validator();
@@ -113,12 +114,12 @@ class Safe
      *
      * @return boolean
      */
-    public function complete(array $data)
+    public function complete(array $data): bool
     {
 
         $required = [];
         foreach ($this->schema as $key => $value) {
-            if (key_exists('required', $value) && $value['required'] == true) {
+            if (key_exists('required', $value) && $value['required']) {
                 $required[] = $key;
             }
         }
@@ -126,7 +127,7 @@ class Safe
         $pass = true;
         foreach ($required as $rs) {
             if (!key_exists($rs, $data)) {
-                $this->incompleteFields[$rs] = '缺少字段 [' . $this->schema[$rs]['label'] . ']';
+                $this->incompleteFields[$rs] = $this->schema[$rs]['label'] . '[' . $rs . ']';
                 $pass = false;
             }
         }
@@ -152,8 +153,7 @@ class Safe
             }
         }
 
-        $given = $this->clear($data);
-        $merge = array_merge($fields, $given);
+        $merge = array_merge($fields, $data);
         foreach ($without as $rs) {
             if (isset($merge[$rs])) {
                 unset($merge[$rs]);
@@ -183,5 +183,41 @@ class Safe
         }
 
         return $given;
+    }
+
+
+    public function validateWhere($where): bool
+    {
+        foreach ($where as $rs) {
+
+            if (!is_array($rs) || count($rs) != 3) {
+                throw new Exception('WHERE条件参数不完整');
+            }
+
+            if (!in_array($rs[1], ['=', '>', '<', '>=', '<=', '<>', '!=', 'in', 'like', 'between'])) {
+                throw new Exception('非法操作符');
+            }
+
+            if (!array_key_exists($rs[0], $this->schema)) {
+                throw new Exception('包含非法字段:' . $rs[0]);
+            }
+
+            if ($rs[1] === 'in' || $rs[1] === 'between') {
+                $ins = explode(',', $rs[2]);
+                foreach ($ins as $subrs) {
+                    $this->validateWhere([[$rs[0], '=', $subrs]]); //递归
+                }
+                continue;
+            }
+
+            if (!$this->validate([$rs[0] => $rs[2]])) {
+                if ($this->illegalFields) {
+                    throw new Exception('非法字段数据:' . join(',', $this->illegalFields));
+                }
+                throw new Exception('没有提交数据');
+            }
+        }
+
+        return true;
     }
 }

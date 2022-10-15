@@ -23,6 +23,7 @@ function load(string $class, $arguments = '', string $alias = '')
     return $instances[$alias];
 }
 
+
 //running profiler
 function profiler(string $type, string $mark, string $desc = '')
 {
@@ -43,18 +44,41 @@ function profiler(string $type, string $mark, string $desc = '')
 
 //autoload class
 spl_autoload_register(function ($class) {
-    $file = str_replace('\\', DIRECTORY_SEPARATOR, $class);
-    $file = APP_DIR . $file . EXT;
 
-    if (file_exists($file)) {
-        include_once $file;
+    $file = '';
+    $find = false;
+
+    if (defined('VENDOR')) {
+        foreach (VENDOR as $key => $val) {
+            if (str_starts_with($class, $key)) {
+                $suffix = substr($class, strlen($key));
+                foreach ($val as $map) {
+                    $file = str_replace('\\', DIRECTORY_SEPARATOR, $map . DIRECTORY_SEPARATOR . $suffix . EXT);
+                    if (file_exists($file)) {
+                        include $file;
+                        $find = true;
+                    }
+                }
+            }
+        }
     }
+
+    if ($find === false) {
+        $file = str_replace('\\', DIRECTORY_SEPARATOR, APP_DIR . $class . EXT);
+        if (file_exists($file)) {
+            include $file;
+        }
+    }
+
 });
 
 profiler('benchmark', 'running', 'Action');
 
 $vars['controller'] = \system\Input::get(CONTROLLER_KEY_NAME, DEFAULT_CONTROLLER);
 $vars['action'] = \system\Input::get(ACTION_KEY_NAME, DEFAULT_ACTION);
+
+define('CONTROLLER', $vars['controller']);
+define('ACTION', $vars['action']);
 
 \system\Middleware::before();
 
