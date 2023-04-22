@@ -282,58 +282,6 @@ class Db
         return $sql;
     }
 
-    /**
-     * sql比较运算符号解析
-     * @param string $key
-     * @param string $value
-     * @return string
-     */
-    private function sqlCompare(string $key, string $value)
-    {
-        $key = strtolower(trim($key));
-
-        if (strpos($key, '>=')) {
-            $key = trim(str_replace('>=', '', $key));
-            return "$key>='$value'";
-        }
-
-        if (strpos($key, '<=')) {
-            $key = trim(str_replace('<=', '', $key));
-            return "$key<='$value'";
-        }
-
-        if (strpos($key, '!=')) {
-            $key = trim(str_replace('!=', '', $key));
-            return "$key!='$value'";
-        }
-
-        if (strpos($key, '<>')) {
-            $key = trim(str_replace('<>', '', $key));
-            return "$key<>'$value'";
-        }
-
-        if (strpos($key, '>')) {
-            $key = trim(str_replace('>', '', $key));
-            return "$key>'$value'";
-        }
-
-        if (strpos($key, '<')) {
-            $key = trim(str_replace('<', '', $key));
-            return "$key<'$value'";
-        }
-
-        if (strpos($key, ' like')) {
-            $key = trim(str_replace(' like', '', $key));
-            return "$key like '$value'";
-        }
-
-        if (strpos($key, ' in')) {
-            $key = trim(str_replace(' in', '', $key));
-            return "$key in ($value)";
-        }
-
-        return "$key='$value'";
-    }
 
     /**
      * 构造sql select字段

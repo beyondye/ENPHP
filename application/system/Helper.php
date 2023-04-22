@@ -34,7 +34,7 @@ class Helper
         if ($total > $size) {
             $count = ceil($total / $size);
         } else {
-            if($info==''){
+            if ($info == '') {
                 return '';
             }
             return '<div class="pager">' . $info . '</div>';
@@ -66,7 +66,7 @@ class Helper
 
         //loop page number
         for (; $start <= $end; $start++) {
-            if ($page == $start ) {
+            if ($page == $start) {
                 $html .= str_replace('<%page%>', $start, '<span class="number current">' . $start . '</span>');
             } else {
                 $html .= str_replace('<%page%>', $start, '<a class="number" href="' . $url . '">' . $start . '</a>');

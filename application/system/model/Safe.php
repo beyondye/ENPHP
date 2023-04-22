@@ -186,7 +186,7 @@ class Safe
     }
 
 
-    public function validateWhere($where): bool
+    public function validateWhere(array $where): bool
     {
         foreach ($where as $rs) {
 
@@ -214,7 +214,7 @@ class Safe
                 if ($this->illegalFields) {
                     throw new Exception('非法字段数据:' . join(',', $this->illegalFields));
                 }
-                throw new Exception('没有提交数据');
+                throw new Exception('没有提交Where数据');
             }
         }
 

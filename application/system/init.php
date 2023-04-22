@@ -31,7 +31,7 @@ function profiler(string $type, string $mark, string $desc = '')
         return false;
     }
 
-    if (false === PROFILER) {
+    if (!PROFILER) {
         return false;
     }
 

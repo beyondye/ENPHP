@@ -32,7 +32,7 @@ class Select
             } elseif ($count == 3) {
                 $this->wheres[] = [$wheres[0], $wheres[1], $wheres[2]];
             }
-        } else if($wheres[0]) {
+        } else if ($wheres[0]) {
 
             $key = array_key_first($wheres[0]);
             if (is_string($wheres[0][$key])) {
@@ -58,7 +58,7 @@ class Select
     }
 
 
-    public function group(array $groups)
+    public function groupBy(array $groups): object
     {
         $this->groups = array_merge($this->groups, $groups);
         return $this;
@@ -73,9 +73,9 @@ class Select
 
 
     //$orders=array|'string'
-    //order('id')|order('id','desc')|order(['id'=>'desc','name'=>'asc'])
-    //select()->order('id')->order('name','asc')->order(['user_id'=>'desc'])
-    public function order(array|string $orders, string $sort = 'desc'): object
+    //orderBy('id')|orderBy('id','desc')|orderBy(['id'=>'desc','name'=>'asc'])
+    //select()->orderBy('id')->orderBy('name','asc')->orderBy(['user_id'=>'desc'])
+    public function orderBy(array|string $orders, string $sort = 'desc'): object
     {
         if (is_string($orders)) {
             $orders = [$orders => $sort];
@@ -86,19 +86,13 @@ class Select
         return $this;
     }
 
-    public function count(): int
-    {
-        $params = ['where' => $this->wheres, 'fields' => " COUNT({$this->primary}) AS ct "];
-        return DB::instance($this->db)->select($this->table, $params)->row()->ct;
-    }
 
-
-    public function last()
+    public function last(): object|null
     {
         $condition = [
             'where' => $this->wheres,
             'fields' => $this->fields,
-            'orderby' => [$this->primary => 'desc'],
+            'orderby' => [$this->primary => 'DESC'],
             'limit' => 1
         ];
 
@@ -110,7 +104,7 @@ class Select
         $condition = [
             'where' => $this->wheres,
             'fields' => $this->fields,
-            'orderby' => [$this->primary => 'asc'],
+            'orderby' => [$this->primary => 'ASC'],
             'limit' => 1
         ];
 

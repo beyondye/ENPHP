@@ -21,8 +21,8 @@ class Model
     ];
 
     const SER_DEFAULT = 0;
-    const  SER_WRITE = 1;
-    const  SER_READ = 2;
+    const SER_WRITE = 1;
+    const SER_READ = 2;
 
     public function setServer($name, $type = self::SER_DEFAULT): void
     {
@@ -38,6 +38,11 @@ class Model
 
     public function selectDb($db): bool
     {
+
+        if ($this->RDB == $this->WDB) {
+            return DB::instance($this->WDB)->selectDb($db);
+        }
+
         if (DB::instance($this->RDB)->selectDb($db) &&
             DB::instance($this->WDB)->selectDb($db)) {
             return true;
@@ -112,7 +117,7 @@ class Model
 
             $rs = $safe->clear($rs);
             if (empty($rs)) {
-                throw new Exception('新增数据不能为空');
+                throw new Exception('插入数据不能为空');
             }
 
             if (!$safe->complete($rs)) {
@@ -157,9 +162,9 @@ class Model
                 $_wheres[] = [$this->primary, 'in', $wheres[0]];
             }
 
-        } else if($wheres[0]){
+        } else if ($wheres[0]) {
             if (is_string($wheres[0][array_key_first($wheres[0])])) {
-                $_wheres= $wheres;
+                $_wheres = $wheres;
             } else {
                 $_wheres = $wheres[0];
             }
@@ -173,5 +178,28 @@ class Model
         return $_wheres;
     }
 
+    public function count(array|string|int ...$wheres): int
+    {
+        $wheres = $this->where($wheres);
+        $params = ['where' => $wheres, 'fields' => " COUNT({$this->primary}) AS ct "];
+        return DB::instance($this->RDB)->select($this->table, $params)->row()->ct;
+    }
+
+
+    public function validateField($fields)
+    {
+        foreach ($fields as $rs) {
+            $as = trim(strstr($rs, ' as ', true));
+            if ($as) {
+                $rs = $as;
+            }
+
+            if (!array_key_exists($rs, $this->model->schema)) {
+                throw new Exception('Schema不存在的字段 ' . $rs);
+            }
+        }
+
+        return true;
+    }
 
 }
