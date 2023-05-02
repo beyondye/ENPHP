@@ -15,8 +15,8 @@ class Select
 
     public array $fields = [];
     public array $wheres = [];
-    private array $groups = [];
-    private array $orders = [];
+    public array $groups = [];
+    public array $orders = [];
 
 
     //['id','=','1']
@@ -87,6 +87,17 @@ class Select
     }
 
 
+    public function one(): object|null
+    {
+        $condition = [
+            'where' => $this->wheres,
+            'fields' => $this->fields,
+            'limit' => 1
+        ];
+
+        return DB::instance($this->db)->select($this->table, $condition)->row();
+    }
+
     public function last(): object|null
     {
         $condition = [
@@ -98,6 +109,7 @@ class Select
 
         return DB::instance($this->db)->select($this->table, $condition)->row();
     }
+
 
     public function first(): object|null
     {
@@ -134,6 +146,8 @@ class Select
     {
         $condition = [
             'fields' => $this->fields,
+            'orderby' => $this->orders,
+            'groupby' => $this->groups,
             'limit' => $limit
         ];
         return DB::instance($this->db)->select($this->table, $condition)->result();

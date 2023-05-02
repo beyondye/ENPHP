@@ -52,7 +52,7 @@ class Model
     }
 
 
-    public function select(string|array $fields = []): object
+    public function select(array $fields = []): object
     {
 
         if ($this->objects['select']) {
@@ -68,6 +68,8 @@ class Model
         $select->fields = $fields;
         $select->db = $this->RDB;
         $select->wheres = [];
+        $select->orders = [];
+        $select->groups = [];
 
         return $select;
     }
@@ -185,21 +187,5 @@ class Model
         return DB::instance($this->RDB)->select($this->table, $params)->row()->ct;
     }
 
-
-    public function validateField($fields)
-    {
-        foreach ($fields as $rs) {
-            $as = trim(strstr($rs, ' as ', true));
-            if ($as) {
-                $rs = $as;
-            }
-
-            if (!array_key_exists($rs, $this->model->schema)) {
-                throw new Exception('Schema不存在的字段 ' . $rs);
-            }
-        }
-
-        return true;
-    }
 
 }

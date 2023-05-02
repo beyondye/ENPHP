@@ -220,4 +220,20 @@ class Safe
 
         return true;
     }
+
+    public function validateField($fields): bool
+    {
+        foreach ($fields as $rs) {
+            $as = trim(strstr($rs, ' as ', true));
+            if ($as) {
+                $rs = $as;
+            }
+
+            if (!array_key_exists($rs, $this->schema)) {
+                throw new Exception('Schema不存在的字段 ' . $rs);
+            }
+        }
+
+        return true;
+    }
 }
