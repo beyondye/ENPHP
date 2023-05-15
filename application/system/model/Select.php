@@ -19,10 +19,9 @@ class Select
     public array $orders = [];
 
 
-    //['id','=','1']
     //id,'>','2'
     //id,'2'
-    //[[['id','=','1'],['name','!=','bob']]]
+    //[['id','=','1'],['name','!=','bob']]
     public function where(array|string ...$wheres): object
     {
         if (is_string($wheres[0])) {
@@ -32,26 +31,15 @@ class Select
             } elseif ($count == 3) {
                 $this->wheres[] = [$wheres[0], $wheres[1], $wheres[2]];
             }
-        } else if ($wheres[0]) {
+        }
 
-            $key = array_key_first($wheres[0]);
-            if (is_string($wheres[0][$key])) {
-                foreach ($wheres as $rs) {
-                    $this->wheres[] = $rs;
-                }
-            } else {
-                foreach ($wheres[0] as $rs) {
-                    //var_dump($rs);
-                    if ($rs) {
-                        $this->wheres[] = $rs;
-                    }
-                }
+        if (is_array($wheres[0])) {
+            foreach ($wheres[0] as $rs) {
+                $this->wheres[] = $rs;
             }
         }
 
         $safe = new Safe($this->schema);
-
-        //var_dump($this->wheres);
         $safe->validateWhere($this->wheres);
 
         return $this;
@@ -92,6 +80,7 @@ class Select
         $condition = [
             'where' => $this->wheres,
             'fields' => $this->fields,
+            'groupby' => $this->groups,
             'limit' => 1
         ];
 
@@ -104,6 +93,7 @@ class Select
             'where' => $this->wheres,
             'fields' => $this->fields,
             'orderby' => [$this->primary => 'DESC'],
+            'groupby' => $this->groups,
             'limit' => 1
         ];
 
@@ -117,6 +107,7 @@ class Select
             'where' => $this->wheres,
             'fields' => $this->fields,
             'orderby' => [$this->primary => 'ASC'],
+            'groupby' => $this->groups,
             'limit' => 1
         ];
 
@@ -136,6 +127,7 @@ class Select
             'where' => $this->wheres,
             'fields' => $this->fields,
             'orderby' => $this->orders,
+            'groupby' => $this->groups,
             'limit' => $limit
         ];
 
@@ -145,6 +137,7 @@ class Select
     public function all(int $limit = 1000): array
     {
         $condition = [
+            'where' => $this->wheres,
             'fields' => $this->fields,
             'orderby' => $this->orders,
             'groupby' => $this->groups,
