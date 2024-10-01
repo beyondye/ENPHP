@@ -41,12 +41,8 @@ function profiler(string $type, string $mark, string $desc = '')
     return true;
 }
 
-
 //autoload class
 spl_autoload_register(function ($class) {
-
-    $file = '';
-    $find = false;
 
     if (defined('VENDOR')) {
         foreach (VENDOR as $key => $val) {
@@ -56,20 +52,20 @@ spl_autoload_register(function ($class) {
                     $file = str_replace('\\', DIRECTORY_SEPARATOR, $map . DIRECTORY_SEPARATOR . $suffix . EXT);
                     if (file_exists($file)) {
                         include $file;
-                        $find = true;
+                        return;
                     }
                 }
             }
         }
     }
 
-    if ($find === false) {
-        $file = str_replace('\\', DIRECTORY_SEPARATOR, APP_DIR . $class . EXT);
-        if (file_exists($file)) {
-            include $file;
-        }
+    $file = str_replace('\\', DIRECTORY_SEPARATOR, APP_DIR . $class . EXT);
+    if (file_exists($file)) {
+        include $file;
+        return;
     }
 
+    include SYS_DIR . str_replace(['\\', 'system'], ['/', ''],  $class) . EXT;
 });
 
 profiler('benchmark', 'running', 'Action');
