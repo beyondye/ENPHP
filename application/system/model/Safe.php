@@ -188,13 +188,14 @@ class Safe
 
     public function validateWhere(array $where): bool
     {
+     
         foreach ($where as $rs) {
 
             if (!is_array($rs) || count($rs) != 3) {
                 throw new Exception('WHERE条件参数不完整');
             }
 
-            if (!in_array($rs[1], ['=', '>', '<', '>=', '<=', '<>', '!=', 'in', 'like', 'between'])) {
+            if (!in_array(strtolower($rs[1]), ['=', '>', '<', '>=', '<=', '<>', '!=', 'in', 'like', 'between'])) {
                 throw new Exception('非法操作符');
             }
 

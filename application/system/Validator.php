@@ -248,7 +248,7 @@ class Validator
      */
     public static function regex(string $var, string $pattern)
     {
-        return preg_match("{$pattern}", $var) > 0;
+        return @preg_match("{$pattern}", $var) > 0;
     }
 
 
