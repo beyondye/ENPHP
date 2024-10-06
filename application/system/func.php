@@ -34,3 +34,22 @@ function profiler(string $type, string $mark, string $desc = '')
 
     return true;
 }
+
+//lang('system.test',['replace',],'en')
+function lang(string $key, array $replace = [], string $lang = '')
+{
+
+    static $data = [];
+
+    $lang = $lang ?: \system\Locale::lang();
+
+    $keys = explode('.', $key);
+    $path = LANG_DIR . $lang . DIRECTORY_SEPARATOR . $keys[0] . EXT;
+
+    if (isset($data[$path])) {
+        return $data[$path][$keys[1]];
+    }
+
+    $data[$path] = include $path;
+    return $data[$path][$keys[1]];
+}
