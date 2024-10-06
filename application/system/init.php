@@ -63,4 +63,4 @@ $ins->$act();
 
 profiler('benchmark', 'running');
 
-echo '<pre>',var_dump(get_included_files()),'</pre>';
+//echo '<pre>',var_dump(get_included_files()),'</pre>';
