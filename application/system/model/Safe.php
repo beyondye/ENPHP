@@ -54,7 +54,7 @@ class Safe
      *
      * @param $schema
      */
-    public function __construct($schema)
+    public function __construct(array $schema)
     {
         $this->schema = $schema;
         $this->rules = $this->makeRules($schema);
@@ -203,7 +203,7 @@ class Safe
                 throw new Exception('包含非法字段:' . $rs[0]);
             }
 
-            if ($rs[1] === 'in' || $rs[1] === 'between') {
+            if ($rs[1] == 'in' || $rs[1] == 'between') {
                 $ins = explode(',', $rs[2]);
                 foreach ($ins as $subrs) {
                     $this->validateWhere([[$rs[0], '=', $subrs]]); //递归
@@ -222,7 +222,7 @@ class Safe
         return true;
     }
 
-    public function validateField($fields): bool
+    public function validateField(array $fields): bool
     {
         foreach ($fields as $rs) {
             $as = trim(strstr($rs, ' as ', true));
