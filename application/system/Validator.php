@@ -158,8 +158,8 @@ class Validator
                 unset($rules[$key]['label']);
             }
 
-            if (isset($rules[$key]['massage'])) {
-                unset($rules[$key]['massage']);
+            if (isset($rules[$key]['message'])) {
+                unset($rules[$key]['message']);
             }
 
             //过滤清理验证数据
