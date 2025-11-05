@@ -290,7 +290,7 @@ class Validator
      */
     public static function float($var)
     {
-        return is_float($var);
+        return filter_var($var, FILTER_VALIDATE_FLOAT) !== false;
     }
 
 
