@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace system;
 
@@ -10,15 +11,15 @@ use system\model\Safe;
 class Model
 {
 
-    public string $table;
-    public array $schema;
-    public string $primary;
+    private string $table;
+    private array $schema;
+    private string $primary;
 
     protected array $objects = [
         'select' => null,
     ];
 
-    private $db = null;
+    protected Dbabstract $db;
 
     public function __construct(Dbabstract $db)
     {

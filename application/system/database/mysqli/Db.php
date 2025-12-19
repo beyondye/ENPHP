@@ -1,9 +1,9 @@
 <?php
+declare(strict_types=1);
 
 namespace system\database\mysqli;
 
 use mysqli;
-
 use system\database\DatabaseException;
 
 class Db extends \system\database\Dbabstract
