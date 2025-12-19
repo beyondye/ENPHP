@@ -8,7 +8,7 @@ class Cookie
     /**
      * 获取cookie数据,不存在返回null，不带参数返回全部
      *
-     * @param string $name
+     * @param string|null $name
      *
      * @return array|null
      */

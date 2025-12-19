@@ -2,7 +2,7 @@
 
 namespace system\model;
 
-use Exception;
+use system\model\ModelException;
 use system\Validator;
 
 class Safe
@@ -192,15 +192,15 @@ class Safe
         foreach ($where as $rs) {
 
             if (!is_array($rs) || count($rs) != 3) {
-                throw new Exception('WHERE条件参数不完整');
+                throw new ModelException('WHERE条件参数不完整');
             }
 
             if (!in_array(strtolower($rs[1]), ['=', '>', '<', '>=', '<=', '<>', '!=', 'in', 'like', 'between'])) {
-                throw new Exception('非法操作符');
+                throw new ModelException('非法操作符');
             }
 
             if (!array_key_exists($rs[0], $this->schema)) {
-                throw new Exception('包含非法字段:' . $rs[0]);
+                throw new ModelException('包含非法字段:' . $rs[0]);
             }
 
             if ($rs[1] == 'in' || $rs[1] == 'between') {
@@ -213,9 +213,9 @@ class Safe
 
             if (!$this->validate([$rs[0] => $rs[2]])) {
                 if ($this->illegalFields) {
-                    throw new Exception('非法字段数据:' . join(',', $this->illegalFields));
+                    throw new ModelException('非法字段数据:' . join(',', $this->illegalFields));
                 }
-                throw new Exception('没有提交Where数据');
+                throw new ModelException('没有提交Where数据');
             }
         }
 
@@ -231,7 +231,7 @@ class Safe
             }
 
             if (!array_key_exists($rs, $this->schema)) {
-                throw new Exception('Schema不存在的字段 ' . $rs);
+                throw new ModelException('Schema不存在的字段 ' . $rs);
             }
         }
 

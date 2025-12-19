@@ -2,15 +2,13 @@
 
 namespace system;
 
-use Exception;
-use system\Database as DB;
+use system\database\Dbabstract;
+use system\model\ModelException;
 use system\model\Select;
 use system\model\Safe;
 
 class Model
 {
-    protected string $RDB = 'default';
-    protected string $WDB = 'default';
 
     public string $table;
     public array $schema;
@@ -20,35 +18,11 @@ class Model
         'select' => null,
     ];
 
-    const SER_DEFAULT = 0;
-    const SER_WRITE = 1;
-    const SER_READ = 2;
+    private $db = null;
 
-    public function setServer($name, $type = self::SER_DEFAULT): void
+    public function __construct(Dbabstract $db)
     {
-        if ($type == self::SER_READ) {
-            $this->RDB = $name;
-        } else if ($type == self::SER_WRITE) {
-            $this->WDB = $name;
-        } else {
-            $this->WDB = $name;
-            $this->RDB = $name;
-        }
-    }
-
-    public function selectDb($db): bool
-    {
-
-        if ($this->RDB == $this->WDB) {
-            return DB::instance($this->WDB)->selectDb($db);
-        }
-
-        if (DB::instance($this->RDB)->selectDb($db) &&
-            DB::instance($this->WDB)->selectDb($db)) {
-            return true;
-        }
-
-        return false;
+        $this->db = $db;
     }
 
 
@@ -66,7 +40,7 @@ class Model
         }
 
         $select->fields = $fields;
-        $select->db = $this->RDB;
+        $select->db = $this->db;
         $select->wheres = [];
         $select->orders = [];
         $select->groups = [];
@@ -78,7 +52,7 @@ class Model
     public function delete(array|string|int ...$wheres): bool
     {
         $wheres = $this->where($wheres);
-        return DB::instance($this->WDB)->delete($this->table, $wheres);
+        return $this->db->delete($this->table, $wheres);
     }
 
 
@@ -88,19 +62,19 @@ class Model
         $data = $safe->clear($data);
 
         if (empty($data)) {
-            throw new Exception('更新数据不能为空');
+            throw new ModelException('更新数据不能为空');
         }
 
         if (!$safe->validate($data)) {
             if ($safe->illegalFields) {
-                throw new Exception('非法字段数据:' . join(',', $safe->illegalFields));
+                throw new ModelException('非法字段数据:' . join(',', $safe->illegalFields));
             }
-            throw new Exception('没有提交数据');
+            throw new ModelException('没有提交数据');
         }
         $data = $safe->data;
         $_wheres = $this->where($wheres);
 
-        return DB::instance($this->WDB)->update($this->table, $data, $_wheres);
+        return $this->db->update($this->table, $data, $_wheres);
     }
 
     public function insert(array $data = []): bool
@@ -119,25 +93,25 @@ class Model
 
             $rs = $safe->clear($rs);
             if (empty($rs)) {
-                throw new Exception('插入数据不能为空');
+                throw new ModelException('插入数据不能为空');
             }
 
             if (!$safe->complete($rs)) {
-                throw new Exception('缺少必要字段:' . join(',', $safe->incompleteFields));
+                throw new ModelException('缺少必要字段:' . join(',', $safe->incompleteFields));
             }
 
             if (!$safe->validate($rs)) {
                 if ($safe->illegalFields) {
-                    throw new Exception('非法字段数据:' . join(',', $safe->illegalFields));
+                    throw new ModelException('非法字段数据:' . join(',', $safe->illegalFields));
                 }
-                throw new Exception('没有提交数据');
+                throw new ModelException('没有提交数据');
             }
 
             $rs = $safe->data;
             $data[] = $safe->merge($rs);
         }
 
-        return DB::instance($this->WDB)->insert($this->table, $data);
+        return $this->db->insert($this->table, $data);
     }
 
     /**
@@ -146,7 +120,7 @@ class Model
      */
     public function lastid()
     {
-        return DB::instance($this->WDB)->insert_id;
+        return $this->db->lastid();
     }
 
 
@@ -163,14 +137,12 @@ class Model
             } else {
                 $_wheres[] = [$this->primary, 'in', $wheres[0]];
             }
-
         } else if ($wheres[0]) {
             if (is_string($wheres[0][array_key_first($wheres[0])])) {
                 $_wheres = $wheres;
             } else {
                 $_wheres = $wheres[0];
             }
-
         }
 
 
@@ -184,8 +156,6 @@ class Model
     {
         $wheres = $this->where($wheres);
         $params = ['where' => $wheres, 'fields' => " COUNT({$this->primary}) AS ct "];
-        return DB::instance($this->RDB)->select($this->table, $params)->row()->ct;
+        return $this->db->select($this->table, $params)->row()->ct;
     }
-
-
 }

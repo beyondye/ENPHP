@@ -4,7 +4,9 @@ namespace system\database\mysqli;
 
 use mysqli;
 
-class Db
+use system\database\DatabaseException;
+
+class Db extends \system\database\Dbabstract
 {
 
     /**
@@ -19,18 +21,6 @@ class Db
      */
     public array $config = [];
 
-    public function __get($name)
-    {
-        //返回最新插入id
-        if ($name == 'insert_id') {
-            return $this->db->insert_id;
-        }
-
-        //返回影响行数
-        if ($name == 'affected_rows') {
-            return $this->db->affected_rows;
-        }
-    }
 
     /**
      * 构造函数
@@ -46,20 +36,15 @@ class Db
         profiler('benchmark', 'database');
 
         if ($this->db->connect_errno) {
-            exit('Database Connection Error :' . $this->db->connect_error);
+            throw new DatabaseException('Database Connection Error :' . $this->db->connect_error);
         }
 
         $this->db->set_charset($config['charset']);
     }
 
-    /**
-     * 改变本次链接操作的数据库
-     * @param string $db
-     * @return bool
-     */
-    public function selectDb(string $db): bool
+    public function lastid()
     {
-        return $this->db->select_db($db);
+        return $this->db->insert_id;
     }
 
     /**
@@ -74,7 +59,7 @@ class Db
         profiler('benchmark', 'queries');
 
         if ($this->db->errno) {
-            exit('Database Error : [' . $sql . '] ' . $this->db->error . ' [Code:' . $this->db->errno . ']');
+            throw new DatabaseException('Database Error : [' . $sql . '] ' . $this->db->error . ' [Code:' . $this->db->errno . ']');
         }
 
         return new Result($result);
@@ -94,7 +79,7 @@ class Db
         profiler('benchmark', 'executes');
 
         if ($this->db->errno) {
-            exit('Database Error : [' . $sql . '] ' . $this->db->error . ' [Code:' . $this->db->errno . ']');
+            throw new DatabaseException('Database Error : [' . $sql . '] ' . $this->db->error . ' [Code:' . $this->db->errno . ']');
         }
 
         return $result;
@@ -269,7 +254,6 @@ class Db
                         continue;
                     }
                     $sub = "$rs[0] BETWEEN '$bet[0]' AND '$bet[1]'";
-
                 } else {
                     $sub = $rs[0] . $rs[1] . "'$rs[2]'";
                 }
@@ -408,5 +392,4 @@ class Db
     {
         $this->close();
     }
-
 }
