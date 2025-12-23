@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace system\database;
 
-abstract class Dbabstract
+abstract class DatabaseAbstract
 {
     abstract public function execute(string $sql);
     abstract public function insert(string $table, array $data);

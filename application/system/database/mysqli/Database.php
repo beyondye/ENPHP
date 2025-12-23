@@ -5,8 +5,10 @@ namespace system\database\mysqli;
 
 use mysqli;
 use system\database\DatabaseException;
+use system\database\mysqli\Result;
+use system\database\DatabaseAbstract;
 
-class Db extends \system\database\Dbabstract
+class Database extends DatabaseAbstract
 {
 
     /**

@@ -3,12 +3,12 @@ declare(strict_types=1);
 
 namespace system\model;
 
-use system\Database as DB;
+use system\database\DatabaseAbstract;
 
 class Select
 {
 
-    public string $db;
+    public DatabaseAbstract $db;
 
     public string $table;
     public string $primary;
@@ -85,7 +85,7 @@ class Select
             'limit' => 1
         ];
 
-        return DB::instance($this->db)->select($this->table, $condition)->row();
+        return $this->db->select($this->table, $condition)->row();
     }
 
     public function last(): object|null
@@ -98,7 +98,7 @@ class Select
             'limit' => 1
         ];
 
-        return DB::instance($this->db)->select($this->table, $condition)->row();
+        return $this->db->select($this->table, $condition)->row();
     }
 
 
@@ -112,7 +112,7 @@ class Select
             'limit' => 1
         ];
 
-        return DB::instance($this->db)->select($this->table, $condition)->row();
+        return $this->db->select($this->table, $condition)->row();
     }
 
 
@@ -132,7 +132,7 @@ class Select
             'limit' => $limit
         ];
 
-        return DB::instance($this->db)->select($this->table, $condition)->result();
+        return $this->db->select($this->table, $condition)->result();
     }
 
     public function all(int $limit = 1000): array
@@ -144,7 +144,7 @@ class Select
             'groupby' => $this->groups,
             'limit' => $limit
         ];
-        return DB::instance($this->db)->select($this->table, $condition)->result();
+        return $this->db->select($this->table, $condition)->result();
     }
 
 

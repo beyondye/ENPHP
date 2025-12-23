@@ -58,7 +58,7 @@ class Safe
     public function __construct(array $schema)
     {
         $this->schema = $schema;
-        $this->rules = $this->makeRules($schema);
+        //$this->rules = $this->makeRules($schema);
     }
 
 

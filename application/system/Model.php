@@ -1,9 +1,10 @@
 <?php
+
 declare(strict_types=1);
 
 namespace system;
 
-use system\database\Dbabstract;
+use system\database\DatabaseAbstract;
 use system\model\ModelException;
 use system\model\Select;
 use system\model\Safe;
@@ -11,19 +12,44 @@ use system\model\Safe;
 class Model
 {
 
-    private string $table;
-    private array $schema;
-    private string $primary;
+    protected string $table;
+    protected string $primary;
+
+    protected array $fields = [];
+    protected array $fillable = [];
+    protected array $timestamps = ['creating' => false, 'updating' => false, 'deleting' => false];
 
     protected array $objects = [
         'select' => null,
     ];
 
-    protected Dbabstract $db;
+    protected DatabaseAbstract $db;
 
-    public function __construct(Dbabstract $db)
+    public function __construct(DatabaseAbstract $db)
     {
         $this->db = $db;
+    }
+
+
+    protected function creating(): void
+    {
+        if ($this->timestamps['creating']) {
+            $this->fields[$this->timestamps['creating']] = time();
+        }
+    }
+
+    protected function updating(): void
+    {
+        if ($this->timestamps['updating']) {
+            $this->fields[$this->timestamps['updating']] = time();
+        }
+    }
+
+    protected function deleting(): void
+    {
+        if ($this->timestamps['deleting']) {
+            $this->fields[$this->timestamps['deleting']] = time();
+        }
     }
 
 
@@ -88,7 +114,7 @@ class Model
             $_data = $data;
         }
 
-        $safe = new Safe($this->schema);
+        $safe = new Safe($this->fillable);
         $data = [];
         foreach ($_data as $rs) {
 

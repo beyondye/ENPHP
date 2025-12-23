@@ -1,6 +1,9 @@
 <?php
+declare(strict_types=1);
 
 namespace system;
+
+use system\database\DatabaseAbstract;
 
 class Database
 {
@@ -12,7 +15,7 @@ class Database
      *
      * @return object
      */
-    public static function instance(string $service = 'default')
+    public static function instance(string $service = 'default'): DatabaseAbstract
     {
         static $ins = [];
         if (isset($ins[$service])) {
@@ -26,7 +29,9 @@ class Database
 
         $arguments = $config[$service];
         if ($arguments['driver'] == 'mysqli') {
-            $ins[$service] = new database\mysqli\Db($arguments);
+            $ins[$service] = new database\mysqli\Database($arguments);
+        } else {
+            exit(" '{$service}' Driver Not Support.");
         }
 
         return $ins[$service];
