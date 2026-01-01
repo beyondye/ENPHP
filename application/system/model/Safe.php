@@ -49,19 +49,6 @@ class Safe
      */
     public $data = [];
 
-
-    /**
-     * 构造函数
-     *
-     * @param $schema
-     */
-    public function __construct(array $schema)
-    {
-        $this->schema = $schema;
-        //$this->rules = $this->makeRules($schema);
-    }
-
-
     /**
      * 生成结构化rules
      *
@@ -171,7 +158,7 @@ class Safe
      *
      * @return array|bool 清理后后的数据
      */
-    public function clear(array $data)
+    public static function clear(array $fields)
     {
 
         $given = [];

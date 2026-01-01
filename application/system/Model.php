@@ -107,16 +107,16 @@ class Model
     public function insert(array $data = []): bool
     {
 
-        $_data = [];
+        $dataset = [];
         if (empty($data[0])) {
-            $_data[] = $data;
+            $dataset[] = $data;
         } else {
-            $_data = $data;
+            $dataset = $data;
         }
 
         $safe = new Safe($this->fillable);
         $data = [];
-        foreach ($_data as $rs) {
+        foreach ($dataset as $rs) {
 
             $rs = $safe->clear($rs);
             if (empty($rs)) {
