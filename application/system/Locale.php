@@ -15,10 +15,4 @@ class Locale
 
       return $var;
    }
-
-   function data(callable $fun){
-
-
-
-   }
 }
