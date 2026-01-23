@@ -50,9 +50,7 @@ const AUTH_COOKIE_EXPIRE = 0;
 
 //默认语言环境
 const LANG = 'zh';
-//语言包数据类型file，database
-const LANG_PACK_TYPE = 'file';
-//语言包目录
+//语言数据目录
 const LANG_DIR = APP_DIR . 'locale/lang/';
 //语言包据库链接名称
 const LANG_DATABASE='default';

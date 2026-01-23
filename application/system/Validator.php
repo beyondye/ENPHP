@@ -1,9 +1,23 @@
 <?php
+declare(strict_types=1);
 
 namespace system;
 
+use system\Locale;
+
 class Validator
 {
+    /**
+     * 构造函数
+     * @param array $rules
+     */
+
+    public function __construct(array $rules=[])
+    {
+        $this->setRules($rules);
+    }
+
+
     /**
      * 验证规则
      * @var array
@@ -20,41 +34,41 @@ class Validator
      * 错误规则
      * @var array
      */
-    public $error = [];
+    public $errors = [];
 
     /**
      * 错误模板
      * @var array
      */
-    private $template = [
-        'required' => '<%label%>不能为空',
-        'len' => '<%label%>长度必须为<%limit%>个字符',
-        'minLen' => '<%label%>最小长度为<%limit%>个字符',
-        'maxLen' => '<%label%>最大长度为<%limit%>个字符',
-        'gt' => '<%label%>必须大于<%limit%>',
-        'lt' => '<%label%>必须小于<%limit%>',
-        'gte' => '<%label%>必须大于等于<%limit%>',
-        'lte' => '<%label%>必须小于等于<%limit%>',
-        'eq' => '<%label%>必须是<%limit%>',
-        'neq' => '<%label%>不能是<%limit%>',
-        'in' => '<%label%>只能是<%limit%>其中之一',
-        'nin' => '<%label%>不能是<%limit%>其中之一',
-        'same' => '<%label%>和<%limit%>必须一致',
-        'mobile' => '<%label%>格式错误',
-        'email' => '<%label%>格式错误',
-        'id' => '<%label%>格式错误',
-        'ip4' => '<%label%>格式错误',
-        'ip6' => '<%label%>格式错误',
-        'url' => '<%label%>格式错误',
-        'array' => '<%label%>必须是数组',
-        'float' => '<%label%>必须是浮点数',
-        'num' => '<%label%>必须是数字',
-        'string' => '<%label%>必须是字符',
-        'chinese' => '<%label%>必须是中文',
-        'alpha' => '<%label%>必须是字母',
-        'alphaNum' => '<%label%>必须是字母、数字',
-        'alphaNumChinese' => '<%label%>必须是字母、数字、汉字',
-        'alphaNumDash' => '<%label%>必须是字母、数字、下划线',
+    private array $template = [
+        'required' => Locale::sys('validator.required'),
+        'len' => Locale::sys('validator.len'),
+        'minLen' => Locale::sys('validator.minLen'),
+        'maxLen' => Locale::sys('validator.maxLen'),
+        'gt' => Locale::sys('validator.gt'),
+        'lt' => Locale::sys('validator.lt'),
+        'gte' => Locale::sys('validator.gte'),
+        'lte' => Locale::sys('validator.lte'),
+        'eq' => Locale::sys('validator.eq'),
+        'neq' => Locale::sys('validator.neq'),
+        'in' => Locale::sys('validator.in'),
+        'nin' => Locale::sys('validator.nin'),
+        'same' => Locale::sys('validator.same'),
+        'mobile' => Locale::sys('validator.mobile'),
+        'email' => Locale::sys('validator.email'),
+        'id' => Locale::sys('validator.id'),
+        'ip4' => Locale::sys('validator.ip4'),
+        'ip6' => Locale::sys('validator.ip6'),
+        'url' => Locale::sys('validator.url'),
+        'array' => Locale::sys('validator.array'),
+        'float' => Locale::sys('validator.float'),
+        'num' => Locale::sys('validator.num'),
+        'string' => Locale::sys('validator.string'),
+        'chinese' => Locale::sys('validator.chinese'),
+        'alpha' => Locale::sys('validator.alpha'),
+        'alphaNum' => Locale::sys('validator.alphaNum'),
+        'alphaNumChinese' => Locale::sys('validator.alphaNumChinese'),
+        'alphaNumDash' => Locale::sys('validator.alphaNumDash')
     ];
 
     /**
@@ -62,7 +76,7 @@ class Validator
      * @param string $key
      * @param string $ruleKey
      */
-    private function setError(string $key, string $ruleKey)
+    private function setErrors(string $key, string $ruleKey)
     {
         $label = $key;
         if (isset($this->rules[$key]['label'])) {
@@ -233,7 +247,6 @@ class Validator
                     $pass = false;
                 }
             }
-
         }
 
         return $pass;
