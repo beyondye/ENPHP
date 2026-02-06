@@ -3,8 +3,6 @@ declare(strict_types=1);
 
 namespace system;
 
-use system\Locale;
-
 class Validator
 {
     /**
@@ -41,34 +39,34 @@ class Validator
      * @var array
      */
     private array $template = [
-        'required' => Locale::sys('validator.required'),
-        'len' => Locale::sys('validator.len'),
-        'minLen' => Locale::sys('validator.minLen'),
-        'maxLen' => Locale::sys('validator.maxLen'),
-        'gt' => Locale::sys('validator.gt'),
-        'lt' => Locale::sys('validator.lt'),
-        'gte' => Locale::sys('validator.gte'),
-        'lte' => Locale::sys('validator.lte'),
-        'eq' => Locale::sys('validator.eq'),
-        'neq' => Locale::sys('validator.neq'),
-        'in' => Locale::sys('validator.in'),
-        'nin' => Locale::sys('validator.nin'),
-        'same' => Locale::sys('validator.same'),
-        'mobile' => Locale::sys('validator.mobile'),
-        'email' => Locale::sys('validator.email'),
-        'id' => Locale::sys('validator.id'),
-        'ip4' => Locale::sys('validator.ip4'),
-        'ip6' => Locale::sys('validator.ip6'),
-        'url' => Locale::sys('validator.url'),
-        'array' => Locale::sys('validator.array'),
-        'float' => Locale::sys('validator.float'),
-        'num' => Locale::sys('validator.num'),
-        'string' => Locale::sys('validator.string'),
-        'chinese' => Locale::sys('validator.chinese'),
-        'alpha' => Locale::sys('validator.alpha'),
-        'alphaNum' => Locale::sys('validator.alphaNum'),
-        'alphaNumChinese' => Locale::sys('validator.alphaNumChinese'),
-        'alphaNumDash' => Locale::sys('validator.alphaNumDash')
+        'required' => lang('system.validator.required'),
+        'len' => lang('system.validator.len'),
+        'minLen' => lang('system.validator.minLen'),
+        'maxLen' => lang('system.validator.maxLen'),
+        'gt' => lang('system.validator.gt'),
+        'lt' => lang('system.validator.lt'),
+        'gte' => lang('system.validator.gte'),
+        'lte' => lang('system.validator.lte'),
+        'eq' => lang('system.validator.eq'),
+        'neq' => lang('system.validator.neq'),
+        'in' => lang('system.validator.in'),
+        'nin' => lang('system.validator.nin'),
+        'same' => lang('system.validator.same'),
+        'mobile' => lang('system.validator.mobile'),
+        'email' => lang('system.validator.email'),
+        'id' => lang('system.validator.id'),
+        'ip4' => lang('system.validator.ip4'),
+        'ip6' => lang('system.validator.ip6'),
+        'url' => lang('system.validator.url'),
+        'array' => lang('system.validator.array'),
+        'float' => lang('system.validator.float'),
+        'num' => lang('system.validator.num'),
+        'string' => lang('system.validator.string'),
+        'chinese' => lang('system.validator.chinese'),
+        'alpha' => lang('system.validator.alpha'),
+        'alphaNum' => lang('system.validator.alphaNum'),
+        'alphaNumChinese' => lang('system.validator.alphaNumChinese'),
+        'alphaNumDash' => lang('system.validator.alphaNumDash')
     ];
 
     /**

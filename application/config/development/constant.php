@@ -48,14 +48,27 @@ const AUTH_JWT_MODE = 'header';
 //认证cookie存活时间
 const AUTH_COOKIE_EXPIRE = 0;
 
-//默认语言环境
-const LANG = 'zh';
+
+//语言环境列表
+const LANG_LIST = [
+    'zh' => '中文',
+    'en' => 'English',
+    'es' => 'Español',
+    'pt' => 'Português',
+    'ja' => '日本語',
+    'de' => 'Deutsch',
+    'fr' => 'Français',
+    'it' => 'Italiano',
+    'ru' => 'Русский',
+    'ko' => '한국어',
+    'tr' => 'Türkçe',
+    'nl' => 'Nederlands',
+    'pl' => 'Polski'
+];
+//默认语言
+const LANG = 'zh'; 
 //语言数据目录
 const LANG_DIR = APP_DIR . 'locale/lang/';
-//语言包据库链接名称
-const LANG_DATABASE='default';
-//语言数据库表名
-const LANG_DATABASE_TABLE='language';
 
 
 //URL重写
