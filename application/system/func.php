@@ -46,74 +46,71 @@ function lang(string $key, array $replace = [], string $lang = '')
     $keys = explode('.', $key);
     $file = $keys[0];
 
+    $placeholder = function (string $string) use ($replace) {
 
-    $result = function () {
+        if (empty($replace)) {
+            return $string;
+        }
 
+        // 构建替换数组，处理单占位符格式
+        $pairs = [];
+        foreach ($replace as $key => $value) {
+            $pairs["{{$key}}"] = $value;
+        }
 
+        // 执行替换
+        return str_replace(array_keys($pairs), array_values($pairs), $string);
+    };
+
+    $result = function ($data) use ($keys, $key, $placeholder) {
+
+        for ($i = 1; $i < count($keys); $i++) {
+            if (isset($data[$keys[$i]])) {
+                $data = $data[$keys[$i]];
+            } else {
+                return $key; // 如果键不存在，返回原始键
+            }
+        }
+
+        if (is_array($data)) {
+            foreach ($data as $key => $value) {
+                $data[$key] = $placeholder($value);
+            }
+            return $data;
+        }
+
+        if (is_string($data)) {
+            return $placeholder($data);
+        }
+
+        return $key;
     };
 
 
     // 定义语言包查找路径的优先级
-    $lang_paths = [
+    $paths = [
         LANG_DIR . $language . DIRECTORY_SEPARATOR . $file . EXT,      // 应用层当前语言
         SYS_DIR . 'locale' . DIRECTORY_SEPARATOR . LANG . DIRECTORY_SEPARATOR . $file . EXT  // 系统层默认语言
     ];
 
-    if (isset($data[$lang_paths[0]])) {
-
-        return $result($data[$lang_paths[0]]);
-
-
-    } elseif (isset($data[$lang_paths[1]])) {
+    if (isset($data[$paths[0]])) {
+        return $result($data[$paths[0]]);
     }
 
-
-    $path = ''; // 初始化路径为空字符串
-    if (is_file($lang_paths[0])) {
-        $path = $lang_paths[0];
-    } elseif (is_file($lang_paths[1])) {
-        $path = $lang_paths[1];
-    } else {
-        return $key; // 如果语言文件不存在，返回原始键
+    if (isset($data[$paths[1]])) {
+        return $result($data[$paths[1]]);
     }
 
-
-    // 检查语言文件是否存在
-    if (!isset($data[$path])) {
-        $data[$path] = include $path;
-    } elseif (!is_file($path)) {
-        // 如果当前语言文件不存在，尝试使用默认语言
-        $default_path = LANG_DIR . LANG . DIRECTORY_SEPARATOR . $file . EXT;
-        if (!isset($data[$default_path]) && is_file($default_path)) {
-            $data[$default_path] = include $default_path;
-        }
-
-        // 更新路径为默认语言路径
-        $path = $default_path;
+    if (is_file($paths[0])) {
+        $data[$paths[0]] = include $paths[0];
+        return $result($data[$paths[0]]);
     }
 
-    if (!isset($data[$path])) {
-        return $key; // 如果语言文件不存在，返回原始键
+    if (is_file($paths[1])) {
+        $data[$paths[1]] = include $paths[1];
+        return $result($data[$paths[1]]);
     }
 
-    // 支持多维数组访问 (例如: 'system.validator.required')
-    $result = $data[$path];
-    for ($i = 1; $i < count($keys); $i++) {
-        if (is_array($result) && isset($result[$keys[$i]])) {
-            $result = $result[$keys[$i]];
-        } else {
-            return $key; // 如果找不到指定的键，返回原始键
-        }
-    }
+    return $key; // 如果语言文件不存在，返回原始键
 
-    // 如果结果仍然是数组，返回原始键
-    if (is_array($result)) {
-        return $result;
-    }
-
-    // 处理占位符替换
-    $pattern = ['{:name}', '{name}'];
-    $replacement = array_values($replace);
-
-    return str_replace($pattern, $replacement, $result);
 }
