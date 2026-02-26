@@ -46,6 +46,7 @@ function lang(string $key, array $replace = [], string $lang = '')
     $keys = explode('.', $key);
     $file = $keys[0];
 
+    // 递归替换占位符
     $placeholder = function (string $string) use ($replace) {
 
         if (empty($replace)) {
@@ -62,6 +63,7 @@ function lang(string $key, array $replace = [], string $lang = '')
         return str_replace(array_keys($pairs), array_values($pairs), $string);
     };
 
+    // 递归查找语言包中的值
     $result = function ($data) use ($keys, $key, $placeholder) {
 
         for ($i = 1; $i < count($keys); $i++) {

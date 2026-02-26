@@ -1,119 +1,107 @@
 <?php
+
 declare(strict_types=1);
 
 namespace system;
 
 class Validator
 {
-    /**
-     * 构造函数
-     * @param array $rules
-     */
 
-    public function __construct(array $rules=[])
+    public function __construct(array $rules = [])
     {
+        $this->raw = $rules;
         $this->setRules($rules);
     }
 
 
-    /**
-     * 验证规则
+    public static function make(array $rules = []): self
+    {
+        return new self($rules);
+    }
+
+
+    /* 原始规则数据
      * @var array
      */
-    public $rules = [];
+    private array $raw = [];
+
+    /**
+     * 处理后的验证规则
+     * @var array
+     */
+    public private(set) array $rules = [];
 
     /**
      * 处理后的数据
      * @var array
      */
-    public $data = [];
+    public private(set) array $data = [];
 
     /**
-     * 错误规则
+     * 验证提示信息
      * @var array
      */
-    public $errors = [];
+    public private(set) array $errors = [];
 
     /**
-     * 错误模板
+     * 是否验证通过
+     * @var bool
+     */
+    public private(set) bool $pass = true;
+
+
+    /**
+     * 验证方法列表
      * @var array
      */
-    private array $template = [
-        'required' => lang('system.validator.required'),
-        'len' => lang('system.validator.len'),
-        'minLen' => lang('system.validator.minLen'),
-        'maxLen' => lang('system.validator.maxLen'),
-        'gt' => lang('system.validator.gt'),
-        'lt' => lang('system.validator.lt'),
-        'gte' => lang('system.validator.gte'),
-        'lte' => lang('system.validator.lte'),
-        'eq' => lang('system.validator.eq'),
-        'neq' => lang('system.validator.neq'),
-        'in' => lang('system.validator.in'),
-        'nin' => lang('system.validator.nin'),
-        'same' => lang('system.validator.same'),
-        'mobile' => lang('system.validator.mobile'),
-        'email' => lang('system.validator.email'),
-        'id' => lang('system.validator.id'),
-        'ip4' => lang('system.validator.ip4'),
-        'ip6' => lang('system.validator.ip6'),
-        'url' => lang('system.validator.url'),
-        'array' => lang('system.validator.array'),
-        'float' => lang('system.validator.float'),
-        'num' => lang('system.validator.num'),
-        'string' => lang('system.validator.string'),
-        'chinese' => lang('system.validator.chinese'),
-        'alpha' => lang('system.validator.alpha'),
-        'alphaNum' => lang('system.validator.alphaNum'),
-        'alphaNumChinese' => lang('system.validator.alphaNumChinese'),
-        'alphaNumDash' => lang('system.validator.alphaNumDash')
+    private array $methods = [
+        'required',
+        'len',
+        'minLen',
+        'maxLen',
+        'gt',
+        'lt',
+        'gte',
+        'lte',
+        'eq',
+        'neq',
+        'in',
+        'nin',
+        'same',
+        'mobile',
+        'email',
+        'id',
+        'ip4',
+        'ip6',
+        'url',
+        'array',
+        'float',
+        'num',
+        'string',
+        'chinese',
+        'alpha',
+        'alphaNum',
+        'alphaNumChinese',
+        'alphaNumDash',
+        'regex',
+        'filter'
     ];
 
-    /**
-     * 设置错误信息
-     * @param string $key
-     * @param string $ruleKey
-     */
-    private function setErrors(string $key, string $ruleKey)
-    {
-        $label = $key;
-        if (isset($this->rules[$key]['label'])) {
-            $label = is_array($this->rules[$key]['label']) ? $this->rules[$key]['label'][0] : $this->rules[$key]['label'];
-        }
-
-        $message = $this->template[$ruleKey] ?? '<%label%><%value%>验证错误';
-        if (isset($this->rules[$key]['message'])) {
-            $message = is_array($this->rules[$key]['message']) ? $this->rules[$key]['message'][0] : $this->rules[$key]['message'];
-        }
-
-        $limit = '';
-        if (isset($this->rules[$key][$ruleKey])) {
-
-            if (is_array($this->rules[$key][$ruleKey])) {
-                $limit = join(',', $this->rules[$key][$ruleKey]);
-            } else {
-                $limit = $this->rules[$key][$ruleKey];
-            }
-        }
-
-        $value = is_string($this->data[$key]) ? $this->data[$key] : '类型';
-        $this->error[$key] = str_replace(['<%label%>', '<%value%>', '<%limit%>'], [$label, $value, $limit], $message);
-    }
 
     /**
      * 设置验证规则
-     * @param array $rules
+     * @param array $rules 验证规则数组
      * @return $this
      */
-    public function setRules(array $rules = [])
+    public function setRules(array $rules = []): self
     {
-        if (empty($rules) || !is_array($rules)) {
+        if (empty($rules)) {
             return $this;
         }
 
         foreach ($rules as $key => $val) {
-            if (is_string($val)) {
-                $this->rules[$key] = $this->toArray($val);
+            if (is_string($val['rules'])) {
+                $this->rules[$key] = $this->toArray($val['rules']);
                 continue;
             }
             $this->rules[$key] = $val;
@@ -123,143 +111,146 @@ class Validator
     }
 
     /**
-     * 一条字符串验证规则转换为数组
-     * @param string $string
-     * @return array
+     * 将验证规则字符串转换为数组
+     * @param string $string 验证规则字符串
+     * @return array 验证规则数组
      */
-    private function toArray(string $string)
+    private function toArray(string $string): array
     {
         $parts = explode('|', $string);
 
-        $funs = [];
+        $funcs = [];
         foreach ($parts as $rs) {
-            $fun = explode(':', $rs);
-            if (isset($fun[1])) {
-                $funs[$fun[0]] = explode(',', $fun[1]);
+            $func = explode(':', $rs);
+            if (isset($func[1])) {
+                $funcs[$func[0]] = explode(',', $func[1]);
                 continue;
             }
-            $funs[$fun[0]] = true;
+            $funcs[$func[0]] = true;
         }
 
-        return $funs;
+        return $funcs;
+    }
+
+    /**
+     * 设置验证错误信息
+     * @param string $key 验证字段名  
+     * @param string $name 验证方法名
+     * @return void
+     */
+    private function setError(string $key, string $name): void
+    {
+        $replace = [
+            // 字段标签
+            'label' => $this->raw[$key]['label'] ?? $key,
+            // 验证规则限制值
+            'limit' => $this->rules[$key][$name] ?? ''
+        ];
+
+        $error = '';
+        if (isset($this->raw[$key]['errors'])) {
+            $error = $this->raw[$key]['errors'][$name] ?? ''; //
+        }
+
+        $this->errors[$key] = $error ?: lang('system.validator.' . $name, $replace);
     }
 
 
     /**
-     * 验证数据
-     * @param array $data
-     * @return bool
+     * 执行验证
+     * @param array $data 验证数据数组
+     * @return bool 是否验证通过
      */
-    public function validate(array $data)
+    public function execute(array $data): bool
     {
-        if (empty($data)) {
+        // 验证数据为空或验证规则为空时直接返回通过
+        if (empty($data) || empty($this->rules)) {
             return true;
         }
 
-        if (empty($this->rules)) {
-            return true;
-        }
-
-        $rules = $this->rules;
-        foreach ($data as $key => $val) {
-            if (!isset($rules[$key])) {
-                continue;
-            }
-
-            if (isset($rules[$key]['label'])) {
-                unset($rules[$key]['label']);
-            }
-
-            if (isset($rules[$key]['message'])) {
-                unset($rules[$key]['message']);
-            }
-
-            //过滤清理验证数据
-            if (isset($rules[$key]['filter'])) {
-                $data[$key] = self::filter($val, ...$rules[$key]['filter']);
-                unset($rules[$key]['filter']);
-            }
-        }
+        //处理后的数据
         $this->data = $data;
 
 
-        $pass = true;
+        //遍历验证数据
         foreach ($data as $key => $val) {
-            if (!isset($rules[$key])) {
+
+            //没有设置验证规则就跳过
+            if (!isset($this->rules[$key])) {
                 continue;
             }
 
-            //提前验证不为空
-            if (isset($rules[$key]['required'])) {
-                if (!self::required($val)) {
-                    $pass = false;
-                    $this->setError($key, 'required');
-                    continue;
-                }
-                unset($rules[$key]['required']);
-            }
+            //获取当前字段设置的验证方法
+            $methods = array_intersect($this->methods, array_keys($this->rules[$key]));
 
-            //没有设置required规则且值为空就跳过
-            if (empty($val) && !is_numeric($val)) {
+            //如果没有设置验证方法就跳过
+            if (empty($methods)) {
                 continue;
             }
 
-            //提前regex验证
-            if (isset($rules[$key]['regex'])) {
-
-                if (!is_string($val)) {
-                    $pass = false;
-                    $this->setError($key, 'regex');
-                    continue;
-                }
-
-                //var_dump($rules[$key]['regex']);
-                if (!self::regex($val, $rules[$key]['regex'][0])) {
-                    $pass = false;
-                    $this->setError($key, 'regex');
-                    continue;
-                }
-                unset($rules[$key]['regex']);
+            //如果设置了filter方法就先进行过滤
+            if (in_array('filter', $methods)) {
+                $val = self::filter($val, ...$this->rules[$key]['filter']);
+                $this->data[$key] = $val;
             }
 
-            foreach ($rules[$key] as $subkey => $subval) {
+            //提前验证不能为空
+            if (in_array('required', $methods) && !self::required($val)) {
+                $this->pass = false;
+                $this->setError($key, 'required');
+                continue;
+            } else {
 
-                if (!method_exists($this, $subkey)) {
+                //没有设置required规则且值为空就跳过
+                if (empty($val) && !is_numeric($val)) {
+                    continue;
+                }
+            }
+
+            //提前验证正则表达式
+            if (in_array('regex', $methods) && is_string($val) && !self::regex($val, $this->rules[$key]['regex'][0])) {
+                $this->pass = false;
+                $this->setError($key, 'regex');
+                continue;
+            }
+
+
+            //遍历验证方法
+            foreach ($methods as $method) {
+
+                if (in_array($method, ['required', 'regex', 'filter'])) {
                     continue;
                 }
 
-                if ($subkey == 'same') {
-                    $val = $data[$rules[$key]['same']] ?? $rules[$key]['same'][0];
+                if ($method == 'same') {
+                    $val = $data[$this->rules[$key]['same']] ?? $this->rules[$key]['same'][0];
                 }
 
                 $param = [];
-                if (is_array($subval)) {
-                    array_unshift($subval, $val);
-                    $param = $subval;
-                } else {
-                    $param[] = $val;
+                if (is_array($this->rules[$key][$method])) {
+                    $param = $this->rules[$key][$method];
                 }
 
-                if (!call_user_func_array(__NAMESPACE__ . '\Validator::' . $subkey, $param)) {
-                    $this->setError($key, $subkey);
-                    $pass = false;
+                if (!self::$method($val, ...$param)) {
+                    $this->setError($key, $method);
+                    $this->pass = false;
                 }
             }
         }
 
-        return $pass;
+        return $this->pass;
     }
 
 
     /**
-     * 自定义政策表达式
+     * 自定义正则表达式验证
      * @param string $var
      * @param string $pattern
      * @return bool
      */
-    public static function regex(string $var, string $pattern)
+    public static function regex(string $var, string $pattern): bool
     {
-        return @preg_match("{$pattern}", $var) > 0;
+        return preg_match("{$pattern}", $var) > 0;
     }
 
 
@@ -268,7 +259,7 @@ class Validator
      * @param mixed $var
      * @return bool
      */
-    public static function array($var)
+    public static function array($var): bool
     {
         return is_array($var);
     }
@@ -279,7 +270,7 @@ class Validator
      * @param mixed $var
      * @return bool
      */
-    public static function string($var)
+    public static function string($var): bool
     {
         return is_string($var);
     }
@@ -289,7 +280,7 @@ class Validator
      * @param mixed $var
      * @return bool
      */
-    public static function num($var)
+    public static function num($var): bool
     {
         return preg_match('/^\d+$/', $var) > 0;
     }
@@ -299,7 +290,7 @@ class Validator
      * @param mixed $var
      * @return bool
      */
-    public static function float($var)
+    public static function float($var): bool
     {
         return filter_var($var, FILTER_VALIDATE_FLOAT) !== false;
     }
@@ -307,16 +298,16 @@ class Validator
 
     /**
      * 不为空
-     * @param mixed $var
+     * @param mixed $val
      * @return bool
      */
-    public static function required($var)
+    public static function required($val): bool
     {
-        if (is_numeric($var)) {
+        if (is_numeric($val)) {
             return true;
         }
 
-        return !empty($var);
+        return !empty($val);
     }
 
     /**
@@ -325,7 +316,7 @@ class Validator
      * @param $compare_var
      * @return bool
      */
-    public static function same($var, $compare_var)
+    public static function same($var, $compare_var): bool
     {
         return $var === $compare_var;
     }
@@ -336,7 +327,7 @@ class Validator
      * @param int $len
      * @return bool
      */
-    public static function len(string $var, int $len)
+    public static function len(string $var, int $len): bool
     {
         return !((mb_strlen($var) != $len));
     }
@@ -347,7 +338,7 @@ class Validator
      * @param int $len
      * @return bool
      */
-    public static function minLen(string $var, int $len)
+    public static function minLen(string $var, int $len): bool
     {
         return !((mb_strlen($var) < $len));
     }
@@ -358,7 +349,7 @@ class Validator
      * @param int $len
      * @return bool
      */
-    public static function maxLen(string $var, int $len)
+    public static function maxLen(string $var, int $len): bool
     {
         return !((mb_strlen($var) > $len));
     }
@@ -369,7 +360,7 @@ class Validator
      * @param string $var
      * @return bool
      */
-    public static function mobile(string $var)
+    public static function mobile(string $var): bool
     {
         return preg_match("/^1[3-9][0-9]{9}$/", $var) > 0;
     }
@@ -379,7 +370,7 @@ class Validator
      * @param string $var
      * @return bool
      */
-    public static function email(string $var)
+    public static function email(string $var): bool
     {
         return (bool)filter_var($var, FILTER_VALIDATE_EMAIL);
     }
@@ -389,7 +380,7 @@ class Validator
      * @param string $var
      * @return bool
      */
-    public static function ip6(string $var)
+    public static function ip6(string $var): bool
     {
         return (bool)filter_var($var, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6);
     }
@@ -399,7 +390,7 @@ class Validator
      * @param string $var
      * @return bool
      */
-    public static function ip4(string $var)
+    public static function ip4(string $var): bool
     {
         return (bool)filter_var($var, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4);
     }
@@ -409,17 +400,17 @@ class Validator
      * @param string $var
      * @return bool
      */
-    public static function url(string $var)
+    public static function url(string $var): bool
     {
         return (bool)filter_var($var, FILTER_VALIDATE_URL);
     }
 
     /**
-     * 是否身份证
+     * 是否中国身份证号
      * @param string $var
      * @return bool
      */
-    public static function id(string $var)
+    public static function id(string $var): bool
     {
         return preg_match('/(^[1-9]\d{5}(18|19|([23]\d))\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$)|(^[1-9]\d{5}\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{3}$)/', $var) > 0;
     }
@@ -429,7 +420,7 @@ class Validator
      * @param string $var
      * @return bool
      */
-    public static function alphaNumChinese(string $var)
+    public static function alphaNumChinese(string $var): bool
     {
         return preg_match('/^[a-z0-9\x{4e00}-\x{9fa5}]+$/u', $var) > 0;
     }
@@ -439,7 +430,7 @@ class Validator
      * @param string $var
      * @return bool
      */
-    public static function chinese(string $var)
+    public static function chinese(string $var): bool
     {
         return preg_match('/^[\x{4e00}-\x{9fa5}]+$/u', $var) > 0;
     }
@@ -450,7 +441,7 @@ class Validator
      * @param string $var
      * @return bool
      */
-    public static function alpha(string $var)
+    public static function alpha(string $var): bool
     {
         return preg_match("/^([a-z])+$/i", $var) > 0;
     }
@@ -460,7 +451,7 @@ class Validator
      * @param string $var
      * @return bool
      */
-    public static function alphaNum(string $var)
+    public static function alphaNum(string $var): bool
     {
         return preg_match("/^([a-z0-9])+$/i", $var) > 0;
     }
@@ -470,7 +461,7 @@ class Validator
      * @param string $var
      * @return bool
      */
-    public static function alphaNumDash(string $var)
+    public static function alphaNumDash(string $var): bool
     {
         return preg_match("/^([a-z0-9_\-])+$/i", $var) > 0;
     }
@@ -481,7 +472,7 @@ class Validator
      * @param $min
      * @return bool
      */
-    public static function gt($var, $min)
+    public static function gt($var, $min): bool
     {
         if (!is_numeric($var)) {
             return false;
@@ -495,7 +486,7 @@ class Validator
      * @param $max
      * @return bool
      */
-    public static function lt($var, $max)
+    public static function lt($var, $max): bool
     {
         if (!is_numeric($var)) {
             return false;
@@ -509,7 +500,7 @@ class Validator
      * @param $min
      * @return bool
      */
-    public static function gte($var, $min)
+    public static function gte($var, $min): bool
     {
         if (!is_numeric($var)) {
             return false;
@@ -523,7 +514,7 @@ class Validator
      * @param $max
      * @return bool
      */
-    public static function lte($var, $max)
+    public static function lte($var, $max): bool
     {
         if (!is_numeric($var)) {
             return false;
@@ -538,7 +529,7 @@ class Validator
      * @param string|int $obj
      * @return bool
      */
-    public static function eq($var, $obj)
+    public static function eq($var, $obj): bool
     {
         if (is_numeric($var)) {
             return $var == $obj;
@@ -553,7 +544,7 @@ class Validator
      * @param string|int $obj
      * @return bool
      */
-    public static function neq($var, $obj)
+    public static function neq($var, $obj): bool
     {
         if (is_numeric($var)) {
             return $var != $obj;
@@ -568,7 +559,7 @@ class Validator
      * @param array ...$set
      * @return bool
      */
-    public static function in($var, ...$set)
+    public static function in($var, ...$set): bool
     {
         return in_array($var, $set);
     }
@@ -579,7 +570,7 @@ class Validator
      * @param array ...$set
      * @return bool
      */
-    public static function nin($var, ...$set)
+    public static function nin($var, ...$set): bool
     {
         return !in_array($var, $set);
     }
@@ -590,7 +581,7 @@ class Validator
      * @param mixed ...$set ['trim','blank','tag','html']
      * @return string
      */
-    public static function filter(string $var, ...$set)
+    public static function filter(string $var, ...$set): string
     {
         if (in_array('trim', $set)) {
             $var = trim($var);
@@ -605,7 +596,7 @@ class Validator
         }
 
         if (in_array('html', $set)) {
-            $var = htmlspecialchars($var, ENT_QUOTES | ENT_HTML401, CHARSET);;
+            $var = htmlspecialchars($var, ENT_QUOTES | ENT_HTML401, CHARSET);
         }
 
         return $var;
