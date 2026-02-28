@@ -30,5 +30,6 @@ return [
         'alphaNum' => '{label}必须是字母、数字',
         'alphaNumChinese' => '{label}必须是字母、数字、汉字',
         'alphaNumDash' => '{label}必须是字母、数字、下划线',
+        'default' => '{label}验证不通过'
     ]
 ];

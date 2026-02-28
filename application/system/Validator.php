@@ -138,7 +138,7 @@ class Validator
      * @param string $name 验证方法名
      * @return void
      */
-    private function setError(string $key, string $name): void
+    private function setError(string $key, string $name = 'default'): void
     {
         $replace = [
             // 字段标签
@@ -147,12 +147,22 @@ class Validator
             'limit' => $this->rules[$key][$name] ?? ''
         ];
 
-        $error = '';
+        // 如果设置了错误信息就使用设置的错误信息
         if (isset($this->raw[$key]['errors'])) {
-            $error = $this->raw[$key]['errors'][$name] ?? ''; //
+
+            if (is_string($this->raw[$key]['errors'])) {
+                $this->errors[$key] = $this->raw[$key]['errors'];
+                return;
+            }
+
+            if(is_array($this->raw[$key]['errors'])){
+                $this->errors[$key] = $this->raw[$key]['errors'][$name] ?? lang('system.validator.'.$name, $replace);
+                return;
+            }
         }
 
-        $this->errors[$key] = $error ?: lang('system.validator.' . $name, $replace);
+        // 如果没有设置错误信息就使用默认错误信息
+        $this->errors[$key] = lang('system.validator.' . $name, $replace);
     }
 
 
@@ -171,12 +181,23 @@ class Validator
         //处理后的数据
         $this->data = $data;
 
-
         //遍历验证数据
         foreach ($data as $key => $val) {
 
             //没有设置验证规则就跳过
             if (!isset($this->rules[$key])) {
+                continue;
+            }
+
+            //如果是自定义验证方法就调用
+            if (is_callable($this->rules[$key])) {
+
+                if ($this->rules[$key]($val)) {
+                    continue;
+                }
+
+                $this->pass = false;
+                $this->setError($key);
                 continue;
             }
 
@@ -214,26 +235,30 @@ class Validator
                 continue;
             }
 
-
             //遍历验证方法
             foreach ($methods as $method) {
 
+                //跳过required,regex,filter方法
                 if (in_array($method, ['required', 'regex', 'filter'])) {
                     continue;
                 }
 
+                //如果是same方法就获取另外一个字段的值
                 if ($method == 'same') {
                     $val = $data[$this->rules[$key]['same']] ?? $this->rules[$key]['same'][0];
                 }
 
+                //如果设置了验证参数就使用参数
                 $param = [];
                 if (is_array($this->rules[$key][$method])) {
                     $param = $this->rules[$key][$method];
                 }
 
+                //调用验证方法
                 if (!self::$method($val, ...$param)) {
                     $this->setError($key, $method);
                     $this->pass = false;
+                    break; //跳出当前字段的验证方法循环
                 }
             }
         }
