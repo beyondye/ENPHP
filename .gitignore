@@ -5,3 +5,7 @@
 Thumbs.db
 *.log
 .data
+/vendor
+/node_modules
+.phpunit.result.cache
+.phpunit-watcher-result.cache

@@ -100,37 +100,34 @@ class Validator
         }
 
         foreach ($rules as $key => $val) {
-            if (is_string($val['rules'])) {
-                $this->rules[$key] = $this->toArray($val['rules']);
+            if (!isset($val['rules'])) {
                 continue;
             }
-            $this->rules[$key] = $val;
+
+            if (is_array($val['rules'])) {
+                // 如果rules是数组且是索引数组就转换成关联数组
+                foreach ($val['rules'] as $method => $limit) {
+                    if (is_int($method)) {
+                        $method = $limit;
+                        $this->rules[$key][$method] = $limit;
+                    } else {
+                        $this->rules[$key][$method] = $limit;
+                    }
+                }
+                continue;
+            }
+
+            if (is_string($val['rules'])) {
+                $this->rules[$key]['regex'] = $val['rules'];
+                continue;
+            }
+
+            $this->rules[$key] = $val['rules'];
         }
 
         return $this;
     }
 
-    /**
-     * 将验证规则字符串转换为数组
-     * @param string $string 验证规则字符串
-     * @return array 验证规则数组
-     */
-    private function toArray(string $string): array
-    {
-        $parts = explode('|', $string);
-
-        $funcs = [];
-        foreach ($parts as $rs) {
-            $func = explode(':', $rs);
-            if (isset($func[1])) {
-                $funcs[$func[0]] = explode(',', $func[1]);
-                continue;
-            }
-            $funcs[$func[0]] = true;
-        }
-
-        return $funcs;
-    }
 
     /**
      * 设置验证错误信息
@@ -144,7 +141,7 @@ class Validator
             // 字段标签
             'label' => $this->raw[$key]['label'] ?? $key,
             // 验证规则限制值
-            'limit' => $this->rules[$key][$name] ?? ''
+            //'limit' => $this->rules[$key][$name] ?? ''
         ];
 
         // 如果设置了错误信息就使用设置的错误信息
@@ -155,8 +152,8 @@ class Validator
                 return;
             }
 
-            if(is_array($this->raw[$key]['errors'])){
-                $this->errors[$key] = $this->raw[$key]['errors'][$name] ?? lang('system.validator.'.$name, $replace);
+            if (is_array($this->raw[$key]['errors'])) {
+                $this->errors[$key] = $this->raw[$key]['errors'][$name] ?? ($this->raw[$key]['errors']['default'] ?? lang('system.validator.' . $name, $replace));
                 return;
             }
         }
@@ -211,7 +208,7 @@ class Validator
 
             //如果设置了filter方法就先进行过滤
             if (in_array('filter', $methods)) {
-                $val = self::filter($val, ...$this->rules[$key]['filter']);
+                $val = self::filter($val, $this->rules[$key]['filter']);
                 $this->data[$key] = $val;
             }
 
@@ -229,7 +226,7 @@ class Validator
             }
 
             //提前验证正则表达式
-            if (in_array('regex', $methods) && is_string($val) && !self::regex($val, $this->rules[$key]['regex'][0])) {
+            if (in_array('regex', $methods) && !self::regex($val, $this->rules[$key]['regex'])) {
                 $this->pass = false;
                 $this->setError($key, 'regex');
                 continue;
@@ -243,19 +240,8 @@ class Validator
                     continue;
                 }
 
-                //如果是same方法就获取另外一个字段的值
-                if ($method == 'same') {
-                    $val = $data[$this->rules[$key]['same']] ?? $this->rules[$key]['same'][0];
-                }
-
-                //如果设置了验证参数就使用参数
-                $param = [];
-                if (is_array($this->rules[$key][$method])) {
-                    $param = $this->rules[$key][$method];
-                }
-
                 //调用验证方法
-                if (!self::$method($val, ...$param)) {
+                if (!self::$method($val, $this->rules[$key][$method])) {
                     $this->setError($key, $method);
                     $this->pass = false;
                     break; //跳出当前字段的验证方法循环
@@ -275,7 +261,18 @@ class Validator
      */
     public static function regex(string $var, string $pattern): bool
     {
-        return preg_match("{$pattern}", $var) > 0;
+        if (empty($pattern)) {
+            return false;
+        }
+
+        $result = @preg_match("{$pattern}", $var);
+
+        // 检查是否有错误发生
+        if ($result === false) {
+            return false;
+        }
+
+        return $result > 0;
     }
 
 
@@ -336,7 +333,7 @@ class Validator
     }
 
     /**
-     * 和另外一个字段值相同
+     * 和另外一个值相同
      * @param $var
      * @param $compare_var
      * @return bool
@@ -354,7 +351,7 @@ class Validator
      */
     public static function len(string $var, int $len): bool
     {
-        return !((mb_strlen($var) != $len));
+        return mb_strlen($var) == $len;
     }
 
     /**
@@ -365,7 +362,7 @@ class Validator
      */
     public static function minLen(string $var, int $len): bool
     {
-        return !((mb_strlen($var) < $len));
+        return mb_strlen($var) >= $len;
     }
 
     /**
@@ -376,7 +373,7 @@ class Validator
      */
     public static function maxLen(string $var, int $len): bool
     {
-        return !((mb_strlen($var) > $len));
+        return mb_strlen($var) <= $len;
     }
 
 
@@ -560,7 +557,7 @@ class Validator
             return $var == $obj;
         }
 
-        return false;
+        return $var === $obj;
     }
 
     /**
@@ -575,16 +572,16 @@ class Validator
             return $var != $obj;
         }
 
-        return false;
+        return $var !== $obj;
     }
 
     /**
      * 必须在集合中
      * @param $var
-     * @param array ...$set
+     * @param array $set
      * @return bool
      */
-    public static function in($var, ...$set): bool
+    public static function in($var, $set): bool
     {
         return in_array($var, $set);
     }
@@ -592,10 +589,10 @@ class Validator
     /**
      * 不在集合中
      * @param $var
-     * @param array ...$set
+     * @param array $set
      * @return bool
      */
-    public static function nin($var, ...$set): bool
+    public static function nin($var, $set): bool
     {
         return !in_array($var, $set);
     }
@@ -603,10 +600,10 @@ class Validator
     /**
      * 过滤字符串
      * @param string $var
-     * @param mixed ...$set ['trim','blank','tag','html']
+     * @param mixed $set ['trim','blank','tag','html']
      * @return string
      */
-    public static function filter(string $var, ...$set): string
+    public static function filter(string $var, $set): string
     {
         if (in_array('trim', $set)) {
             $var = trim($var);
@@ -621,8 +618,9 @@ class Validator
         }
 
         if (in_array('html', $set)) {
-            $var = htmlspecialchars($var, ENT_QUOTES | ENT_HTML401, CHARSET);
+            $var = htmlspecialchars($var, ENT_QUOTES | ENT_HTML401, 'UTF-8');
         }
+
 
         return $var;
     }

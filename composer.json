@@ -1,0 +1,6 @@
+{
+    "require-dev": {
+        "phpunit/phpunit": "^13.0",
+        "spatie/phpunit-watcher": "^1.24"
+    }
+}

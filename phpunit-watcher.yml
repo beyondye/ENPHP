@@ -1,0 +1,15 @@
+# phpunit-watcher.yml 核心配置（直接复制即可用）
+watch:
+  directories:
+    - application/system          # 监听业务代码目录
+    - test      # 监听测试代码目录
+  file_patterns:
+    - '*.php'      # 只监听 PHP 文件
+
+notifications:
+  passing_tests: false  # 测试通过不弹通知
+  failing_tests: true   # 测试失败弹系统通知
+
+phpunit:
+  binary_path: './vendor/bin/phpunit'  # PHPUnit 执行路径（项目级）
+  arguments: '--testsuite=system'         # 传递给 PHPUnit 的参数（如指定测试套件）
