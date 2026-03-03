@@ -35,11 +35,14 @@ function profiler(string $type, string $mark, string $desc = '')
     return true;
 }
 
-//lang('system.test',['replace',],'en')
+//lang('system.test',['test'=>'测试'],'en')
 function lang(string $key, array $replace = [], string $lang = '')
 {
+    if (empty($key)) {
+        return $key;
+    }
 
-    static $data = [];
+    static $filedata = [];
 
     $language = $lang ?: \system\Lang::get(); //获取当前语言环境
 
@@ -56,7 +59,7 @@ function lang(string $key, array $replace = [], string $lang = '')
         // 构建替换数组，处理单占位符格式
         $pairs = [];
         foreach ($replace as $key => $value) {
-            $pairs["{{$key}}"] = $value;
+            $pairs['{' . $key . '}'] = $value;
         }
 
         // 执行替换
@@ -65,6 +68,18 @@ function lang(string $key, array $replace = [], string $lang = '')
 
     // 递归查找语言包中的值
     $result = function ($data) use ($keys, $key, $placeholder) {
+
+        // 如果只有一个键（没有点号），返回整个语言文件数组
+        if (count($keys) === 1) {
+            if (is_array($data)) {
+                foreach ($data as $k => $v) {
+                    if (is_string($v)) {
+                        $data[$k] = $placeholder($v);
+                    }
+                }
+            }
+            return $data;
+        }
 
         for ($i = 1; $i < count($keys); $i++) {
             if (isset($data[$keys[$i]])) {
@@ -75,8 +90,8 @@ function lang(string $key, array $replace = [], string $lang = '')
         }
 
         if (is_array($data)) {
-            foreach ($data as $key => $value) {
-                $data[$key] = $placeholder($value);
+            foreach ($data as $k => $v) {
+                $data[$k] = $placeholder($v);
             }
             return $data;
         }
@@ -85,34 +100,31 @@ function lang(string $key, array $replace = [], string $lang = '')
             return $placeholder($data);
         }
 
-        return $key;
+        return $key;// 如果数据既不是字符串也不是数组，返回原始键
     };
-
 
     // 定义语言包查找路径的优先级
     $paths = [
-        LANG_DIR . $language . DIRECTORY_SEPARATOR . $file . EXT,      // 应用层当前语言
-        SYS_DIR . 'locale' . DIRECTORY_SEPARATOR . LANG . DIRECTORY_SEPARATOR . $file . EXT  // 系统层默认语言
+        LANG_DIR . $language . '/' . $file . EXT,      // 应用层当前语言
+        SYS_DIR . 'locale/lang/' . $language . '/' . $file . EXT, // 系统层当前语言
     ];
 
-    if (isset($data[$paths[0]])) {
-        return $result($data[$paths[0]]);
+    // 检查缓存
+    foreach ($paths as $path) {
+        if (isset($filedata[$path])) {
+            return $result($filedata[$path]);
+        }
+    }
+  
+    // 检查文件并加载
+    foreach ($paths as $path) {
+        if (is_file($path)) {
+            $filedata[$path] = include $path;
+            return $result($filedata[$path]);
+        }
     }
 
-    if (isset($data[$paths[1]])) {
-        return $result($data[$paths[1]]);
-    }
-
-    if (is_file($paths[0])) {
-        $data[$paths[0]] = include $paths[0];
-        return $result($data[$paths[0]]);
-    }
-
-    if (is_file($paths[1])) {
-        $data[$paths[1]] = include $paths[1];
-        return $result($data[$paths[1]]);
-    }
-
+ 
     return $key; // 如果语言文件不存在，返回原始键
 
 }

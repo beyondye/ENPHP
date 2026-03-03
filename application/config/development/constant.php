@@ -67,7 +67,7 @@ const LANG_LIST = [
 ];
 //默认语言
 const LANG = 'zh'; 
-//语言数据目录
+//自定义语言数据目录
 const LANG_DIR = APP_DIR . 'locale/lang/';
 
 

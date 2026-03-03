@@ -20,8 +20,8 @@ class Validator extends \PHPUnit\Framework\TestCase
             'xxx' => ['label' => 'xxx', 'rules' => function ($value) {
                 return $value === 'xxx_value';
             }],
-            'xxx3' => ['label' => 'xxx3', 'rules' => ['id']],
-            'html' => ['label' => 'HTML', 'rules' => ['filter' => ['html', 'trim', 'blank', 'tag']]]
+            'xxx3' => ['label' => 'xxx3', 'rules' => ['required', 'id']],
+            'html' => ['label' => 'HTML', 'rules' => ['required', 'filter' => ['html', 'trim', 'blank', 'tag']]]
         ]);
         $result = $validator->execute([
             'name' => 'abc',
@@ -31,7 +31,7 @@ class Validator extends \PHPUnit\Framework\TestCase
             'regex' => 'abc',
             'default' => 'default_value',
             'xxx' => 'xxx_value',
-            'xxx3' => '',
+            'xxx3' => '42022419900101001X',
             'html' => ' <b>test</b> '
         ]);
         $this->assertTrue($result);
@@ -39,10 +39,6 @@ class Validator extends \PHPUnit\Framework\TestCase
         $this->assertEquals('test', $validator->data['html']);
         $this->assertEmpty($validator->errors);
         
-
-
-
-
 
         $validator = ValidatorClass::make([
             'name' => ['label' => '姓名', 'rules' => ['required', 'len' => 3], 'errors' => '姓名长度必须为3个字符'],
@@ -52,11 +48,11 @@ class Validator extends \PHPUnit\Framework\TestCase
                 return ctype_lower($value);
             }, 'errors' => '{label}必须是小写字母'],
             'regex' => ['label' => '正则', 'rules' => '/^[a-z]+$/', 'errors' => '正则表达式不匹配'],
-            'default' => ['label' => '默认', 'rules' => ['required']],
+            'default' => ['label' => '默认1', 'rules' => ['required']],
             'xxx' => ['label' => 'xxx', 'rules' => function ($value) {
                 return $value === 'xxx_value';
             }],
-            'xxx2' => ['label' => 'xxx2', 'rules' => ';z+$/'],
+            'xxx2' => ['label' => 'xxx2', 'rules' => '/^[a-z]+$/', 'errors' => '正则表达式不匹配'],
             'html' => ['label' => 'HTML', 'rules' => ['filter' => ['trim', 'blank']]]
         ]);
         $result = $validator->execute([
@@ -65,8 +61,8 @@ class Validator extends \PHPUnit\Framework\TestCase
             'email' => 'test@example',
             'func' => 'TEST',
             'regex' => 'Abc',
-            'default' => 'default_value',
-            'xxx' => 'xxx_value',
+            'default' => '',
+            'xxx' => '',
             'xxx2' => 'z111',
             'html' => ' <b>test</b> '
         ]);
@@ -80,14 +76,402 @@ class Validator extends \PHPUnit\Framework\TestCase
         $this->assertEquals('年龄必须大于18岁', $validator->errors['age']);
         $this->assertEquals('邮箱格式不正确', $validator->errors['email']);
         $this->assertEquals('函数必须是小写字母', $validator->errors['func']);
-        $this->assertIsCallable($validator->rules['func']['rules']);
+        $this->assertIsCallable($validator->rules['func']);
         $this->assertEquals('正则表达式不匹配', $validator->errors['regex']);
-        $this->assertEquals('默认不能为空', $validator->errors['default']);
+        $this->assertEquals('默认1不能为空', $validator->errors['default']);
         $this->assertEquals('xxx验证不通过', $validator->errors['xxx']);
         $this->assertEquals('正则表达式不匹配', $validator->errors['xxx2']);
 
     }
 
+    /**
+     * 测试构造函数
+     */
+    public function testConstruct()
+    {
+        $validator = new ValidatorClass([
+            'name' => ['label' => '姓名', 'rules' => ['required']]
+        ]);
+        
+        $this->assertInstanceOf(ValidatorClass::class, $validator);
+        $this->assertNotEmpty($validator->rules);
+    }
+    
+    /**
+     * 测试静态 make 方法
+     */
+    public function testMake()
+    {
+        $validator = ValidatorClass::make([
+            'name' => ['label' => '姓名', 'rules' => ['required']]
+        ]);
+        
+        $this->assertInstanceOf(ValidatorClass::class, $validator);
+    }
+    
+    /**
+     * 测试 setRules 方法
+     */
+    public function testSetRules()
+    {
+        $validator = new ValidatorClass();
+        
+        $rules = [
+            'name' => ['label' => '姓名', 'rules' => ['required', 'len' => 3]]
+        ];
+        
+        $result = $validator->setRules($rules);
+        
+        $this->assertSame($validator, $result);
+        $this->assertNotEmpty($validator->rules);
+    }
+    
+    /**
+     * 测试空规则设置
+     */
+    public function testSetEmptyRules()
+    {
+        $validator = new ValidatorClass([
+            'name' => ['label' => '姓名', 'rules' => ['required']]
+        ]);
+        
+        $originalRulesCount = count($validator->rules);
+        
+        $result = $validator->setRules([]);
+        
+        $this->assertSame($validator, $result);
+        $this->assertCount($originalRulesCount, $validator->rules);
+    }
+    
+    /**
+     * 测试各种边界条件
+     */
+    public function testEdgeCases()
+    {
+        // 测试数字 0 应该被认为是 required 的
+        $validator = ValidatorClass::make([
+            'number' => ['label' => '数字', 'rules' => ['required']]
+        ]);
+        
+        $result = $validator->execute(['number' => 0]);
+        $this->assertTrue($result);
+        
+        // 测试空字符串应该被判断为非 required
+        $validator2 = ValidatorClass::make([
+            'text' => ['label' => '文本', 'rules' => ['required']]
+        ]);
+        
+        $result2 = $validator2->execute(['text' => '']);
+        $this->assertFalse($result2);
+        
+        // 测试 null 值
+        $validator3 = ValidatorClass::make([
+            'field' => ['label' => '字段', 'rules' => ['required']]
+        ]);
+        
+        $result3 = $validator3->execute(['field' => null]);
+        $this->assertFalse($result3);
+     }
+    
+    /**
+     * 测试验证规则解析
+     */
+    public function testRuleParsing()
+    {
+        $validator = ValidatorClass::make([
+            'field1' => ['label' => '字段1', 'rules' => ['required', 'minLen' => 5]],
+            'field2' => ['label' => '字段2', 'rules' => '/^[a-z]+$/'],
+            'field3' => ['label' => '字段3', 'rules' => function ($value) { return strlen($value) > 0; }]
+        ]);
+        
+        $this->assertArrayHasKey('field1', $validator->rules);
+        $this->assertArrayHasKey('field2', $validator->rules);
+        $this->assertArrayHasKey('field3', $validator->rules);
+        
+        $this->assertArrayHasKey('required', $validator->rules['field1']);
+        $this->assertArrayHasKey('minLen', $validator->rules['field1']);
+        $this->assertArrayHasKey('regex', $validator->rules['field2']);
+        $this->assertIsCallable($validator->rules['field3']);
+    }
+    
+    /**
+     * 测试错误消息设置
+     */
+    public function testErrorMessages()
+    {
+        $validator = ValidatorClass::make([
+            'name' => [
+                'label' => '用户名', 
+                'rules' => ['required', 'minLen' => 6],
+                'errors' => [
+                    'required' => '用户名不能为空',
+                    'minLen' => '用户名长度不能少于6个字符',
+                    'default' => '用户名验证失败'
+                ]
+            ]
+        ]);
+        
+        // 测试必填项错误
+        $result = $validator->execute(['name' => '']);
+        $this->assertFalse($result);
+        $this->assertArrayHasKey('name', $validator->errors);
+        $this->assertEquals('用户名不能为空', $validator->errors['name']);
+        
+        // 测试长度错误
+        $validator2 = ValidatorClass::make([
+            'name' => [
+                'label' => '用户名', 
+                'rules' => ['required', 'minLen' => 6],
+                'errors' => [
+                    'required' => '用户名不能为空',
+                    'minLen' => '用户名长度不能少于6个字符',
+                    'default' => '用户名验证失败'
+                ]
+            ]
+        ]);
+        
+        $result2 = $validator2->execute(['name' => 'abc']);
+        $this->assertFalse($result2);
+        $this->assertArrayHasKey('name', $validator2->errors);
+        $this->assertEquals('用户名长度不能少于6个字符', $validator2->errors['name']);
+    }
+    
+    /**
+     * 测试过滤器功能
+     */
+    public function testFilters()
+    {
+        $validator = ValidatorClass::make([
+            'text' => [
+                'label' => '文本', 
+                'rules' => ['filter' => ['trim', 'blank']]
+            ]
+        ]);
+        
+        $result = $validator->execute(['text' => '  hello    world  ']);
+        
+        $this->assertTrue($result);
+        $this->assertEquals('hello world', $validator->data['text']);
+    }
+    
+    /**
+     * 测试不同数据类型验证
+     */
+    public function testDifferentDataTypes()
+    {
+        // 测试布尔值
+        $this->assertTrue(ValidatorClass::required(true));
+        $this->assertTrue(ValidatorClass::required(false));
+        $this->assertFalse(ValidatorClass::required(null));
+        
+        // 测试浮点数
+        $this->assertTrue(ValidatorClass::float(3.14));
+        $this->assertTrue(ValidatorClass::float(0.0));
+        $this->assertFalse(ValidatorClass::float('not_a_float'));
+        
+        // 测试整数
+        $this->assertTrue(ValidatorClass::num(123));
+        $this->assertTrue(ValidatorClass::num('123'));
+        $this->assertTrue(ValidatorClass::num(123.45));
+        $this->assertTrue(ValidatorClass::num('123.45'));
+    }
+    
+    /**
+     * 测试执行方法的边界情况
+     */
+    /**
+     * 全面测试正则表达式验证功能
+     */
+    public function testRegexComprehensive()
+    {
+        // 测试基本字母匹配
+        $this->assertTrue(ValidatorClass::regex('hello', '/^[a-z]+$/'));
+        $this->assertFalse(ValidatorClass::regex('Hello', '/^[a-z]+$/'));
+        $this->assertFalse(ValidatorClass::regex('hello123', '/^[a-z]+$/'));
+        
+        // 测试大小写字母匹配
+        $this->assertTrue(ValidatorClass::regex('Hello', '/^[A-Za-z]+$/'));
+        $this->assertFalse(ValidatorClass::regex('Hello123', '/^[A-Za-z]+$/'));
+        
+        // 测试数字匹配
+        $this->assertTrue(ValidatorClass::regex('123456', '/^\\d+$/'));
+        $this->assertFalse(ValidatorClass::regex('123abc', '/^\\d+$/'));
+        
+        // 测试字母数字混合
+        $this->assertTrue(ValidatorClass::regex('abc123', '/^[a-zA-Z0-9]+$/'));
+        $this->assertFalse(ValidatorClass::regex('abc123!', '/^[a-zA-Z0-9]+$/'));
+        
+        // 测试特殊字符
+        $this->assertTrue(ValidatorClass::regex('test@email.com', '/^.+@.+.+$/'));
+        $this->assertTrue(ValidatorClass::regex('test_email-test', '/^[a-zA-Z0-9_-]+$/'));
+        
+        // 测试URL匹配
+        $pattern = '/^https?:\\/\\/[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$/';
+        $this->assertTrue(ValidatorClass::regex('https://www.example.com', $pattern));
+        $this->assertTrue(ValidatorClass::regex('http://example.org', $pattern));
+        $this->assertFalse(ValidatorClass::regex('ftp://example.com', $pattern));
+        
+        // 测试IP地址匹配
+        $ipPattern = '/^\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}$/';
+        $this->assertTrue(ValidatorClass::regex('192.168.1.1', $ipPattern));
+        $this->assertTrue(ValidatorClass::regex('127.0.0.1', $ipPattern));
+        
+        // 测试中文匹配
+        $this->assertTrue(ValidatorClass::regex('你好世界', '/^[\\x{4e00}-\\x{9fa5}]+$/u'));
+        $this->assertFalse(ValidatorClass::regex('你好123', '/^[\\x{4e00}-\\x{9fa5}]+$/u'));
+        
+        // 测试空模式
+        $this->assertFalse(ValidatorClass::regex('test', ''));
+        
+        // 测试无效正则表达式
+        $this->assertFalse(ValidatorClass::regex('test', '/[invalid/'));
+        $this->assertFalse(ValidatorClass::regex('test', '/(/'));
+        
+        // 测试长度限制
+        $this->assertTrue(ValidatorClass::regex('abc', '/^.{3}$/'));
+        $this->assertFalse(ValidatorClass::regex('abcd', '/^.{3}$/'));
+        $this->assertFalse(ValidatorClass::regex('ab', '/^.{3}$/'));
+        
+        // 测试电话号码
+        $phonePattern = '/^1[3-9]\\d{9}$/';
+        $this->assertTrue(ValidatorClass::regex('13812345678', $phonePattern));
+        $this->assertFalse(ValidatorClass::regex('12812345678', $phonePattern));
+        $this->assertFalse(ValidatorClass::regex('1381234567', $phonePattern));
+        
+        // 测试身份证号
+        $idPattern = '/^(^[1-9]\\d{5}(18|19|([23]\\d))\\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\\d{3}[0-9Xx]$)|(^[1-9]\\d{5}\\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\\d{3}$)/';
+        $this->assertTrue(ValidatorClass::regex('42022419900101001X', $idPattern));
+        $this->assertFalse(ValidatorClass::regex('12345678901234567', $idPattern));
+        
+        // 测试日期格式
+        $datePattern = '/^\\d{4}-\\d{2}-\\d{2}$/';
+        $this->assertTrue(ValidatorClass::regex('2023-12-25', $datePattern));
+        $this->assertFalse(ValidatorClass::regex('25-12-2023', $datePattern));
+        
+        // 测试时间格式
+        $timePattern = '/^([01]?[0-9]|2[0-3]):[0-5][0-9]$/';
+        $this->assertTrue(ValidatorClass::regex('14:30', $timePattern));
+        $this->assertTrue(ValidatorClass::regex('9:05', $timePattern));
+        $this->assertFalse(ValidatorClass::regex('25:00', $timePattern));
+    }
+    
+    /**
+     * 测试在实际验证场景中使用正则表达式
+     */
+    public function testRegexInValidation()
+    {
+        // 测试用户自定义正则表达式验证
+        $validator = ValidatorClass::make([
+            'username' => [
+                'label' => '用户名',
+                'rules' => '/^[a-zA-Z][a-zA-Z0-9_]{2,19}$/',  // 以字母开头，包含字母数字下划线，长度3-20
+                'errors' => '用户名格式不正确'
+            ],
+            'zipcode' => [
+                'label' => '邮编',
+                'rules' => '/^\\d{6}$/',  // 6位数字
+                'errors' => '邮编格式不正确'
+            ]
+        ]);
+        
+        // 测试有效用户名和邮编
+        $result = $validator->execute([
+            'username' => 'user_123',
+            'zipcode' => '123456'
+        ]);
+        $this->assertTrue($result);
+        
+        // 测试无效用户名
+        $validator2 = ValidatorClass::make([
+            'username' => [
+                'label' => '用户名',
+                'rules' => '/^[a-zA-Z][a-zA-Z0-9_]{2,19}$/',
+                'errors' => '用户名格式不正确'
+            ]
+        ]);
+        
+        $result2 = $validator2->execute(['username' => '_invalid']);
+        $this->assertFalse($result2);
+        $this->assertArrayHasKey('username', $validator2->errors);
+        $this->assertEquals('用户名格式不正确', $validator2->errors['username']);
+        
+        // 测试无效邮编
+        $validator3 = ValidatorClass::make([
+            'zipcode' => [
+                'label' => '邮编',
+                'rules' => '/^\\d{6}$/',
+                'errors' => '邮编格式不正确'
+            ]
+        ]);
+        
+        $result3 = $validator3->execute(['zipcode' => '12345']);
+        $this->assertFalse($result3);
+        $this->assertArrayHasKey('zipcode', $validator3->errors);
+        $this->assertEquals('邮编格式不正确', $validator3->errors['zipcode']);
+    }
+    
+    public function testExecuteEdgeCases()
+    {
+        // 空数据和空规则
+        $validator = ValidatorClass::make([]);
+        $result = $validator->execute([]);
+        $this->assertTrue($result);
+        
+        // 空数据有规则
+        $validator2 = ValidatorClass::make([
+            'field' => ['label' => '字段', 'rules' => ['required']]
+        ]);
+        $result2 = $validator2->execute([]);
+        $this->assertTrue($result2); // 因为没有提供要验证的数据
+        
+        // 数据多于规则
+        $validator3 = ValidatorClass::make([
+            'field' => ['label' => '字段', 'rules' => ['required']]
+        ]);
+        $result3 = $validator3->execute([
+            'field' => 'value',
+            'extra_field' => 'extra_value'
+        ]);
+        $this->assertTrue($result3);
+    }
+    
+    /**
+     * 测试多个验证规则组合
+     */
+    public function testMultipleRules()
+    {
+        $validator = ValidatorClass::make([
+            'password' => [
+                'label' => '密码',
+                'rules' => ['required', 'minLen' => 8, 'maxLen' => 20, 'alphaNum']
+            ]
+        ]);
+        
+        // 测试成功情况
+        $result = $validator->execute(['password' => 'MyPass123']);
+        $this->assertTrue($result);
+        
+        // 测试失败情况 - 长度不够
+        $validator2 = ValidatorClass::make([
+            'password' => [
+                'label' => '密码',
+                'rules' => ['required', 'minLen' => 8, 'maxLen' => 20, 'alphaNum']
+            ]
+        ]);
+        $result2 = $validator2->execute(['password' => 'short']);
+        $this->assertFalse($result2);
+        
+        // 测试失败情况 - 包含非法字符
+        $validator3 = ValidatorClass::make([
+            'password' => [
+                'label' => '密码',
+                'rules' => ['required', 'minLen' => 8, 'maxLen' => 20, 'alphaNum']
+            ]
+        ]);
+        $result3 = $validator3->execute(['password' => 'MyPassword!@#']);
+        $this->assertFalse($result3);
+    }
+    
     public  function testMaxLen()
     {
         $this->assertTrue(ValidatorClass::maxLen('abc', 3));
@@ -196,7 +580,7 @@ class Validator extends \PHPUnit\Framework\TestCase
     public function testNum()
     {
         $this->assertTrue(ValidatorClass::num('123'));
-        $this->assertFalse(ValidatorClass::num('123.456'));
+        $this->assertTrue(ValidatorClass::num('123.456'));
     }
 
     public function testString()

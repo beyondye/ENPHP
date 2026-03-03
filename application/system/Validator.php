@@ -141,14 +141,14 @@ class Validator
             // 字段标签
             'label' => $this->raw[$key]['label'] ?? $key,
             // 验证规则限制值
-            //'limit' => $this->rules[$key][$name] ?? ''
+            'limit' => is_array($this->rules[$key]) ? $this->rules[$key][$name] ?? '' : '',
         ];
 
         // 如果设置了错误信息就使用设置的错误信息
         if (isset($this->raw[$key]['errors'])) {
 
             if (is_string($this->raw[$key]['errors'])) {
-                $this->errors[$key] = $this->raw[$key]['errors'];
+                $this->errors[$key] = str_replace(['{label}', '{limit}'], array_values($replace), $this->raw[$key]['errors']);
                 return;
             }
 
@@ -170,9 +170,9 @@ class Validator
      */
     public function execute(array $data): bool
     {
-        // 验证数据为空或验证规则为空时直接返回通过
-        if (empty($data) || empty($this->rules)) {
-            return true;
+        //如果没有设置验证规则就直接返回true
+        if (empty($this->rules)) {
+            return $this->pass;
         }
 
         //处理后的数据
@@ -218,7 +218,6 @@ class Validator
                 $this->setError($key, 'required');
                 continue;
             } else {
-
                 //没有设置required规则且值为空就跳过
                 if (empty($val) && !is_numeric($val)) {
                     continue;
@@ -228,7 +227,7 @@ class Validator
             //提前验证正则表达式
             if (in_array('regex', $methods) && !self::regex($val, $this->rules[$key]['regex'])) {
                 $this->pass = false;
-                $this->setError($key, 'regex');
+                $this->setError($key);
                 continue;
             }
 
@@ -298,13 +297,13 @@ class Validator
     }
 
     /**
-     * 是否整型
+     * 是否数字
      * @param mixed $var
      * @return bool
      */
     public static function num($var): bool
     {
-        return preg_match('/^\d+$/', $var) > 0;
+        return is_numeric($var);
     }
 
     /**
@@ -326,6 +325,9 @@ class Validator
     public static function required($val): bool
     {
         if (is_numeric($val)) {
+            return true;
+        }
+        if (is_bool($val)) {
             return true;
         }
 

@@ -11,7 +11,7 @@ date_default_timezone_set('PRC');
 const ENVIRONMENT = 'development';
 
 //开启运行分析
-const PROFILER = true;
+const PROFILER = false;
 
 //设置controller模块
 const MODULE = 'www';
@@ -33,3 +33,4 @@ const CONST_FILE = 'constant';
 
 //初始脚本
 require_once SYS_DIR . 'init.php';
+

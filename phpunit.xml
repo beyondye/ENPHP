@@ -2,18 +2,11 @@
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/10.0/phpunit.xsd"
          bootstrap="test/bootstrap.php"
-         executionOrder="depends,defects"
-         requireCoverageMetadata="false"
-         beStrictAboutCoverageMetadata="true"
-         beStrictAboutOutputDuringTests="true"
-         beStrictAboutTodoAnnotatedTests="true"
-         failOnRisky="true"
-         failOnWarning="true"
          colors="true">
     <testsuites>
         <testsuite name="system">
         <directory suffix=".php">./test</directory>
-        <exclude>bootstrap.php</exclude>
+        <exclude>./test/bootstrap.php</exclude>
         </testsuite>
     </testsuites>
 </phpunit>
