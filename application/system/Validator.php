@@ -77,6 +77,7 @@ class Validator
         'array',
         'float',
         'num',
+        'int',
         'string',
         'chinese',
         'alpha',
@@ -615,6 +616,16 @@ class Validator
         return !in_array($var, $set);
     }
 
+    /**
+     * 是否整数
+     * @param string $var
+     * @return bool
+     */
+    public static function int(string $var): bool
+    {
+        return is_int((int)$var);
+    }
+    
     /**
      * 过滤字符串
      * @param string $var

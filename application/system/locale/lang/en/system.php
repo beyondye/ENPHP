@@ -23,6 +23,7 @@ return [
         'array' => '{label} MUST BE ARRAY',
         'float' => '{label} MUST BE FLOAT',
         'num' => '{label} MUST BE NUM',
+        'int' => '{label} MUST BE INT',
         'string' => '{label} MUST BE STRING',
         'chinese' => '{label} MUST BE CHINESE',
         'alpha' => '{label} MUST BE ALPHA',
