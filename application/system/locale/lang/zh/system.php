@@ -30,6 +30,8 @@ return [
         'alphaNum' => '{label}必须是字母、数字',
         'alphaNumChinese' => '{label}必须是字母、数字、汉字',
         'alphaNumDash' => '{label}必须是字母、数字、下划线',
-        'default' => '{label}验证不通过'
+        'default' => '{label}验证不通过',
+        'key_no_exist' => '{label}不存在',
+        'method_no_exist' => '{label}使用不存在的验证方法{limit}',
     ]
 ];

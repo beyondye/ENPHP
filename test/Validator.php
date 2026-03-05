@@ -34,6 +34,7 @@ class Validator extends \PHPUnit\Framework\TestCase
             'xxx3' => '42022419900101001X',
             'html' => ' <b>test</b> '
         ]);
+
         $this->assertTrue($result);
         $this->assertTrue($validator->pass);
         $this->assertEquals('test', $validator->data['html']);
@@ -419,20 +420,34 @@ class Validator extends \PHPUnit\Framework\TestCase
         
         // 空数据有规则
         $validator2 = ValidatorClass::make([
-            'field' => ['label' => '字段', 'rules' => ['required']]
+            'field' => ['label' => '字段', 'rules' => ['required']],
+            'extra_field' => ['label' => '额外字段', 'rules' => ['required']],
+            'bb' => ['rules' => ['required']],
+
         ]);
         $result2 = $validator2->execute([]);
-        $this->assertTrue($result2); // 因为没有提供要验证的数据
+        $this->assertFalse($result2);
+        $this->assertArrayHasKey('field', $validator2->errors);
+        $this->assertArrayHasKey('extra_field', $validator2->errors);
+        $this->assertEquals('字段不存在', $validator2->errors['field']);
+        $this->assertEquals('额外字段不存在', $validator2->errors['extra_field']);
+        $this->assertEquals('bb不存在', $validator2->errors['bb']);
         
         // 数据多于规则
         $validator3 = ValidatorClass::make([
-            'field' => ['label' => '字段', 'rules' => ['required']]
+            'field' => ['label' => '字段', 'rules' => ['requirxxxed', 'gygy' => 3]],
+            'extra_field' => ['label' => '额外字段', 'rules' => ['rered']]
+
         ]);
         $result3 = $validator3->execute([
             'field' => 'value',
             'extra_field' => 'extra_value'
         ]);
-        $this->assertTrue($result3);
+        $this->assertFalse($result3);
+        $this->assertArrayHasKey('field', $validator3->errors);
+        $this->assertEquals('字段使用不存在的验证方法requirxxxed,gygy', $validator3->errors['field']);
+        $this->assertEquals('额外字段使用不存在的验证方法rered', $validator3->errors['extra_field']);
+
     }
     
     /**

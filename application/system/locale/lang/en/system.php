@@ -29,6 +29,8 @@ return [
         'alphaNum' => '{label} MUST BE ALPHA NUM',
         'alphaNumChinese' => '{label} MUST BE ALPHA NUM CHINESE',
         'alphaNumDash' => '{label} MUST BE ALPHA NUM DASH',
-        'default' => '{label} VALIDATION FAILED'
+        'default' => '{label} VALIDATION FAILED',
+        'key_no_exist' => '{label} does not exist',
+        'method_no_exist' => '{label} uses non-existent validation method {limit}',
     ]
 ];

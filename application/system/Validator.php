@@ -109,10 +109,8 @@ class Validator
                 foreach ($val['rules'] as $method => $limit) {
                     if (is_int($method)) {
                         $method = $limit;
-                        $this->rules[$key][$method] = $limit;
-                    } else {
-                        $this->rules[$key][$method] = $limit;
                     }
+                    $this->rules[$key][$method] = $limit;
                 }
                 continue;
             }
@@ -133,16 +131,18 @@ class Validator
      * 设置验证错误信息
      * @param string $key 验证字段名  
      * @param string $name 验证方法名
+     * @param array $replace 替换参数数组
      * @return void
      */
-    private function setError(string $key, string $name = 'default'): void
+    private function setError(string $key, string $name = 'default', array $replace = []): void
     {
-        $replace = [
+        $replace = array_merge([
             // 字段标签
             'label' => $this->raw[$key]['label'] ?? $key,
             // 验证规则限制值
             'limit' => is_array($this->rules[$key]) ? $this->rules[$key][$name] ?? '' : '',
-        ];
+        ], $replace);
+
 
         // 如果设置了错误信息就使用设置的错误信息
         if (isset($this->raw[$key]['errors'])) {
@@ -175,7 +175,17 @@ class Validator
             return $this->pass;
         }
 
-        //处理后的数据
+        //验证数据的键必须在规则中存在，否则返回错误
+        $diff = array_diff_key($this->rules, $data);
+        if (!empty($diff)) {
+            $this->pass = false;
+            foreach ($diff as $key => $val) {
+                $this->setError($key, 'key_no_exist');
+            }
+            return $this->pass;
+        } 
+
+        //过滤数据
         $this->data = $data;
 
         //遍历验证数据
@@ -188,13 +198,19 @@ class Validator
 
             //如果是自定义验证方法就调用
             if (is_callable($this->rules[$key])) {
-
                 if ($this->rules[$key]($val)) {
                     continue;
                 }
-
                 $this->pass = false;
                 $this->setError($key);
+                continue;
+            }
+
+            //检查验证方法是否存在，不存在就返回错误
+            $diff = array_diff_key($this->rules[$key], array_flip($this->methods));
+            if (!empty($diff)) {
+                $this->pass = false;
+                $this->setError($key, 'method_no_exist', ['limit' => implode(',', array_keys($diff))]);
                 continue;
             }
 
