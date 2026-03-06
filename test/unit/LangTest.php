@@ -1,10 +1,10 @@
 <?php
 
-namespace test;
+namespace test\unit;
 
 use PHPUnit\Framework\TestCase;
 
-class Lang extends TestCase
+class LangTest extends TestCase
 {
     /**
      * 测试基本语言文本获取

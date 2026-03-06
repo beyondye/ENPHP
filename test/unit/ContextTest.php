@@ -1,6 +1,6 @@
 <?php
 
-namespace test;
+namespace test\unit;
 
 use PHPUnit\Framework\TestCase;
 use system\Context;

@@ -2,7 +2,7 @@
 watch:
   directories:
     - application/system          # 监听业务代码目录
-    - test      # 监听测试代码目录
+    - test/unit     # 监听测试代码目录
   file_patterns:
     - '*.php'      # 只监听 PHP 文件
 

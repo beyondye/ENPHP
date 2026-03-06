@@ -1,10 +1,10 @@
 <?php
 
-namespace test;
+namespace test\unit;
 
 use system\Validator as ValidatorClass;
 
-class Validator extends \PHPUnit\Framework\TestCase
+class ValidatorTest extends \PHPUnit\Framework\TestCase 
 {
     public function testExecute()
     {
