@@ -21,7 +21,11 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
                 return $value === 'xxx_value';
             }],
             'xxx3' => ['label' => 'xxx3', 'rules' => ['required', 'id']],
-            'html' => ['label' => 'HTML', 'rules' => ['required', 'filter' => ['html', 'trim', 'blank', 'tag']]]
+            'html' => ['label' => 'HTML', 'rules' => ['required', 'filter' => ['html', 'trim', 'blank', 'tag']]],
+            'not_rule2' => ['label' => '不规则'],
+            'no_method' => ['label' => '无方法', 'rules' => 90],
+            'empty_value' => ['label' => '空', 'rules' => ['gt' => 0]],
+       
         ]);
         $result = $validator->execute([
             'name' => 'abc',
@@ -32,7 +36,10 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
             'default' => 'default_value',
             'xxx' => 'xxx_value',
             'xxx3' => '42022419900101001X',
-            'html' => ' <b>test</b> '
+            'html' => ' <b>test</b> ',
+            'not_rule' => 'should be ignored',
+            'empty_value' => '',
+            'no_method' => 'value'
         ]);
 
         $this->assertTrue($result);
@@ -507,32 +514,45 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
     {
         $this->assertTrue(ValidatorClass::gt('4', 3));
         $this->assertFalse(ValidatorClass::gt('3', 3)); 
+        $this->assertFalse(ValidatorClass::gt('3', 4));
+        $this->assertFalse(ValidatorClass::gt('3dsd', '4'));
     }
     public function testLt()
     {
         $this->assertTrue(ValidatorClass::lt('3', 4));
         $this->assertFalse(ValidatorClass::lt('4', 4)); 
+        $this->assertFalse(ValidatorClass::lt('4', 3));
+        $this->assertFalse(ValidatorClass::lt('4dsd', '3'));
     }
     public function testGte()
     {
         $this->assertTrue(ValidatorClass::gte('4', 3));
         $this->assertTrue(ValidatorClass::gte('3', 3)); 
+        $this->assertFalse(ValidatorClass::gte('3', 4));
+        $this->assertFalse(ValidatorClass::gte('3dsd', '4'));
     }
     public function testLte()
     {
         $this->assertTrue(ValidatorClass::lte('3', 4));
         $this->assertTrue(ValidatorClass::lte('4', 4)); 
+        $this->assertFalse(ValidatorClass::lte('4', 3));
+        $this->assertFalse(ValidatorClass::lte('4dsd', '3'));
     }
 
     public function testEq()
     {
         $this->assertTrue(ValidatorClass::eq('4', 4));
         $this->assertFalse(ValidatorClass::eq('4', 3));
+        $this->assertFalse(ValidatorClass::eq('4dsd', '4'));
+
+    
     }
     public function testNeq()
     {
         $this->assertTrue(ValidatorClass::neq('4', 3));
         $this->assertFalse(ValidatorClass::neq('4', 4)); 
+        $this->assertTrue(ValidatorClass::neq('4dsd', '4'));
+
     }
 
     public function testRegex()
@@ -579,12 +599,6 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
         $this->assertFalse(ValidatorClass::url('www.example.com/'));
     }
 
-
-    public function testArray()
-    {
-        $this->assertTrue(ValidatorClass::array([1, 2, 3]));
-        $this->assertFalse(ValidatorClass::array('not an array'));
-    }
 
     public function testFloat()
     {
@@ -687,4 +701,41 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('abc', ValidatorClass::filter('<b>abc</b>', ['tag']));
         $this->assertEquals('&lt;b&gt;abc&lt;/b&gt;', ValidatorClass::filter('<b>abc</b>', ['html']));
     }
+
+    public function testInt()
+    {
+        // 测试整数类型
+        $this->assertTrue(ValidatorClass::int(0));
+        $this->assertTrue(ValidatorClass::int(123));
+        $this->assertTrue(ValidatorClass::int(-123));
+        $this->assertTrue(ValidatorClass::int(PHP_INT_MAX));
+        $this->assertTrue(ValidatorClass::int(PHP_INT_MIN));
+        
+        // 测试数字字符串
+        $this->assertTrue(ValidatorClass::int('0'));
+        $this->assertTrue(ValidatorClass::int('123'));
+        $this->assertTrue(ValidatorClass::int('1234567890'));
+        
+        // 测试浮点数
+        $this->assertTrue(ValidatorClass::int(123.0)); // 整数形式的浮点数
+        $this->assertFalse(ValidatorClass::int(123.5)); // 非整数形式的浮点数
+        
+        // 测试非数字值
+        $this->assertFalse(ValidatorClass::int('abc'));
+        $this->assertFalse(ValidatorClass::int('123abc'));
+        $this->assertFalse(ValidatorClass::int('abc123'));
+        $this->assertFalse(ValidatorClass::int(''));
+        $this->assertFalse(ValidatorClass::int(null));
+        $this->assertFalse(ValidatorClass::int(true));
+        $this->assertFalse(ValidatorClass::int(false));
+        $this->assertFalse(ValidatorClass::int([]));
+        $this->assertFalse(ValidatorClass::int(new \stdClass()));
+        
+        // 测试特殊情况
+        $this->assertFalse(ValidatorClass::int(' 123 ')); // 带空格的字符串
+        $this->assertFalse(ValidatorClass::int('+123')); // 带正号的字符串
+        $this->assertFalse(ValidatorClass::int('-123')); // 带负号的字符串
+      
+    }
+
 }

@@ -20,7 +20,6 @@ return [
         'ip4' => '{label} FORMAT ERROR',
         'ip6' => '{label} FORMAT ERROR',
         'url' => '{label} FORMAT ERROR',
-        'array' => '{label} MUST BE ARRAY',
         'float' => '{label} MUST BE FLOAT',
         'num' => '{label} MUST BE NUM',
         'int' => '{label} MUST BE INT',

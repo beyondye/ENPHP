@@ -21,7 +21,6 @@ return [
         'ip4' => '{label}格式错误',
         'ip6' => '{label}格式错误',
         'url' => '{label}格式错误',
-        'array' => '{label}必须是数组',
         'float' => '{label}必须是浮点数',
         'num' => '{label}必须是数字',
         'int' => '{label}必须是整数',

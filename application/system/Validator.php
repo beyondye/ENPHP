@@ -121,7 +121,12 @@ class Validator
                 continue;
             }
 
-            $this->rules[$key] = $val['rules'];
+            if (is_callable($val['rules'])) {
+                $this->rules[$key] = $val['rules'];
+                continue;
+            }
+
+            $this->rules[$key] = [];
         }
 
         return $this;
@@ -184,7 +189,7 @@ class Validator
                 $this->setError($key, 'key_no_exist');
             }
             return $this->pass;
-        } 
+        }
 
         //过滤数据
         $this->data = $data;
@@ -215,10 +220,8 @@ class Validator
                 continue;
             }
 
-            //获取当前字段设置的验证方法
+            //获取当前字段设置的验证方法并与系统验证方法进行交集
             $methods = array_intersect($this->methods, array_keys($this->rules[$key]));
-
-            //如果没有设置验证方法就跳过
             if (empty($methods)) {
                 continue;
             }
@@ -293,22 +296,11 @@ class Validator
 
 
     /**
-     * 是否数组
-     * @param mixed $var
-     * @return bool
-     */
-    public static function array($var): bool
-    {
-        return is_array($var);
-    }
-
-
-    /**
      * 是否字符串
      * @param mixed $var
      * @return bool
      */
-    public static function string($var): bool
+    public static function string(mixed $var): bool
     {
         return is_string($var);
     }
@@ -318,7 +310,7 @@ class Validator
      * @param mixed $var
      * @return bool
      */
-    public static function num($var): bool
+    public static function num(mixed $var): bool
     {
         return is_numeric($var);
     }
@@ -328,7 +320,7 @@ class Validator
      * @param mixed $var
      * @return bool
      */
-    public static function float($var): bool
+    public static function float(mixed $var): bool
     {
         return filter_var($var, FILTER_VALIDATE_FLOAT) !== false;
     }
@@ -339,7 +331,7 @@ class Validator
      * @param mixed $val
      * @return bool
      */
-    public static function required($val): bool
+    public static function required(mixed $val): bool
     {
         if (is_numeric($val)) {
             return true;
@@ -353,11 +345,11 @@ class Validator
 
     /**
      * 和另外一个值相同
-     * @param $var
-     * @param $compare_var
+     * @param mixed $var
+     * @param mixed $compare_var
      * @return bool
      */
-    public static function same($var, $compare_var): bool
+    public static function same(mixed $var, mixed $compare_var): bool
     {
         return $var === $compare_var;
     }
@@ -509,11 +501,11 @@ class Validator
 
     /**
      * 大于
-     * @param $var
-     * @param $min
+     * @param mixed $var
+     * @param mixed $min
      * @return bool
      */
-    public static function gt($var, $min): bool
+    public static function gt(mixed $var, mixed $min): bool
     {
         if (!is_numeric($var)) {
             return false;
@@ -523,11 +515,11 @@ class Validator
 
     /**
      * 小于
-     * @param $var
-     * @param $max
+     * @param mixed $var
+     * @param mixed $max
      * @return bool
      */
-    public static function lt($var, $max): bool
+    public static function lt(mixed $var, mixed $max): bool
     {
         if (!is_numeric($var)) {
             return false;
@@ -537,11 +529,11 @@ class Validator
 
     /**
      * 大于等于
-     * @param $var
-     * @param $min
+     * @param mixed $var
+     * @param mixed $min
      * @return bool
      */
-    public static function gte($var, $min): bool
+    public static function gte(mixed $var, mixed $min): bool
     {
         if (!is_numeric($var)) {
             return false;
@@ -551,11 +543,11 @@ class Validator
 
     /**
      * 小于等于
-     * @param $var
-     * @param $max
+     * @param mixed $var
+     * @param mixed $max
      * @return bool
      */
-    public static function lte($var, $max): bool
+    public static function lte(mixed $var, mixed $max): bool
     {
         if (!is_numeric($var)) {
             return false;
@@ -566,11 +558,11 @@ class Validator
 
     /**
      * 等于
-     * @param string|int $var
-     * @param string|int $obj
+     * @param mixed $var
+     * @param mixed $obj
      * @return bool
      */
-    public static function eq($var, $obj): bool
+    public static function eq(mixed $var, mixed $obj): bool
     {
         if (is_numeric($var)) {
             return $var == $obj;
@@ -581,11 +573,11 @@ class Validator
 
     /**
      * 不等于
-     * @param string|int $var
-     * @param string|int $obj
+     * @param mixed $var
+     * @param mixed $obj
      * @return bool
      */
-    public static function neq($var, $obj): bool
+    public static function neq(mixed $var, mixed $obj): bool
     {
         if (is_numeric($var)) {
             return $var != $obj;
@@ -596,43 +588,58 @@ class Validator
 
     /**
      * 必须在集合中
-     * @param $var
+     * @param mixed $var
      * @param array $set
      * @return bool
      */
-    public static function in($var, $set): bool
+    public static function in(mixed $var, array $set): bool
     {
         return in_array($var, $set);
     }
 
     /**
      * 不在集合中
-     * @param $var
+     * @param mixed $var
      * @param array $set
      * @return bool
      */
-    public static function nin($var, $set): bool
+    public static function nin(mixed $var, array $set): bool
     {
         return !in_array($var, $set);
     }
 
     /**
      * 是否整数
-     * @param string $var
+     * @param mixed $var
      * @return bool
      */
-    public static function int(string $var): bool
+    public static function int(mixed $var): bool
     {
-        return is_int((int)$var);
+        // 检查是否为整数类型
+        if (is_int($var)) {
+            return true;
+        }
+
+        // 检查是否为数字字符串
+        if (is_string($var) && ctype_digit($var)) {
+            return true;
+        }
+
+        // 检查是否为可以转换为整数的浮点数
+        if (is_float($var) && floor($var) === $var) {
+            return true;
+        }
+        
+        return false;
     }
-    
+
     /**
      * 过滤字符串
      * @param string $var
      * @param mixed $set ['trim','blank','tag','html']
      * @return string
      */
-    public static function filter(string $var, $set): string
+    public static function filter(string $var, array $set): string
     {
         if (in_array('trim', $set)) {
             $var = trim($var);
