@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace system;
 
@@ -7,12 +8,10 @@ class Cache
 
     /**
      * 返回缓存实列
-     *
      * @param string $service
-     *
-     * @return object
+     * @return \system\cache\AbstractCache
      */
-    public static function instance(string $service = 'default')
+    public static function instance(string $service = 'default'): \system\cache\AbstractCache
     {
         static $ins = [];
         if (isset($ins[$service])) {
