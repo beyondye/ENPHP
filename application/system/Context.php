@@ -12,14 +12,14 @@ class Context
         return self::$keys[$key] ?? null;
     }           
 
-     public static function set(string $key, $value): void
+     public static function set(string $key, mixed $value): void
     {
         self::$keys[$key] = $value;
     }   
 
     public static function has(string $key): bool
     {
-        return isset(self::$keys[$key]);
+        return array_key_exists($key, self::$keys);
     }
 
      public static function remove(string $key): void
@@ -27,16 +27,9 @@ class Context
         unset(self::$keys[$key]);
     }
 
-    public function clear(): void
+    public static function clear(): void
     {
         self::$keys = [];
     }
-
-
-    public function __destruct()
-    {
-        $this->clear();
-    }
-
 
 }
