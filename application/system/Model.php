@@ -12,47 +12,77 @@ use system\model\Safe;
 class Model
 {
 
+    //表名
     protected string $table;
+
+    //主键
     protected string $primary;
 
-    protected array $fields = [];
-    protected array $fillable = [];
-    protected array $timestamps = ['creating' => false, 'updating' => false, 'deleting' => false];
+    //主键是否自增
+    protected bool $autoincrement = false;
 
+
+    /**
+     * @var array 表字段，带验证规则
+     * @example
+     * $fields=[
+     *     'id' => 'integer',
+     *     'category_id' => ['integer','unsigned'=>true,'max'=>255,'min'=>0],
+     *     'name' => 'varchar',
+     *     'price' => 'decimal',
+     *     'discount' => ['decimal','length'=>10,'precision'=>2],
+     *     'description' => ['varchar','length'=>255],
+     *     'status' => ['enum','options'=>['active','inactive']],
+     *     'content' => 'text',
+     *     'created_at' => 'datetime',
+     *     'updated_at' => 'datetime',
+     *     'time' => 'datetime'
+     * ];
+     */
+    protected array $schema = [];
+
+    /**
+     * @var array 可填充字段，带默认值
+     * @example
+     * $fillable=[
+     *    'category_id'=>0,
+     *    'name'=>'',
+     *    'price'=>0.0,
+     *    'discount'=>0.0,
+     *    'description'=>'',
+     *    'status'=>'active',
+     *    'content'=>''
+     * ];
+     */
+    protected array $fillable = [];
+
+
+    //查询对象
     protected array $objects = [
         'select' => null,
     ];
 
+    //数据库对象
     protected DatabaseAbstract $db;
 
+    //构造函数
     public function __construct(DatabaseAbstract $db)
     {
         $this->db = $db;
     }
 
 
-    protected function creating(): void
-    {
-        if ($this->timestamps['creating']) {
-            $this->fields[$this->timestamps['creating']] = time();
-        }
-    }
+    //创建前事件
+    protected function creating(): void {}
 
-    protected function updating(): void
-    {
-        if ($this->timestamps['updating']) {
-            $this->fields[$this->timestamps['updating']] = time();
-        }
-    }
+    //删除前事件
+    protected function updating(): void {}
 
-    protected function deleting(): void
-    {
-        if ($this->timestamps['deleting']) {
-            $this->fields[$this->timestamps['deleting']] = time();
-        }
-    }
+    //删除前事件
+    protected function deleting(): void {}
 
 
+    //查询方法
     public function select(array $fields = []): object
     {
 
@@ -76,113 +106,225 @@ class Model
     }
 
 
-    public function delete(array|string|int ...$wheres): bool
+    /**
+     * 删除方法
+     * @param float|string|int ...$wheres 删除条件
+     * @return bool 是否删除成功
+     * @example
+     * delete(1); // primary key = 1
+     * delete('1');// primary key = 1 
+     * 
+     * delete('id',1);// id = 1 
+     * delete('id','1');// id = 1 
+     * delete('id',[1,2,3]);// id in (1,2,3)
+     * 
+     * delete('id','=',1);// id = 1
+     * delete('id','in',[1,2,3]);// id in (1,2,3)
+     * delete('id','between',[1,10]);// id between (1,10)
+     * 
+     * delete('id','not in',[1,2,3],'and');// id not in (1,2,3) and
+     * delete('id','not between',[1,10],'or');// id not between (1,10) or
+     *
+     * delete(['id','=',1],['name','=','张三']);// id = 1 and name = '张三'
+     * delete(['id','in',[1,2,3],'or'],['name','=','张三']);// id in (1,2,3) or name = '张三'
+     * delete(['id','>',1,'and'],['name','like','%张三%']);// id > 1 and name like '%张三%'
+     * 
+     */
+    public function delete(float|string|int ...$wheres): bool
     {
+        if (empty($wheres)) {
+            throw new ModelException('删除条件不能为空');
+        }
+
         $wheres = $this->where($wheres);
+        if (empty($wheres)) {
+            throw new ModelException('删除条件不能为空');
+        }
+
+        $this->deleting();
+
         return $this->db->delete($this->table, $wheres);
     }
 
 
-    public function update(array $data, array|int|string ...$wheres): bool
+    /**
+     * 更新方法
+     * @param array $data 更新数据
+     * @param array|int|string ...$wheres 更新条件
+     * @return bool 是否更新成功
+     * @example
+     * 示例：
+     *
+     * update(['name'=>'张三'],1); // primary key = 1
+     * update(['name'=>'张三'],'1'); // primary key = 1
+     * 
+     * update(['name'=>'张三'],'id',1); // id = 1
+     * update(['name'=>'张三'],'id','1'); // id = 1
+     * update(['name'=>'张三'],'id',[1,2,3]); // id in (1,2,3)
+     * 
+     * update(['name'=>'张三'],'id','=',1); // id = 1
+     * update(['name'=>'张三'],'id','in',[1,2,3]); // id in (1,2,3)
+     * update(['name'=>'张三'],'id','between',[1,10]); // id between (1,10)
+     * 
+     * update(['name'=>'张三'],'id','not in',[1,2,3],'and'); // id not in (1,2,3) and
+     * update(['name'=>'张三'],'id','not between',[1,10],'or'); // id not between (1,10) or
+     * 
+     * update(['name'=>'张三'],['id','=',1],['name','=','李四']);// id = 1 and name = '李四'
+     * update(['name'=>'张三'],['id','in',[1,2,3],'or'],['name','=','李四']);// id in (1,2,3) or name = '李四'
+     * 
+     */
+    public function update(array $data, float|array|int|string ...$wheres): bool
     {
-        $safe = new Safe($this->schema);
-        $data = $safe->clear($data);
+        if (empty($wheres)) {
+            throw new ModelException('更新条件不能为空');
+        }
 
         if (empty($data)) {
             throw new ModelException('更新数据不能为空');
         }
 
-        if (!$safe->validate($data)) {
-            if ($safe->illegalFields) {
-                throw new ModelException('非法字段数据:' . join(',', $safe->illegalFields));
-            }
-            throw new ModelException('没有提交数据');
+        $wheres = $this->where($wheres);
+        if (empty($wheres)) {
+            throw new ModelException('更新条件不能为空');
         }
-        $data = $safe->data;
-        $_wheres = $this->where($wheres);
 
-        return $this->db->update($this->table, $data, $_wheres);
+        Safe::fillable($data, $this->fillable); //检查填充字段
+        Safe::data($data, $this->schema); //检查数据字段
+
+        $this->updating();
+
+        return $this->db->update($this->table, $data, $wheres);
     }
 
     public function insert(array $data = []): bool
     {
 
+        if (empty($data)) {
+            throw new ModelException('插入数据不能为空');
+        }
+
+        if (!isset($this->fillable) || empty($this->fillable)) {
+            throw new ModelException('Fillable字段未定义');
+        }
+
+        if (!isset($this->fields) || empty($this->fields)) {
+            throw new ModelException('Fields字段未定义');
+        }
+
+        // 处理数据格式
         $dataset = [];
-        if (empty($data[0])) {
-            $dataset[] = $data;
-        } else {
+        if (is_array($data) && isset($data[0]) && is_array($data[0])) {
+            // 多条数据
             $dataset = $data;
+        } else {
+            // 单条数据
+            $dataset[] = $data;
         }
 
-        $safe = new Safe($this->fillable);
-        $data = [];
-        foreach ($dataset as $rs) {
-
-            $rs = $safe->clear($rs);
-            if (empty($rs)) {
-                throw new ModelException('插入数据不能为空');
-            }
-
-            if (!$safe->complete($rs)) {
-                throw new ModelException('缺少必要字段:' . join(',', $safe->incompleteFields));
-            }
-
-            if (!$safe->validate($rs)) {
-                if ($safe->illegalFields) {
-                    throw new ModelException('非法字段数据:' . join(',', $safe->illegalFields));
-                }
-                throw new ModelException('没有提交数据');
-            }
-
-            $rs = $safe->data;
-            $data[] = $safe->merge($rs);
+        $merged = [];
+        foreach ($dataset as $key => $rs) {
+            Safe::fillable($rs, $this->fillable); //检查填充字段
+            Safe::data($rs, $this->schema); //检查数据字段
+            $merged[$key] = array_merge($this->fillable, $rs);//合并填充字段和数据字段
         }
 
-        return $this->db->insert($this->table, $data);
+        $this->creating();
+
+        return $this->db->insert($this->table, $merged);
     }
 
     /**
      * 获取最后插入的主键id
      * @return int
      */
-    public function lastid()
+    public function lastid(): int
     {
         return $this->db->lastid();
     }
 
 
-    protected function where(array $wheres): array
+    /**
+     * 构建查询条件数组
+     * @param float|int|string|array ...$wheres 查询条件
+     * @return array 查询条件数组
+     * @example
+     * 示例：
+     * where(1); // [['primary','=',1]]  默认字段名为$this->primary
+     * where('1');// [['primary','=','1']] 默认字段名为$this->primary   
+     * where('id',1);// [['id','=',1]]
+     * where('id','1');// [['id','=','1']]
+     * where('id',[1,2,3]);// [['id','in',[1,2,3]]] 
+     * where('id','between',[1,10]);// [['id','between',[1,10]]] 
+     * where('id','not in',[1,2,3],'and');// [['id','not','in',[1,2,3]]]
+     * where('id','not between',[1,10],'or');// [['id','not','between',[1,10]]]
+     * where(['id','=',1],['name','=','张三']);// [['id','=',1],['name','=','张三']]
+     * where(['id','in',[1,2,3],'or'], ['name','=','李四']);// [['id','in',[1,2,3],'or'], ['name','=','李四']]
+     * 
+     **/
+    protected function where(float|int|string|array ...$wheres): array
     {
-        //var_dump($wheres);
-        $_wheres = [];
-        if (is_numeric($wheres[0])) {
-            $_wheres[] = [$this->primary, '=', $wheres[0]];
-        } else if (is_string($wheres[0])) {
-
-            if (stripos($wheres[0], ',') === false) {
-                $_wheres[] = [$this->primary, '=', $wheres[0]];
-            } else {
-                $_wheres[] = [$this->primary, 'in', $wheres[0]];
-            }
-        } else if ($wheres[0]) {
-            if (is_string($wheres[0][array_key_first($wheres[0])])) {
-                $_wheres = $wheres;
-            } else {
-                $_wheres = $wheres[0];
+        if (is_numeric($wheres[0]) || is_string($wheres[0])) {
+            if (count($wheres) == 1) {
+                $wheres = [$this->primary, '=', $wheres[0]];
             }
         }
 
-
-        $safe = new Safe($this->schema);
-        $safe->validateWhere($_wheres);
-
-        return $_wheres;
+        return Safe::where($wheres, $this->schema);
     }
 
-    public function count(array|string|int ...$wheres): int
+    /**
+     * 统计方法
+     * @param array|int|string ...$wheres 查询条件
+     * @return int 统计结果
+     */
+    public function count(float|int|string|array ...$wheres): int
     {
         $wheres = $this->where($wheres);
         $params = ['where' => $wheres, 'fields' => " COUNT({$this->primary}) AS ct "];
+
         return $this->db->select($this->table, $params)->row()->ct;
     }
+
+    // 查询单条数据
+    public function find(float|int|string|array ...$wheres): array
+    {
+        $wheres = $this->where($wheres);
+        $params = ['where' => $wheres, 'fields' => array_keys($this->schema)];
+
+        return $this->db->select($this->table, $params)->row();
+    }
+
+    // 查询所有数据
+    public function findAll(): array
+    {
+        $params = ['fields' => array_keys($this->schema)];
+
+        return $this->db->select($this->table, $params)->result();
+    }
+
+
+    // 查询第一条数据
+    public function first(): array
+    {
+        $params = ['fields' => array_keys($this->schema), 'orderby' => [$this->primary => 'ASC']];
+
+        return $this->db->select($this->table, $params)->row();
+    }
+
+    // 查询最后一条数据
+    public function last(): array
+    {
+        $params = ['fields' => array_keys($this->schema), 'orderby' => [$this->primary => 'DESC']];
+
+        return $this->db->select($this->table, $params)->row();
+    }
+
+    // 查询多条数据
+    public function rows(int ...$offset): array
+    {
+        $params = ['fields' => array_keys($this->schema), 'offset' => $offset];
+
+        return $this->db->select($this->table, $params)->result();
+    }
+
 }

@@ -1,9 +1,11 @@
 <?php
+
 declare(strict_types=1);
 
 namespace system\model;
 
 use system\database\DatabaseAbstract;
+use system\model\Safe;
 
 class Select
 {
@@ -13,35 +15,38 @@ class Select
     public string $table;
     public string $primary;
     public array $schema;
-
     public array $fields = [];
     public array $wheres = [];
     public array $groups = [];
     public array $orders = [];
 
 
-    //id,'>','2'
-    //id,'2'
-    //[['id','=','1'],['name','!=','bob']]
-    public function where(array|string ...$wheres): object
+    /**
+     * 查询方法
+     * @param float|int|string|array ...$wheres 查询条件
+     * @return object 查询对象
+     * @example
+     * 示例：
+     * where(1); // [['primary','=',1]]  默认字段名为$this->primary
+     * where('1');// [['primary','=','1']] 默认字段名为$this->primary   
+     * where('id',1);// [['id','=',1]]
+     * where('id','1');// [['id','=','1']]
+     * where('id',[1,2,3]);// [['id','in',[1,2,3]]] 
+     * where('id','between',[1,10]);// [['id','between',[1,10]]] 
+     * where('id','not in',[1,2,3],'and');// [['id','not','in',[1,2,3]]]
+     * where('id','not between',[1,10],'or');// [['id','not','between',[1,10]]]
+     * where(['id','=',1],['name','=','张三']);// [['id','=',1],['name','=','张三']]
+     * where(['id','in',[1,2,3],'or'], ['name','=','李四']);// [['id','in',[1,2,3],'or'], ['name','=','李四']]
+     */
+    public function where(float|int|string ...$wheres): object
     {
-        if (is_string($wheres[0])) {
-            $count = count($wheres);
-            if ($count == 2) {
-                $this->wheres[] = [$wheres[0], '=', $wheres[1]];
-            } elseif ($count == 3) {
-                $this->wheres[] = [$wheres[0], $wheres[1], $wheres[2]];
+        if (is_numeric($wheres[0]) || is_string($wheres[0])) {
+            if (count($wheres) == 1) {
+                $wheres = [$this->primary, '=', $wheres[0]];
             }
         }
 
-        if (is_array($wheres[0])) {
-            foreach ($wheres[0] as $rs) {
-                $this->wheres[] = $rs;
-            }
-        }
-
-        $safe = new Safe($this->schema);
-        $safe->validateWhere($this->wheres);
+        $this->wheres = array_merge($this->wheres, Safe::where($wheres, $this->schema)); //验证where条件是否合法并合并
 
         return $this;
     }
@@ -54,11 +59,7 @@ class Select
     }
 
 
-    public function having()
-    {
-
-
-    }
+    public function having() {}
 
 
     //$orders=array|'string'
@@ -146,6 +147,4 @@ class Select
         ];
         return $this->db->select($this->table, $condition)->result();
     }
-
-
 }

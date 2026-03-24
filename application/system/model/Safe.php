@@ -1,228 +1,184 @@
 <?php
+
 declare(strict_types=1);
 
 namespace system\model;
 
 use system\model\ModelException;
-use system\Validator;
+use system\database\Util;
 
 class Safe
 {
-    /**
-     * 表结构
-     *
-     * @var array
-     */
-    public $schema = [];
 
-    /**
-     * 验证规则
-     * @var array
-     */
-    public $rules = [];
-
-    /**
-     * 验证的不合法字段
-     *
-     * @var array
-     */
-    public $illegalFields = [];
-
-    /**
-     * 缺少的必要字段
-     *
-     * @var array
-     */
-    public $incompleteFields = [];
-
-    /**
-     * 非数据库的字段
-     *
-     * @var array
-     */
-    public $notMemberFields = [];
-
-
-    /**
-     * 验证之后的数据
-     * @var array
-     */
-    public $data = [];
-
-    /**
-     * 生成结构化rules
-     *
-     * @param array $schema
-     * @return array
-     */
-    private function makeRules(array $schema): array
+    public static function where(array $wheres, array $fields): array
     {
-        $rules = [];
-        foreach ($schema as $key => $val) {
-            if (!is_array($val) || !key_exists('rules', $val)) {
-                continue;
-            }
+        $wheres = Util::where($wheres);
 
-            $rules[$key] = $val['rules'];
-            if (is_string($rules[$key])) {
-                $rules[$key] = $rules[$key] . '|label:' . $val['label'];
-            } else {
-                $rules[$key]['label'] = $val['label'];
+        foreach ($wheres as $where) {
+
+            if (in_array(mb_strtolower($where[1]), ['in', 'not in', 'between', 'not between'])) {
+                if (!is_array($where[2])) {
+                    throw new ModelException('值必须是数组:' . $where[2]);
+                }
+                foreach ($where[2] as $value) {
+                    if (!self::validate($where[0], $value, $fields)) {
+                        throw new ModelException('字段'.$where[0].'值不符合要求:' . $value);
+                    }
+                }
             }
+            elseif (!self::validate($where[0], $where[2], $fields)) {
+                throw new ModelException('字段'.$where[0].'值不符合要求:' . $where[2]);
+            }   
+
         }
 
-        return $rules;
+        return $wheres;
     }
 
-    /**
-     * 验证数据合法性，非法字段保存于$this->illegalFields
-     *
-     * @param array $data 需要和schema key名一致
-     *
-     * @return boolean
-     */
-    public function validate(array $data): bool
-    {
 
-        $vali = new Validator();
-        if ($vali->setRules($this->rules)->validate($data)) {
-            $this->data = $vali->data;
-            return true;
+    public static function fillable(array $data, array $fillable): void
+    {
+        foreach ($data as $key => $value) {
+            if (!array_key_exists($key, $fillable)) {
+                throw new ModelException('非法字段' . $key . '  ，仅允许的字段:' . join(',', array_keys($fillable)));
+            }
+        }
+    }
+
+
+    public static function data(array $data, array $fields): void
+    {
+        foreach ($data as $key => $value) {
+            if (!self::validate($key, $value, $fields)) {
+                throw new ModelException('字段'.$key.'值不符合要求:' . $value);
+            }
+        }
+    }
+
+
+    public static function integer($value, int $min = PHP_INT_MIN, int $max = PHP_INT_MAX, bool $unsigned = false): bool
+    {
+        if (!is_int($value)) {
+            return false;
         }
 
-        $this->illegalFields = $vali->error;
+        if ($unsigned && $value < 0) {
+            return false;
+        }
+
+        if ($min !== null && $value < $min) {
+            return false;
+        }
+        if ($max !== null && $value > $max) {
+            return false;
+        }
+
+        return true;
+    }
+
+
+
+    public static function varchar($value, int $length = 255): bool
+    {
+        if (!is_string($value)) {
+            return false;
+        }
+        $len = mb_strlen($value);
+        if ($len > $length) {
+            return false;
+        }
+        return true;
+    }
+
+
+    public static function datetime($value): bool
+    {
+        if (!is_string($value)) {
+            return false;
+        }
+        $timestamp = strtotime($value);
+        if ($timestamp === false) {
+            return false;
+        }
+        return true;
+    }
+
+    public static function enum($value, array $options): bool
+    {
+        return in_array($value, $options);
+    }
+
+
+    public static function decimal($value, int $precision = 10, int $scale = 0): bool
+    {
+        if (!is_string($value)) {
+            return false;
+        }
+        if (!preg_match('/^-?\d+(\.\d{1,' . $scale . '})?$/', $value)) {
+            return false;
+        }
+        $parts = explode('.', $value);
+        if (strlen($parts[0]) > ($precision - $scale)) {
+            return false;
+        }
+        return true;
+    }
+
+
+
+    public static function validate(string $key, mixed $value, array $fields): bool
+    {
+        // 检查字段名是否在允许的字段列表中
+        if (!array_key_exists($key, $fields)) {
+            throw new ModelException('非法字段名:' . $key);
+        }
+
+        // 获取字段类型和验证规则
+        $fieldConfig = $fields[$key];
+
+        // 处理不同类型的验证
+        if (is_string($fieldConfig)) {
+            // 简单类型，如 'integer', 'varchar', 'datetime', 'enum', 'decimal'
+            $type = $fieldConfig;
+            $rules = [];
+        } else if (is_array($fieldConfig)) {
+            // 复杂类型，包含类型和规则，如 ['varchar', 'length' => 100]
+            $type = $fieldConfig[0] ?? 'varchar';
+            $rules = array_slice($fieldConfig, 1);
+        } else {
+            throw new ModelException($key.'无效验证值,必须是字符串或数组，包含类型和规则.');
+        }
+
+        if (!in_array(strtolower($type), ['integer', 'varchar', 'datetime', 'enum', 'decimal', 'text'])) {
+            throw new ModelException($key.'无效的验证类型,必须是[integer,varchar,datetime,enum,decimal,text]之一.');
+        }
+
+        // 根据类型进行验证
+        switch (strtolower($type)) {
+            case 'integer':
+                $min = $rules['min'] ?? PHP_INT_MIN;
+                $max = $rules['max'] ?? PHP_INT_MAX;
+                $unsigned = $rules['unsigned'] ?? false;
+                return self::integer($value, $min, $max, $unsigned);
+
+            case 'varchar':
+            case 'text':
+                $length = $rules['length'] ?? 255;
+                return self::varchar($value, $length);
+
+            case 'datetime':
+                return self::datetime($value);
+
+            case 'enum':
+                $options = $rules['options'] ?? [];
+                return self::enum($value, $options);
+
+            case 'decimal':
+                $precision = $rules['precision'] ?? 10;
+                $scale = $rules['scale'] ?? 0;
+                return self::decimal($value, $precision, $scale);
+        }
 
         return false;
-    }
-
-    /**
-     * 验证是否缺少必要字段，缺少的必要字段保存于$this->incompleteFields
-     *
-     * @param array $data 比较数据
-     *
-     * @return boolean
-     */
-    public function complete(array $data): bool
-    {
-
-        $required = [];
-        foreach ($this->schema as $key => $value) {
-            if (key_exists('required', $value) && $value['required']) {
-                $required[] = $key;
-            }
-        }
-
-        $pass = true;
-        foreach ($required as $rs) {
-            if (!key_exists($rs, $data)) {
-                $this->incompleteFields[$rs] = $this->schema[$rs]['label'] . '[' . $rs . ']';
-                $pass = false;
-            }
-        }
-
-        return $pass;
-    }
-
-    /**
-     * 与schema默认数据合并，并且清理不存在于schema里面的字段，不是成员的字段保存于$this->notMemberFields
-     *
-     * @param array $data 并入schema的数据
-     * @param array $without 不需要的字段
-     *
-     * @return array|boolean 与schema默认合并后的数据
-     */
-    public function merge(array $data, array $without = [])
-    {
-
-        $fields = [];
-        foreach ($this->schema as $key => $value) {
-            if (isset($value['default'])) {
-                $fields[$key] = $value['default'];
-            }
-        }
-
-        $merge = array_merge($fields, $data);
-        foreach ($without as $rs) {
-            if (isset($merge[$rs])) {
-                unset($merge[$rs]);
-            }
-        }
-
-        return $merge;
-    }
-
-    /**
-     * 清理不存在于schema里面的字段，不是成员的字段保存于$this->notMemberFields
-     *
-     * @param array $data 需要清理的数据
-     *
-     * @return array|bool 清理后后的数据
-     */
-    public static function clear(array $fields)
-    {
-
-        $given = [];
-        foreach ($data as $key => $value) {
-            if (isset($this->schema[$key])) {
-                $given[$key] = $value;
-            } else {
-                $this->notMemberFields[] = $key;
-            }
-        }
-
-        return $given;
-    }
-
-
-    public function validateWhere(array $where): bool
-    {
-     
-        foreach ($where as $rs) {
-
-            if (!is_array($rs) || count($rs) != 3) {
-                throw new ModelException('WHERE条件参数不完整');
-            }
-
-            if (!in_array(strtolower($rs[1]), ['=', '>', '<', '>=', '<=', '<>', '!=', 'in', 'like', 'between'])) {
-                throw new ModelException('非法操作符');
-            }
-
-            if (!array_key_exists($rs[0], $this->schema)) {
-                throw new ModelException('包含非法字段:' . $rs[0]);
-            }
-
-            if ($rs[1] == 'in' || $rs[1] == 'between') {
-                $ins = explode(',', $rs[2]);
-                foreach ($ins as $subrs) {
-                    $this->validateWhere([[$rs[0], '=', $subrs]]); //递归
-                }
-                continue;
-            }
-
-            if (!$this->validate([$rs[0] => $rs[2]])) {
-                if ($this->illegalFields) {
-                    throw new ModelException('非法字段数据:' . join(',', $this->illegalFields));
-                }
-                throw new ModelException('没有提交Where数据');
-            }
-        }
-
-        return true;
-    }
-
-    public function validateField(array $fields): bool
-    {
-        foreach ($fields as $rs) {
-            $as = trim(strstr($rs, ' as ', true));
-            if ($as) {
-                $rs = $as;
-            }
-
-            if (!array_key_exists($rs, $this->schema)) {
-                throw new ModelException('Schema不存在的字段 ' . $rs);
-            }
-        }
-
-        return true;
     }
 }
