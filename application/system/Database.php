@@ -1,20 +1,14 @@
 <?php
+
 declare(strict_types=1);
 
 namespace system;
 
 use system\database\DatabaseAbstract;
+use system\database\DatabaseException;
 
 class Database
 {
-
-    /**
-     * 返回数据库实列
-     *
-     * @param string $service
-     *
-     * @return object
-     */
     public static function instance(string $service = 'default'): DatabaseAbstract
     {
         static $ins = [];
@@ -24,18 +18,16 @@ class Database
 
         $config = include APP_DIR . 'config/' . ENVIRONMENT . '/database' . EXT;
         if (!isset($config[$service])) {
-            exit(" '{$service}' Config Not Exist,Please Check Database Config File In '" . ENVIRONMENT . "' Directory.");
+            throw new DatabaseException(" '{$service}' Config Not Exist,Please Check Database Config File In '" . ENVIRONMENT . "' Directory.");
         }
 
         $arguments = $config[$service];
-        if ($arguments['driver'] == 'mysqli') {
-            $ins[$service] = new database\mysqli\Database($arguments);
+        if ($arguments['driver'] == 'pdo_mysql') {
+            $ins[$service] = new database\pdo\Mysql($arguments);
         } else {
-            exit(" '{$service}' Driver Not Support.");
+            throw new DatabaseException(" '{$service}' Driver Not Support.");
         }
 
         return $ins[$service];
     }
-
-
 }

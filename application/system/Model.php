@@ -196,10 +196,9 @@ class Model
         return $this->db->update($this->table, $data, $wheres);
     }
 
-    public function insert(array $data = []): bool
+    public function insert(array ...$data): int|false   
     {
-
-        if (empty($data)) {
+        if (empty($data[0])) {
             throw new ModelException('插入数据不能为空');
         }
 
@@ -211,18 +210,8 @@ class Model
             throw new ModelException('Fields字段未定义');
         }
 
-        // 处理数据格式
-        $dataset = [];
-        if (is_array($data) && isset($data[0]) && is_array($data[0])) {
-            // 多条数据
-            $dataset = $data;
-        } else {
-            // 单条数据
-            $dataset[] = $data;
-        }
-
         $merged = [];
-        foreach ($dataset as $key => $rs) {
+        foreach ($data as $key => $rs) {
             Safe::fillable($rs, $this->fillable); //检查填充字段
             Safe::data($rs, $this->schema); //检查数据字段
             $merged[$key] = array_merge($this->fillable, $rs);//合并填充字段和数据字段
@@ -230,7 +219,7 @@ class Model
 
         $this->creating();
 
-        return $this->db->insert($this->table, $merged);
+        return $this->db->insert($this->table, ...$merged);
     }
 
     /**
@@ -325,6 +314,21 @@ class Model
         $params = ['fields' => array_keys($this->schema), 'offset' => $offset];
 
         return $this->db->select($this->table, $params)->result();
+    }
+
+
+    public function transaction(callable $callback): mixed
+    {
+        $result = null;
+        try {
+            $this->db->transaction();
+            $result = $callback();
+            $this->db->commit();
+        } catch (\Exception $e) {
+            $this->db->rollback();
+            throw new ModelException("Transaction Error: {$e->getMessage()}");
+        }
+        return $result;
     }
 
 }
