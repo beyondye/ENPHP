@@ -13,11 +13,23 @@ class Mysql extends DatabaseAbstract
 
     private \PDO|null $db = null;
 
-    protected array $config = [];
-
     public function __construct($config = [])
     {
-        $this->config = $config;
+        $config = array_merge([
+            'host' => 'localhost',
+            'port' => 3306,
+            'charset' => 'utf8mb4',
+            'collation' => 'utf8mb4_unicode_ci',
+            'persistent' => false,
+            'username' => '',
+            'password' => '',
+            'database' => '',
+            'driver' => 'pdo_mysql'
+        ], $config);
+
+        if (empty($config['database']) || empty($config['username']) || empty($config['password'])) {
+            throw new DatabaseException('Database Name Or Username Or Password Is Required.');
+        }
 
         $dsn = "mysql:host={$config['host']};dbname={$config['database']};port={$config['port']};charset={$config['charset']};collation={$config['collation']}";
         $options = [

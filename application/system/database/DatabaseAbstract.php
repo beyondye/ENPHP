@@ -8,11 +8,11 @@ use system\database\ResultAbstract;
 
 abstract class DatabaseAbstract
 {
-    abstract public function execute(string $sql): int;
+    abstract public function execute(string $sql): int|ResultAbstract;
 
-    abstract public function insert(string $table, array ...$data): int;
+    abstract public function insert(string $table, array ...$data): string|int;
 
-    abstract public function upsert(string $table, array $data): int;
+    abstract public function upsert(string $table, array $data): string|int;
 
     abstract public function update(string $table, array $data, array ...$wheres): int;
 
@@ -28,9 +28,7 @@ abstract class DatabaseAbstract
 
     abstract public function transaction(): bool;
 
-     abstract public function select(string $table, array $params): ResultAbstract;
+    abstract public function select(string $table, array $params): ResultAbstract;
 
     abstract public function close(): bool;
-
-
 }

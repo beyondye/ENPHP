@@ -3,27 +3,34 @@ return [
     'default' => [
         'driver' => 'pdo_mysql',
         'host' => 'localhost',
-        'username' => 'root',
-        'password' => '123456',
-        'database' => 'test',
         'port' => 3306,
+        'database' => 'test_db',
+        'username' => 'root',
+        'password' => 'a12345678',
         'charset' => 'utf8mb4',
         'collation' => 'utf8mb4_unicode_ci',
-        'persistent' => true,
-        
+        'persistent' => false
     ],
-
-
-    'sqlite' => [
-        'driver' => 'pod_sqlite',
-        'host' => 'test.db',
-        'username' => '',
+    'test' => [
+        'driver' => 'pdo_mysql',
+        'host' => 'localhost',
+        'port' => 3306,
+        'database' => 'test_db',
+        'username' => 'root',
+        'password' => 'a12345678',
+        'charset' => 'utf8mb4',
+        'collation' => 'utf8mb4_unicode_ci',
+        'persistent' => false
+    ],
+     'unsupported' => [
+        'driver' => 'unsupported_driver',
+        'host' => 'localhost',
+        'port' => 3306,
+        'database' => 'test_db',
+        'username' => 'root',
         'password' => '',
-        'database' => 'sqlite3',
-        'database' => 'test',
-        'port' => '',
-        'charset' => 'utf8'
-    ],
-
-
+        'charset' => 'utf8mb4',
+        'collation' => 'utf8mb4_unicode_ci',
+        'persistent' => false
+    ]
 ];

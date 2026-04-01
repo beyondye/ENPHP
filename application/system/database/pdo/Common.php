@@ -7,33 +7,34 @@ namespace system\database\pdo;
 use system\database\DatabaseException;
 use system\database\Util;
 use system\database\pdo\Build;
-use system\database\pdo\Result;
+use system\database\ResultAbstract;
 
 trait Common
 {
-    protected function transaction(): bool
+    protected int $effected = 0;
+
+    public function transaction(): bool
     {
         return $this->db->beginTransaction();
     }
 
-
-    protected function commit(): bool
+    public function commit(): bool
     {
         return $this->db->commit();
     }
 
-    protected function rollback(): bool
+    public function rollback(): bool
     {
         return $this->db->rollBack();
     }
 
-    protected function close(): bool
+    public function close(): bool
     {
         $this->db = null;
         return true;
     }
 
-    public function insert(string $table, array ...$data): int|false
+    public function insert(string $table, array ...$data): string|int
     {
         if (empty($data) || empty($data[0])) {
             throw new DatabaseException('Insert Data Is Empty.');
@@ -73,11 +74,13 @@ trait Common
             throw new DatabaseException('Insert Execute Error :' . $e->getMessage());
         }
 
+        $this->effected = $stmt->rowCount();
+
         return $this->lastid();
     }
 
 
-    public function upsert(string $table, array $data): int
+    public function upsert(string $table, array $data): string|int
     {
         if (empty($data)) {
             throw new DatabaseException('Upsert Data Is Empty.');
@@ -99,12 +102,14 @@ trait Common
         foreach ($data as $key => $value) {
             $stmt->bindValue(':' . $key, $value);
         }
-        
+
         try {
             $stmt->execute();
         } catch (\PDOException $e) {
             throw new DatabaseException('Upsert Execute Error :' . $e->getMessage());
         }
+
+        $this->effected = $stmt->rowCount();
 
         return $this->lastid();
     }
@@ -115,7 +120,7 @@ trait Common
             throw new DatabaseException('Update Data Is Empty.');
         }
 
-        $wheres = Util::where($wheres);
+        $wheres = Util::where(...$wheres);
         if (empty($wheres)) {
             throw new DatabaseException('Update Where Condition Is Empty.');
         }
@@ -127,7 +132,7 @@ trait Common
         $setStr = implode(', ', $set);
 
         // 构建 WHERE 子句
-        $whereClause = Build::whereParams(...$wheres);
+        $whereClause = Build::wherePlaceholder(...$wheres);
         $sql = "UPDATE {$table} SET {$setStr} WHERE {$whereClause}";
         $stmt = $this->db->prepare($sql);
 
@@ -137,7 +142,7 @@ trait Common
         }
 
         // 绑定 WHERE 条件参数
-        Build::whereValues($stmt, ...$wheres);
+        Build::wherePlaceholderValues($stmt, ...$wheres);
 
         try {
             $stmt->execute();
@@ -145,31 +150,35 @@ trait Common
             throw new DatabaseException('Update Execute Error :' . $e->getMessage());
         }
 
-        return $stmt->rowCount();
+        $this->effected = $stmt->rowCount();
+
+        return $this->effected;
     }
 
     public function delete(string $table, array ...$wheres): int
     {
-        $wheres = Util::where($wheres);
+        $wheres = Util::where(...$wheres);
         if (empty($wheres)) {
             throw new DatabaseException('Delete Where Condition Is Empty.');
         }
 
         // 构建 WHERE 子句
-        $whereClause = Build::whereParams(...$wheres);
+        $whereClause = Build::wherePlaceholder(...$wheres);
         $sql = "DELETE FROM {$table} WHERE {$whereClause}";
         $stmt = $this->db->prepare($sql);
 
         // 绑定 WHERE 条件参数
-        Build::whereValues($stmt, ...$wheres);
+        Build::wherePlaceholderValues($stmt, ...$wheres);
 
         try {
             $stmt->execute();
         } catch (\PDOException $e) {
             throw new DatabaseException('Delete Execute Error :' . $e->getMessage());
         }
-   
-        return $stmt->rowCount();
+
+        $this->effected = $stmt->rowCount();
+
+        return $this->effected;
     }
 
     public function lastid(): string|int
@@ -194,34 +203,51 @@ trait Common
         if (stripos(trim($sql), 'SELECT') === 0) {
             return new Result($stmt);
         } else {
-            return $stmt->rowCount();
+            $this->effected = $stmt->rowCount();
+
+            return $this->effected;
         }
     }
 
 
-    public function select(string $table, array ...$params): Result
+    /**
+     * 执行 SELECT 查询
+     * @param string $table 表名
+     * @param array $field 字段列表，默认所有字段
+     * @param array $where WHERE 条件，默认空数组
+     * @param array $groupby GROUP BY 字段，默认空数组
+     * @param array $having HAVING 条件，默认空数组
+     * @param array $orderby ORDER BY 字段，默认空数组
+     * @param array|int $limit LIMIT 条件，默认空数组或整数 ，数组时为 [offset, limit]
+     * @example 
+     * select('test_table', ['id', 'name'], ['id', '=', 1], ['status'], ['count(*)',' >', 4], ['name'=>'asc'], [10, 20]);
+     * select('test_table', field:['id', 'name'], where:['id', '=', 1], groupby:['status'], having:['count(*)',' >', 4], orderby:['name'=>'asc'], limit:[10, 20]);
+     * select('test_table', field:['id', 'name'], where:['id', '=', 1], groupby:['status', 'name'], having:['count(*)',' >', 4], orderby:['name'=>'asc'], limit:10);
+     * select('test_table');
+     * select('test_table', field:['id', 'name']);
+     * select('test_table', where:[['id', '=', 1,'or'], ['name', 'like', '%test%','not'], ['age', '>', 5]]);
+     * 
+     * @return ResultAbstract 查询结果
+     * @throws DatabaseException 如果查询执行失败
+     */
+    public function select(string $table, array $field = [], array $where = [], array $groupby = [], array $having = [], array $orderby = [], array|int $limit = []): ResultAbstract
     {
         if (trim($table) == '') {
             throw new DatabaseException('Select Table Name Is Empty');
         }
 
-        $fields = $params['fields'] ?? [];
-        $where = $params['where'] ?? [];
-        $groupby = $params['groupby'] ?? [];
-        $having = $params['having'] ?? [];
-        $orderby = $params['orderby'] ?? [];
-        $limit = $params['limit'] ?? [];
-
         // 构建 SELECT 子句
-        $fields = Build::fields($this->db, $fields);
+        $fields = Build::fields($this->db, ...$field);
 
         // 构建 FROM 子句
         $sql = "SELECT {$fields} FROM {$table}";
 
         // 构建 WHERE 子句
+        $where = Util::where(...$where);
         $sql .= Build::where($where);
 
         // 构建 GROUP BY 子句
+        $having = Util::where(...$having);
         $sql .= Build::groupBy($groupby, $having);
 
         // 构建 ORDER BY 子句
@@ -234,10 +260,10 @@ trait Common
         $stmt = $this->db->prepare($sql);
 
         // 绑定 WHERE 条件参数
-        Build::whereValues($stmt, $where);
+        Build::wherePlaceholderValues($stmt, ...$where);
 
         // 绑定 HAVING 条件参数
-        Build::whereValues($stmt, $having);
+        Build::wherePlaceholderValues($stmt, ...$having);
 
         try {
             $stmt->execute();
@@ -250,6 +276,6 @@ trait Common
 
     public function effected(): int
     {
-        return $this->db->rowCount();
+        return $this->effected;
     }
 }

@@ -1,0 +1,1 @@
+./vendor/bin/phpunit --coverage-html test/coverage  --coverage-filter ./application/system --display-all-issues

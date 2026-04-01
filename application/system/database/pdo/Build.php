@@ -5,19 +5,17 @@ declare(strict_types=1);
 namespace system\database\pdo;
 
 use system\database\DatabaseException;
-use system\database\Util;
 
 class Build
 {
-    public static function whereParams(array ...$wheres): string
+    public static function wherePlaceholder(array ...$wheres): string
     {
+        if (empty(array_filter($wheres))) {
+            return '';
+        }
+
         $conditions = [];
-
         foreach ($wheres as $key => $value) {
-
-            if (!is_array($value)) {
-                throw new DatabaseException('buildWhere Condition Must Be Array. ' . $key);
-            }
 
             if (count($value) < 3 || count($value) > 4) {
                 throw new DatabaseException('buildWhere Condition Format Is Wrong.');
@@ -41,47 +39,52 @@ class Build
                 throw new DatabaseException('buildWhere Logic Condition Format Is Wrong. ' . $field);
             }
 
-            $operator = $value[1];
-            $allowedOperators = ['=', '!=', '<>', '<', '>', '<=', '>=', 'like', 'in', 'between', 'ilike'];
-            if (!in_array(strtolower($operator), $allowedOperators)) {
+            $operator = strtoupper($value[1]);
+            $allowedOperators = ['=', '!=', '<>', '<', '>', '<=', '>=', 'LIKE', 'IN', 'BETWEEN', 'ILIKE'];
+            if (!in_array($operator, $allowedOperators)) {
                 throw new DatabaseException('buildWhere Operator Is Wrong. ' . $field);
             }
 
             $logic = $value[3] ?? '';
+            $logic = $logic ? ' ' . strtoupper($logic) : '';
 
-
-            if (in_array($operator, ['in', 'between'])) {
+            if (in_array($operator, ['IN', 'BETWEEN'])) {
                 if (!is_array($value[2])) {
                     throw new DatabaseException('buildWhere In Or Between Value Must Be Array. ' . $field);
                 }
                 $placeholders = [];
                 foreach ($value[2] as $subkey => $subvalue) {
-                    if (is_scalar($subvalue)) {
+                    if (is_string($subvalue) || is_numeric($subvalue)) {
                         $placeholders[] = ":{$field}_{$subkey}";
                     }
                 }
                 if (empty($placeholders)) {
                     continue;
                 }
-                $conditions[] = "{$field} {$operator} ({ implode(',', $placeholders) }) {$logic}";
+                $conditions[] = "{$field} {$operator} (" . implode(',', $placeholders) . "){$logic}";
             } else {
-                $conditions[] = "{$field} {$operator} :where_{$field} {$logic}";
+                if (in_array($operator, ['LIKE', 'ILIKE'])) {
+                    $conditions[] = "{$field} {$operator} :where_{$field}{$logic}";
+                } else {
+                    $conditions[] = "{$field}{$operator}:where_{$field}{$logic}";
+                }
             }
         }
 
         return implode(' ', $conditions);
     }
 
-    public static function whereValues(\PDOStatement $stmt, array ...$wheres): void
+    public static function wherePlaceholderValues(\PDOStatement $stmt, array ...$wheres): bool
     {
-        if (empty($wheres)) {
-            return;
-        }   
+        if (empty(array_filter($wheres))) {
+            return true;
+        }
 
         foreach ($wheres as $key => $value) {
-            if (in_array($value[1], ['in', 'between']) && is_array($value[2])) {
+            if (in_array(strtolower($value[1]), ['in', 'between']) && is_array($value[2])) {
+
                 foreach ($value[2] as $subkey => $subvalue) {
-                    if (is_scalar($subvalue)) {
+                    if (is_string($subvalue) || is_numeric($subvalue)) {
                         $stmt->bindValue(":{$value[0]}_{$subkey}", $subvalue);
                     }
                 }
@@ -89,16 +92,17 @@ class Build
                 $stmt->bindValue(":where_{$value[0]}", $value[2]);
             }
         }
+
+        return true;
     }
 
-    public static function where(array ...$wheres): string
+    public static function where(array $wheres=[]): string
     {
-        $wheres = Util::where($wheres);
         if (empty($wheres)) {
             return '';
         }
 
-        $whereClause = self::whereParams($wheres);
+        $whereClause = self::wherePlaceholder(...$wheres);
         return " WHERE {$whereClause}";
     }
 
@@ -113,15 +117,14 @@ class Build
         return implode(',', $fields);
     }
 
-    public static function having(array ...$having): string
+    public static function having(array $having=[]): string
     {
-        $wheres = Util::where($having);
-        if (empty($wheres)) {
+        if (empty($having)) {
             return '';
         }
 
-        $whereClause = self::whereParams($wheres);
-        return " HAVING {$whereClause}";
+        $havingClause = self::wherePlaceholder(...$having);
+        return " HAVING {$havingClause}";
     }
 
     public static function groupBy(array $groupby, array $having): string
@@ -151,18 +154,14 @@ class Build
 
         $orders = [];
         foreach ($orderby as $key => $value) {
-            if (is_string($key) && trim($key) != '' && $value != '' && is_string($value) && in_array(strtolower($value), ['asc', 'desc'])) {  
+            if (is_string($key) && trim($key) != '' && $value != '' && is_string($value) && in_array(strtolower($value), ['asc', 'desc'])) {
                 $orders[$key] = $key . ' ' . $value;
             } else {
                 throw new DatabaseException('buildOrderBy Order By Key Must Be String,Value Must Be Asc Or Desc. ' . $key);
             }
         }
 
-        if (empty($orders)) {
-            return '';
-        }
-
-        return ' ORDER BY ' . implode(',', $orders);    
+        return ' ORDER BY ' . implode(',', $orders);
     }
 
 
@@ -172,19 +171,16 @@ class Build
             return '';
         }
 
-        if(is_int($limit)) {
+        if (is_int($limit)) {
             return " LIMIT {$limit}";
         }
 
-        if(count($limit) == 1 && is_int($limit[0])) {
+        if (count($limit) == 1 && is_int($limit[0])) {
             return " LIMIT {$limit[0]}";
-        }    
-        elseif(count($limit) == 2 && is_int($limit[0]) && is_int($limit[1])) {
+        } elseif (count($limit) == 2 && is_int($limit[0]) && is_int($limit[1])) {
             return " LIMIT {$limit[0]} OFFSET {$limit[1]}";
-        } 
+        }
 
         throw new DatabaseException('buildLimit Limit Must Be Integer Or Array Be Integer,Not More Than 2');
-
     }
-
 }
