@@ -41,6 +41,9 @@ class Database
             case 'pdo_mysql':
                 $ins[$service] = new database\pdo\Mysql($arguments);
                 break;
+            case 'pdo_sqlite':
+                $ins[$service] = new database\pdo\Sqlite($arguments);
+                break;
             default:
                 throw new DatabaseException(" '{$service}' Driver Not Support.");
         }

@@ -79,5 +79,15 @@ class DatabaseTest extends TestCase
         
         Database::instance('unsupported');
     }
+
+    /**
+     * 测试 SQLite 驱动
+     */
+    public function testSqliteDriver()
+    {
+        // 假设配置文件中存在一个使用 SQLite 驱动的服务
+        $db = Database::instance('sqlite');
+        $this->assertInstanceOf(DatabaseAbstract::class, $db);
+    }
    
 }
