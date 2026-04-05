@@ -1,12 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/10.0/phpunit.xsd"
-         bootstrap="test/unit/bootstrap.php"
-         colors="true">
+         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/13.0/phpunit.xsd"
+         bootstrap="./test/bootstrap.php"
+         colors="true"
+         processIsolation="false"
+         stopOnFailure="false"
+         failOnRisky="true"
+         failOnWarning="true"
+         cacheDirectory="./test/.phpunit.cache">
+
+    <!-- 1. 定义源码范围（新版本核心：用于代码覆盖率过滤） -->
+    <source>
+        <include>
+            <directory suffix=".php">./application</directory>
+        </include>
+        <exclude>
+            <directory>./application/fonts</directory>
+            <directory>./application/public</directory>
+        </exclude>
+    </source>
+
+    <!-- 测试套件配置 -->
     <testsuites>
-        <testsuite name="system">
-        <directory suffix=".php">./test/unit</directory>
-        <exclude>./test/unit/bootstrap.php</exclude>
+        <testsuite name="all">
+            <directory>./test/unit</directory>
+            <directory>./test/integration</directory>
         </testsuite>
     </testsuites>
+
+    <!-- 2. 覆盖率报告输出（仅保留报告格式配置） -->
+    <coverage cacheDirectory="./test/.phpunit.cache/code-coverage">
+        <report>
+            <html outputDirectory="./test/coverage/html"/>
+            <text outputFile="./test/coverage/coverage.txt"/>
+        </report>
+    </coverage>
+
 </phpunit>

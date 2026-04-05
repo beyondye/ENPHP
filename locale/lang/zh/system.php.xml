@@ -1,0 +1,426 @@
+<?xml version="1.0"?>
+<phpunit xmlns="https://schema.phpunit.de/coverage/1.0">
+  <file name="system.php" path="/locale/lang/zh" hash="13c9e8e7bd3bcf8f666c6dbd10a13e19b4092f1a">
+    <totals>
+      <lines total="38" comments="0" code="38" executable="35" executed="35" percent="100.00"/>
+      <methods count="0" tested="0" percent="0"/>
+      <functions count="0" tested="0" percent="0"/>
+      <classes count="0" tested="0" percent="0"/>
+      <traits count="0" tested="0" percent="0"/>
+    </totals>
+    <coverage>
+      <line nr="5">
+        <covered by="test\unit\LangTest::testBasicLangRetrieval"/>
+      </line>
+      <line nr="3">
+        <covered by="test\unit\LangTest::testBasicLangRetrieval"/>
+      </line>
+      <line nr="4">
+        <covered by="test\unit\LangTest::testBasicLangRetrieval"/>
+      </line>
+      <line nr="6">
+        <covered by="test\unit\LangTest::testBasicLangRetrieval"/>
+      </line>
+      <line nr="7">
+        <covered by="test\unit\LangTest::testBasicLangRetrieval"/>
+      </line>
+      <line nr="8">
+        <covered by="test\unit\LangTest::testBasicLangRetrieval"/>
+      </line>
+      <line nr="9">
+        <covered by="test\unit\LangTest::testBasicLangRetrieval"/>
+      </line>
+      <line nr="10">
+        <covered by="test\unit\LangTest::testBasicLangRetrieval"/>
+      </line>
+      <line nr="11">
+        <covered by="test\unit\LangTest::testBasicLangRetrieval"/>
+      </line>
+      <line nr="12">
+        <covered by="test\unit\LangTest::testBasicLangRetrieval"/>
+      </line>
+      <line nr="13">
+        <covered by="test\unit\LangTest::testBasicLangRetrieval"/>
+      </line>
+      <line nr="14">
+        <covered by="test\unit\LangTest::testBasicLangRetrieval"/>
+      </line>
+      <line nr="15">
+        <covered by="test\unit\LangTest::testBasicLangRetrieval"/>
+      </line>
+      <line nr="16">
+        <covered by="test\unit\LangTest::testBasicLangRetrieval"/>
+      </line>
+      <line nr="17">
+        <covered by="test\unit\LangTest::testBasicLangRetrieval"/>
+      </line>
+      <line nr="18">
+        <covered by="test\unit\LangTest::testBasicLangRetrieval"/>
+      </line>
+      <line nr="19">
+        <covered by="test\unit\LangTest::testBasicLangRetrieval"/>
+      </line>
+      <line nr="20">
+        <covered by="test\unit\LangTest::testBasicLangRetrieval"/>
+      </line>
+      <line nr="21">
+        <covered by="test\unit\LangTest::testBasicLangRetrieval"/>
+      </line>
+      <line nr="22">
+        <covered by="test\unit\LangTest::testBasicLangRetrieval"/>
+      </line>
+      <line nr="23">
+        <covered by="test\unit\LangTest::testBasicLangRetrieval"/>
+      </line>
+      <line nr="24">
+        <covered by="test\unit\LangTest::testBasicLangRetrieval"/>
+      </line>
+      <line nr="25">
+        <covered by="test\unit\LangTest::testBasicLangRetrieval"/>
+      </line>
+      <line nr="26">
+        <covered by="test\unit\LangTest::testBasicLangRetrieval"/>
+      </line>
+      <line nr="27">
+        <covered by="test\unit\LangTest::testBasicLangRetrieval"/>
+      </line>
+      <line nr="28">
+        <covered by="test\unit\LangTest::testBasicLangRetrieval"/>
+      </line>
+      <line nr="29">
+        <covered by="test\unit\LangTest::testBasicLangRetrieval"/>
+      </line>
+      <line nr="30">
+        <covered by="test\unit\LangTest::testBasicLangRetrieval"/>
+      </line>
+      <line nr="31">
+        <covered by="test\unit\LangTest::testBasicLangRetrieval"/>
+      </line>
+      <line nr="32">
+        <covered by="test\unit\LangTest::testBasicLangRetrieval"/>
+      </line>
+      <line nr="33">
+        <covered by="test\unit\LangTest::testBasicLangRetrieval"/>
+      </line>
+      <line nr="34">
+        <covered by="test\unit\LangTest::testBasicLangRetrieval"/>
+      </line>
+      <line nr="35">
+        <covered by="test\unit\LangTest::testBasicLangRetrieval"/>
+      </line>
+      <line nr="36">
+        <covered by="test\unit\LangTest::testBasicLangRetrieval"/>
+      </line>
+      <line nr="37">
+        <covered by="test\unit\LangTest::testBasicLangRetrieval"/>
+      </line>
+    </coverage>
+    <source xmlns="https://schema.phpunit.de/coverage/1.0">
+      <line no="1">
+        <token name="T_OPEN_TAG">&lt;?php</token>
+      </line>
+      <line no="2"/>
+      <line no="3">
+        <token name="T_RETURN">return</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_OPEN_SQUARE">[</token>
+      </line>
+      <line no="4">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'validator'</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_DOUBLE_ARROW">=&gt;</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_OPEN_SQUARE">[</token>
+      </line>
+      <line no="5">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'required'</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_DOUBLE_ARROW">=&gt;</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'{label}不能为空'</token>
+        <token name="T_COMMA">,</token>
+      </line>
+      <line no="6">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'len'</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_DOUBLE_ARROW">=&gt;</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'{label}长度必须为{limit}个字符'</token>
+        <token name="T_COMMA">,</token>
+      </line>
+      <line no="7">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'minLen'</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_DOUBLE_ARROW">=&gt;</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'{label}最小长度为{limit}个字符'</token>
+        <token name="T_COMMA">,</token>
+      </line>
+      <line no="8">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'maxLen'</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_DOUBLE_ARROW">=&gt;</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'{label}最大长度为{limit}个字符'</token>
+        <token name="T_COMMA">,</token>
+      </line>
+      <line no="9">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'gt'</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_DOUBLE_ARROW">=&gt;</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'{label}必须大于{limit}'</token>
+        <token name="T_COMMA">,</token>
+      </line>
+      <line no="10">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'lt'</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_DOUBLE_ARROW">=&gt;</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'{label}必须小于{limit}'</token>
+        <token name="T_COMMA">,</token>
+      </line>
+      <line no="11">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'gte'</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_DOUBLE_ARROW">=&gt;</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'{label}必须大于等于{limit}'</token>
+        <token name="T_COMMA">,</token>
+      </line>
+      <line no="12">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'lte'</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_DOUBLE_ARROW">=&gt;</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'{label}必须小于等于{limit}'</token>
+        <token name="T_COMMA">,</token>
+      </line>
+      <line no="13">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'eq'</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_DOUBLE_ARROW">=&gt;</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'{label}必须是{limit}'</token>
+        <token name="T_COMMA">,</token>
+      </line>
+      <line no="14">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'neq'</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_DOUBLE_ARROW">=&gt;</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'{label}不能是{limit}'</token>
+        <token name="T_COMMA">,</token>
+      </line>
+      <line no="15">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'in'</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_DOUBLE_ARROW">=&gt;</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'{label}只能是{limit}其中之一'</token>
+        <token name="T_COMMA">,</token>
+      </line>
+      <line no="16">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'nin'</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_DOUBLE_ARROW">=&gt;</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'{label}不能是{limit}其中之一'</token>
+        <token name="T_COMMA">,</token>
+      </line>
+      <line no="17">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'same'</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_DOUBLE_ARROW">=&gt;</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'{label}和{limit}必须一致'</token>
+        <token name="T_COMMA">,</token>
+      </line>
+      <line no="18">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'mobile'</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_DOUBLE_ARROW">=&gt;</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'{label}格式错误'</token>
+        <token name="T_COMMA">,</token>
+      </line>
+      <line no="19">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'email'</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_DOUBLE_ARROW">=&gt;</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'{label}格式错误'</token>
+        <token name="T_COMMA">,</token>
+      </line>
+      <line no="20">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'id'</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_DOUBLE_ARROW">=&gt;</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'{label}格式错误'</token>
+        <token name="T_COMMA">,</token>
+      </line>
+      <line no="21">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'ip4'</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_DOUBLE_ARROW">=&gt;</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'{label}格式错误'</token>
+        <token name="T_COMMA">,</token>
+      </line>
+      <line no="22">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'ip6'</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_DOUBLE_ARROW">=&gt;</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'{label}格式错误'</token>
+        <token name="T_COMMA">,</token>
+      </line>
+      <line no="23">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'url'</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_DOUBLE_ARROW">=&gt;</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'{label}格式错误'</token>
+        <token name="T_COMMA">,</token>
+      </line>
+      <line no="24">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'float'</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_DOUBLE_ARROW">=&gt;</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'{label}必须是浮点数'</token>
+        <token name="T_COMMA">,</token>
+      </line>
+      <line no="25">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'num'</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_DOUBLE_ARROW">=&gt;</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'{label}必须是数字'</token>
+        <token name="T_COMMA">,</token>
+      </line>
+      <line no="26">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'int'</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_DOUBLE_ARROW">=&gt;</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'{label}必须是整数'</token>
+        <token name="T_COMMA">,</token>
+      </line>
+      <line no="27">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'string'</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_DOUBLE_ARROW">=&gt;</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'{label}必须是字符串'</token>
+        <token name="T_COMMA">,</token>
+      </line>
+      <line no="28">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'chinese'</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_DOUBLE_ARROW">=&gt;</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'{label}必须是中文'</token>
+        <token name="T_COMMA">,</token>
+      </line>
+      <line no="29">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'alpha'</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_DOUBLE_ARROW">=&gt;</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'{label}必须是字母'</token>
+        <token name="T_COMMA">,</token>
+      </line>
+      <line no="30">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'alphaNum'</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_DOUBLE_ARROW">=&gt;</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'{label}必须是字母、数字'</token>
+        <token name="T_COMMA">,</token>
+      </line>
+      <line no="31">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'alphaNumChinese'</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_DOUBLE_ARROW">=&gt;</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'{label}必须是字母、数字、汉字'</token>
+        <token name="T_COMMA">,</token>
+      </line>
+      <line no="32">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'alphaNumDash'</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_DOUBLE_ARROW">=&gt;</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'{label}必须是字母、数字、下划线'</token>
+        <token name="T_COMMA">,</token>
+      </line>
+      <line no="33">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'default'</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_DOUBLE_ARROW">=&gt;</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'{label}验证不通过'</token>
+        <token name="T_COMMA">,</token>
+      </line>
+      <line no="34">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'key_no_exist'</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_DOUBLE_ARROW">=&gt;</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'{label}不存在'</token>
+        <token name="T_COMMA">,</token>
+      </line>
+      <line no="35">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'method_no_exist'</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_DOUBLE_ARROW">=&gt;</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'{label}使用不存在的验证方法{limit}'</token>
+        <token name="T_COMMA">,</token>
+      </line>
+      <line no="36">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_CLOSE_SQUARE">]</token>
+      </line>
+      <line no="37">
+        <token name="T_CLOSE_SQUARE">]</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="38"/>
+    </source>
+  </file>
+</phpunit>

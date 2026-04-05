@@ -1,0 +1,378 @@
+<?xml version="1.0"?>
+<phpunit xmlns="https://schema.phpunit.de/coverage/1.0">
+  <file name="AbstractAuth.php" path="/auth" hash="4ac6bf8f5e2ce6738c44ca57f43660b30544e7e1">
+    <totals>
+      <lines total="74" comments="39" code="35" executable="5" executed="0" percent="0.00"/>
+      <methods count="5" tested="0" percent="0.00"/>
+      <functions count="0" tested="0" percent="0"/>
+      <classes count="1" tested="0" percent="0.00"/>
+      <traits count="0" tested="0" percent="0"/>
+    </totals>
+    <class name="system\auth\AbstractAuth" start="5" executable="5" executed="0" crap="0">
+      <namespace name="system\auth"/>
+      <method name="check" signature="check()" start="38" end="38" crap="0" executable="1" executed="0" coverage="0"/>
+      <method name="create" signature="create(array $data)" start="47" end="47" crap="0" executable="1" executed="0" coverage="0"/>
+      <method name="data" signature="data(bool $assoc)" start="56" end="56" crap="0" executable="1" executed="0" coverage="0"/>
+      <method name="id" signature="id()" start="63" end="63" crap="0" executable="1" executed="0" coverage="0"/>
+      <method name="remove" signature="remove()" start="71" end="71" crap="0" executable="1" executed="0" coverage="0"/>
+    </class>
+    <coverage/>
+    <source xmlns="https://schema.phpunit.de/coverage/1.0">
+      <line no="1">
+        <token name="T_OPEN_TAG">&lt;?php</token>
+      </line>
+      <line no="2"/>
+      <line no="3">
+        <token name="T_NAMESPACE">namespace</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_NAME_QUALIFIED">system\auth</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="4"/>
+      <line no="5">
+        <token name="T_ABSTRACT">abstract</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CLASS">class</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">AbstractAuth</token>
+      </line>
+      <line no="6">
+        <token name="T_OPEN_CURLY">{</token>
+      </line>
+      <line no="7">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_CONST">const</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">ERR_ILLEGAL</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_EQUAL">=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_LNUMBER">1</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="8">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_CONST">const</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">ERR_EXP</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_EQUAL">=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_LNUMBER">2</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="9">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_CONST">const</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">ERR_DATA_NULL</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_EQUAL">=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_LNUMBER">3</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="10">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_CONST">const</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">VERIFIED_SUCCESS</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_EQUAL">=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_LNUMBER">0</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="11"/>
+      <line no="12">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_CONST">const</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">MSG</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_EQUAL">=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_OPEN_SQUARE">[</token>
+      </line>
+      <line no="13">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_STRING">self</token>
+        <token name="T_DOUBLE_COLON">::</token>
+        <token name="T_STRING">ERR_EXP</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_DOUBLE_ARROW">=&gt;</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'认证过期'</token>
+        <token name="T_COMMA">,</token>
+      </line>
+      <line no="14">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_STRING">self</token>
+        <token name="T_DOUBLE_COLON">::</token>
+        <token name="T_STRING">ERR_ILLEGAL</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_DOUBLE_ARROW">=&gt;</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'非法认证'</token>
+        <token name="T_COMMA">,</token>
+      </line>
+      <line no="15">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_STRING">self</token>
+        <token name="T_DOUBLE_COLON">::</token>
+        <token name="T_STRING">ERR_DATA_NULL</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_DOUBLE_ARROW">=&gt;</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'无认证数据'</token>
+        <token name="T_COMMA">,</token>
+      </line>
+      <line no="16">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_STRING">self</token>
+        <token name="T_DOUBLE_COLON">::</token>
+        <token name="T_STRING">VERIFIED_SUCCESS</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_DOUBLE_ARROW">=&gt;</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'认证通过'</token>
+      </line>
+      <line no="17">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_CLOSE_SQUARE">]</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="18"/>
+      <line no="19">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_DOC_COMMENT">/**</token>
+      </line>
+      <line no="20">
+        <token name="T_DOC_COMMENT">     * 认证信息</token>
+      </line>
+      <line no="21">
+        <token name="T_DOC_COMMENT">     *</token>
+      </line>
+      <line no="22">
+        <token name="T_DOC_COMMENT">     * @var string</token>
+      </line>
+      <line no="23">
+        <token name="T_DOC_COMMENT">     */</token>
+      </line>
+      <line no="24">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_PUBLIC">public</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$message</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="25"/>
+      <line no="26">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_DOC_COMMENT">/**</token>
+      </line>
+      <line no="27">
+        <token name="T_DOC_COMMENT">     * 认证信息码</token>
+      </line>
+      <line no="28">
+        <token name="T_DOC_COMMENT">     *</token>
+      </line>
+      <line no="29">
+        <token name="T_DOC_COMMENT">     * @var int</token>
+      </line>
+      <line no="30">
+        <token name="T_DOC_COMMENT">     */</token>
+      </line>
+      <line no="31">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_PUBLIC">public</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$code</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="32"/>
+      <line no="33">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_DOC_COMMENT">/**</token>
+      </line>
+      <line no="34">
+        <token name="T_DOC_COMMENT">     * 验证有效性</token>
+      </line>
+      <line no="35">
+        <token name="T_DOC_COMMENT">     *</token>
+      </line>
+      <line no="36">
+        <token name="T_DOC_COMMENT">     * @return bool</token>
+      </line>
+      <line no="37">
+        <token name="T_DOC_COMMENT">     */</token>
+      </line>
+      <line no="38">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_ABSTRACT">abstract</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_PROTECTED">protected</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_FUNCTION">function</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">check</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="39"/>
+      <line no="40">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_DOC_COMMENT">/**</token>
+      </line>
+      <line no="41">
+        <token name="T_DOC_COMMENT">     * 创建认证信息</token>
+      </line>
+      <line no="42">
+        <token name="T_DOC_COMMENT">     *</token>
+      </line>
+      <line no="43">
+        <token name="T_DOC_COMMENT">     * @param array $data</token>
+      </line>
+      <line no="44">
+        <token name="T_DOC_COMMENT">     *</token>
+      </line>
+      <line no="45">
+        <token name="T_DOC_COMMENT">     * @return mixed</token>
+      </line>
+      <line no="46">
+        <token name="T_DOC_COMMENT">     */</token>
+      </line>
+      <line no="47">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_ABSTRACT">abstract</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_PROTECTED">protected</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_FUNCTION">function</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">create</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_ARRAY">array</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$data</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_EQUAL">=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_OPEN_SQUARE">[</token>
+        <token name="T_CLOSE_SQUARE">]</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="48"/>
+      <line no="49">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_DOC_COMMENT">/**</token>
+      </line>
+      <line no="50">
+        <token name="T_DOC_COMMENT">     * 获取认证信息</token>
+      </line>
+      <line no="51">
+        <token name="T_DOC_COMMENT">     *</token>
+      </line>
+      <line no="52">
+        <token name="T_DOC_COMMENT">     * @param bool $assoc</token>
+      </line>
+      <line no="53">
+        <token name="T_DOC_COMMENT">     *</token>
+      </line>
+      <line no="54">
+        <token name="T_DOC_COMMENT">     * @return mixed</token>
+      </line>
+      <line no="55">
+        <token name="T_DOC_COMMENT">     */</token>
+      </line>
+      <line no="56">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_ABSTRACT">abstract</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_PROTECTED">protected</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_FUNCTION">function</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">data</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_STRING">bool</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$assoc</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_EQUAL">=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">false</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="57"/>
+      <line no="58">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_DOC_COMMENT">/**</token>
+      </line>
+      <line no="59">
+        <token name="T_DOC_COMMENT">     * 获取认证数据ID</token>
+      </line>
+      <line no="60">
+        <token name="T_DOC_COMMENT">     *</token>
+      </line>
+      <line no="61">
+        <token name="T_DOC_COMMENT">     * @return mixed</token>
+      </line>
+      <line no="62">
+        <token name="T_DOC_COMMENT">     */</token>
+      </line>
+      <line no="63">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_ABSTRACT">abstract</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_PROTECTED">protected</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_FUNCTION">function</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">id</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="64"/>
+      <line no="65"/>
+      <line no="66">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_DOC_COMMENT">/**</token>
+      </line>
+      <line no="67">
+        <token name="T_DOC_COMMENT">     * 清除认证</token>
+      </line>
+      <line no="68">
+        <token name="T_DOC_COMMENT">     *</token>
+      </line>
+      <line no="69">
+        <token name="T_DOC_COMMENT">     * @return mixed</token>
+      </line>
+      <line no="70">
+        <token name="T_DOC_COMMENT">     */</token>
+      </line>
+      <line no="71">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_ABSTRACT">abstract</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_PROTECTED">protected</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_FUNCTION">function</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">remove</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="72"/>
+      <line no="73">
+        <token name="T_CLOSE_CURLY">}</token>
+      </line>
+      <line no="74"/>
+    </source>
+  </file>
+</phpunit>
