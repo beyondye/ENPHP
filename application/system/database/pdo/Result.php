@@ -47,6 +47,17 @@ class Result extends ResultAbstract
 
         $this->stmt->closeCursor();
 
+        if ($result === false) {
+            $this->num = 0;
+            return null;
+        }
+
+        $this->num = 1;
         return $result;
+    }
+
+    public function raw(): \PDOStatement|null
+    {
+        return $this->stmt;
     }
 }

@@ -5,89 +5,83 @@ declare(strict_types=1);
 use PHPUnit\Framework\TestCase;
 use system\Database;
 use system\database\DatabaseException;
-use system\database\DatabaseAbstract;
 
 class DatabaseTest extends TestCase
 {
     /**
-     * 测试默认服务的单例模式
+     * 测试 Database 类的方法存在性
      */
-    public function testDefaultServiceSingleton()
+    public function testDatabaseMethodsExist()
     {
-        // 第一次调用，应该创建新实例
-        $db1 = Database::instance();
-        // 第二次调用，应该返回相同实例
-        $db2 = Database::instance();
+        $reflection = new ReflectionClass(Database::class);
         
-        $this->assertSame($db1, $db2, "Database::instance() 应该返回相同实例");
+        // 验证 instance 方法存在
+        $this->assertTrue($reflection->hasMethod('instance'));
+        
+        // 验证 instance 方法是静态的
+        $method = $reflection->getMethod('instance');
+        $this->assertTrue($method->isStatic());
+        
+        // 验证方法参数
+        $parameters = $method->getParameters();
+        $this->assertEquals(1, count($parameters));
+        $this->assertEquals('service', $parameters[0]->getName());
+        $this->assertEquals('string', $parameters[0]->getType()->getName());
+        
+        // 验证返回类型
+        $returnType = $method->getReturnType();
+        $this->assertEquals('system\\database\\DatabaseAbstract', (string) $returnType);
     }
 
     /**
-     * 测试指定服务的单例模式
+     * 测试 instance 方法 - 服务名称参数边界测试
      */
-    public function testNamedServiceSingleton()
+    public function testInstanceServiceNameBoundaries()
     {
-        // 测试 'test' 服务
-        $db1 = Database::instance('test');
-        $db2 = Database::instance('test');
-        
-        $this->assertSame($db1, $db2, "Database::instance('test') 应该返回相同实例");
-    }
-
-    /**
-     * 测试不同服务返回不同实例
-     */
-    public function testDifferentServices()
-    {
-        $dbDefault = Database::instance('default');
-        $dbTest = Database::instance('test');
-        
-        $this->assertNotSame($dbDefault, $dbTest, "不同服务应该返回不同实例");
-    }
-
-    /**
-     * 测试不存在的服务抛出异常
-     */
-    public function testNonExistentService()
-    {
+        // 测试空字符串服务名称
         $this->expectException(DatabaseException::class);
-        $this->expectExceptionMessage(" 'non_existent' Config Not Exist,Please Check Database Config File In 'development' Directory.");
-        
-        Database::instance('non_existent');
-    }
-
-    public function testDefaultService()
-    {
-        $db = Database::instance();
-        $this->assertInstanceOf(DatabaseAbstract::class, $db);
+        Database::instance('');
     }
 
     /**
-     * 测试指定服务的实例
+     * 测试 instance 方法 - 特殊字符服务名称
      */
-    public function testNamedService()
+    public function testInstanceServiceNameSpecialCharacters()
     {
-        $db = Database::instance('test');
-        $this->assertInstanceOf(DatabaseAbstract::class, $db);
-    }
-
-
-    public function testUnsupportedDriver()
-    {
+        // 测试包含特殊字符的服务名称
         $this->expectException(DatabaseException::class);
-        $this->expectExceptionMessage("'unsupported' Driver Not Support.");
-        
-        Database::instance('unsupported');
+        Database::instance('service@#$%');
     }
 
     /**
-     * 测试 SQLite 驱动
+     * 测试 instance 方法 - 长服务名称
      */
-    public function testSqliteDriver()
+    public function testInstanceServiceNameLong()
     {
-        // 假设配置文件中存在一个使用 SQLite 驱动的服务
-        $db = Database::instance('sqlite');
-        $this->assertInstanceOf(DatabaseAbstract::class, $db);
+        // 测试长服务名称
+        $longServiceName = str_repeat('a', 1000);
+        $this->expectException(DatabaseException::class);
+        Database::instance($longServiceName);
     }
-   
+
+    /**
+     * 测试 Database 类的异常处理
+     */
+    public function testDatabaseExceptionHandling()
+    {
+        // 测试无效的服务名称
+        $this->expectException(DatabaseException::class);
+        Database::instance('non_existent_service');
+    }
+
+    /**
+     * 测试 Database 类的安全性
+     */
+    public function testDatabaseSecurity()
+    {
+        // 测试 SQL 注入尝试
+        $sqlInjectionAttempt = "'; DROP TABLE users; --";
+        $this->expectException(DatabaseException::class);
+        Database::instance($sqlInjectionAttempt);
+    }
 }

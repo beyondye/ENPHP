@@ -8,9 +8,9 @@ use system\database\DatabaseException;
 
 class Build
 {
-    public static function wherePlaceholder(array ...$wheres): string
+    public static function wherePlaceholder(array $wheres, string $prefix = 'where'): string
     {
-        if (empty(array_filter($wheres))) {
+        if (empty($wheres)) {
             return '';
         }
 
@@ -21,13 +21,13 @@ class Build
                 throw new DatabaseException('buildWhere Condition Format Is Wrong.');
             }
 
-            if (!is_string($value[0])) {
+            if (!is_string($value[0]) || empty($value[0]) || is_numeric($value[0])) {
                 throw new DatabaseException('buildWhere Key Must Be String. ' . $key);
             }
 
             $field = $value[0];
 
-            if (!is_string($value[1])) {
+            if (!is_string($value[1]) || empty($value[1]) || is_numeric($value[1])) {
                 throw new DatabaseException('buildWhere Operator Must Be String. ' . $field);
             }
 
@@ -48,82 +48,94 @@ class Build
             $logic = $value[3] ?? '';
             $logic = $logic ? ' ' . strtoupper($logic) : '';
 
-            if (in_array($operator, ['IN', 'BETWEEN'])) {
-                if (!is_array($value[2])) {
-                    throw new DatabaseException('buildWhere In Or Between Value Must Be Array. ' . $field);
+            if ($operator == 'IN') {
+                if (!is_array($value[2]) || count($value[2]) == 0) {
+                    throw new DatabaseException('buildWhere In Operator Value Must Be Array With At Least One Element. ' . $field);
                 }
                 $placeholders = [];
                 foreach ($value[2] as $subkey => $subvalue) {
                     if (is_string($subvalue) || is_numeric($subvalue)) {
-                        $placeholders[] = ":{$field}_{$subkey}";
+                        $placeholders[] = ":{$prefix}_{$key}_{$subkey}";
+                    } else {
+                        throw new DatabaseException('buildWhere In Operator Value Must Be String Or Numeric. ' . $field);
                     }
                 }
-                if (empty($placeholders)) {
+
+                $conditions[] = "{$field} {$operator} (" . implode(',', $placeholders) . "){$logic}";
+                continue;
+            }
+
+            if ($operator == 'BETWEEN') {
+                if (!is_array($value[2]) || count($value[2]) != 2) {
+                    throw new DatabaseException('buildWhere Between Operator Value Must Be Array With Two Elements. ' . $field);
+                }
+
+                if (is_numeric($value[2][0]) && is_numeric($value[2][1])) {
+                    $conditions[] = "{$field} {$operator} :{$prefix}_{$key}_0 AND :{$prefix}_{$key}_1{$logic}";
                     continue;
                 }
-                $conditions[] = "{$field} {$operator} (" . implode(',', $placeholders) . "){$logic}";
-            } else {
-                if (in_array($operator, ['LIKE', 'ILIKE'])) {
-                    $conditions[] = "{$field} {$operator} :where_{$field}{$logic}";
-                } else {
-                    $conditions[] = "{$field}{$operator}:where_{$field}{$logic}";
-                }
+
+                throw new DatabaseException('buildWhere Between Operator Value Must Be Numeric. ' . $field);
             }
+
+            $conditions[] = "{$field} {$operator} :{$prefix}_{$key}{$logic}";
         }
 
         return implode(' ', $conditions);
     }
 
-    public static function wherePlaceholderValues(\PDOStatement $stmt, array ...$wheres): bool
+    public static function wherePlaceholderValues(\PDOStatement $stmt, array $wheres, string $prefix = 'where'): array
     {
-        if (empty(array_filter($wheres))) {
-            return true;
+        if (empty($wheres)) {
+            return [];
         }
 
+        $values = [];
         foreach ($wheres as $key => $value) {
-            if (in_array(strtolower($value[1]), ['in', 'between']) && is_array($value[2])) {
 
+            if (in_array(strtolower($value[1]), ['in', 'between']) && is_array($value[2])) {
                 foreach ($value[2] as $subkey => $subvalue) {
-                    if (is_string($subvalue) || is_numeric($subvalue)) {
-                        $stmt->bindValue(":{$value[0]}_{$subkey}", $subvalue);
-                    }
+                    $stmt->bindValue(":{$prefix}_{$key}_{$subkey}", $subvalue, is_int($subvalue) ? \PDO::PARAM_INT : \PDO::PARAM_STR);
+                    $values["{$prefix}_{$key}_{$subkey}"] = $subvalue;
                 }
-            } else {
-                $stmt->bindValue(":where_{$value[0]}", $value[2]);
+                continue;
             }
+
+            $stmt->bindValue(":{$prefix}_{$key}", $value[2], is_int($value[2]) ? \PDO::PARAM_INT : \PDO::PARAM_STR);
+            $values["{$prefix}_{$key}"] = $value[2];
         }
 
-        return true;
+        return $values;
     }
 
-    public static function where(array $wheres=[]): string
+    public static function where(array $wheres = []): string
     {
         if (empty($wheres)) {
             return '';
         }
 
-        $whereClause = self::wherePlaceholder(...$wheres);
+        $whereClause = self::wherePlaceholder($wheres, 'where');
         return " WHERE {$whereClause}";
     }
 
-    public static function fields(\PDO $db, string ...$fields): string
+    public static function fields(string ...$fields): string
     {
         if (empty($fields)) {
             return '*';
         }
         foreach ($fields as $key => $value) {
-            $fields[$key] = $db->quote($value);
+            $fields[$key] = $value;
         }
         return implode(',', $fields);
     }
 
-    public static function having(array $having=[]): string
+    public static function having(array $having = []): string
     {
         if (empty($having)) {
             return '';
         }
 
-        $havingClause = self::wherePlaceholder(...$having);
+        $havingClause = self::wherePlaceholder($having, 'having');
         return " HAVING {$havingClause}";
     }
 
@@ -156,9 +168,9 @@ class Build
         foreach ($orderby as $key => $value) {
             if (is_string($key) && trim($key) != '' && $value != '' && is_string($value) && in_array(strtolower($value), ['asc', 'desc'])) {
                 $orders[$key] = $key . ' ' . $value;
-            } else {
-                throw new DatabaseException('buildOrderBy Order By Key Must Be String,Value Must Be Asc Or Desc. ' . $key);
+                continue;
             }
+            throw new DatabaseException('buildOrderBy Order By Key Must Be String,Value Must Be Asc Or Desc. ' . $key);
         }
 
         return ' ORDER BY ' . implode(',', $orders);

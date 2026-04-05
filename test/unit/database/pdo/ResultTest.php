@@ -3,181 +3,402 @@
 declare(strict_types=1);
 
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use system\database\pdo\Result;
-use system\database\ResultAbstract;
 
 class ResultTest extends TestCase
 {
-    /**
-     * 测试 Result 类继承关系
-     */
-    public function testResultInheritance()
-    {
-        // 检查 Result 类是否继承自 ResultAbstract
-        $this->assertTrue(is_subclass_of(Result::class, ResultAbstract::class));
-    }
+
 
     /**
-     * 测试 Result 类构造函数
+     * 测试 all 方法 - 默认类型（object）
      */
-    public function testResultConstructor()
+    public function testAllWithObjectType()
     {
-        // 创建模拟的 PDOStatement
-        $mockStmt = $this->createStub(PDOStatement::class);
-
-        // 创建 Result 实例
-        $result = new Result($mockStmt);
-
-        // 验证实例创建成功
-        $this->assertInstanceOf(Result::class, $result);
-    }
-
-    /**
-     * 测试 Result::count 方法
-     */
-    public function testResultCount()
-    {
-        // 创建模拟的 PDOStatement
+        // 创建一个模拟的 PDOStatement 对象
         $mockStmt = $this->createMock(PDOStatement::class);
-
-        // 模拟 fetchAll 方法返回对象数组
-        $mockResult = [(object) ['id' => 1, 'name' => 'test1'], (object) ['id' => 2, 'name' => 'test2']];
+        
+        // 设置模拟对象的行为
+        $expectedResult = [
+            (object) ['id' => 1, 'name' => 'Test 1'],
+            (object) ['id' => 2, 'name' => 'Test 2']
+        ];
         $mockStmt->expects($this->once())
-            ->method('fetchAll')
-            ->with(\PDO::FETCH_CLASS)
-            ->willReturn($mockResult);
-
-        // 创建 Result 实例
+                 ->method('fetchAll')
+                 ->with(PDO::FETCH_CLASS)
+                 ->willReturn($expectedResult);
+        
+        // 创建 Result 对象
         $result = new Result($mockStmt);
-
-        // 调用 all 方法，这会设置 num 属性
-        $result->all();
-
-        // 验证 count 方法返回正确的结果数量
+        
+        // 执行 all 方法
+        $actualResult = $result->all();
+        
+        // 验证结果
+        $this->assertEquals($expectedResult, $actualResult);
         $this->assertEquals(2, $result->count());
     }
 
     /**
-     * 测试 Result::count 方法 - 初始状态
+     * 测试 all 方法 - array 类型
      */
-    public function testResultCountInitial()
+    public function testAllWithArrayType()
     {
-        // 创建模拟的 PDOStatement，使用 createStub 而不是 createMock
-        // 这样就不需要设置期望
-        $mockStmt = $this->createStub(PDOStatement::class);
-
-        // 创建 Result 实例
+        // 创建一个模拟的 PDOStatement 对象
+        $mockStmt = $this->createMock(PDOStatement::class);
+        
+        // 设置模拟对象的行为
+        $expectedResult = [
+            ['id' => 1, 'name' => 'Test 1'],
+            ['id' => 2, 'name' => 'Test 2']
+        ];
+        $mockStmt->expects($this->once())
+                 ->method('fetchAll')
+                 ->with(PDO::FETCH_ASSOC)
+                 ->willReturn($expectedResult);
+        
+        // 创建 Result 对象
         $result = new Result($mockStmt);
+        
+        // 执行 all 方法
+        $actualResult = $result->all('array');
+        
+        // 验证结果
+        $this->assertEquals($expectedResult, $actualResult);
+        $this->assertEquals(2, $result->count());
+    }
 
-        // 验证 count 方法在初始状态下返回 0
+    /**
+     * 测试 all 方法 - 空结果
+     */
+    public function testAllWithEmptyResult()
+    {
+        // 创建一个模拟的 PDOStatement 对象
+        $mockStmt = $this->createMock(PDOStatement::class);
+        
+        // 设置模拟对象的行为
+        $expectedResult = [];
+        $mockStmt->expects($this->once())
+                 ->method('fetchAll')
+                 ->with(PDO::FETCH_CLASS)
+                 ->willReturn($expectedResult);
+        
+        // 创建 Result 对象
+        $result = new Result($mockStmt);
+        
+        // 执行 all 方法
+        $actualResult = $result->all();
+        
+        // 验证结果
+        $this->assertEquals($expectedResult, $actualResult);
         $this->assertEquals(0, $result->count());
     }
 
     /**
-     * 测试 Result::all 方法 - 默认类型（object）
+     * 测试 count 方法
      */
-    public function testResultAllDefaultType()
+    public function testCount()
     {
-        // 创建模拟的 PDOStatement
+        // 创建一个模拟的 PDOStatement 对象
         $mockStmt = $this->createMock(PDOStatement::class);
-
-        // 模拟 fetchAll 方法返回对象数组
-        $mockResult = [(object) ['id' => 1, 'name' => 'test1'], (object) ['id' => 2, 'name' => 'test2']];
+        
+        // 设置模拟对象的行为
+        $expectedResult = [
+            (object) ['id' => 1, 'name' => 'Test 1'],
+            (object) ['id' => 2, 'name' => 'Test 2']
+        ];
         $mockStmt->expects($this->once())
-            ->method('fetchAll')
-            ->with(\PDO::FETCH_CLASS)
-            ->willReturn($mockResult);
-
-        // 创建 Result 实例
+                 ->method('fetchAll')
+                 ->with(PDO::FETCH_CLASS)
+                 ->willReturn($expectedResult);
+        
+        // 创建 Result 对象
         $result = new Result($mockStmt);
-
-        // 调用 all 方法
-        $actualResult = $result->all();
-
-        // 验证返回结果
-        $this->assertEquals($mockResult, $actualResult);
+        
+        // 执行 all 方法来设置 count
+        $result->all();
+        
+        // 执行 count 方法
+        $count = $result->count();
+        
+        // 验证结果
+        $this->assertEquals(2, $count);
     }
 
     /**
-     * 测试 Result::all 方法 - 指定类型为 array
+     * 测试 first 方法 - 默认类型（object）
      */
-    public function testResultAllArrayType()
+    public function testFirstWithObjectType()
     {
-        // 创建模拟的 PDOStatement
+        // 创建一个模拟的 PDOStatement 对象
         $mockStmt = $this->createMock(PDOStatement::class);
-
-        // 模拟 fetchAll 方法返回关联数组
-        $mockResult = [['id' => 1, 'name' => 'test1'], ['id' => 2, 'name' => 'test2']];
+        
+        // 设置模拟对象的行为
+        $expectedResult = (object) ['id' => 1, 'name' => 'Test 1'];
         $mockStmt->expects($this->once())
-            ->method('fetchAll')
-            ->with(\PDO::FETCH_ASSOC)
-            ->willReturn($mockResult);
-
-        // 创建 Result 实例
+                 ->method('fetch')
+                 ->with(PDO::FETCH_CLASS)
+                 ->willReturn($expectedResult);
+        $mockStmt->expects($this->once())
+                 ->method('closeCursor')
+                 ->willReturn(true);
+        
+        // 创建 Result 对象
         $result = new Result($mockStmt);
-
-        // 调用 all 方法
-        $actualResult = $result->all('array');
-
-        // 验证返回结果
-        $this->assertEquals($mockResult, $actualResult);
-    }
-
-    /**
-     * 测试 Result::first 方法 - 默认类型（object）
-     */
-    public function testResultFirstDefaultType()
-    {
-        // 创建模拟的 PDOStatement
-        $mockStmt = $this->createMock(PDOStatement::class);
-
-        // 模拟 fetch 方法返回对象
-        $mockResult = (object) ['id' => 1, 'name' => 'test'];
-        $mockStmt->expects($this->once())
-            ->method('fetch')
-            ->with(\PDO::FETCH_CLASS)
-            ->willReturn($mockResult);
-
-        // 期望调用 closeCursor 方法
-        $mockStmt->expects($this->once())
-            ->method('closeCursor');
-
-        // 创建 Result 实例
-        $result = new Result($mockStmt);
-
-        // 调用 first 方法
+        
+        // 执行 first 方法
         $actualResult = $result->first();
-
-        // 验证返回结果
-        $this->assertEquals($mockResult, $actualResult);
+        
+        // 验证结果
+        $this->assertEquals($expectedResult, $actualResult);
+        $this->assertEquals(1, $result->count());
     }
 
     /**
-     * 测试 Result::first 方法 - 指定类型为 array
+     * 测试 first 方法 - array 类型
      */
-    public function testResultFirstArrayType()
+    public function testFirstWithArrayType()
     {
-        // 创建模拟的 PDOStatement
+        // 创建一个模拟的 PDOStatement 对象
         $mockStmt = $this->createMock(PDOStatement::class);
-
-        // 模拟 fetch 方法返回关联数组
-        $mockResult = ['id' => 1, 'name' => 'test'];
+        
+        // 设置模拟对象的行为
+        $expectedResult = ['id' => 1, 'name' => 'Test 1'];
         $mockStmt->expects($this->once())
-            ->method('fetch')
-            ->with(\PDO::FETCH_ASSOC)
-            ->willReturn($mockResult);
-
-        // 期望调用 closeCursor 方法
+                 ->method('fetch')
+                 ->with(PDO::FETCH_ASSOC)
+                 ->willReturn($expectedResult);
         $mockStmt->expects($this->once())
-            ->method('closeCursor');
-
-        // 创建 Result 实例
+                 ->method('closeCursor')
+                 ->willReturn(true);
+        
+        // 创建 Result 对象
         $result = new Result($mockStmt);
-
-        // 调用 first 方法
+        
+        // 执行 first 方法
         $actualResult = $result->first('array');
+        
+        // 验证结果
+        $this->assertEquals($expectedResult, $actualResult);
+        $this->assertEquals(1, $result->count());
+    }
 
-        // 验证返回结果
-        $this->assertEquals($mockResult, $actualResult);
+    /**
+     * 测试 first 方法 - 无结果
+     */
+    public function testFirstWithNoResult()
+    {
+        // 创建一个模拟的 PDOStatement 对象
+        $mockStmt = $this->createMock(PDOStatement::class);
+        
+        // 设置模拟对象的行为
+        $mockStmt->expects($this->once())
+                 ->method('fetch')
+                 ->with(PDO::FETCH_CLASS)
+                 ->willReturn(false);
+        $mockStmt->expects($this->once())
+                 ->method('closeCursor')
+                 ->willReturn(true);
+        
+        // 创建 Result 对象
+        $result = new Result($mockStmt);
+        
+        // 执行 first 方法
+        $actualResult = $result->first();
+        
+        // 验证结果
+        $this->assertNull($actualResult);
+        $this->assertEquals(0, $result->count());
+    }
+
+    /**
+     * 测试 raw 方法
+     */
+    #[AllowMockObjectsWithoutExpectations]
+    public function testRaw()
+    {
+        // 创建一个模拟的 PDOStatement 对象
+        $mockStmt = $this->createMock(PDOStatement::class);
+        
+        // 创建 Result 对象
+        $result = new Result($mockStmt);
+        
+        // 执行 raw 方法
+        $actualStmt = $result->raw();
+        
+        // 验证结果
+        $this->assertSame($mockStmt, $actualStmt);
+    }
+
+    /**
+     * 测试边界情况 - 多次调用 all 方法
+     */
+    public function testMultipleAllCalls()
+    {
+        // 创建一个模拟的 PDOStatement 对象
+        $mockStmt = $this->createMock(PDOStatement::class);
+        
+        // 设置模拟对象的行为
+        $expectedResult = [
+            (object) ['id' => 1, 'name' => 'Test 1'],
+            (object) ['id' => 2, 'name' => 'Test 2']
+        ];
+        $mockStmt->expects($this->exactly(2))
+                 ->method('fetchAll')
+                 ->with(PDO::FETCH_CLASS)
+                 ->willReturn($expectedResult);
+        
+        // 创建 Result 对象
+        $result = new Result($mockStmt);
+        
+        // 第一次调用 all 方法
+        $actualResult1 = $result->all();
+        $this->assertEquals($expectedResult, $actualResult1);
+        $this->assertEquals(2, $result->count());
+        
+        // 第二次调用 all 方法
+        $actualResult2 = $result->all();
+        $this->assertEquals($expectedResult, $actualResult2);
+        $this->assertEquals(2, $result->count());
+    }
+
+    /**
+     * 测试边界情况 - 先调用 all 再调用 first
+     */
+    public function testAllThenFirst()
+    {
+        // 创建一个模拟的 PDOStatement 对象
+        $mockStmt = $this->createMock(PDOStatement::class);
+        
+        // 设置模拟对象的行为
+        $allResult = [
+            (object) ['id' => 1, 'name' => 'Test 1'],
+            (object) ['id' => 2, 'name' => 'Test 2']
+        ];
+        $firstResult = (object) ['id' => 1, 'name' => 'Test 1'];
+        
+        $mockStmt->expects($this->once())
+                 ->method('fetchAll')
+                 ->with(PDO::FETCH_CLASS)
+                 ->willReturn($allResult);
+        $mockStmt->expects($this->once())
+                 ->method('fetch')
+                 ->with(PDO::FETCH_CLASS)
+                 ->willReturn($firstResult);
+        $mockStmt->expects($this->once())
+                 ->method('closeCursor')
+                 ->willReturn(true);
+        
+        // 创建 Result 对象
+        $result = new Result($mockStmt);
+        
+        // 先调用 all 方法
+        $actualAllResult = $result->all();
+        $this->assertEquals($allResult, $actualAllResult);
+        $this->assertEquals(2, $result->count());
+        
+        // 再调用 first 方法
+        $actualFirstResult = $result->first();
+        $this->assertEquals($firstResult, $actualFirstResult);
+        $this->assertEquals(1, $result->count());
+    }
+
+    /**
+     * 测试边界情况 - 先调用 first 再调用 all
+     */
+    public function testFirstThenAll()
+    {
+        // 创建一个模拟的 PDOStatement 对象
+        $mockStmt = $this->createMock(PDOStatement::class);
+        
+        // 设置模拟对象的行为
+        $firstResult = (object) ['id' => 1, 'name' => 'Test 1'];
+        $allResult = [
+            (object) ['id' => 1, 'name' => 'Test 1'],
+            (object) ['id' => 2, 'name' => 'Test 2']
+        ];
+        
+        $mockStmt->expects($this->once())
+                 ->method('fetch')
+                 ->with(PDO::FETCH_CLASS)
+                 ->willReturn($firstResult);
+        $mockStmt->expects($this->once())
+                 ->method('closeCursor')
+                 ->willReturn(true);
+        $mockStmt->expects($this->once())
+                 ->method('fetchAll')
+                 ->with(PDO::FETCH_CLASS)
+                 ->willReturn($allResult);
+        
+        // 创建 Result 对象
+        $result = new Result($mockStmt);
+        
+        // 先调用 first 方法
+        $actualFirstResult = $result->first();
+        $this->assertEquals($firstResult, $actualFirstResult);
+        $this->assertEquals(1, $result->count());
+        
+        // 再调用 all 方法
+        $actualAllResult = $result->all();
+        $this->assertEquals($allResult, $actualAllResult);
+        $this->assertEquals(2, $result->count());
+    }
+
+    /**
+     * 测试边界情况 - 无效的类型参数
+     */
+    public function testAllWithInvalidType()
+    {
+        // 创建一个模拟的 PDOStatement 对象
+        $mockStmt = $this->createMock(PDOStatement::class);
+        
+        // 设置模拟对象的行为
+        $expectedResult = [
+            ['id' => 1, 'name' => 'Test 1'],
+            ['id' => 2, 'name' => 'Test 2']
+        ];
+        $mockStmt->expects($this->once())
+                 ->method('fetchAll')
+                 ->with(PDO::FETCH_ASSOC)
+                 ->willReturn($expectedResult);
+        
+        // 创建 Result 对象
+        $result = new Result($mockStmt);
+        
+        // 执行 all 方法，使用无效的类型参数
+        $actualResult = $result->all('invalid');
+        
+        // 验证结果（应该默认使用 array 类型）
+        $this->assertEquals($expectedResult, $actualResult);
+        $this->assertEquals(2, $result->count());
+    }
+
+    /**
+     * 测试边界情况 - first 方法使用无效的类型参数
+     */
+    public function testFirstWithInvalidType()
+    {
+        // 创建一个模拟的 PDOStatement 对象
+        $mockStmt = $this->createMock(PDOStatement::class);
+        
+        // 设置模拟对象的行为
+        $expectedResult = ['id' => 1, 'name' => 'Test 1'];
+        $mockStmt->expects($this->once())
+                 ->method('fetch')
+                 ->with(PDO::FETCH_ASSOC)
+                 ->willReturn($expectedResult);
+        $mockStmt->expects($this->once())
+                 ->method('closeCursor')
+                 ->willReturn(true);
+        
+        // 创建 Result 对象
+        $result = new Result($mockStmt);
+        
+        // 执行 first 方法，使用无效的类型参数
+        $actualResult = $result->first('invalid');
+        
+        // 验证结果（应该默认使用 array 类型）
+        $this->assertEquals($expectedResult, $actualResult);
+        $this->assertEquals(1, $result->count());
     }
 }

@@ -3,324 +3,447 @@
 declare(strict_types=1);
 
 use PHPUnit\Framework\TestCase;
-use system\database\pdo\Common;
+use system\database\pdo\Sqlite;
 use system\database\DatabaseException;
-use system\database\pdo\Build;
-use system\database\Util;
 
 class CommonUpdateTest extends TestCase
 {
-    use Common;
-
-    protected $db;
-
     /**
-     * 测试前的准备工作
+     * 测试 update 方法 - 基本更新功能
      */
-    protected function setUp(): void
+    public function testUpdateBasic()
     {
-        // 初始化 effected 属性
-        $this->effected = 0;
+        $sqlite = new Sqlite(['database' => ':memory:']);
+
+        // 创建测试表
+        $createTableSql = "CREATE TABLE IF NOT EXISTS test_table (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            name TEXT NOT NULL,
+            value INTEGER
+        )";
+        $sqlite->execute($createTableSql);
+
+        // 插入测试数据
+        $sqlite->execute('INSERT INTO test_table (name, value) VALUES (:name, :value)', ['name' => 'Test 1', 'value' => 100]);
+
+        // 执行更新操作
+        $affected = $sqlite->update('test_table', ['name' => 'Updated Test', 'value' => 200], ['id', '=', 1]);
+
+        // 验证返回受影响的行数
+        $this->assertEquals(1, $affected);
+
+        // 验证数据更新成功
+        $result = $sqlite->execute('SELECT * FROM test_table WHERE id = :id', ['id' => 1]);
+        $row = $result->first('array');
+        $this->assertEquals('Updated Test', $row['name']);
+        $this->assertEquals(200, $row['value']);
     }
 
     /**
-     * 测试 update 方法 - 空数据
+     * 测试 update 方法 - 空表名（应该抛出异常）
+     */
+    public function testUpdateEmptyTable()
+    {
+        $sqlite = new Sqlite(['database' => ':memory:']);
+
+        // 尝试执行空表名的更新操作，应该抛出异常
+        $this->expectException(DatabaseException::class);
+        $this->expectExceptionMessage('Update Table Is Empty.');
+        $sqlite->update('', ['name' => 'Updated Test'], ['id', '=', 1]);
+    }
+
+    /**
+     * 测试 update 方法 - 只包含空白字符的表名（应该抛出异常）
+     */
+    public function testUpdateWhitespaceTable()
+    {
+        $sqlite = new Sqlite(['database' => ':memory:']);
+
+        // 尝试执行只包含空白字符的表名的更新操作，应该抛出异常
+        $this->expectException(DatabaseException::class);
+        $this->expectExceptionMessage('Update Table Is Empty.');
+        $sqlite->update('   ', ['name' => 'Updated Test'], ['id', '=', 1]);
+    }
+
+    /**
+     * 测试 update 方法 - 空数据（应该抛出异常）
      */
     public function testUpdateEmptyData()
     {
-        // 验证是否抛出 DatabaseException 异常
+        $sqlite = new Sqlite(['database' => ':memory:']);
+
+        // 创建测试表
+        $createTableSql = "CREATE TABLE IF NOT EXISTS test_table (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            name TEXT NOT NULL,
+            value INTEGER
+        )";
+        $sqlite->execute($createTableSql);
+
+        // 尝试执行空数据的更新操作，应该抛出异常
         $this->expectException(DatabaseException::class);
         $this->expectExceptionMessage('Update Data Is Empty.');
-
-        // 调用 update 方法
-        $this->update('test_table', [], ['id', '=', 1]);
+        $sqlite->update('test_table', [], ['id', '=', 1]);
     }
 
     /**
-     * 测试 update 方法 - 空条件
+     * 测试 update 方法 - 空 WHERE 条件（应该抛出异常）
      */
     public function testUpdateEmptyWhere()
     {
-        // 验证是否抛出 DatabaseException 异常
+        $sqlite = new Sqlite(['database' => ':memory:']);
+
+        // 创建测试表
+        $createTableSql = "CREATE TABLE IF NOT EXISTS test_table (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            name TEXT NOT NULL,
+            value INTEGER
+        )";
+        $sqlite->execute($createTableSql);
+
+        // 尝试执行空 WHERE 条件的更新操作，应该抛出异常
         $this->expectException(DatabaseException::class);
         $this->expectExceptionMessage('Update Where Condition Is Empty.');
-
-        // 调用 update 方法
-        $this->update('test_table', ['name' => 'test']);
+        $sqlite->update('test_table', ['name' => 'Updated Test']);
     }
 
     /**
-     * 测试 update 方法 - 正常情况
+     * 测试 update 方法 - 执行错误（应该抛出异常）
      */
-    public function testUpdateSuccess()
+    public function testUpdateExecuteError()
     {
-        // 创建 PDO 模拟对象
-        $this->db = $this->createMock(PDO::class);
-        // 创建 PDOStatement 模拟对象
-        $mockStmt = $this->createMock(PDOStatement::class);
+        $sqlite = new Sqlite(['database' => ':memory:']);
 
-        // 期望调用 prepare 方法
-        $this->db->expects($this->once())
-            ->method('prepare')
-            ->willReturn($mockStmt);
-
-        // 期望调用 bindValue 方法
-        $mockStmt->expects($this->exactly(2))
-            ->method('bindValue');
-
-        // 期望调用 execute 方法
-        $mockStmt->expects($this->once())
-            ->method('execute')
-            ->willReturn(true);
-
-        // 期望调用 rowCount 方法并返回 1
-        $mockStmt->expects($this->once())
-            ->method('rowCount')
-            ->willReturn(1);
-
-        // 调用 update 方法
-        $result = $this->update('test_table', ['name' => 'test'], ['id', '=', 1]);
-
-        // 验证返回结果
-        $this->assertEquals(1, $result);
-        // 验证 effected 属性被更新
-        $this->assertEquals(1, $this->effected);
-    }
-
-    /**
-     * 测试 update 方法 - PDO 执行异常
-     */
-    public function testUpdatePdoException()
-    {
-        // 创建 PDO 模拟对象
-        $this->db = $this->createMock(PDO::class);
-        // 创建 PDOStatement 模拟对象
-        $mockStmt = $this->createMock(PDOStatement::class);
-
-        // 期望调用 prepare 方法
-        $this->db->expects($this->once())
-            ->method('prepare')
-            ->willReturn($mockStmt);
-
-        // 期望调用 bindValue 方法
-        $mockStmt->expects($this->exactly(2))
-            ->method('bindValue');
-
-        // 期望调用 execute 方法并抛出异常
-        $mockStmt->expects($this->once())
-            ->method('execute')
-            ->willThrowException(new PDOException('PDO Error'));
-
-        // 验证是否抛出 DatabaseException 异常
+        // 尝试更新不存在的表，应该抛出异常
         $this->expectException(DatabaseException::class);
-        $this->expectExceptionMessage('Update Execute Error :PDO Error');
-
-        // 调用 update 方法
-        $this->update('test_table', ['name' => 'test'], ['id', '=', 1]);
+        $this->expectExceptionMessageMatches('/Update Execute Error :/');
+        $sqlite->update('non_existent_table', ['name' => 'Updated Test'], ['id', '=', 1]);
     }
 
     /**
-     * 测试 update 方法 - 不同类型的值
+     * 测试 update 方法 - 边界测试（特殊字符）
      */
-    public function testUpdateWithDifferentValueTypes()
+    public function testUpdateWithSpecialCharacters()
     {
-        // 创建 PDO 模拟对象
-        $this->db = $this->createMock(PDO::class);
-        // 创建 PDOStatement 模拟对象
-        $mockStmt = $this->createMock(PDOStatement::class);
+        $sqlite = new Sqlite(['database' => ':memory:']);
 
-        // 期望调用 prepare 方法
-        $this->db->expects($this->once())
-            ->method('prepare')
-            ->willReturn($mockStmt);
+        // 创建测试表
+        $createTableSql = "CREATE TABLE IF NOT EXISTS test_table (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            name TEXT NOT NULL,
+            value INTEGER
+        )";
+        $sqlite->execute($createTableSql);
 
-        // 期望调用 bindValue 方法 5 次（4个数据字段 + 1个条件字段）
-        $mockStmt->expects($this->exactly(5))
-            ->method('bindValue');
+        // 插入测试数据
+        $sqlite->execute('INSERT INTO test_table (name, value) VALUES (:name, :value)', ['name' => 'Test 1', 'value' => 100]);
 
-        // 期望调用 execute 方法
-        $mockStmt->expects($this->once())
-            ->method('execute')
-            ->willReturn(true);
+        // 执行包含特殊字符的更新操作
+        $specialName = "Updated Test's data with \"quotes\" and special chars: !@#$%^&*()";
+        $affected = $sqlite->update('test_table', ['name' => $specialName], ['id', '=', 1]);
 
-        // 期望调用 rowCount 方法并返回 2
-        $mockStmt->expects($this->once())
-            ->method('rowCount')
-            ->willReturn(2);
+        // 验证返回受影响的行数
+        $this->assertEquals(1, $affected);
 
-        // 调用 update 方法，包含不同类型的值
-        $result = $this->update('test_table', [
-            'name' => 'test',
-            'age' => 25,
-            'active' => true,
-            'salary' => 1000.50
-        ], ['id', '=', 1]);
-
-        // 验证返回结果
-        $this->assertEquals(2, $result);
-        // 验证 effected 属性被更新
-        $this->assertEquals(2, $this->effected);
+        // 验证数据更新成功
+        $result = $sqlite->execute('SELECT * FROM test_table WHERE id = :id', ['id' => 1]);
+        $row = $result->first('array');
+        $this->assertEquals($specialName, $row['name']);
     }
 
     /**
-     * 测试 update 方法 - 单字段
+     * 测试 update 方法 - 安全测试（SQL注入尝试）
      */
-    public function testUpdateSingleField()
+    public function testUpdateSqlInjectionAttempt()
     {
-        // 创建 PDO 模拟对象
-        $this->db = $this->createMock(PDO::class);
-        // 创建 PDOStatement 模拟对象
-        $mockStmt = $this->createMock(PDOStatement::class);
+        $sqlite = new Sqlite(['database' => ':memory:']);
 
-        // 期望调用 prepare 方法
-        $this->db->expects($this->once())
-            ->method('prepare')
-            ->willReturn($mockStmt);
+        // 创建测试表
+        $createTableSql = "CREATE TABLE IF NOT EXISTS test_table (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            name TEXT NOT NULL,
+            value INTEGER
+        )";
+        $sqlite->execute($createTableSql);
 
-        // 期望调用 bindValue 方法 2 次（1个数据字段 + 1个条件字段）
-        $mockStmt->expects($this->exactly(2))
-            ->method('bindValue');
+        // 插入测试数据
+        $sqlite->execute('INSERT INTO test_table (name, value) VALUES (:name, :value)', ['name' => 'Test 1', 'value' => 100]);
+        $sqlite->execute('INSERT INTO test_table (name, value) VALUES (:name, :value)', ['name' => 'Test 2', 'value' => 200]);
 
-        // 期望调用 execute 方法
-        $mockStmt->expects($this->once())
-            ->method('execute')
-            ->willReturn(true);
+        // 尝试SQL注入
+        $sqlInjectionAttempt = "1 OR 1=1";
+        $affected = $sqlite->update('test_table', ['value' => 999], ['id', '=', $sqlInjectionAttempt]);
 
-        // 期望调用 rowCount 方法并返回 1
-        $mockStmt->expects($this->once())
-            ->method('rowCount')
-            ->willReturn(1);
+        // 验证只更新了符合条件的行，而不是所有行
+        $this->assertEquals(0, $affected); // 因为没有 id 等于 "1 OR 1=1" 的行
 
-        // 调用 update 方法，只有一个字段
-        $result = $this->update('test_table', ['name' => 'test'], ['id', '=', 1]);
-
-        // 验证返回结果
-        $this->assertEquals(1, $result);
-        // 验证 effected 属性被更新
-        $this->assertEquals(1, $this->effected);
+        // 验证数据未被更新
+        $result = $sqlite->execute('SELECT * FROM test_table');
+        $rows = $result->all('array');
+        $this->assertEquals(100, $rows[0]['value']);
+        $this->assertEquals(200, $rows[1]['value']);
     }
 
     /**
-     * 测试 update 方法 - 多个字段
+     * 测试 update 方法 - 验证受影响的行数
      */
-    public function testUpdateMultipleFields()
+    public function testUpdateAffectedRows()
     {
-        // 创建 PDO 模拟对象
-        $this->db = $this->createMock(PDO::class);
-        // 创建 PDOStatement 模拟对象
-        $mockStmt = $this->createMock(PDOStatement::class);
+        $sqlite = new Sqlite(['database' => ':memory:']);
 
-        // 期望调用 prepare 方法
-        $this->db->expects($this->once())
-            ->method('prepare')
-            ->willReturn($mockStmt);
+        // 创建测试表
+        $createTableSql = "CREATE TABLE IF NOT EXISTS test_table (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            name TEXT NOT NULL,
+            value INTEGER
+        )";
+        $sqlite->execute($createTableSql);
 
-        // 期望调用 bindValue 方法 6 次（5个数据字段 + 1个条件字段）
-        $mockStmt->expects($this->exactly(6))
-            ->method('bindValue');
+        // 插入测试数据
+        $sqlite->execute('INSERT INTO test_table (name, value) VALUES (:name, :value)', ['name' => 'Test 1', 'value' => 100]);
+        $sqlite->execute('INSERT INTO test_table (name, value) VALUES (:name, :value)', ['name' => 'Test 2', 'value' => 200]);
 
-        // 期望调用 execute 方法
-        $mockStmt->expects($this->once())
-            ->method('execute')
-            ->willReturn(true);
+        // 执行更新操作
+        $affected = $sqlite->update('test_table', ['value' => 300], ['value', '<', 150]);
 
-        // 期望调用 rowCount 方法并返回 3
-        $mockStmt->expects($this->once())
-            ->method('rowCount')
-            ->willReturn(3);
+        // 验证返回受影响的行数
+        $this->assertEquals(1, $affected);
+        $this->assertEquals(1, $sqlite->effected());
 
-        // 调用 update 方法，包含多个字段
-        $result = $this->update('test_table', [
-            'name' => 'test',
-            'age' => 25,
-            'email' => 'test@example.com',
-            'phone' => '1234567890',
-            'address' => '123 Main St'
-        ], ['id', '=', 1]);
-
-        // 验证返回结果
-        $this->assertEquals(3, $result);
-        // 验证 effected 属性被更新
-        $this->assertEquals(3, $this->effected);
+        // 验证数据更新成功
+        $result = $sqlite->execute('SELECT * FROM test_table WHERE value = :value', ['value' => 300]);
+        $rows = $result->all('array');
+        $this->assertCount(1, $rows);
+        $this->assertEquals('Test 1', $rows[0]['name']);
     }
 
     /**
-     * 测试 update 方法 - 复杂 WHERE 条件
+     * 测试 update 方法 - 不同形式的 WHERE 条件
      */
-    public function testUpdateWithComplexWhere()
+    public function testUpdateWithDifferentWhereForms()
     {
-        // 创建 PDO 模拟对象
-        $this->db = $this->createMock(PDO::class);
-        // 创建 PDOStatement 模拟对象
-        $mockStmt = $this->createMock(PDOStatement::class);
+        $sqlite = new Sqlite(['database' => ':memory:']);
 
-        // 期望调用 prepare 方法
-        $this->db->expects($this->once())
-            ->method('prepare')
-            ->willReturn($mockStmt);
+        // 创建测试表
+        $createTableSql = "CREATE TABLE IF NOT EXISTS test_table (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            name TEXT NOT NULL,
+            value INTEGER
+        )";
+        $sqlite->execute($createTableSql);
 
-        // 期望调用 bindValue 方法 4 次（2个数据字段 + 2个条件字段）
-        $mockStmt->expects($this->exactly(4))
-            ->method('bindValue');
+        // 插入测试数据
+        for ($i = 1; $i <= 3; $i++) {
+            $sqlite->execute('INSERT INTO test_table (name, value) VALUES (:name, :value)', ['name' => 'Test ' . $i, 'value' => $i * 100]);
+        }
 
-        // 期望调用 execute 方法
-        $mockStmt->expects($this->once())
-            ->method('execute')
-            ->willReturn(true);
+        // 测试形式 1: update('table', $data, [1]) - 默认字段名为 id，操作符为 =
+        $affected = $sqlite->update('test_table', ['value' => 999], [1]);
+        $this->assertEquals(1, $affected);
+        $result = $sqlite->execute('SELECT * FROM test_table WHERE id = :id', ['id' => 1]);
+        $row = $result->first('array');
+        $this->assertEquals(999, $row['value']);
 
-        // 期望调用 rowCount 方法并返回 2
-        $mockStmt->expects($this->once())
-            ->method('rowCount')
-            ->willReturn(2);
+        // 测试形式 2: update('table', $data, ['id', 2]) - 字段名为 id，操作符为 =
+        $affected = $sqlite->update('test_table', ['value' => 888], ['id', 2]);
+        $this->assertEquals(1, $affected);
+        $result = $sqlite->execute('SELECT * FROM test_table WHERE id = :id', ['id' => 2]);
+        $row = $result->first('array');
+        $this->assertEquals(888, $row['value']);
 
-        // 调用 update 方法，使用复杂的 WHERE 条件
-        $result = $this->update('test_table', 
-            ['name' => 'test', 'age' => 25], 
-            ['id', '=', 1], 
-            ['status', '!=', 'inactive']
-        );
+        // 测试形式 3: update('table', $data, ['id', [3]]) - 字段名为 id，操作符为 in
+        $affected = $sqlite->update('test_table', ['value' => 777], ['id', [3]]);
+        $this->assertEquals(1, $affected);
+        $result = $sqlite->execute('SELECT * FROM test_table WHERE id = :id', ['id' => 3]);
+        $row = $result->first('array');
+        $this->assertEquals(777, $row['value']);
 
-        // 验证返回结果
-        $this->assertEquals(2, $result);
-        // 验证 effected 属性被更新
-        $this->assertEquals(2, $this->effected);
+        // 测试形式 4: update('table', $data, ['id', '=', '3']) - 字段名为 id，操作符为 =
+        $affected = $sqlite->update('test_table', ['value' => 666], ['id', '=', '3']);
+        $this->assertEquals(1, $affected);
+        $result = $sqlite->execute('SELECT * FROM test_table WHERE id = :id', ['id' => 3]);
+        $row = $result->first('array');
+        $this->assertEquals(666, $row['value']);
     }
 
     /**
-     * 测试 update 方法 - 包含 null 值
+     * 测试 update 方法 - 空字符串参数
      */
-    public function testUpdateWithNullValues()
+    public function testUpdateWithEmptyStringParams()
     {
-        // 创建 PDO 模拟对象
-        $this->db = $this->createMock(PDO::class);
-        // 创建 PDOStatement 模拟对象
-        $mockStmt = $this->createMock(PDOStatement::class);
+        $sqlite = new Sqlite(['database' => ':memory:']);
 
-        // 期望调用 prepare 方法
-        $this->db->expects($this->once())
-            ->method('prepare')
-            ->willReturn($mockStmt);
+        // 创建测试表
+        $createTableSql = "CREATE TABLE IF NOT EXISTS test_table (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            name TEXT NOT NULL,
+            value INTEGER
+        )";
+        $sqlite->execute($createTableSql);
 
-        // 期望调用 bindValue 方法 2 次（1个数据字段 + 1个条件字段）
-        $mockStmt->expects($this->exactly(2))
-            ->method('bindValue');
+        // 插入测试数据
+        $sqlite->execute('INSERT INTO test_table (name, value) VALUES (:name, :value)', ['name' => 'Test 1', 'value' => 100]);
 
-        // 期望调用 execute 方法
-        $mockStmt->expects($this->once())
-            ->method('execute')
-            ->willReturn(true);
+        // 执行空字符串参数的更新操作
+        $affected = $sqlite->update('test_table', ['name' => ''], ['id', '=', 1]);
 
-        // 期望调用 rowCount 方法并返回 1
-        $mockStmt->expects($this->once())
-            ->method('rowCount')
-            ->willReturn(1);
+        // 验证返回受影响的行数
+        $this->assertEquals(1, $affected);
 
-        // 调用 update 方法，包含 null 值
-        $result = $this->update('test_table', ['name' => null], ['id', '=', 1]);
+        // 验证数据更新成功
+        $result = $sqlite->execute('SELECT * FROM test_table WHERE id = :id', ['id' => 1]);
+        $row = $result->first('array');
+        $this->assertEquals('', $row['name']);
 
-        // 验证返回结果
-        $this->assertEquals(1, $result);
-        // 验证 effected 属性被更新
-        $this->assertEquals(1, $this->effected);
+        // 执行使用空字符串作为条件的更新操作
+        $sqlite->execute('INSERT INTO test_table (name, value) VALUES (:name, :value)', ['name' => 'Test 2', 'value' => 200]);
+        $affected = $sqlite->update('test_table', ['value' => 999], ['name', '=', '']);
+
+        // 验证返回受影响的行数
+        $this->assertEquals(1, $affected);
+
+        // 验证数据更新成功
+        $result = $sqlite->execute('SELECT * FROM test_table WHERE name = :name', ['name' => '']);
+        $row = $result->first('array');
+        $this->assertEquals(999, $row['value']);
+    }
+
+    /**
+     * 测试 update 方法 - 不同类型的数据
+     */
+    public function testUpdateWithDifferentDataTypes()
+    {
+        $sqlite = new Sqlite(['database' => ':memory:']);
+
+        // 创建测试表
+        $createTableSql = "CREATE TABLE IF NOT EXISTS test_table (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            name TEXT NOT NULL,
+            value INTEGER,
+            price REAL,
+            active INTEGER
+        )";
+        $sqlite->execute($createTableSql);
+
+        // 插入测试数据
+        $sqlite->execute('INSERT INTO test_table (name, value, price, active) VALUES (:name, :value, :price, :active)', ['name' => 'Test 1', 'value' => 100, 'price' => 99.99, 'active' => 1]);
+
+        // 执行不同类型数据的更新操作
+        $data = [
+            'name' => 'Updated Test',
+            'value' => 200,
+            'price' => 199.99,
+            'active' => 0
+        ];
+        $affected = $sqlite->update('test_table', $data, ['id', '=', 1]);
+
+        // 验证返回受影响的行数
+        $this->assertEquals(1, $affected);
+
+        // 验证数据更新成功
+        $result = $sqlite->execute('SELECT * FROM test_table WHERE id = :id', ['id' => 1]);
+        $row = $result->first('array');
+        $this->assertEquals('Updated Test', $row['name']);
+        $this->assertEquals(200, $row['value']);
+        $this->assertEquals(199.99, $row['price']);
+        $this->assertEquals(0, $row['active']);
+    }
+
+    /**
+     * 测试 update 方法 - 多个 WHERE 条件
+     */
+    public function testUpdateWithMultipleWhereConditions()
+    {
+        $sqlite = new Sqlite(['database' => ':memory:']);
+
+        // 创建测试表
+        $createTableSql = "CREATE TABLE IF NOT EXISTS test_table (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            name TEXT NOT NULL,
+            value INTEGER,
+            category TEXT
+        )";
+        $sqlite->execute($createTableSql);
+
+        // 插入测试数据
+        $sqlite->execute('INSERT INTO test_table (name, value, category) VALUES (:name, :value, :category)', ['name' => 'Test 1', 'value' => 100, 'category' => 'A']);
+        $sqlite->execute('INSERT INTO test_table (name, value, category) VALUES (:name, :value, :category)', ['name' => 'Test 2', 'value' => 200, 'category' => 'A']);
+        $sqlite->execute('INSERT INTO test_table (name, value, category) VALUES (:name, :value, :category)', ['name' => 'Test 3', 'value' => 300, 'category' => 'B']);
+
+        // 执行多个 WHERE 条件的更新操作
+        $affected = $sqlite->update('test_table', ['value' => 999], [['category', '=', 'A'], ['value', '<', 150]]);
+
+        // 验证返回受影响的行数
+        $this->assertEquals(1, $affected);
+
+        // 验证数据更新成功
+        $result = $sqlite->execute('SELECT * FROM test_table WHERE category = :category', ['category' => 'A']);
+        $rows = $result->all('array');
+        $this->assertEquals(999, $rows[0]['value']);
+        $this->assertEquals(200, $rows[1]['value']);
+    }
+
+    /**
+     * 测试 update 方法 - 更新不存在的记录
+     */
+    public function testUpdateNonExistentRecord()
+    {
+        $sqlite = new Sqlite(['database' => ':memory:']);
+
+        // 创建测试表
+        $createTableSql = "CREATE TABLE IF NOT EXISTS test_table (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            name TEXT NOT NULL,
+            value INTEGER
+        )";
+        $sqlite->execute($createTableSql);
+
+        // 插入测试数据
+        $sqlite->execute('INSERT INTO test_table (name, value) VALUES (:name, :value)', ['name' => 'Test 1', 'value' => 100]);
+
+        // 尝试更新不存在的记录
+        $affected = $sqlite->update('test_table', ['name' => 'Updated Test'], ['id', '=', 999]);
+
+        // 验证返回受影响的行数为 0
+        $this->assertEquals(0, $affected);
+
+        // 验证数据未被更新
+        $result = $sqlite->execute('SELECT * FROM test_table');
+        $rows = $result->all('array');
+        $this->assertEquals('Test 1', $rows[0]['name']);
+    }
+
+    /**
+     * 测试 update 方法 - 更新所有符合条件的记录
+     */
+    public function testUpdateAllMatchingRecords()
+    {
+        $sqlite = new Sqlite(['database' => ':memory:']);
+
+        // 创建测试表
+        $createTableSql = "CREATE TABLE IF NOT EXISTS test_table (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            name TEXT NOT NULL,
+            value INTEGER,
+            category TEXT
+        )";
+        $sqlite->execute($createTableSql);
+
+        // 插入测试数据
+        $sqlite->execute('INSERT INTO test_table (name, value, category) VALUES (:name, :value, :category)', ['name' => 'Test 1', 'value' => 100, 'category' => 'A']);
+        $sqlite->execute('INSERT INTO test_table (name, value, category) VALUES (:name, :value, :category)', ['name' => 'Test 2', 'value' => 200, 'category' => 'A']);
+        $sqlite->execute('INSERT INTO test_table (name, value, category) VALUES (:name, :value, :category)', ['name' => 'Test 3', 'value' => 300, 'category' => 'B']);
+
+        // 更新所有 category 为 A 的记录
+        $affected = $sqlite->update('test_table', ['value' => 999], ['category', '=', 'A']);
+
+        // 验证返回受影响的行数
+        $this->assertEquals(2, $affected);
+
+        // 验证数据更新成功
+        $result = $sqlite->execute('SELECT * FROM test_table WHERE category = :category', ['category' => 'A']);
+        $rows = $result->all('array');
+        $this->assertEquals(999, $rows[0]['value']);
+        $this->assertEquals(999, $rows[1]['value']);
     }
 }

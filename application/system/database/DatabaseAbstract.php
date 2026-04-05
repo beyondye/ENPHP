@@ -14,9 +14,9 @@ abstract class DatabaseAbstract
 
     abstract public function upsert(string $table, array $data): string|int;
 
-    abstract public function update(string $table, array $data, array ...$wheres): int;
+    abstract public function update(string $table, array $data, array|int|string|float ...$wheres): int;
 
-    abstract public function delete(string $table, array $wheres): int;
+    abstract public function delete(string $table, array|int|string|float ...$wheres): int;    
 
     abstract public function lastid(): int|string;
 
@@ -31,4 +31,5 @@ abstract class DatabaseAbstract
     abstract public function select(string $table, array $params): ResultAbstract;
 
     abstract public function close(): bool;
+
 }

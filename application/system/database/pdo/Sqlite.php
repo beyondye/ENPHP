@@ -28,6 +28,9 @@ class Sqlite extends DatabaseAbstract
         }
 
         $options = [
+            \PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION,
+            \PDO::ATTR_DEFAULT_FETCH_MODE => \PDO::FETCH_CLASS,
+            \PDO::ATTR_EMULATE_PREPARES => true,
             \PDO::ATTR_PERSISTENT => $config['persistent'] ?? false,
         ];
 
@@ -38,5 +41,30 @@ class Sqlite extends DatabaseAbstract
         } catch (\PDOException $e) {
             throw new DatabaseException('SQLite Database Connection Error :' . $e->getMessage());
         }
+    }
+
+    public function upsert(string $table, array $data): string|int
+    {
+        if (empty($data)) {
+            throw new DatabaseException('Upsert Data Is Empty.');
+        }
+
+        $fields = array_keys($data);
+        $placeholders = ':' . implode(', :', $fields);
+        $sql = "INSERT OR REPLACE INTO {$table} (" . implode(',', $fields) . ") VALUES ({$placeholders})";
+
+        try {
+            $stmt = $this->db->prepare($sql);
+            foreach ($data as $key => $value) {
+                $stmt->bindValue(':' . $key, $value);
+            }
+            $stmt->execute();
+        } catch (\PDOException $e) {
+            throw new DatabaseException('Upsert Execute Error :' . $e->getMessage());
+        }
+
+        $this->effected = $stmt->rowCount();
+
+        return $this->lastid();
     }
 }

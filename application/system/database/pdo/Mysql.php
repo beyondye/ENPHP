@@ -47,4 +47,42 @@ class Mysql extends DatabaseAbstract
             throw new DatabaseException('Database Connection Error :' . $e->getMessage());
         }
     }
+
+
+    public function upsert(string $table, array $data): string|int
+    {
+        if (trim($table) === '') {
+            throw new DatabaseException('Upsert Table Name Is Required.');
+        }
+        
+        if (empty($data)) {
+            throw new DatabaseException('Upsert Data Is Empty.');
+        }
+
+        $fields = array_keys($data);
+        $placeholders = ':' . implode(', :', $fields);
+        $updateFields = [];
+        foreach ($fields as $field) {
+            $updateFields[] = "{$field} = VALUES({$field})";
+        }
+
+        $sql = "INSERT INTO {$table} (" . implode(',', $fields) . ") VALUES ({$placeholders})";
+        if (!empty($updateFields)) {
+            $sql .= " ON DUPLICATE KEY UPDATE " . implode(', ', $updateFields);
+        }
+
+        try {
+            $stmt = $this->db->prepare($sql);
+            foreach ($data as $key => $value) {
+                $stmt->bindValue(':' . $key, $value);
+            }
+            $stmt->execute();
+        } catch (\PDOException $e) {
+            throw new DatabaseException('Upsert Execute Error :' . $e->getMessage());
+        }
+
+        $this->effected = $stmt->rowCount();
+
+        return $this->lastid();
+    }
 }
