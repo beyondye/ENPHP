@@ -22,7 +22,7 @@ trait Common
     }
 
     public function commit(): bool
-    {
+    {  
         if (!$this->db->inTransaction()) {
             throw new DatabaseException('No active transaction to commit.');
         }

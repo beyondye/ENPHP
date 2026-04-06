@@ -18,7 +18,7 @@ class Result extends ResultAbstract
     public function all(string $type = 'object'): array
     {
         if ($type == 'object') {
-            $type = \PDO::FETCH_CLASS;
+            $type = \PDO::FETCH_OBJ;
         } else {
             $type = \PDO::FETCH_ASSOC;
         }
@@ -38,7 +38,7 @@ class Result extends ResultAbstract
     {
 
         if ($type == 'object') {
-            $type = \PDO::FETCH_CLASS;
+            $type = \PDO::FETCH_OBJ;
         } else {
             $type = \PDO::FETCH_ASSOC;
         }

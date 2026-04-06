@@ -626,4 +626,62 @@ class CommonSelectTest extends TestCase
         $this->assertCount(1, $rows);
         $this->assertEquals('B', $rows[0]['category']);
     }
+
+    /**
+     * 测试 select 方法 - 复杂的 LIMIT 场景
+     */
+    public function testSelectWithComplexLimit()
+    {
+        $sqlite = new Sqlite(['database' => ':memory:']);
+
+        // 创建测试表
+        $createTableSql = "CREATE TABLE IF NOT EXISTS test_table (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        name TEXT NOT NULL,
+        value INTEGER
+    )";
+        $sqlite->execute($createTableSql);
+
+        // 插入测试数据
+        for ($i = 1; $i <= 5; $i++) {
+            $sqlite->execute('INSERT INTO test_table (name, value) VALUES (:name, :value)', ['name' => 'Test ' . $i, 'value' => $i * 100]);
+        }
+
+        // 测试 1: LIMIT 为 0
+        $result = $sqlite->select('test_table', ['*'], [], [], [], [], 0);
+        $rows = $result->all('array');
+        $this->assertCount(0, $rows);
+
+        // 测试 2: LIMIT 大于实际数据量
+        $result = $sqlite->select('test_table', ['*'], [], [], [], [], 10);
+        $rows = $result->all('array');
+        $this->assertCount(5, $rows);
+
+        // 测试 3: OFFSET 大于实际数据量
+        $result = $sqlite->select('test_table', ['*'], [], [], [], [], [10, 0]);
+        $rows = $result->all('array');
+        $this->assertCount(5, $rows);
+
+        // 测试 4: LIMIT 与 ORDER BY 结合
+        $result = $sqlite->select('test_table', ['*'], [], [], [], ['value' => 'desc'], 3);
+        $rows = $result->all('array');
+        $this->assertCount(3, $rows);
+        $this->assertEquals('Test 5', $rows[0]['name']);
+        $this->assertEquals('Test 4', $rows[1]['name']);
+        $this->assertEquals('Test 3', $rows[2]['name']);
+
+        // 测试 5: LIMIT 与 WHERE 条件结合
+        $result = $sqlite->select('test_table', ['*'], ['value', '>', 200], [], [], [], 2);
+        $rows = $result->all('array');
+        $this->assertCount(2, $rows);
+        $this->assertEquals('Test 3', $rows[0]['name']);
+        $this->assertEquals('Test 4', $rows[1]['name']);
+
+        // 测试 6: 复杂的 LIMIT 和 OFFSET 组合
+        $result = $sqlite->select('test_table', ['*'], [], [], [], ['id' => 'asc'], [2, 1]);
+        $rows = $result->all('array');
+        $this->assertCount(2, $rows);
+        $this->assertEquals('Test 2', $rows[0]['name']);/*  */
+        $this->assertEquals('Test 3', $rows[1]['name']);
+    }
 }

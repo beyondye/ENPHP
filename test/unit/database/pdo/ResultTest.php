@@ -25,7 +25,7 @@ class ResultTest extends TestCase
         ];
         $mockStmt->expects($this->once())
                  ->method('fetchAll')
-                 ->with(PDO::FETCH_CLASS)
+                 ->with(PDO::FETCH_OBJ)
                  ->willReturn($expectedResult);
         
         // 创建 Result 对象
@@ -80,7 +80,7 @@ class ResultTest extends TestCase
         $expectedResult = [];
         $mockStmt->expects($this->once())
                  ->method('fetchAll')
-                 ->with(PDO::FETCH_CLASS)
+                 ->with(PDO::FETCH_OBJ)
                  ->willReturn($expectedResult);
         
         // 创建 Result 对象
@@ -109,7 +109,7 @@ class ResultTest extends TestCase
         ];
         $mockStmt->expects($this->once())
                  ->method('fetchAll')
-                 ->with(PDO::FETCH_CLASS)
+                 ->with(PDO::FETCH_OBJ)
                  ->willReturn($expectedResult);
         
         // 创建 Result 对象
@@ -137,7 +137,7 @@ class ResultTest extends TestCase
         $expectedResult = (object) ['id' => 1, 'name' => 'Test 1'];
         $mockStmt->expects($this->once())
                  ->method('fetch')
-                 ->with(PDO::FETCH_CLASS)
+                 ->with(PDO::FETCH_OBJ)
                  ->willReturn($expectedResult);
         $mockStmt->expects($this->once())
                  ->method('closeCursor')
@@ -194,7 +194,7 @@ class ResultTest extends TestCase
         // 设置模拟对象的行为
         $mockStmt->expects($this->once())
                  ->method('fetch')
-                 ->with(PDO::FETCH_CLASS)
+                 ->with(PDO::FETCH_OBJ)
                  ->willReturn(false);
         $mockStmt->expects($this->once())
                  ->method('closeCursor')
@@ -245,7 +245,7 @@ class ResultTest extends TestCase
         ];
         $mockStmt->expects($this->exactly(2))
                  ->method('fetchAll')
-                 ->with(PDO::FETCH_CLASS)
+                 ->with(PDO::FETCH_OBJ)
                  ->willReturn($expectedResult);
         
         // 创建 Result 对象
@@ -279,11 +279,11 @@ class ResultTest extends TestCase
         
         $mockStmt->expects($this->once())
                  ->method('fetchAll')
-                 ->with(PDO::FETCH_CLASS)
+                 ->with(PDO::FETCH_OBJ)
                  ->willReturn($allResult);
         $mockStmt->expects($this->once())
                  ->method('fetch')
-                 ->with(PDO::FETCH_CLASS)
+                 ->with(PDO::FETCH_OBJ)
                  ->willReturn($firstResult);
         $mockStmt->expects($this->once())
                  ->method('closeCursor')
@@ -320,14 +320,14 @@ class ResultTest extends TestCase
         
         $mockStmt->expects($this->once())
                  ->method('fetch')
-                 ->with(PDO::FETCH_CLASS)
+                 ->with(PDO::FETCH_OBJ)
                  ->willReturn($firstResult);
         $mockStmt->expects($this->once())
                  ->method('closeCursor')
                  ->willReturn(true);
         $mockStmt->expects($this->once())
                  ->method('fetchAll')
-                 ->with(PDO::FETCH_CLASS)
+                 ->with(PDO::FETCH_OBJ)
                  ->willReturn($allResult);
         
         // 创建 Result 对象

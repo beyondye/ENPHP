@@ -179,7 +179,7 @@ class Build
 
     public static function limit(array|int $limit): string
     {
-        if (empty($limit)) {
+        if (empty($limit) && $limit !== 0) {
             return '';
         }
 

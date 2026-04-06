@@ -180,4 +180,14 @@ class DatabaseMysqlIntegrationTest extends TestCase
         $this->expectException(DatabaseException::class);
         Database::instance('non_existent_service');
     }
+
+    public function testUnsupportedDriver()
+{
+     // 测试不支持的驱动
+    $this->expectException(DatabaseException::class);
+    $this->expectExceptionMessage(" 'unsupported' Driver Not Support.");
+    
+    // 尝试获取使用不支持驱动的服务实例
+    Database::instance('unsupported');
+}
 }
