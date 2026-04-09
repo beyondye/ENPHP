@@ -11,7 +11,6 @@ use system\model\Safe;
 
 class Model
 {
-
     //表名
     protected string $table;
 
@@ -21,11 +20,10 @@ class Model
     //主键是否自增
     protected bool $autoincrement = false;
 
-
     /**
      * @var array 表字段，带验证规则
      * @example
-     * $fields=[
+     * $schema=[
      *     'id' => 'integer',
      *     'category_id' => ['integer','unsigned'=>true,'max'=>255,'min'=>0],
      *     'name' => 'varchar',
@@ -56,11 +54,8 @@ class Model
      */
     protected array $fillable = [];
 
-
-    //查询对象
-    protected array $objects = [
-        'select' => null,
-    ];
+    //查询条件
+    protected array $conditions = [];
 
     //数据库对象
     protected DatabaseAbstract $db;
@@ -71,7 +66,6 @@ class Model
         $this->db = $db;
     }
 
-
     //创建前事件
     protected function creating(): void {}
 
@@ -81,35 +75,42 @@ class Model
     //删除前事件
     protected function deleting(): void {}
 
-
-    //查询方法
-    public function select(array $fields = []): object
+    //选择字段
+    public function select(array $fields): object
     {
+        $this->conditions['fields'] = $fields;
+        return $this;
+    }
 
-        if ($this->objects['select']) {
-            $select = $this->objects['select'];
-        } else {
-            $select = new Select();
-            $select->table = $this->table;
-            $select->schema = $this->schema;
-            $select->primary = $this->primary;
-            $this->objects['select'] = $select;
-        }
+    public function where(float|int|string|array ...$wheres): object
+    {
+        $this->conditions['wheres'] = $this->_bindWhere(...$wheres);
+        return $this;
+    }
 
-        $select->fields = $fields;
-        $select->db = $this->db;
-        $select->wheres = [];
-        $select->orders = [];
-        $select->groups = [];
+    public function groupBy(array $groups): object
+    {
+        $this->conditions['groups'] = $groups;
+        return $this;
+    }
 
-        return $select;
+    public function having(array $havings): object
+    {
+        $this->conditions['havings'] = $havings;
+        return $this;
+    }
+
+    public function orderBy(array $orders): object
+    {
+        $this->conditions['orders'] = $orders;
+        return $this;
     }
 
 
     /**
      * 删除方法
      * @param float|string|int ...$wheres 删除条件
-     * @return bool 是否删除成功
+     * @return int 影响的行数
      * @example
      * delete(1); // primary key = 1
      * delete('1');// primary key = 1 
@@ -130,28 +131,27 @@ class Model
      * delete(['id','>',1,'and'],['name','like','%张三%']);// id > 1 and name like '%张三%'
      * 
      */
-    public function delete(float|string|int ...$wheres): bool
+    public function delete(float|string|int|array ...$wheres): int
     {
         if (empty($wheres)) {
-            throw new ModelException('删除条件不能为空');
+            throw new ModelException('Delete Condition Cannot Be Empty.');
         }
 
-        $wheres = $this->where($wheres);
+        $wheres = $this->_bindWhere($wheres);
         if (empty($wheres)) {
-            throw new ModelException('删除条件不能为空');
+            throw new ModelException('Delete Condition Cannot Be Empty.');
         }
 
         $this->deleting();
 
-        return $this->db->delete($this->table, $wheres);
+        return $this->db->delete($this->table, ...$wheres);
     }
-
 
     /**
      * 更新方法
      * @param array $data 更新数据
      * @param array|int|string ...$wheres 更新条件
-     * @return bool 是否更新成功
+     * @return int 影响的行数
      * @example
      * 示例：
      *
@@ -173,64 +173,62 @@ class Model
      * update(['name'=>'张三'],['id','in',[1,2,3],'or'],['name','=','李四']);// id in (1,2,3) or name = '李四'
      * 
      */
-    public function update(array $data, float|array|int|string ...$wheres): bool
+    public function update(array $data, float|array|int|string ...$wheres): int
     {
         if (empty($wheres)) {
-            throw new ModelException('更新条件不能为空');
+            throw new ModelException('Update Condition Cannot Be Empty.');
         }
 
         if (empty($data)) {
-            throw new ModelException('更新数据不能为空');
-        }
-
-        $wheres = $this->where($wheres);
-        if (empty($wheres)) {
-            throw new ModelException('更新条件不能为空');
-        }
-
-        Safe::fillable($data, $this->fillable); //检查填充字段
-        Safe::data($data, $this->schema); //检查数据字段
-
-        $this->updating();
-
-        return $this->db->update($this->table, $data, $wheres);
-    }
-
-    public function insert(array ...$data): int|false   
-    {
-        if (empty($data[0])) {
-            throw new ModelException('插入数据不能为空');
+            throw new ModelException('Update Data Cannot Be Empty.');
         }
 
         if (!isset($this->fillable) || empty($this->fillable)) {
-            throw new ModelException('Fillable字段未定义');
+            throw new ModelException('Fillable Array Not Defined.');
         }
 
-        if (!isset($this->fields) || empty($this->fields)) {
-            throw new ModelException('Fields字段未定义');
+        if (!isset($this->schema) || empty($this->schema)) {
+            throw new ModelException('Schema Array Not Defined.');
+        }
+
+        $wheres = $this->_bindWhere($wheres);
+        if (empty($wheres)) {
+            throw new ModelException('Update Condition Cannot Be Empty.');
+        }
+
+        Safe::fillable($data, $this->fillable);
+        Safe::data($data, $this->schema);
+
+        $this->updating();
+
+        return $this->db->update($this->table, $data, ...$wheres);
+    }
+
+    public function insert(array ...$data): int|string
+    {
+        if (empty($data[0]) || !is_array($data[0])) {
+            throw new ModelException('Insert Data Cannot Be Empty Or Not Array.');
+        }
+
+        if (!isset($this->fillable) || empty($this->fillable)) {
+            throw new ModelException('Fillable Array Not Defined.');
+        }
+
+        if (!isset($this->schema) || empty($this->schema)) {
+            throw new ModelException('Schema Array Not Defined.');
         }
 
         $merged = [];
         foreach ($data as $key => $rs) {
-            Safe::fillable($rs, $this->fillable); //检查填充字段
-            Safe::data($rs, $this->schema); //检查数据字段
-            $merged[$key] = array_merge($this->fillable, $rs);//合并填充字段和数据字段
+            Safe::fillable($rs, $this->fillable);
+            Safe::data($rs, $this->schema);
+            $merged[$key] = array_merge($this->fillable, $rs); //合并填充字段和数据字段
         }
 
         $this->creating();
 
         return $this->db->insert($this->table, ...$merged);
     }
-
-    /**
-     * 获取最后插入的主键id
-     * @return int
-     */
-    public function lastid(): int
-    {
-        return $this->db->lastid();
-    }
-
 
     /**
      * 构建查询条件数组
@@ -250,7 +248,7 @@ class Model
      * where(['id','in',[1,2,3],'or'], ['name','=','李四']);// [['id','in',[1,2,3],'or'], ['name','=','李四']]
      * 
      **/
-    protected function where(float|int|string|array ...$wheres): array
+    protected function _bindWhere(float|int|string|array ...$wheres): array
     {
         if (is_numeric($wheres[0]) || is_string($wheres[0])) {
             if (count($wheres) == 1) {
@@ -261,61 +259,74 @@ class Model
         return Safe::where($wheres, $this->schema);
     }
 
-    /**
-     * 统计方法
-     * @param array|int|string ...$wheres 查询条件
-     * @return int 统计结果
-     */
-    public function count(float|int|string|array ...$wheres): int
+    public function first(): object|null
     {
-        $wheres = $this->where($wheres);
-        $params = ['where' => $wheres, 'fields' => " COUNT({$this->primary}) AS ct "];
+        $condition = [
+            'field' => $this->conditions['fields'] ?? [],
+            'where' => $this->conditions['wheres'] ?? [],
+            'groupby' => $this->conditions['groups'] ?? [],
+            'having' => $this->conditions['havings'] ?? [],
+            'orderby' => $this->conditions['orders'] ?? [],
+            'limit' => 1
+        ];
 
-        return $this->db->select($this->table, $params)->row()->ct;
+        $this->conditions = [];
+        return $this->db->select($this->table, ...$condition)->first();
     }
 
-    // 查询单条数据
-    public function find(float|int|string|array ...$wheres): array
+    public function all(int $limit = 1000): array
     {
-        $wheres = $this->where($wheres);
-        $params = ['where' => $wheres, 'fields' => array_keys($this->schema)];
+        $condition = [
+            'field' => $this->conditions['fields'] ?? [],
+            'where' => $this->conditions['wheres'] ?? [],
+            'groupby' => $this->conditions['groups'] ?? [],
+            'having' => $this->conditions['havings'] ?? [],
+            'orderby' => $this->conditions['orders'] ?? [],
+            'limit' => $limit
+        ];
 
-        return $this->db->select($this->table, $params)->row();
+        $this->conditions = [];
+        return $this->db->select($this->table, ...$condition)->all();
     }
 
-    // 查询所有数据
-    public function findAll(): array
+    public function count(): int
     {
-        $params = ['fields' => array_keys($this->schema)];
+        $condition = [
+            'field' => ['count(*) as total'],
+            'where' => $this->conditions['wheres'] ?? [],
+            'groupby' => $this->conditions['groups'] ?? [],
+            'having' => $this->conditions['havings'] ?? [],
+            'orderby' => $this->conditions['orders'] ?? []
+        ];
 
-        return $this->db->select($this->table, $params)->result();
+        $this->conditions = [];
+        return $this->db->select($this->table, ...$condition)->first('array')['total'] ?? 0;
     }
 
-
-    // 查询第一条数据
-    public function first(): array
+    public function find(int|string $id): object|null
     {
-        $params = ['fields' => array_keys($this->schema), 'orderby' => [$this->primary => 'ASC']];
-
-        return $this->db->select($this->table, $params)->row();
+        return $this->where($id)->first();
     }
 
-    // 查询最后一条数据
-    public function last(): array
+    public function exists(int|string $id): bool
     {
-        $params = ['fields' => array_keys($this->schema), 'orderby' => [$this->primary => 'DESC']];
-
-        return $this->db->select($this->table, $params)->row();
+        return $this->where($id)->first() !== null;
     }
 
-    // 查询多条数据
-    public function rows(int ...$offset): array
+    public function rows(int $limit = 1000,int $offset = 0): array
     {
-        $params = ['fields' => array_keys($this->schema), 'offset' => $offset];
+        $condition = [
+            'field' => $this->conditions['fields'] ?? [],
+            'where' => $this->conditions['wheres'] ?? [],
+            'groupby' => $this->conditions['groups'] ?? [],
+            'having' => $this->conditions['havings'] ?? [],
+            'orderby' => $this->conditions['orders'] ?? [],
+            'limit' => [$limit,$offset]
+        ];
 
-        return $this->db->select($this->table, $params)->result();
+        $this->conditions = [];
+        return $this->db->select($this->table, ...$condition)->all();
     }
-
 
     public function transaction(callable $callback): mixed
     {
@@ -330,5 +341,4 @@ class Model
         }
         return $result;
     }
-
 }

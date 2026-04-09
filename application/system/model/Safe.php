@@ -13,23 +13,21 @@ class Safe
     public static function where(array $wheres, array $fields): array
     {
         $wheres = Util::where($wheres);
-
         foreach ($wheres as $where) {
 
-            if (in_array(mb_strtolower($where[1]), ['in', 'not in', 'between', 'not between'])) {
+            if (in_array(mb_strtolower($where[1]), ['in', 'between'])) {
                 if (!is_array($where[2])) {
-                    throw new ModelException('值必须是数组:' . $where[2]);
+                    throw new ModelException('Value Must Be Array:' . $where[2]);
                 }
                 foreach ($where[2] as $value) {
                     if (!self::validate($where[0], $value, $fields)) {
-                        throw new ModelException('字段'.$where[0].'值不符合要求:' . $value);
+                        throw new ModelException('Field '.$where[0].' Value Not Matched:' . $value);
                     }
                 }
             }
             elseif (!self::validate($where[0], $where[2], $fields)) {
-                throw new ModelException('字段'.$where[0].'值不符合要求:' . $where[2]);
+                throw new ModelException('Field '.$where[0].' Value Not Matched:' . $where[2]);
             }   
-
         }
 
         return $wheres;
@@ -40,7 +38,7 @@ class Safe
     {
         foreach ($data as $key => $value) {
             if (!array_key_exists($key, $fillable)) {
-                throw new ModelException('非法字段' . $key . '  ，仅允许的字段:' . join(',', array_keys($fillable)));
+                throw new ModelException('Invalid Field ' . $key . ',Only Allowed Fields:' . join(',', array_keys($fillable)));
             }
         }
     }
@@ -50,18 +48,14 @@ class Safe
     {
         foreach ($data as $key => $value) {
             if (!self::validate($key, $value, $fields)) {
-                throw new ModelException('字段'.$key.'值不符合要求:' . $value);
+                throw new ModelException('Field '.$key.' Value Not Matched:' . $value);
             }
         }
     }
 
 
-    public static function integer($value, int $min = PHP_INT_MIN, int $max = PHP_INT_MAX, bool $unsigned = false): bool
+    public static function integer(int $value, int $min = PHP_INT_MIN, int $max = PHP_INT_MAX, bool $unsigned = false): bool
     {
-        if (!is_int($value)) {
-            return false;
-        }
-
         if ($unsigned && $value < 0) {
             return false;
         }
@@ -76,13 +70,8 @@ class Safe
         return true;
     }
 
-
-
-    public static function varchar($value, int $length = 255): bool
+    public static function varchar(string $value, int $length = 255): bool
     {
-        if (!is_string($value)) {
-            return false;
-        }
         $len = mb_strlen($value);
         if ($len > $length) {
             return false;
@@ -90,47 +79,61 @@ class Safe
         return true;
     }
 
-
-    public static function datetime($value): bool
+    public static function datetime(string $value): bool
     {
-        if (!is_string($value)) {
-            return false;
-        }
-        $timestamp = strtotime($value);
+        $timestamp = strtotime($value);//时间超出范围，只要格式正确即可通过
         if ($timestamp === false) {
             return false;
         }
         return true;
     }
 
-    public static function enum($value, array $options): bool
+    public static function enum(mixed $value, array $options): bool
     {
-        return in_array($value, $options);
+        return in_array($value, $options, true);
     }
 
 
-    public static function decimal($value, int $precision = 10, int $scale = 0): bool
+    public static function decimal(string|float|int $value, int $precision = 10, int $scale = 0): bool
     {
-        if (!is_string($value)) {
+        // 验证参数有效性
+        if ($precision <= 0 || $scale < 0 || $scale > $precision) {
             return false;
         }
-        if (!preg_match('/^-?\d+(\.\d{1,' . $scale . '})?$/', $value)) {
+        
+        // 处理不同类型的输入
+        if (is_int($value)) {
+            // 整数转换为字符串
+            $value = (string)$value;
+        } elseif (is_float($value)) {
+            // 浮点数转换为字符串，确保小数位数正确
+            $value = number_format($value, $scale, '.', '');
+        }
+        
+        // 匹配小数格式：可选负号，整数部分，可选小数部分（最多 $scale 位）
+        $pattern = '/^-?\d+(' . ($scale > 0 ? '\.\d{1,' . $scale . '}' : '') . ')?$/';
+        if (!preg_match($pattern, $value)) {
             return false;
         }
+        
+        // 分离整数部分和小数部分
         $parts = explode('.', $value);
-        if (strlen($parts[0]) > ($precision - $scale)) {
+        $integerPart = ltrim($parts[0], '-'); // 移除负号以计算长度
+        
+        // 验证整数部分长度不超过最大允许长度
+        $maxIntegerLength = $precision - $scale;
+        if (strlen($integerPart) > $maxIntegerLength) {
             return false;
         }
+        
         return true;
     }
-
-
 
     public static function validate(string $key, mixed $value, array $fields): bool
     {
         // 检查字段名是否在允许的字段列表中
         if (!array_key_exists($key, $fields)) {
-            throw new ModelException('非法字段名:' . $key);
+            throw new ModelException('Invalid Field Name:' . $key);
         }
 
         // 获取字段类型和验证规则
@@ -146,11 +149,11 @@ class Safe
             $type = $fieldConfig[0] ?? 'varchar';
             $rules = array_slice($fieldConfig, 1);
         } else {
-            throw new ModelException($key.'无效验证值,必须是字符串或数组，包含类型和规则.');
+            throw new ModelException('Invalid Validation Value for Field ' . $key . ', Must Be String or Array Containing Type and Rules.');
         }
 
         if (!in_array(strtolower($type), ['integer', 'varchar', 'datetime', 'enum', 'decimal', 'text'])) {
-            throw new ModelException($key.'无效的验证类型,必须是[integer,varchar,datetime,enum,decimal,text]之一.');
+            throw new ModelException('Invalid Validation Type for Field ' . $key . ', Must Be One of [integer,varchar,datetime,enum,decimal,text].');
         }
 
         // 根据类型进行验证
@@ -159,15 +162,21 @@ class Safe
                 $min = $rules['min'] ?? PHP_INT_MIN;
                 $max = $rules['max'] ?? PHP_INT_MAX;
                 $unsigned = $rules['unsigned'] ?? false;
-                return self::integer($value, $min, $max, $unsigned);
+                
+                // 对于整数类型，允许字符串或浮点数输入，只要它们可以被转换为有效的整数
+                if (is_string($value) && ctype_digit($value)) {
+                    $value = (int)$value;
+                } 
+                
+                return is_int($value) && self::integer($value, $min, $max, $unsigned);
 
             case 'varchar':
             case 'text':
                 $length = $rules['length'] ?? 255;
-                return self::varchar($value, $length);
+                return is_string($value) && self::varchar($value, $length);
 
             case 'datetime':
-                return self::datetime($value);
+                return is_string($value) && self::datetime($value);
 
             case 'enum':
                 $options = $rules['options'] ?? [];
@@ -176,7 +185,7 @@ class Safe
             case 'decimal':
                 $precision = $rules['precision'] ?? 10;
                 $scale = $rules['scale'] ?? 0;
-                return self::decimal($value, $precision, $scale);
+                return is_numeric($value) && self::decimal($value, $precision, $scale);
         }
 
         return false;
