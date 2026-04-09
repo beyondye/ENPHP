@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace system;
 
 use system\database\DatabaseAbstract;
+use system\Database;
 use system\model\ModelException;
-use system\model\Select;
 use system\model\Safe;
 
 class Model
@@ -61,9 +61,9 @@ class Model
     protected DatabaseAbstract $db;
 
     //构造函数
-    public function __construct(DatabaseAbstract $db)
+    public function __construct(string $db = 'default')
     {
-        $this->db = $db;
+        $this->db = Database::instance($db);
     }
 
     //创建前事件
@@ -84,17 +84,17 @@ class Model
 
     public function where(float|int|string|array ...$wheres): object
     {
-        $this->conditions['wheres'] = $this->_bindWhere(...$wheres);
+        $this->conditions['wheres'][] = $wheres;
         return $this;
     }
 
-    public function groupBy(array $groups): object
+    public function groupBy(string ...$groups): object
     {
         $this->conditions['groups'] = $groups;
         return $this;
-    }
+    }   
 
-    public function having(array $havings): object
+    public function having(array ...$havings): object
     {
         $this->conditions['havings'] = $havings;
         return $this;
@@ -263,7 +263,7 @@ class Model
     {
         $condition = [
             'field' => $this->conditions['fields'] ?? [],
-            'where' => $this->conditions['wheres'] ?? [],
+            'where' => array_key_exists('wheres', $this->conditions) ? $this->_bindWhere(...$this->conditions['wheres']) : [],  
             'groupby' => $this->conditions['groups'] ?? [],
             'having' => $this->conditions['havings'] ?? [],
             'orderby' => $this->conditions['orders'] ?? [],
@@ -278,7 +278,7 @@ class Model
     {
         $condition = [
             'field' => $this->conditions['fields'] ?? [],
-            'where' => $this->conditions['wheres'] ?? [],
+            'where' => array_key_exists('wheres', $this->conditions) ? $this->_bindWhere(...$this->conditions['wheres']) : [],  
             'groupby' => $this->conditions['groups'] ?? [],
             'having' => $this->conditions['havings'] ?? [],
             'orderby' => $this->conditions['orders'] ?? [],
@@ -293,7 +293,7 @@ class Model
     {
         $condition = [
             'field' => ['count(*) as total'],
-            'where' => $this->conditions['wheres'] ?? [],
+            'where' => array_key_exists('wheres', $this->conditions) ? $this->_bindWhere(...$this->conditions['wheres']) : [],  
             'groupby' => $this->conditions['groups'] ?? [],
             'having' => $this->conditions['havings'] ?? [],
             'orderby' => $this->conditions['orders'] ?? []
@@ -317,7 +317,7 @@ class Model
     {
         $condition = [
             'field' => $this->conditions['fields'] ?? [],
-            'where' => $this->conditions['wheres'] ?? [],
+            'where' => array_key_exists('wheres', $this->conditions) ? $this->_bindWhere(...$this->conditions['wheres']) : [],  
             'groupby' => $this->conditions['groups'] ?? [],
             'having' => $this->conditions['havings'] ?? [],
             'orderby' => $this->conditions['orders'] ?? [],
