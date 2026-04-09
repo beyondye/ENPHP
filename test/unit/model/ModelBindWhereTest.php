@@ -106,7 +106,7 @@ class ModelBindWhereTest extends TestCase
 
         // 测试多个参数形式的浮点数
         $result = $testModel->bindWhere('price', '=', 1.5);
-
+     
         // 验证结果
         $expected = [['price', '=', 1.5]];
         $this->assertEquals($expected, $result);
@@ -282,6 +282,7 @@ class ModelBindWhereTest extends TestCase
         };
         
         $result3 = $decimalPrimaryModel->bindWhere(3.14);
+        // 输出结果以调试
         $this->assertEquals([['price', '=', 3.14]], $result3);
     }
 }

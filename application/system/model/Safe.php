@@ -21,13 +21,12 @@ class Safe
                 }
                 foreach ($where[2] as $value) {
                     if (!self::validate($where[0], $value, $fields)) {
-                        throw new ModelException('Field '.$where[0].' Value Not Matched:' . $value);
+                        throw new ModelException('Field ' . $where[0] . ' Value Not Matched:' . $value);
                     }
                 }
+            } elseif (!self::validate($where[0], $where[2], $fields)) {
+                throw new ModelException('Field ' . $where[0] . ' Value Not Matched:' . $where[2]);
             }
-            elseif (!self::validate($where[0], $where[2], $fields)) {
-                throw new ModelException('Field '.$where[0].' Value Not Matched:' . $where[2]);
-            }   
         }
 
         return $wheres;
@@ -48,7 +47,7 @@ class Safe
     {
         foreach ($data as $key => $value) {
             if (!self::validate($key, $value, $fields)) {
-                throw new ModelException('Field '.$key.' Value Not Matched:' . $value);
+                throw new ModelException('Field ' . $key . ' Value Not Matched:' . $value);
             }
         }
     }
@@ -81,7 +80,7 @@ class Safe
 
     public static function datetime(string $value): bool
     {
-        $timestamp = strtotime($value);//时间超出范围，只要格式正确即可通过
+        $timestamp = strtotime($value); //时间超出范围，只要格式正确即可通过
         if ($timestamp === false) {
             return false;
         }
@@ -94,38 +93,51 @@ class Safe
     }
 
 
-    public static function decimal(string|float|int $value, int $precision = 10, int $scale = 0): bool
+    public static function decimal(string|float $value, int $precision = 10, int $scale = 2): bool
     {
         // 验证参数有效性
         if ($precision <= 0 || $scale < 0 || $scale > $precision) {
             return false;
         }
-        
-        // 处理不同类型的输入
-        if (is_int($value)) {
-            // 整数转换为字符串
-            $value = (string)$value;
-        } elseif (is_float($value)) {
-            // 浮点数转换为字符串，确保小数位数正确
-            $value = number_format($value, $scale, '.', '');
-        }
-        
-        // 匹配小数格式：可选负号，整数部分，可选小数部分（最多 $scale 位）
-        $pattern = '/^-?\d+(' . ($scale > 0 ? '\.\d{1,' . $scale . '}' : '') . ')?$/';
-        if (!preg_match($pattern, $value)) {
+
+        if (!is_numeric($value)) {
             return false;
         }
-        
+
+        // 转换为字符串
+        if (is_float($value)) {
+            $value = (string)$value;
+        }
+
+        $value = ltrim($value, '-'); // 移除负号以计算长度
+
         // 分离整数部分和小数部分
         $parts = explode('.', $value);
-        $integerPart = ltrim($parts[0], '-'); // 移除负号以计算长度
-        
-        // 验证整数部分长度不超过最大允许长度
-        $maxIntegerLength = $precision - $scale;
-        if (strlen($integerPart) > $maxIntegerLength) {
+
+        if (count($parts) !== 2) {
             return false;
         }
-        
+
+        $integer = strlen($parts[0]);
+        $decimal = strlen($parts[1]);
+
+        if ($decimal === 0) {
+            return false;
+        }
+
+        if ($integer > $precision) {
+            return false;
+        }
+
+        if ($decimal > $scale) {
+            return false;
+        }
+
+        $total = $integer + $decimal;
+        if ($total > $precision) {
+            return false;
+        }
+
         return true;
     }
 
@@ -162,12 +174,12 @@ class Safe
                 $min = $rules['min'] ?? PHP_INT_MIN;
                 $max = $rules['max'] ?? PHP_INT_MAX;
                 $unsigned = $rules['unsigned'] ?? false;
-                
+
                 // 对于整数类型，允许字符串或浮点数输入，只要它们可以被转换为有效的整数
                 if (is_string($value) && ctype_digit($value)) {
                     $value = (int)$value;
-                } 
-                
+                }
+
                 return is_int($value) && self::integer($value, $min, $max, $unsigned);
 
             case 'varchar':
@@ -184,10 +196,10 @@ class Safe
 
             case 'decimal':
                 $precision = $rules['precision'] ?? 10;
-                $scale = $rules['scale'] ?? 0;
+                $scale = $rules['scale'] ?? 2;
                 return is_numeric($value) && self::decimal($value, $precision, $scale);
+            default:
+                return false;
         }
-
-        return false;
     }
 }
