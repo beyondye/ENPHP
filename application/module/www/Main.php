@@ -9,6 +9,7 @@ class Main extends \system\Controller
 
     public function index()
     {
+        $db = service('test');  
         $data['hello_world'] = 'hello wolrd';
 
         Output::view('main', $data);

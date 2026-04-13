@@ -100,7 +100,7 @@ function lang(string $key, array $replace = [], string $lang = '')
             return $placeholder($data);
         }
 
-        return $key;// 如果数据既不是字符串也不是数组，返回原始键
+        return $key; // 如果数据既不是字符串也不是数组，返回原始键
     };
 
     // 定义语言包查找路径的优先级
@@ -115,7 +115,7 @@ function lang(string $key, array $replace = [], string $lang = '')
             return $result($filedata[$path]);
         }
     }
-  
+
     // 检查文件并加载
     foreach ($paths as $path) {
         if (is_file($path)) {
@@ -124,7 +124,53 @@ function lang(string $key, array $replace = [], string $lang = '')
         }
     }
 
- 
+
     return $key; // 如果语言文件不存在，返回原始键
 
+}
+
+function service(string $name): object
+{
+    $file=APP_DIR . 'config/' . ENVIRONMENT . '/service.php';
+
+    if (!is_file($file)) {
+        throw new \system\SysException("Service file not found: {$file}]");
+    }
+
+    $services = include $file;  
+    if (!isset($services[$name])) {
+        throw new \system\SysException("Service config not found: {$name}]");
+    }
+
+    /**
+     * 递归构建器：采用闭包实现，支持无限层级类嵌套
+     */
+    $buildService = function ($item) use (&$buildService) {
+
+        if (!is_array($item) || !array_key_exists('value', $item)) {
+            return $item;
+        }
+
+        if (($item['type'] ?? '') === 'class') {
+            $className = $item['value'];
+
+            if (!class_exists($className)) {
+                throw new \system\SysException("Class not found: {$className}]");
+            }
+
+            $rawParams = $item['params'] ?? [];
+            $resolvedArgs = array_map($buildService, $rawParams);
+
+            return new $className(...array_values($resolvedArgs));
+        }
+
+        return $item['value'];
+    };
+
+
+    $config = $services[$name];
+    $args = array_map($buildService, $config['params']);
+    $instance = new $config['entry'](...array_values($args));
+
+    return $instance;
 }
