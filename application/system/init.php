@@ -1,12 +1,14 @@
 <?php
 
 //global variable
+
+use PSpell\Config;
+
 $vars = [];
 
 //include constant file
 include APP_DIR . 'config/' . ENVIRONMENT . '/' . CONST_FILE . '.php';
 include SYS_DIR . 'func.php';
-
 
 //autoload class
 spl_autoload_register(function ($class) {
@@ -36,6 +38,8 @@ spl_autoload_register(function ($class) {
 });
 
 profiler('benchmark', 'running', 'Action');
+
+\system\Config::init(CONFIG_PATH);
 
 $vars['controller'] = \system\Input::get(CONTROLLER_KEY_NAME, DEFAULT_CONTROLLER);
 $vars['action'] = \system\Input::get(ACTION_KEY_NAME, DEFAULT_ACTION);
