@@ -131,15 +131,32 @@ function lang(string $key, array $replace = [], string $lang = '')
 
 function service(string $name): object
 {
-    $file=APP_DIR . 'config/' . ENVIRONMENT . '/service.php';
+    $services = \system\Config::get($name);
 
-    if (!is_file($file)) {
-        throw new \system\SysException("Service file not found: {$file}]");
+    if ($services === null) {
+        throw new \system\SysException("Service config not found:[{$name}]");
     }
 
-    $services = include $file;  
+    // 检查配置是否为数组
+    if (!is_array($services)) {
+        throw new \system\SysException("Service config must be an array:[{$name}]");
+    }
+
+    // 检查服务是否存在于配置中
     if (!isset($services[$name])) {
-        throw new \system\SysException("Service config not found: {$name}]");
+        throw new \system\SysException("Service config not found:[{$name}]");
+    }
+
+    $config = $services[$name];
+
+    // 检查服务配置是否为数组
+    if (!is_array($config)) {
+        throw new \system\SysException("Service config must be an array:[{$name}]");
+    }
+
+    // 检查服务配置是否包含 entry 键
+    if (!isset($config['entry'])) {
+        throw new \system\SysException("Service config missing entry:[{$name}]");
     }
 
     /**
@@ -155,7 +172,7 @@ function service(string $name): object
             $className = $item['value'];
 
             if (!class_exists($className)) {
-                throw new \system\SysException("Class not found: {$className}]");
+                throw new \system\SysException("Class not found:[{$className}]");
             }
 
             $rawParams = $item['params'] ?? [];
@@ -167,10 +184,13 @@ function service(string $name): object
         return $item['value'];
     };
 
+    $args = array_map($buildService, $config['params'] ?? []);
 
-    $config = $services[$name];
-    $args = array_map($buildService, $config['params']);
-    $instance = new $config['entry'](...array_values($args));
+    try {
+        $instance = new $config['entry'](...array_values($args));
+    } catch (Error $e) {
+        throw new \system\SysException("Class not found:[{$config['entry']}]");
+    }
 
     return $instance;
 }
