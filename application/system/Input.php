@@ -1,75 +1,30 @@
 <?php
+declare(strict_types=1);
 
 namespace system;
 
-
 class Input
 {
-    /**
-     * 获取查询字符串,不存在返回null，不带参数返回全部
-     *
-     * @param string $name
-     *
-     * @param string $default
-     *
-     * @return array|string
-     */
-    public static function get($name = null, $default = null)
+    public static function get(string $name = '', $default = null): mixed
     {
-        if ($name === null) {
+        if ($name === '') {
             return $_GET;
         }
 
-        if ($name) {
-            if (isset($_GET[$name]) && $_GET[$name] != '') {
-                return $_GET[$name];
-            }
+        if (!isset($_GET[$name])) {
             return $default;
         }
 
-        return null;
+        $value = $_GET[$name];
+
+        if (is_string($value) && trim($value) === '') {
+            return $default;
+        }
+
+        return $value;
     }
 
-    /**
-     * 获取请求类型方法
-     *
-     * @return string
-     */
-    public static function method()
-    {
-        return $_SERVER['REQUEST_METHOD'];
-    }
-
-
-    /**
-     * 获取引用来源页的URL地址
-     *
-     * @return string
-     */
-    public static function referer()
-    {
-        return $_SERVER['HTTP_REFERER'];
-    }
-
-    /**
-     *
-     * 获取请求中的body
-     *
-     * @return string
-     */
-    public static function body()
-    {
-        return file_get_contents("php://input");
-    }
-
-    /**
-     * 获取post数据,不存在返回null，不带参数返回全部
-     *
-     * @param string $name
-     *
-     * @return array|string|null
-     */
-    public static function post($name = null)
+    public static function post(string $name = '', $default = null): mixed
     {
         $func = function ($val) {
             if (is_array($val)) {
@@ -80,67 +35,71 @@ class Input
             return trim($val);
         };
 
-        if ($name === null) {
+        if ($name === '') {
             return array_map($func, $_POST);
         }
 
         if (!isset($_POST[$name])) {
-            return null;
+            return $default;
         }
 
         return $func($_POST[$name]);
     }
 
-    /**
-     * 判断是否ajax请求
-     *
-     * @return bool
-     */
-    public static function isAjax()
+    public static function method(): string
+    {
+        return $_SERVER['REQUEST_METHOD']??'';
+    }
+
+    public static function referer(): string
+    {
+        return $_SERVER['HTTP_REFERER']??'';
+    }
+
+    public static function body(): string
+    {
+        return file_get_contents("php://input");
+    }
+
+    public static function isAjax(): bool
     {
         if (isset($_SERVER['HTTP_X_REQUESTED_WITH'])) {
-            return ($_SERVER['HTTP_X_REQUESTED_WITH'] === 'XMLHttpRequest');
+            return (strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest');
         } else {
             return false;
         }
     }
 
-    /**
-     * 获取请求ip
-     *
-     * @return string
-     */
-    public static function ip()
+    public static function ip(): string
     {
-        if (getenv('HTTP_CLIENT_IP')) {
-            return getenv('HTTP_CLIENT_IP');
-        }
+      $keys = [
+            'HTTP_CLIENT_IP',
+            'HTTP_X_FORWARDED_FOR',
+            'HTTP_X_FORWARDED',
+            'HTTP_FORWARDED_FOR',
+            'HTTP_FORWARDED',
+            'REMOTE_ADDR'
+        ];
 
-        if (getenv('HTTP_X_FORWARDED_FOR')) {
-            return getenv('HTTP_X_FORWARDED_FOR');
-        }
-
-        if (getenv('HTTP_X_FORWARDED')) {
-            return getenv('HTTP_X_FORWARDED');
-        }
-
-        if (getenv('HTTP_FORWARDED_FOR')) {
-            return getenv('HTTP_FORWARDED_FOR');
-        }
-
-        if (getenv('HTTP_FORWARDED')) {
-            return getenv('HTTP_FORWARDED');
-        }
-
-        if (getenv('REMOTE_ADDR')) {
-            return getenv('REMOTE_ADDR');
+        foreach ($keys as $key) {
+            $ip = getenv($key) ?: ($_SERVER[$key] ?? '');
+            if ($ip) {
+                // 处理 X-Forwarded-For 可能返回的多个IP（取第一个）
+                if (str_contains($ip, ',')) {
+                    $ip = explode(',', $ip)[0];
+                }
+                $ip = trim($ip);
+                if (filter_var($ip, FILTER_VALIDATE_IP)) {
+                    return $ip;
+                }
+            }
         }
 
         return '0.0.0.0';
     }
-
-    public static function host()
+    
+    public static function host(): string
     {
-        return $_SERVER['HTTP_HOST'];
+        return $_SERVER['HTTP_HOST']??'';
     }
 }
