@@ -1,10 +1,5 @@
 <?php
 
-//global variable
-
-$vars = [];
-
-//include constant file
 include APP_DIR . 'config/' . ENVIRONMENT . '/' . CONST_FILE . '.php';
 include SYS_DIR . 'func.php';
 
@@ -39,26 +34,24 @@ profiler('benchmark', 'running', 'Action');
 
 \system\Config::init(AUTOLOAD_CONFIG_PATH);
 
-$vars['controller'] = \system\Input::get(CONTROLLER_KEY_NAME, DEFAULT_CONTROLLER);
-$vars['action'] = \system\Input::get(ACTION_KEY_NAME, DEFAULT_ACTION);
 
-define('CONTROLLER', $vars['controller']);
-define('ACTION', $vars['action']);
+define('CONTROLLER',\system\Input::get(CONTROLLER_KEY_NAME, DEFAULT_CONTROLLER));
+define('ACTION', \system\Input::get(ACTION_KEY_NAME, DEFAULT_ACTION));
 
 \system\Middleware::before();
 
-if (preg_match('/^[\w\/]+$/', $vars['controller']) == 0 || preg_match('/^\w+$/', $vars['action']) == 0) {
+if (preg_match('/^[\w\/]+$/', CONTROLLER) == 0 || preg_match('/^\w+$/', ACTION) == 0) {
     exit('Action Or Controller Not Found');
 }
 
-$controller = explode('/', $vars['controller']);
+$controller = explode('/', CONTROLLER);
 $controller[count($controller) - 1] = ucfirst(end($controller));
 $ins = load('module\\' . MODULE . '\\' . join('\\', $controller));
-if (!method_exists($ins, $vars['action'])) {
+if (!method_exists($ins, ACTION)) {
     exit('Action Not Found');
 }
 
-$act = $vars['action'];
+$act = ACTION;
 $ins->$act();
 
 \system\Middleware::after();
