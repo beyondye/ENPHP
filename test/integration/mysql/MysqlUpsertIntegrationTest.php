@@ -14,7 +14,7 @@ class MysqlUpsertIntegrationTest extends TestCase
     public function testUpsertInsert()
     {
         try {
-            $db = Database::instance('default');
+            $db = Database::instance('database.default');
 
             // 创建测试表
             $createTableSql = "CREATE TABLE IF NOT EXISTS test_upsert_insert (
@@ -48,7 +48,7 @@ class MysqlUpsertIntegrationTest extends TestCase
     public function testUpsertUpdate()
     {
         try {
-            $db = Database::instance('default');
+            $db = Database::instance('database.default');
 
             // 创建测试表
             $createTableSql = "CREATE TABLE IF NOT EXISTS test_upsert_update (
@@ -86,7 +86,7 @@ class MysqlUpsertIntegrationTest extends TestCase
     public function testUpsertWithSpecialCharacters()
     {
         try {
-            $db = Database::instance('default');
+            $db = Database::instance('database.default');
 
             // 创建测试表
             $createTableSql = "CREATE TABLE IF NOT EXISTS test_upsert_special (
@@ -121,7 +121,7 @@ class MysqlUpsertIntegrationTest extends TestCase
     public function testUpsertSqlInjectionAttempt()
     {
         try {
-            $db = Database::instance('default');
+            $db = Database::instance('database.default');
 
             // 创建测试表
             $createTableSql = "CREATE TABLE IF NOT EXISTS test_upsert_injection (
@@ -156,7 +156,7 @@ class MysqlUpsertIntegrationTest extends TestCase
     public function testUpsertWithEmptyStringParams()
     {
         try {
-            $db = Database::instance('default');
+            $db = Database::instance('database.default');
 
             // 创建测试表
             $createTableSql = "CREATE TABLE IF NOT EXISTS test_upsert_empty (
@@ -190,7 +190,7 @@ class MysqlUpsertIntegrationTest extends TestCase
     public function testUpsertAffectedRows()
     {
         try {
-            $db = Database::instance('default');
+            $db = Database::instance('database.default');
 
             // 创建测试表
             $createTableSql = "CREATE TABLE IF NOT EXISTS test_upsert_affected (

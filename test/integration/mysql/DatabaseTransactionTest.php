@@ -14,7 +14,7 @@ class DatabaseTransactionTest extends TestCase
     public function testTransactionCommit()
     {
         try {
-            $db = Database::instance('default');
+            $db = Database::instance('database.default');
 
             // 创建测试表
             $createTableSql = "CREATE TABLE IF NOT EXISTS test_transaction_commit (
@@ -53,7 +53,7 @@ class DatabaseTransactionTest extends TestCase
     public function testTransactionRollback()
     {
         try {
-            $db = Database::instance('default');
+            $db = Database::instance('database.default');
 
             // 创建测试表
             $createTableSql = "CREATE TABLE IF NOT EXISTS test_transaction_rollback (
@@ -91,7 +91,7 @@ class DatabaseTransactionTest extends TestCase
     public function testTransactionWithException()
     {
         try {
-            $db = Database::instance('default');
+            $db = Database::instance('database.default');
 
             // 创建测试表
             $createTableSql = "CREATE TABLE IF NOT EXISTS test_transaction_exception (
@@ -134,7 +134,7 @@ class DatabaseTransactionTest extends TestCase
     public function testTransactionMultipleOperations()
     {
         try {
-            $db = Database::instance('default');
+            $db = Database::instance('database.default');
 
             // 创建测试表
             $createTableSql = "CREATE TABLE IF NOT EXISTS test_transaction_multiple (
@@ -184,7 +184,7 @@ class DatabaseTransactionTest extends TestCase
      */
     public function testNestedTransaction()
     {
-        $db = Database::instance('default');
+        $db = Database::instance('database.default');
 
         try {
             // 开始第一个事务
@@ -210,7 +210,7 @@ class DatabaseTransactionTest extends TestCase
     public function testCommitWithoutActiveTransaction()
     {
 
-        $db = Database::instance('default');
+        $db = Database::instance('database.default');
 
         // 确保没有活动事务
         try {
@@ -230,7 +230,7 @@ class DatabaseTransactionTest extends TestCase
      */
     public function testRollbackWithoutActiveTransaction()
     {
-        $db = Database::instance('default');
+        $db = Database::instance('database.default');
 
         // 确保没有活动事务
         try {
@@ -252,7 +252,7 @@ class DatabaseTransactionTest extends TestCase
     {
         try {
 
-            $db = Database::instance('default');
+            $db = Database::instance('database.default');
 
             // 创建测试表
             $createTableSql = "CREATE TABLE IF NOT EXISTS test_transaction_delete (

@@ -61,7 +61,7 @@ class Model
     protected DatabaseAbstract $db;
 
     //构造函数
-    public function __construct(string $db = 'default')
+    public function __construct(string $db = 'database.default')
     {
         $this->db = Database::instance($db);
     }

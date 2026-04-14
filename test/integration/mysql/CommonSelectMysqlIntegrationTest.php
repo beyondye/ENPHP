@@ -14,7 +14,7 @@ class CommonSelectMysqlIntegrationTest extends TestCase
     public function testSelectBasic()
     {
         try {
-            $db = Database::instance('default');
+            $db = Database::instance('database.default');
 
             // 创建测试表
             $createTableSql = "CREATE TABLE IF NOT EXISTS test_select_basic (
@@ -52,7 +52,7 @@ class CommonSelectMysqlIntegrationTest extends TestCase
     public function testSelectWithWhere()
     {
         try {
-            $db = Database::instance('default');
+            $db = Database::instance('database.default');
 
             // 创建测试表
             $createTableSql = "CREATE TABLE IF NOT EXISTS test_select_where (
@@ -89,7 +89,7 @@ class CommonSelectMysqlIntegrationTest extends TestCase
     public function testSelectWithMultipleWhereConditions()
     {
         try {
-            $db = Database::instance('default');
+            $db = Database::instance('database.default');
 
             // 创建测试表
             $createTableSql = "CREATE TABLE IF NOT EXISTS test_select_multiple_where (
@@ -128,7 +128,7 @@ class CommonSelectMysqlIntegrationTest extends TestCase
     public function testSelectWithOrderBy()
     {
         try {
-            $db = Database::instance('default');
+            $db = Database::instance('database.default');
 
             // 创建测试表
             $createTableSql = "CREATE TABLE IF NOT EXISTS test_select_orderby (
@@ -166,7 +166,7 @@ class CommonSelectMysqlIntegrationTest extends TestCase
     public function testSelectWithMultipleOrderBy()
     {
         try {
-            $db = Database::instance('default');
+            $db = Database::instance('database.default');
 
             // 创建测试表
             $createTableSql = "CREATE TABLE IF NOT EXISTS test_select_multiple_orderby (
@@ -211,7 +211,7 @@ class CommonSelectMysqlIntegrationTest extends TestCase
     public function testSelectWithLimit()
     {
         try {
-            $db = Database::instance('default');
+            $db = Database::instance('database.default');
 
             // 创建测试表
             $createTableSql = "CREATE TABLE IF NOT EXISTS test_select_limit (
@@ -251,7 +251,7 @@ class CommonSelectMysqlIntegrationTest extends TestCase
     public function testSelectWithGroupBy()
     {
         try {
-            $db = Database::instance('default');
+            $db = Database::instance('database.default');
 
             // 创建测试表
             $createTableSql = "CREATE TABLE IF NOT EXISTS test_select_groupby (
@@ -294,7 +294,7 @@ class CommonSelectMysqlIntegrationTest extends TestCase
     public function testSelectWithGroupByAndHaving()
     {
         try {
-            $db = Database::instance('default');
+            $db = Database::instance('database.default');
 
             // 创建测试表
             $createTableSql = "CREATE TABLE IF NOT EXISTS test_select_having (
@@ -338,7 +338,7 @@ class CommonSelectMysqlIntegrationTest extends TestCase
     public function testSelectWithComplexHaving()
     {
         try {
-            $db = Database::instance('default');
+            $db = Database::instance('database.default');
 
             // 创建测试表
             $createTableSql = "CREATE TABLE IF NOT EXISTS test_select_complex_having (
@@ -378,7 +378,7 @@ class CommonSelectMysqlIntegrationTest extends TestCase
     public function testSelectWithSpecialCharacters()
     {
         try {
-            $db = Database::instance('default');
+            $db = Database::instance('database.default');
 
             // 创建测试表
             $createTableSql = "CREATE TABLE IF NOT EXISTS test_select_special (
@@ -415,7 +415,7 @@ class CommonSelectMysqlIntegrationTest extends TestCase
     public function testSelectWithEmptyString()
     {
         try {
-            $db = Database::instance('default');
+            $db = Database::instance('database.default');
 
             // 创建测试表
             $createTableSql = "CREATE TABLE IF NOT EXISTS test_select_empty_string (
@@ -451,7 +451,7 @@ class CommonSelectMysqlIntegrationTest extends TestCase
     public function testSelectWithNullValues()
     {
         try {
-            $db = Database::instance('default');
+            $db = Database::instance('database.default');
 
             // 创建测试表，允许 NULL 值
             $createTableSql = "CREATE TABLE IF NOT EXISTS test_select_null (
@@ -488,7 +488,7 @@ class CommonSelectMysqlIntegrationTest extends TestCase
     public function testSelectSqlInjectionAttempt()
     {
         try {
-            $db = Database::instance('default');
+            $db = Database::instance('database.default');
 
             // 首先清理可能存在的表
             $db->execute("DROP TABLE IF EXISTS test_select_injection");
@@ -530,7 +530,7 @@ class CommonSelectMysqlIntegrationTest extends TestCase
         } catch (DatabaseException $e) {
             // 清理表
             try {
-                Database::instance('default')->execute("DROP TABLE IF EXISTS test_select_injection");
+                Database::instance('database.default')->execute("DROP TABLE IF EXISTS test_select_injection");
             } catch (DatabaseException $ex) {
                 // 忽略清理错误
             }
@@ -544,7 +544,7 @@ class CommonSelectMysqlIntegrationTest extends TestCase
     public function testSelectComplexCombination()
     {
         try {
-            $db = Database::instance('default');
+            $db = Database::instance('database.default');
 
             // 创建测试表
             $createTableSql = "CREATE TABLE IF NOT EXISTS test_select_combination (

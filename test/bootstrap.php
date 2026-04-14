@@ -67,3 +67,5 @@ spl_autoload_register(function ($class) {
     include SYS_DIR . str_replace(['\\', 'system'], ['/', ''],  $class) . EXT;
 });
 
+\system\Config::init(AUTOLOAD_CONFIG_PATH);
+

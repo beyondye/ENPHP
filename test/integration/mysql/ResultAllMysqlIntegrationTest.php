@@ -15,7 +15,7 @@ class ResultAllMysqlIntegrationTest extends TestCase
     public function testAllWithObjectType()
     {
         try {
-            $db = Database::instance('default');
+            $db = Database::instance('database.default');
 
             // 创建测试表
             $createTableSql = "CREATE TABLE IF NOT EXISTS test_result_all_object (
@@ -66,7 +66,7 @@ class ResultAllMysqlIntegrationTest extends TestCase
     public function testAllWithArrayType()
     {
         try {
-            $db = Database::instance('default');
+            $db = Database::instance('database.default');
 
             // 创建测试表
             $createTableSql = "CREATE TABLE IF NOT EXISTS test_result_all_array (
@@ -117,7 +117,7 @@ class ResultAllMysqlIntegrationTest extends TestCase
     public function testAllWithEmptyResult()
     {
         try {
-            $db = Database::instance('default');
+            $db = Database::instance('database.default');
 
             // 创建测试表
             $createTableSql = "CREATE TABLE IF NOT EXISTS test_result_all_empty (
@@ -156,7 +156,7 @@ class ResultAllMysqlIntegrationTest extends TestCase
     public function testAllWithMultipleRecords()
     {
         try {
-            $db = Database::instance('default');
+            $db = Database::instance('database.default');
 
             // 创建测试表
             $createTableSql = "CREATE TABLE IF NOT EXISTS test_result_all_multiple (

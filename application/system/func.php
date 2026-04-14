@@ -131,31 +131,19 @@ function lang(string $key, array $replace = [], string $lang = '')
 
 function service(string $name): object
 {
-    $services = \system\Config::get($name);
+    $service= \system\Config::get($name);
 
-    if ($services === null) {
+    if ($service === null) {
         throw new \system\SysException("Service config not found:[{$name}]");
     }
 
     // 检查配置是否为数组
-    if (!is_array($services)) {
-        throw new \system\SysException("Service config must be an array:[{$name}]");
-    }
-
-    // 检查服务是否存在于配置中
-    if (!isset($services[$name])) {
-        throw new \system\SysException("Service config not found:[{$name}]");
-    }
-
-    $config = $services[$name];
-
-    // 检查服务配置是否为数组
-    if (!is_array($config)) {
+    if (!is_array($service)) {
         throw new \system\SysException("Service config must be an array:[{$name}]");
     }
 
     // 检查服务配置是否包含 entry 键
-    if (!isset($config['entry'])) {
+    if (!isset($service['entry'])) {
         throw new \system\SysException("Service config missing entry:[{$name}]");
     }
 
@@ -184,12 +172,13 @@ function service(string $name): object
         return $item['value'];
     };
 
-    $args = array_map($buildService, $config['params'] ?? []);
+    $args = array_map($buildService, $service['params'] ?? []);
+
 
     try {
-        $instance = new $config['entry'](...array_values($args));
+        $instance = new $service['entry'](...array_values($args));
     } catch (Error $e) {
-        throw new \system\SysException("Class not found:[{$config['entry']}]");
+        throw new \system\SysException("Class not found:[{$service['entry']}]");
     }
 
     return $instance;

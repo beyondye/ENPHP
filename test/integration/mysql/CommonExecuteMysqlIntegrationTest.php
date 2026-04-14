@@ -15,7 +15,7 @@ class CommonExecuteMysqlIntegrationTest extends TestCase
     public function testExecuteSelectQuery()
     {
         try {
-            $db = Database::instance('default');
+            $db = Database::instance('database.default');
 
             // 创建测试表
             $createTableSql = "CREATE TABLE IF NOT EXISTS test_execute_select (
@@ -53,7 +53,7 @@ class CommonExecuteMysqlIntegrationTest extends TestCase
     public function testExecuteInsertQuery()
     {
         try {
-            $db = Database::instance('default');
+            $db = Database::instance('database.default');
 
             // 创建测试表
             $createTableSql = "CREATE TABLE IF NOT EXISTS test_execute_insert (
@@ -89,7 +89,7 @@ class CommonExecuteMysqlIntegrationTest extends TestCase
     public function testExecuteUpdateQuery()
     {
         try {
-            $db = Database::instance('default');
+            $db = Database::instance('database.default');
 
             // 创建测试表
             $createTableSql = "CREATE TABLE IF NOT EXISTS test_execute_update (
@@ -129,7 +129,7 @@ class CommonExecuteMysqlIntegrationTest extends TestCase
     public function testExecuteDeleteQuery()
     {
         try {
-            $db = Database::instance('default');
+            $db = Database::instance('database.default');
 
             // 创建测试表
             $createTableSql = "CREATE TABLE IF NOT EXISTS test_execute_delete (
@@ -170,7 +170,7 @@ class CommonExecuteMysqlIntegrationTest extends TestCase
     public function testExecuteWithSpecialCharacters()
     {
         try {
-            $db = Database::instance('default');
+            $db = Database::instance('database.default');
 
             // 创建测试表
             $createTableSql = "CREATE TABLE IF NOT EXISTS test_execute_special (
@@ -205,7 +205,7 @@ class CommonExecuteMysqlIntegrationTest extends TestCase
     public function testExecuteWithEmptyString()
     {
         try {
-            $db = Database::instance('default');
+            $db = Database::instance('database.default');
 
             // 创建测试表
             $createTableSql = "CREATE TABLE IF NOT EXISTS test_execute_empty (
@@ -239,7 +239,7 @@ class CommonExecuteMysqlIntegrationTest extends TestCase
     public function testExecuteSqlInjectionAttempt()
     {
         try {
-            $db = Database::instance('default');
+            $db = Database::instance('database.default');
 
             // 创建测试表
             $createTableSql = "CREATE TABLE IF NOT EXISTS test_execute_injection (
@@ -274,7 +274,7 @@ class CommonExecuteMysqlIntegrationTest extends TestCase
      */
     public function testExecuteSqlSyntaxError()
     {
-        $db = Database::instance('default');
+        $db = Database::instance('database.default');
 
         // 尝试执行语法错误的 SQL
         $this->expectException(\system\database\DatabaseException::class);
@@ -288,7 +288,7 @@ class CommonExecuteMysqlIntegrationTest extends TestCase
     public function testExecuteMultipleTimes()
     {
         try {
-            $db = Database::instance('default');
+            $db = Database::instance('database.default');
 
             // 创建测试表
             $createTableSql = "CREATE TABLE IF NOT EXISTS test_execute_multiple (

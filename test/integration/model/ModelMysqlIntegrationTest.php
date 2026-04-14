@@ -26,7 +26,7 @@ class ModelMysqlIntegrationTest extends TestCase
         $this->model = new class extends Model {
             public function __construct()
             {
-                parent::__construct('default');
+                parent::__construct('database.default');
                 $this->table = 'test_users';
                 $this->primary = 'id';
                 $this->fillable = [

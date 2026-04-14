@@ -14,7 +14,7 @@ class CommonDeleteMysqlIntegrationTest extends TestCase
     public function testDeleteBasic()
     {
         try {
-            $db = Database::instance('default');
+            $db = Database::instance('database.default');
 
             // 创建测试表
             $createTableSql = "CREATE TABLE IF NOT EXISTS test_delete_basic (
@@ -54,7 +54,7 @@ class CommonDeleteMysqlIntegrationTest extends TestCase
      */
     public function testDeleteEmptyTable()
     {
-        $db = Database::instance('default');
+        $db = Database::instance('database.default');
 
         // 尝试执行空表名的删除操作，应该抛出异常
         $this->expectException(\system\database\DatabaseException::class);
@@ -67,7 +67,7 @@ class CommonDeleteMysqlIntegrationTest extends TestCase
      */
     public function testDeleteEmptyWhere()
     {
-        $db = Database::instance('default');
+        $db = Database::instance('database.default');
 
         // 尝试执行空 WHERE 条件的删除操作，应该抛出异常
         $this->expectException(\system\database\DatabaseException::class);
@@ -80,7 +80,7 @@ class CommonDeleteMysqlIntegrationTest extends TestCase
      */
     public function testDeleteExecuteError()
     {
-        $db = Database::instance('default');
+        $db = Database::instance('database.default');
 
         // 尝试删除不存在的表，应该抛出异常
         $this->expectException(\system\database\DatabaseException::class);
@@ -94,7 +94,7 @@ class CommonDeleteMysqlIntegrationTest extends TestCase
     public function testDeleteWithSpecialCharacters()
     {
         try {
-            $db = Database::instance('default');
+            $db = Database::instance('database.default');
 
             // 创建测试表
             $createTableSql = "CREATE TABLE IF NOT EXISTS test_delete_special (
@@ -134,7 +134,7 @@ class CommonDeleteMysqlIntegrationTest extends TestCase
     public function testDeleteWithMultipleWhereConditions()
     {
         try {
-            $db = Database::instance('default');
+            $db = Database::instance('database.default');
 
             // 创建测试表
             $createTableSql = "CREATE TABLE IF NOT EXISTS test_delete_multiple_where (
@@ -178,7 +178,7 @@ class CommonDeleteMysqlIntegrationTest extends TestCase
     public function testDeleteNonExistentRecord()
     {
         try {
-            $db = Database::instance('default');
+            $db = Database::instance('database.default');
 
             // 创建测试表
             $createTableSql = "CREATE TABLE IF NOT EXISTS test_delete_non_existent (
@@ -218,7 +218,7 @@ class CommonDeleteMysqlIntegrationTest extends TestCase
     public function testDeleteSqlInjectionAttempt()
     {
         try {
-            $db = Database::instance('default');
+            $db = Database::instance('database.default');
 
             // 创建测试表
             $createTableSql = "CREATE TABLE IF NOT EXISTS test_delete_injection (
@@ -252,7 +252,7 @@ class CommonDeleteMysqlIntegrationTest extends TestCase
         } catch (DatabaseException $e) {
             // 清理表
             try {
-                Database::instance('default')->execute("DROP TABLE IF EXISTS test_delete_injection");
+                Database::instance('database.default')->execute("DROP TABLE IF EXISTS test_delete_injection");
             } catch (DatabaseException $ex) {
                 // 忽略清理错误
             }

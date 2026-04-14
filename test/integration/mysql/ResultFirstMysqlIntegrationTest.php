@@ -15,7 +15,7 @@ class ResultFirstMysqlIntegrationTest extends TestCase
     public function testFirstWithObjectType()
     {
         try {
-            $db = Database::instance('default');
+            $db = Database::instance('database.default');
 
             // 创建测试表
             $createTableSql = "CREATE TABLE IF NOT EXISTS test_result_first_object (
@@ -59,7 +59,7 @@ class ResultFirstMysqlIntegrationTest extends TestCase
     public function testFirstWithArrayType()
     {
         try {
-            $db = Database::instance('default');
+            $db = Database::instance('database.default');
 
             // 创建测试表
             $createTableSql = "CREATE TABLE IF NOT EXISTS test_result_first_array (
@@ -103,7 +103,7 @@ class ResultFirstMysqlIntegrationTest extends TestCase
     public function testFirstWithEmptyResult()
     {
         try {
-            $db = Database::instance('default');
+            $db = Database::instance('database.default');
 
             // 创建测试表
             $createTableSql = "CREATE TABLE IF NOT EXISTS test_result_first_empty (
@@ -141,7 +141,7 @@ class ResultFirstMysqlIntegrationTest extends TestCase
     public function testFirstMultipleCalls()
     {
         try {
-            $db = Database::instance('default');
+            $db = Database::instance('database.default');
 
             // 创建测试表
             $createTableSql = "CREATE TABLE IF NOT EXISTS test_result_first_multiple (
@@ -185,7 +185,7 @@ class ResultFirstMysqlIntegrationTest extends TestCase
     public function testFirstWithSpecialCharacters()
     {
         try {
-            $db = Database::instance('default');
+            $db = Database::instance('database.default');
 
             // 创建测试表
             $createTableSql = "CREATE TABLE IF NOT EXISTS test_result_first_special (

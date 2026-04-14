@@ -15,7 +15,7 @@ class DatabaseMysqlIntegrationTest extends TestCase
     {
         try {
             // 使用默认服务连接 MySQL 数据库
-            $db = Database::instance('default');
+            $db = Database::instance('database.default');
             $this->assertNotNull($db);
             
             // 验证返回的实例是 DatabaseAbstract 的子类
@@ -33,7 +33,7 @@ class DatabaseMysqlIntegrationTest extends TestCase
     {
         try {
             // 使用默认服务连接 MySQL 数据库
-            $db = Database::instance('default');
+            $db = Database::instance('database.default');
             
             // 创建测试表
             $createTableSql = "CREATE TABLE IF NOT EXISTS test_integration (
@@ -94,7 +94,7 @@ class DatabaseMysqlIntegrationTest extends TestCase
     {
         try {
             // 使用默认服务连接 MySQL 数据库
-            $db = Database::instance('default');
+            $db = Database::instance('database.default');
             
             // 创建测试表
             $createTableSql = "CREATE TABLE IF NOT EXISTS test_transaction (
@@ -156,11 +156,11 @@ class DatabaseMysqlIntegrationTest extends TestCase
     {
         try {
             // 获取第一个实例
-            $db1 = Database::instance('default');
+            $db1 = Database::instance('database.default');
             $this->assertNotNull($db1);
             
             // 获取第二个实例（应该是缓存的）
-            $db2 = Database::instance('default');
+            $db2 = Database::instance('database.default');
             $this->assertNotNull($db2);
             
             // 验证两个实例是同一个对象
@@ -185,9 +185,9 @@ class DatabaseMysqlIntegrationTest extends TestCase
 {
      // 测试不支持的驱动
     $this->expectException(DatabaseException::class);
-    $this->expectExceptionMessage(" 'unsupported' Driver Not Support.");
+    $this->expectExceptionMessage("'database.unsupported' Driver Not Support.");
     
     // 尝试获取使用不支持驱动的服务实例
-    Database::instance('unsupported');
+    Database::instance('database.unsupported');
 }
 }

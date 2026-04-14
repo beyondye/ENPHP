@@ -97,4 +97,4 @@ const MIDDLEWARE = [
     'after' => []
 ];
 
-const CONFIG_PATH = APP_DIR . 'config/' . ENVIRONMENT . '/autoload/';
+const AUTOLOAD_CONFIG_PATH = APP_DIR . 'config/' . ENVIRONMENT . '/autoload/';

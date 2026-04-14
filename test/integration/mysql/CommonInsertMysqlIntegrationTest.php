@@ -14,7 +14,7 @@ class CommonInsertMysqlIntegrationTest extends TestCase
     public function testInsertBasic()
     {
         try {
-            $db = Database::instance('default');
+            $db = Database::instance('database.default');
 
             // 创建测试表
             $createTableSql = "CREATE TABLE IF NOT EXISTS test_insert_basic (
@@ -50,7 +50,7 @@ class CommonInsertMysqlIntegrationTest extends TestCase
     public function testInsertMultiple()
     {
         try {
-            $db = Database::instance('default');
+            $db = Database::instance('database.default');
 
             // 创建测试表
             $createTableSql = "CREATE TABLE IF NOT EXISTS test_insert_multiple (
@@ -92,7 +92,7 @@ class CommonInsertMysqlIntegrationTest extends TestCase
      */
     public function testInsertEmptyTable()
     {
-        $db = Database::instance('default');
+        $db = Database::instance('database.default');
 
         // 尝试执行空表名的插入操作，应该抛出异常
         $this->expectException(\system\database\DatabaseException::class);
@@ -105,7 +105,7 @@ class CommonInsertMysqlIntegrationTest extends TestCase
      */
     public function testInsertEmptyData()
     {
-        $db = Database::instance('default');
+        $db = Database::instance('database.default');
 
         // 尝试执行空数据的插入操作，应该抛出异常
         $this->expectException(\system\database\DatabaseException::class);
@@ -119,7 +119,7 @@ class CommonInsertMysqlIntegrationTest extends TestCase
      */
     public function testInsertExecuteError()
     {
-        $db = Database::instance('default');
+        $db = Database::instance('database.default');
 
         // 尝试插入到不存在的表，应该抛出异常
         $this->expectException(\system\database\DatabaseException::class);
@@ -133,7 +133,7 @@ class CommonInsertMysqlIntegrationTest extends TestCase
     public function testInsertWithSpecialCharacters()
     {
         try {
-            $db = Database::instance('default');
+            $db = Database::instance('database.default');
 
             // 创建测试表
             $createTableSql = "CREATE TABLE IF NOT EXISTS test_insert_special (
@@ -169,7 +169,7 @@ class CommonInsertMysqlIntegrationTest extends TestCase
     public function testInsertWithEmptyString()
     {
         try {
-            $db = Database::instance('default');
+            $db = Database::instance('database.default');
 
             // 创建测试表
             $createTableSql = "CREATE TABLE IF NOT EXISTS test_insert_empty_string (
@@ -204,7 +204,7 @@ class CommonInsertMysqlIntegrationTest extends TestCase
     public function testInsertSqlInjectionAttempt()
     {
         try {
-            $db = Database::instance('default');
+            $db = Database::instance('database.default');
 
             // 创建测试表
             $createTableSql = "CREATE TABLE IF NOT EXISTS test_insert_injection (
@@ -237,7 +237,7 @@ class CommonInsertMysqlIntegrationTest extends TestCase
         } catch (DatabaseException $e) {
             // 清理表
             try {
-                Database::instance('default')->execute("DROP TABLE IF EXISTS test_insert_injection");
+                Database::instance('database.default')->execute("DROP TABLE IF EXISTS test_insert_injection");
             } catch (DatabaseException $ex) {
                 // 忽略清理错误
             }
@@ -251,7 +251,7 @@ class CommonInsertMysqlIntegrationTest extends TestCase
     public function testInsertMultipleTimes()
     {
         try {
-            $db = Database::instance('default');
+            $db = Database::instance('database.default');
 
             // 创建测试表
             $createTableSql = "CREATE TABLE IF NOT EXISTS test_insert_multiple_times (
@@ -289,7 +289,7 @@ class CommonInsertMysqlIntegrationTest extends TestCase
     public function testInsertIncompleteData()
     {
         try {
-            $db = Database::instance('default');
+            $db = Database::instance('database.default');
 
             // 创建测试表，包含多个字段
             $createTableSql = "CREATE TABLE IF NOT EXISTS test_insert_incomplete (
@@ -357,7 +357,7 @@ class CommonInsertMysqlIntegrationTest extends TestCase
      */
     public function testInsertMultipleWithIncompleteData()
     {
-              $db = Database::instance('default');
+              $db = Database::instance('database.default');
 
         // 尝试执行字段数量不匹配的批量插入操作，应该抛出异常
         $this->expectException(\system\database\DatabaseException::class);

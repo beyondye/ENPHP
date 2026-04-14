@@ -59,7 +59,7 @@ class ModelTest extends TestCase
         $this->model = new class extends Model {
             public function __construct()
             {
-                parent::__construct('default');
+                parent::__construct('database.default');
                 $this->table = 'test_table';
                 $this->primary = 'id';
                 $this->fillable = [
@@ -145,7 +145,7 @@ class ModelTest extends TestCase
         $model = new class extends Model {
             public function __construct()
             {
-                parent::__construct('default');
+                parent::__construct('database.default');
                 $this->table = 'test_table';
                 $this->primary = 'id';
             }
@@ -322,7 +322,7 @@ class ModelTest extends TestCase
         $modelWithEmptyBindWhere = new class extends Model {
             public function __construct()
             {
-                parent::__construct('default');
+                parent::__construct('database.default');
                 $this->table = 'test_table';
                 $this->primary = 'id';
                 $this->fillable = [
@@ -390,7 +390,7 @@ class ModelTest extends TestCase
         $modelWithoutFillable = new class extends Model {
             public function __construct()
             {
-                parent::__construct('default');
+                parent::__construct('database.default');
                 $this->table = 'test_table';
                 $this->primary = 'id';
                 $this->schema = [
@@ -414,7 +414,7 @@ class ModelTest extends TestCase
         $modelWithoutSchema = new class extends Model {
             public function __construct()
             {
-                parent::__construct('default');
+                parent::__construct('database.default');
                 $this->table = 'test_table';
                 $this->primary = 'id';
                 $this->fillable = [
@@ -454,7 +454,7 @@ class ModelTest extends TestCase
         $modelWithEmptyBindWhere = new class extends Model {
             public function __construct()
             {
-                parent::__construct('default');
+                parent::__construct('database.default');
                 $this->table = 'test_table';
                 $this->primary = 'id';
                 $this->fillable = [
@@ -511,7 +511,7 @@ class ModelTest extends TestCase
         $modelWithoutFillable = new class extends Model {
             public function __construct()
             {
-                parent::__construct('default');
+                parent::__construct('database.default');
                 $this->table = 'test_table';
                 $this->primary = 'id';
                 $this->schema = [
@@ -535,7 +535,7 @@ class ModelTest extends TestCase
         $modelWithoutSchema = new class extends Model {
             public function __construct()
             {
-                parent::__construct('default');
+                parent::__construct('database.default');
                 $this->table = 'test_table';
                 $this->primary = 'id';
                 $this->fillable = [

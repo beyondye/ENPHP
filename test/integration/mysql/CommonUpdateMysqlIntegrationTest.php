@@ -14,7 +14,7 @@ class CommonUpdateMysqlIntegrationTest extends TestCase
     public function testUpdateBasic()
     {
         try {
-            $db = Database::instance('default');
+            $db = Database::instance('database.default');
 
             // 创建测试表
             $createTableSql = "CREATE TABLE IF NOT EXISTS test_update_basic (
@@ -53,7 +53,7 @@ class CommonUpdateMysqlIntegrationTest extends TestCase
      */
     public function testUpdateEmptyTable()
     {
-        $db = Database::instance('default');
+        $db = Database::instance('database.default');
 
         // 尝试执行空表名的更新操作，应该抛出异常
         $this->expectException(\system\database\DatabaseException::class);
@@ -66,7 +66,7 @@ class CommonUpdateMysqlIntegrationTest extends TestCase
      */
     public function testUpdateEmptyData()
     {
-        $db = Database::instance('default');
+        $db = Database::instance('database.default');
 
         // 尝试执行空数据的更新操作，应该抛出异常
         $this->expectException(\system\database\DatabaseException::class);
@@ -79,7 +79,7 @@ class CommonUpdateMysqlIntegrationTest extends TestCase
      */
     public function testUpdateEmptyWhere()
     {
-        $db = Database::instance('default');
+        $db = Database::instance('database.default');
 
         // 尝试执行空 WHERE 条件的更新操作，应该抛出异常
         $this->expectException(\system\database\DatabaseException::class);
@@ -92,7 +92,7 @@ class CommonUpdateMysqlIntegrationTest extends TestCase
      */
     public function testUpdateExecuteError()
     {
-        $db = Database::instance('default');
+        $db = Database::instance('database.default');
 
         // 尝试更新不存在的表，应该抛出异常
         $this->expectException(\system\database\DatabaseException::class);
@@ -106,7 +106,7 @@ class CommonUpdateMysqlIntegrationTest extends TestCase
     public function testUpdateWithSpecialCharacters()
     {
         try {
-            $db = Database::instance('default');
+            $db = Database::instance('database.default');
 
             // 创建测试表
             $createTableSql = "CREATE TABLE IF NOT EXISTS test_update_special (
@@ -146,7 +146,7 @@ class CommonUpdateMysqlIntegrationTest extends TestCase
     public function testUpdateWithEmptyString()
     {
         try {
-            $db = Database::instance('default');
+            $db = Database::instance('database.default');
 
             // 创建测试表
             $createTableSql = "CREATE TABLE IF NOT EXISTS test_update_empty_string (
@@ -185,7 +185,7 @@ class CommonUpdateMysqlIntegrationTest extends TestCase
     public function testUpdateWithMultipleWhereConditions()
     {
         try {
-            $db = Database::instance('default');
+            $db = Database::instance('database.default');
 
             // 创建测试表
             $createTableSql = "CREATE TABLE IF NOT EXISTS test_update_multiple_where (
@@ -226,7 +226,7 @@ class CommonUpdateMysqlIntegrationTest extends TestCase
     public function testUpdateNonExistentRecord()
     {
         try {
-            $db = Database::instance('default');
+            $db = Database::instance('database.default');
 
             // 创建测试表
             $createTableSql = "CREATE TABLE IF NOT EXISTS test_update_non_existent (
@@ -263,7 +263,7 @@ class CommonUpdateMysqlIntegrationTest extends TestCase
     public function testUpdateSqlInjectionAttempt()
     {
         try {
-            $db = Database::instance('default');
+            $db = Database::instance('database.default');
 
             // 首先清理可能存在的表
             $db->execute("DROP TABLE IF EXISTS test_update_injection");
@@ -302,7 +302,7 @@ class CommonUpdateMysqlIntegrationTest extends TestCase
         } catch (DatabaseException $e) {
             // 清理表
             try {
-                Database::instance('default')->execute("DROP TABLE IF EXISTS test_update_injection");
+                Database::instance('database.default')->execute("DROP TABLE IF EXISTS test_update_injection");
             } catch (DatabaseException $ex) {
                 // 忽略清理错误
             }
