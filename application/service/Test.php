@@ -1,7 +1,7 @@
 <?php
 
-namespace service;
-use model\Test as TestModel;
+namespace app\service;
+use app\model\Test as TestModel;
 
 class Test
 {

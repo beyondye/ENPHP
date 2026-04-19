@@ -16,11 +16,11 @@ class ServiceFuncTest extends TestCase
        
             // 直接设置测试所需的配置数据，按照 service() 函数的实际实现结构
             Config::set('test', [
-                'entry' => 'service\Test',
+                'entry' => 'app\service\Test',
                 'params' => [
                     'test' => [
                         'type' => 'class',
-                        'value' => 'model\Test',
+                        'value' => 'app\model\Test',
                         'params' => [
                             'db' => ['value' => 'default']
                         ],
@@ -46,7 +46,7 @@ class ServiceFuncTest extends TestCase
         // 验证返回的是对象
         $this->assertIsObject($service);
         // 验证返回的是正确的类实例
-        $this->assertInstanceOf('service\Test', $service);
+        $this->assertInstanceOf('app\service\Test', $service);
     }
     
     /**
@@ -114,7 +114,7 @@ class ServiceFuncTest extends TestCase
         // 验证返回的是对象
         $this->assertIsObject($service);
         // 验证返回的是正确的类实例
-        $this->assertInstanceOf('service\Test', $service);
+        $this->assertInstanceOf('app\service\Test', $service);
     }
     
 }

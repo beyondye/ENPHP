@@ -3,4 +3,11 @@
         "phpunit/phpunit": "^13.0",
         "spatie/phpunit-watcher": "^1.24"
     }
+   ,
+    "autoload": {
+        "psr-4": {
+            "system\\": "application/system/",
+            "app\\": "application/"
+        }
+    }
 }

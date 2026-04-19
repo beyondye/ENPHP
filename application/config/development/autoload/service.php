@@ -2,11 +2,11 @@
 return [
 
     'test' => [
-        'entry' => \service\Test::class,
+        'entry' => \app\service\Test::class,
         'params' => [
             'test' => [
                 'type' => 'class',
-                'value' => \model\Test::class,
+                'value' => \app\model\Test::class,
                 'params' => [
                     'db' => ['value' => 'database.default']
                 ],

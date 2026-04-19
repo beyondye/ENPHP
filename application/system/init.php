@@ -1,41 +1,28 @@
 <?php
+require_once CONST_FILE;
+require_once SYS_DIR . 'func.php';
+require_once COMPOSER_AUTO_LOAD_FILE;
 
-include APP_DIR . 'config/' . ENVIRONMENT . '/' . CONST_FILE . '.php';
-include SYS_DIR . 'func.php';
-
-//autoload class
 spl_autoload_register(function ($class) {
-
-    if (defined('VENDOR')) {
-        foreach (VENDOR as $key => $val) {
-            if (str_starts_with($class, $key)) {
-                $suffix = substr($class, strlen($key));
-                foreach ($val as $map) {
-                    $file = str_replace('\\', DIRECTORY_SEPARATOR, $map . DIRECTORY_SEPARATOR . $suffix . EXT);
-                    if (file_exists($file)) {
-                        include $file;
-                        return;
-                    }
-                }
+    foreach (CLASS_MAP as $prefix => $dir) {
+        if (strpos($class, $prefix) === 0) {
+            $relativeClass = substr($class, strlen($prefix));
+            $file = $dir . '/' . str_replace('\\', '/', $relativeClass) . '.php';
+            if (file_exists($file)) {
+                require $file;
+                return true;
             }
         }
     }
-
-    $file = str_replace('\\', DIRECTORY_SEPARATOR, APP_DIR . $class . EXT);
-    if (file_exists($file)) {
-        include $file;
-        return;
-    }
-
-    include SYS_DIR . str_replace(['\\', 'system'], ['/', ''],  $class) . EXT;
+    return false;
 });
+
 
 profiler('benchmark', 'running', 'Action');
 
 \system\Config::init(AUTOLOAD_CONFIG_PATH);
 
-
-define('CONTROLLER',\system\Input::get(CONTROLLER_KEY_NAME, DEFAULT_CONTROLLER));
+define('CONTROLLER', \system\Input::get(CONTROLLER_KEY_NAME, DEFAULT_CONTROLLER));
 define('ACTION', \system\Input::get(ACTION_KEY_NAME, DEFAULT_ACTION));
 
 \system\Middleware::before();

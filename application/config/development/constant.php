@@ -90,9 +90,9 @@ const PROFILER_LOG_FILE = APP_DIR . 'log/profiler.log';
 //中间件设置
 const MIDDLEWARE = [
     'before' => [
-        'auth' => \middleware\Auth::class,
-        'authorize' => \middleware\Authorize::class,
-        'lang' => \middleware\Lang::class
+        'auth' => \app\middleware\Auth::class,
+        'authorize' => \app\middleware\Authorize::class,
+        'lang' => \app\middleware\Lang::class
     ],
     'after' => []
 ];

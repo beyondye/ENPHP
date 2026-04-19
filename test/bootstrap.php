@@ -1,5 +1,4 @@
 <?php
-
 //错误显示设置
 error_reporting(E_ALL);
 
@@ -13,59 +12,33 @@ const ENVIRONMENT = 'development';
 //开启运行分析
 const PROFILER = false;
 
-//设置controller模块
-const MODULE = 'www';
-
-//设置模板
-const TEMPLATE = 'www';
-
 //应用程序目录
-define('APP_DIR', './application/');
+define('APP_DIR', realpath('./application') . DIRECTORY_SEPARATOR);
 
 //系统文件目录
-define('SYS_DIR', APP_DIR . 'system/');
+define('SYS_DIR', realpath('./application/system') . DIRECTORY_SEPARATOR);
+
+//设置模块目录
+const MODULE_DIR = APP_DIR . 'module/www/';
+
+//设置模板目录
+const TEMPLATE_DIR = APP_DIR . 'template/www/';
 
 //入口地址
 define('ENTRY', $_SERVER['PHP_SELF']);
 
-//常量配置
-const CONST_FILE = 'constant';
+//配置目录
+const CONFIG_DIR = APP_DIR . 'config/' . ENVIRONMENT . '/';
 
+//常量配置文件
+const CONST_FILE = CONFIG_DIR . 'constant.php';
 
-//global variable
-$vars = [];
 
 //include constant file
-include APP_DIR . 'config/' . ENVIRONMENT . '/' . CONST_FILE . '.php';
+include CONST_FILE;
 include SYS_DIR . 'func.php';
 
-
-//autoload class
-spl_autoload_register(function ($class) {
-
-    if (defined('VENDOR')) {
-        foreach (VENDOR as $key => $val) {
-            if (str_starts_with($class, $key)) {
-                $suffix = substr($class, strlen($key));
-                foreach ($val as $map) {
-                    $file = str_replace('\\', DIRECTORY_SEPARATOR, $map . DIRECTORY_SEPARATOR . $suffix . EXT);
-                    if (file_exists($file)) {
-                        include $file;
-                        return;
-                    }
-                }
-            }
-        }
-    }
-
-    $file = str_replace('\\', DIRECTORY_SEPARATOR, APP_DIR . $class . EXT);
-    if (file_exists($file)) {
-        include $file;
-        return;
-    }
-
-    include SYS_DIR . str_replace(['\\', 'system'], ['/', ''],  $class) . EXT;
-});
+require_once './vendor/autoload.php';
 
 \system\Config::init(AUTOLOAD_CONFIG_PATH);
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace module\www;
+namespace app\module\www;
 
 use system\Output;
 

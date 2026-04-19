@@ -11,3 +11,4 @@ Thumbs.db
 .phpunit-watcher-result.cache
 /test/coverage
 /test/.phpunit.cache
+composer.lock
