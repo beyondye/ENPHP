@@ -1,7 +1,6 @@
 <?php
 require_once CONST_FILE;
 require_once SYS_DIR . 'func.php';
-require_once COMPOSER_AUTO_LOAD_FILE;
 
 spl_autoload_register(function ($class) {
     foreach (CLASS_MAP as $prefix => $dir) {
