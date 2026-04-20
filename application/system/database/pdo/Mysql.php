@@ -37,6 +37,7 @@ class Mysql extends DatabaseAbstract
             \PDO::ATTR_DEFAULT_FETCH_MODE => \PDO::FETCH_CLASS,
             \PDO::ATTR_EMULATE_PREPARES => false,
             \PDO::ATTR_PERSISTENT => $config['persistent'] ?? false,
+            \PDO::MYSQL_ATTR_FOUND_ROWS => true,
         ];
 
         try {
