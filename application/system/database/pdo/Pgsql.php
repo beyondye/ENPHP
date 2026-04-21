@@ -7,7 +7,7 @@ namespace system\database\pdo;
 use system\database\DatabaseAbstract;
 use system\database\DatabaseException;
 
-class Mysql extends DatabaseAbstract
+class Pgsql extends DatabaseAbstract
 {
     use Common;
 
@@ -17,27 +17,25 @@ class Mysql extends DatabaseAbstract
     {
         $config = array_merge([
             'host' => 'localhost',
-            'port' => 3306,
-            'charset' => 'utf8mb4',
-            'collation' => 'utf8mb4_unicode_ci',
+            'port' => 5432,
             'persistent' => false,
             'username' => '',
             'password' => '',
             'database' => '',
-            'driver' => 'pdo_mysql'
+            'sslmode' => 'disable',
+            'driver' => 'pdo_pgsql'
         ], $config);
 
         if (empty($config['database']) || empty($config['username']) || empty($config['password'])) {
             throw new DatabaseException('Database Name Or Username Or Password Is Required.');
         }
 
-        $dsn = "mysql:host={$config['host']};dbname={$config['database']};port={$config['port']};charset={$config['charset']};collation={$config['collation']}";
+        $dsn = "pgsql:host={$config['host']};dbname={$config['database']};port={$config['port']};sslmode={$config['sslmode']}";
         $options = [
             \PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION,
             \PDO::ATTR_DEFAULT_FETCH_MODE => \PDO::FETCH_CLASS,
             \PDO::ATTR_EMULATE_PREPARES => false,
-            \PDO::ATTR_PERSISTENT => $config['persistent'] ?? false,
-            \PDO::MYSQL_ATTR_FOUND_ROWS => true,
+            \PDO::ATTR_PERSISTENT => $config['persistent'] ?? false
         ];
 
         try {
@@ -48,5 +46,6 @@ class Mysql extends DatabaseAbstract
             throw new DatabaseException('Database Connection Error :' . $e->getMessage());
         }
     }
+
 
 }

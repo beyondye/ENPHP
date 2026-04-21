@@ -1,5 +1,15 @@
 <?php
 return [
+    'pgsql' => [
+        'driver' => 'pdo_pgsql',
+        'host' => 'localhost',
+        'port' => 5432,
+        'database' => 'test_db',
+        'username' => 'postgres',
+        'password' => 'a12345678',
+        'sslmode' => 'disable',
+        'persistent' => false
+    ],
     'default' => [
         'driver' => 'pdo_mysql',
         'host' => 'localhost',

@@ -63,9 +63,9 @@ class CommonInsertMysqlIntegrationTest extends TestCase
             // 执行批量插入操作
             $id = $db->insert(
                 'test_insert_multiple',
-                ['name' => 'Test 1', 'value' => 100],
+                [['name' => 'Test 1', 'value' => 100],
                 ['name' => 'Test 2', 'value' => 200],
-                ['name' => 'Test 3', 'value' => 300]
+                ['name' => 'Test 3', 'value' => 300]]
             );
 
             // 验证返回的 ID（最后插入的记录的 ID）
@@ -357,14 +357,27 @@ class CommonInsertMysqlIntegrationTest extends TestCase
      */
     public function testInsertMultipleWithIncompleteData()
     {
-              $db = Database::instance('database.default');
+        $db = Database::instance('database.default');
 
-        // 尝试执行字段数量不匹配的批量插入操作，应该抛出异常
-        $this->expectException(\system\database\DatabaseException::class);
-        $this->expectExceptionMessage('Insert Data Row 1 Field Count Does Not Match.');
-        $db->insert('test_insert_mismatched', 
-            ['name' => 'Test 1', 'email' => 'test1@example.com'], // 2 个字段
-            ['name' => 'Test 2'] // 1 个字段 - 字段数量不匹配
-        );
+        // 创建测试表
+        $createTableSql = "CREATE TABLE IF NOT EXISTS test_insert_mismatched (
+            id INT PRIMARY KEY AUTO_INCREMENT,
+            name VARCHAR(255) NOT NULL,
+            email VARCHAR(255)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4";
+        $db->execute($createTableSql);
+
+        try {
+            // 尝试执行字段数量不匹配的批量插入操作，应该抛出异常
+            $this->expectException(\system\database\DatabaseException::class);
+            $this->expectExceptionMessage('Insert Data Row 1 Field Count Does Not Match.');
+            $db->insert('test_insert_mismatched', [
+                ['name' => 'Test 1', 'email' => 'test1@example.com'], // 2 个字段
+                ['name' => 'Test 2'] // 1 个字段 - 字段数量不匹配
+            ]);
+        } finally {
+            // 清理
+            $db->execute("DROP TABLE IF EXISTS test_insert_mismatched");
+        }
     }
 }

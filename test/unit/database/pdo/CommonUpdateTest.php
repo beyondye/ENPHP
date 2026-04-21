@@ -48,7 +48,7 @@ class CommonUpdateTest extends TestCase
 
         // 尝试执行空表名的更新操作，应该抛出异常
         $this->expectException(DatabaseException::class);
-        $this->expectExceptionMessage('Update Table Is Empty.');
+        $this->expectExceptionMessage('Update Table Name Is Empty.');
         $sqlite->update('', ['name' => 'Updated Test'], ['id', '=', 1]);
     }
 
@@ -61,7 +61,7 @@ class CommonUpdateTest extends TestCase
 
         // 尝试执行只包含空白字符的表名的更新操作，应该抛出异常
         $this->expectException(DatabaseException::class);
-        $this->expectExceptionMessage('Update Table Is Empty.');
+        $this->expectExceptionMessage('Update Table Name Is Empty.');
         $sqlite->update('   ', ['name' => 'Updated Test'], ['id', '=', 1]);
     }
 

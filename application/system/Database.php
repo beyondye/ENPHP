@@ -39,6 +39,9 @@ class Database
             case 'pdo_sqlite':
                 $ins[$service] = new database\pdo\Sqlite($config);
                 break;
+            case 'pdo_pgsql':
+                $ins[$service] = new database\pdo\Pgsql($config);
+                break;
             default:
                 throw new DatabaseException("'{$service}' Driver Not Support.");
         }

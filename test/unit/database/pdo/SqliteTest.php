@@ -168,9 +168,9 @@ class SqliteTest extends TestCase
         // 插入多条数据
         $id = $sqlite->insert(
             'test_table',
-            ['name' => 'Test 1', 'value' => 100],
+            [['name' => 'Test 1', 'value' => 100],
             ['name' => 'Test 2', 'value' => 200],
-            ['name' => 'Test 3', 'value' => 300]
+            ['name' => 'Test 3', 'value' => 300]]
         );
 
         // 验证插入成功

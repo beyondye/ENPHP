@@ -96,7 +96,7 @@ class MysqlTest extends TestCase
         
         // 测试 upsert 方法，传入空表名
         $this->expectException(DatabaseException::class);
-        $this->expectExceptionMessage('Upsert Table Name Is Required.');
+        $this->expectExceptionMessage('Upsert Table Name Is Empty.');
         $mysql->upsert('', ['name' => 'Test', 'value' => 100]);
     }
 
@@ -111,7 +111,7 @@ class MysqlTest extends TestCase
         
         // 测试 upsert 方法，传入只包含空白字符的表名
         $this->expectException(DatabaseException::class);
-        $this->expectExceptionMessage('Upsert Table Name Is Required.');
+        $this->expectExceptionMessage('Upsert Table Name Is Empty.');
         $mysql->upsert('   ', ['name' => 'Test', 'value' => 100]);
     }
 

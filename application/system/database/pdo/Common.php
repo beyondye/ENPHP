@@ -12,6 +12,7 @@ use system\database\ResultAbstract;
 trait Common
 {
     protected int $effected = 0;
+    protected string|int|array $_lastid = '';
 
     public function transaction(): bool
     {
@@ -22,7 +23,7 @@ trait Common
     }
 
     public function commit(): bool
-    {  
+    {
         if (!$this->db->inTransaction()) {
             throw new DatabaseException('No active transaction to commit.');
         }
@@ -31,11 +32,10 @@ trait Common
 
     public function rollback(): bool
     {
-       if (!$this->db->inTransaction()) {
-           throw new DatabaseException('No active transaction to roll back.');
-       }
-       return $this->db->rollBack();    
-     
+        if (!$this->db->inTransaction()) {
+            throw new DatabaseException('No active transaction to roll back.');
+        }
+        return $this->db->rollBack();
     }
 
     public function close(): bool
@@ -44,14 +44,18 @@ trait Common
         return true;
     }
 
-    public function insert(string $table, array ...$data): string|int
+    public function insert(string $table, array $data, $return = 'id'): string|int
     {
         if (trim($table) == '') {
             throw new DatabaseException('Insert Table Name Is Empty.');
         }
 
-        if (empty($data) || empty($data[0]) || !is_array($data[0])) {
+        if (empty($data)) {
             throw new DatabaseException('Insert Data Is Empty.');
+        }
+
+        if (!isset($data[0]) || (isset($data[0]) && !is_array($data[0]))) {
+            $data = [$data];
         }
 
         foreach ($data as $index => $row) {
@@ -90,19 +94,29 @@ trait Common
         $fieldList = implode(',', $fields);
         $sql = "INSERT INTO {$table} ({$fieldList}) VALUES {$placeholderList}";
 
+        if ($this->db->getAttribute(\PDO::ATTR_DRIVER_NAME) == 'pgsql') {
+            $sql .= " RETURNING {$return}";
+        }
+
         try {
             $stmt = $this->db->prepare($sql);
             foreach ($bindValues as $key => $value) {
                 $stmt->bindValue(':' . $key, $value);
             }
             $stmt->execute();
+
+            if ($this->db->getAttribute(\PDO::ATTR_DRIVER_NAME) == 'pgsql') {
+                $this->_lastid = $stmt->fetchColumn();
+                $stmt->closeCursor();
+            } else {
+                $this->_lastid = $this->db->lastInsertId();
+            }
+
+            $this->effected = $stmt->rowCount();
+            return $this->_lastid;
         } catch (\PDOException $e) {
             throw new DatabaseException('Insert Execute Error :' . $e->getMessage());
         }
-
-        $this->effected = $stmt->rowCount();
-
-        return $this->lastid();
     }
 
 
@@ -121,7 +135,7 @@ trait Common
     public function update(string $table, array $data, array|int|string|float ...$wheres): int
     {
         if (trim($table) == '') {
-            throw new DatabaseException('Update Table Is Empty.');
+            throw new DatabaseException('Update Table Name Is Empty.');
         }
 
         if (empty($data)) {
@@ -182,7 +196,7 @@ trait Common
     public function delete(string $table, array|int|string|float ...$wheres): int
     {
         if (trim($table) == '') {
-            throw new DatabaseException('Delete Table Is Empty.');
+            throw new DatabaseException('Delete Table Name Is Empty.');
         }
 
         $wheres = Util::where(...$wheres);
@@ -205,10 +219,6 @@ trait Common
         return $this->effected;
     }
 
-    public function lastid(): string|int
-    {
-        return $this->db->lastInsertId();
-    }
 
     /**
      * 执行自定义 SQL 语句
@@ -268,7 +278,7 @@ trait Common
     public function select(string $table, array $field = [], array $where = [], array $groupby = [], array $having = [], array $orderby = [], array|int $limit = []): ResultAbstract
     {
         if (trim($table) == '') {
-            throw new DatabaseException('Select Table Name Is Empty');
+            throw new DatabaseException('Select Table Name Is Empty.');
         }
 
         $fields = Build::fields(...$field);
@@ -292,8 +302,68 @@ trait Common
         return new Result($stmt);
     }
 
+    public function upsert(string $table, array $data, string $conflict = 'id'): string|int
+    {
+        if (trim($table) == '') {
+            throw new DatabaseException('Upsert Table Name Is Empty.');
+        }
+
+        if (empty($data)) {
+            throw new DatabaseException('Upsert Data Is Empty.');
+        }
+
+        $fields = array_keys($data);
+        $fieldList = implode(', ', $fields);
+        $placeholders = ':' . implode(', :', $fields);
+
+        $driver = $this->db->getAttribute(\PDO::ATTR_DRIVER_NAME);
+
+        if ($driver === 'mysql') {
+            // MySQL 使用 ON DUPLICATE KEY UPDATE
+            $updates = array_map(fn($f) => "$f = VALUES($f)", $fields);
+            $sql = "INSERT INTO $table ($fieldList) VALUES ($placeholders) ON DUPLICATE KEY UPDATE " . implode(', ', $updates);
+        } else {
+            // PostgreSQL 和 SQLite 都需要必须指定冲突列，使用 EXCLUDED 引用新值
+            $updates = array_map(fn($f) => "$f = EXCLUDED.$f", $fields);
+            $sql = "INSERT INTO $table ($fieldList) VALUES ($placeholders) ON CONFLICT ($conflict) DO UPDATE SET " . implode(', ', $updates);
+
+            if ($driver === 'pgsql') {
+                $sql .= " RETURNING $conflict";
+            }
+        }
+
+        try {
+
+            $stmt = $this->db->prepare($sql);
+            foreach ($data as $key => $value) {
+                $stmt->bindValue(':' . $key, $value);
+            }
+            $stmt->execute();
+
+            if ($driver === 'pgsql') {
+                // PostgreSQL 通过 fetch 直接拿到返回的 ID
+                $id = $stmt->fetchColumn();
+                $stmt->closeCursor();
+                $this->_lastid = $id ?: 0;
+            } else {
+                $this->_lastid = $this->db->lastInsertId();
+            }
+
+            $this->effected = $stmt->rowCount();
+            return $this->_lastid;
+        } catch (\PDOException $e) {
+            throw new DatabaseException('Upsert Execute Error :' . $e->getMessage());
+        }
+    }
+
+
     public function effected(): int
     {
         return $this->effected;
+    }
+
+    public function lastid(): string|int|array
+    {
+        return $this->_lastid;
     }
 }

@@ -52,7 +52,7 @@ class CommonSelectTest extends TestCase
 
         // 尝试执行空表名的查询，应该抛出异常
         $this->expectException(DatabaseException::class);
-        $this->expectExceptionMessage('Select Table Name Is Empty');
+        $this->expectExceptionMessage('Select Table Name Is Empty.');
         $sqlite->select('');
     }
 

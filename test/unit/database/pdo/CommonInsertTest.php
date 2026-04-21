@@ -55,9 +55,9 @@ class CommonInsertTest extends TestCase
         // 执行批量插入操作
         $id = $sqlite->insert(
             'test_table',
-            ['name' => 'Test 1', 'value' => 100],
+            [['name' => 'Test 1', 'value' => 100],
             ['name' => 'Test 2', 'value' => 200],
-            ['name' => 'Test 3', 'value' => 300]
+            ['name' => 'Test 3', 'value' => 300]]
         );
 
         // 验证返回的 ID
@@ -108,7 +108,7 @@ class CommonInsertTest extends TestCase
         // 尝试执行空数据的插入操作，应该抛出异常
         $this->expectException(DatabaseException::class);
         $this->expectExceptionMessage('Insert Data Is Empty.');
-        $sqlite->insert('test_table');
+        $sqlite->insert('test_table', []);
     }
 
     /**
@@ -134,7 +134,7 @@ class CommonInsertTest extends TestCase
         // 尝试执行无效数据行的插入操作，应该抛出异常
         $this->expectException(DatabaseException::class);
         $this->expectExceptionMessage('Insert Data Row 1 Is Invalid.');
-        $sqlite->insert('test_table', ['name' => 'Test 1', 'value' => 100], []);
+        $sqlite->insert('test_table', [['name' => 'Test 1', 'value' => 100], []]);
     }
 
     /**
@@ -147,7 +147,7 @@ class CommonInsertTest extends TestCase
         // 尝试执行字段数量不匹配的数据行的插入操作，应该抛出异常
         $this->expectException(DatabaseException::class);
         $this->expectExceptionMessage('Insert Data Row 1 Field Count Does Not Match.');
-        $sqlite->insert('test_table', ['name' => 'Test 1', 'value' => 100], ['name' => 'Test 2']);
+        $sqlite->insert('test_table', [['name' => 'Test 1', 'value' => 100], ['name' => 'Test 2']]);
     }
 
     /**
@@ -258,8 +258,8 @@ class CommonInsertTest extends TestCase
         // 执行批量插入操作
         $sqlite->insert(
             'test_table',
-            ['name' => 'Test 2', 'value' => 200],
-            ['name' => 'Test 3', 'value' => 300]
+            [['name' => 'Test 2', 'value' => 200],
+            ['name' => 'Test 3', 'value' => 300]]   
         );
         $this->assertEquals(2, $sqlite->effected());
     }
@@ -377,9 +377,9 @@ class CommonInsertTest extends TestCase
         // 执行批量插入操作
         $id = $sqlite->insert(
             'test_table',
-            ['name' => 'Test 1', 'value' => 100, 'category' => 'A'],
+            [['name' => 'Test 1', 'value' => 100, 'category' => 'A'],
             ['name' => 'Test 2', 'value' => 200, 'category' => 'B'],
-            ['name' => 'Test 3', 'value' => 300, 'category' => 'A']
+            ['name' => 'Test 3', 'value' => 300, 'category' => 'A']]    
         );
 
         // 验证返回的 ID

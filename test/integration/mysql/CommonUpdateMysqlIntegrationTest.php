@@ -57,7 +57,7 @@ class CommonUpdateMysqlIntegrationTest extends TestCase
 
         // 尝试执行空表名的更新操作，应该抛出异常
         $this->expectException(\system\database\DatabaseException::class);
-        $this->expectExceptionMessage('Update Table Is Empty.');
+        $this->expectExceptionMessage('Update Table Name Is Empty.');
         $db->update('', ['name' => 'Updated Test'], ['id', '=', 1]);
     }
 

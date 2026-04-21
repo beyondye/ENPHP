@@ -43,28 +43,5 @@ class Sqlite extends DatabaseAbstract
         }
     }
 
-    public function upsert(string $table, array $data): string|int
-    {
-        if (empty($data)) {
-            throw new DatabaseException('Upsert Data Is Empty.');
-        }
-
-        $fields = array_keys($data);
-        $placeholders = ':' . implode(', :', $fields);
-        $sql = "INSERT OR REPLACE INTO {$table} (" . implode(',', $fields) . ") VALUES ({$placeholders})";
-
-        try {
-            $stmt = $this->db->prepare($sql);
-            foreach ($data as $key => $value) {
-                $stmt->bindValue(':' . $key, $value);
-            }
-            $stmt->execute();
-        } catch (\PDOException $e) {
-            throw new DatabaseException('Upsert Execute Error :' . $e->getMessage());
-        }
-
-        $this->effected = $stmt->rowCount();
-
-        return $this->lastid();
-    }
+   
 }
