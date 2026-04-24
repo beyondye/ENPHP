@@ -141,6 +141,11 @@ class Safe
         return true;
     }
 
+    public static function boolean(bool $value): bool
+    {
+        return $value === true || $value === false;
+    }
+
     public static function validate(string $key, mixed $value, array $fields): bool
     {
         // 检查字段名是否在允许的字段列表中
@@ -164,12 +169,14 @@ class Safe
             throw new ModelException('Invalid Validation Value for Field ' . $key . ', Must Be String or Array Containing Type and Rules.');
         }
 
-        if (!in_array(strtolower($type), ['integer', 'varchar', 'datetime', 'enum', 'decimal', 'text'])) {
-            throw new ModelException('Invalid Validation Type for Field ' . $key . ', Must Be One of [integer,varchar,datetime,enum,decimal,text].');
+        if (!in_array(strtolower($type), ['boolean', 'integer', 'varchar', 'datetime', 'enum', 'decimal', 'text'])) {
+            throw new ModelException('Invalid Validation Type for Field ' . $key . ', Must Be One of [boolean,integer,varchar,datetime,enum,decimal,text].');
         }
 
         // 根据类型进行验证
         switch (strtolower($type)) {
+            case 'boolean':
+                return self::boolean($value);
             case 'integer':
                 $min = $rules['min'] ?? PHP_INT_MIN;
                 $max = $rules['max'] ?? PHP_INT_MAX;
@@ -199,6 +206,7 @@ class Safe
                 $scale = $rules['scale'] ?? 2;
                 return is_numeric($value) && self::decimal($value, $precision, $scale);
             default:
+
                 return false;
         }
     }

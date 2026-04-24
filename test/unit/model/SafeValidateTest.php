@@ -38,7 +38,7 @@ class SafeValidateTest extends TestCase
     public function testValidateWithInvalidValidationType()
     {
         $this->expectException(ModelException::class);
-        $this->expectExceptionMessage('Invalid Validation Type for Field id, Must Be One of [integer,varchar,datetime,enum,decimal,text].');
+        $this->expectExceptionMessage('Invalid Validation Type for Field id, Must Be One of [boolean,integer,varchar,datetime,enum,decimal,text].');
 
         $fields = ['id' => 'invalid_type'];
         Safe::validate('id', 1, $fields);

@@ -31,7 +31,7 @@ class Build
                 throw new DatabaseException('buildWhere Operator Must Be String. ' . $field);
             }
 
-            if (!is_scalar($value[2]) && !is_array($value[2])) {
+            if (!is_scalar($value[2]) && !is_array($value[2]) && !is_null($value[2])) {
                 throw new DatabaseException('buildWhere Value Condition Format Is Wrong. ' . $field);
             }
 
@@ -78,6 +78,17 @@ class Build
                 throw new DatabaseException('buildWhere Between Operator Value Must Be Numeric. ' . $field);
             }
 
+            // 处理 null 值比较
+            if (is_null($value[2])) {
+                if ($operator == '=') {
+                    $conditions[] = "{$field} IS NULL{$logic}";
+                    continue;
+                } elseif ($operator == '!=' || $operator == '<>') {
+                    $conditions[] = "{$field} IS NOT NULL{$logic}";
+                    continue;
+                }
+            }
+
             $conditions[] = "{$field} {$operator} :{$prefix}_{$key}{$logic}";
         }
 
@@ -95,13 +106,19 @@ class Build
 
             if (in_array(strtolower($value[1]), ['in', 'between']) && is_array($value[2])) {
                 foreach ($value[2] as $subkey => $subvalue) {
-                    $stmt->bindValue(":{$prefix}_{$key}_{$subkey}", $subvalue, is_int($subvalue) ? \PDO::PARAM_INT : \PDO::PARAM_STR);
+                    self::buildValueType($stmt,"{$prefix}_{$key}_{$subkey}",$subvalue);
+                    //$stmt->bindValue(":{$prefix}_{$key}_{$subkey}", $subvalue, is_int($subvalue) ? \PDO::PARAM_INT : \PDO::PARAM_STR);
                     $values["{$prefix}_{$key}_{$subkey}"] = $subvalue;
                 }
                 continue;
             }
 
-            $stmt->bindValue(":{$prefix}_{$key}", $value[2], is_int($value[2]) ? \PDO::PARAM_INT : \PDO::PARAM_STR);
+            if (is_null($value[2])) {
+                continue;
+            }
+
+            self::buildValueType($stmt,"{$prefix}_{$key}",$value[2]);
+            //$stmt->bindValue(":{$prefix}_{$key}", $value[2], is_int($value[2]) ? \PDO::PARAM_INT : \PDO::PARAM_STR);
             $values["{$prefix}_{$key}"] = $value[2];
         }
 
@@ -194,5 +211,25 @@ class Build
         }
 
         throw new DatabaseException('buildLimit Limit Must Be Integer Or Array Be Integer,Not More Than 2');
+    }
+
+    public static function buildValueType(\PDOStatement $stmt, string $key, mixed $value): void
+    {
+        // 处理布尔值
+        if (is_bool($value)) {
+            $stmt->bindValue(':' . $key, $value, \PDO::PARAM_BOOL);
+        }
+        // 处理 null 值
+        elseif (is_null($value)) {
+            $stmt->bindValue(':' . $key, $value, \PDO::PARAM_NULL);
+        }
+        // 处理整数
+        elseif (is_int($value)) {
+            $stmt->bindValue(':' . $key, $value, \PDO::PARAM_INT);
+        }
+        // 处理字符串
+        else {
+            $stmt->bindValue(':' . $key, $value, \PDO::PARAM_STR);
+        }
     }
 }

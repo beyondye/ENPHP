@@ -5,7 +5,7 @@ return [
         'host' => 'localhost',
         'port' => 5432,
         'database' => 'test_db',
-        'username' => 'postgres',
+        'username' => 'root',
         'password' => 'a12345678',
         'sslmode' => 'disable',
         'persistent' => false

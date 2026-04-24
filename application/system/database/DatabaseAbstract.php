@@ -18,7 +18,7 @@ abstract class DatabaseAbstract
 
     abstract public function delete(string $table, array|int|string|float ...$wheres): int;
 
-    abstract public function lastid(): int|string|array;
+    abstract public function lastid(): int|string;
 
     abstract public function effected(): int;
 

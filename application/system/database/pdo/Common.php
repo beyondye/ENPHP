@@ -94,18 +94,20 @@ trait Common
         $fieldList = implode(',', $fields);
         $sql = "INSERT INTO {$table} ({$fieldList}) VALUES {$placeholderList}";
 
-        if ($this->db->getAttribute(\PDO::ATTR_DRIVER_NAME) == 'pgsql') {
+        $driver = $this->db->getAttribute(\PDO::ATTR_DRIVER_NAME);
+
+        if ($driver == 'pgsql') {
             $sql .= " RETURNING {$return}";
         }
 
         try {
             $stmt = $this->db->prepare($sql);
             foreach ($bindValues as $key => $value) {
-                $stmt->bindValue(':' . $key, $value);
+                Build::buildValueType($stmt, $key, $value);
             }
             $stmt->execute();
 
-            if ($this->db->getAttribute(\PDO::ATTR_DRIVER_NAME) == 'pgsql') {
+            if ($driver == 'pgsql') {
                 $this->_lastid = $stmt->fetchColumn();
                 $stmt->closeCursor();
             } else {
@@ -162,7 +164,7 @@ trait Common
 
             // 绑定数据参数
             foreach ($data as $key => $value) {
-                $stmt->bindValue(':' . $key, $value);
+                Build::buildValueType($stmt, $key, $value);
             }
 
             // 绑定 WHERE 条件参数
@@ -239,7 +241,7 @@ trait Common
         try {
             $stmt = $this->db->prepare($sql);
             foreach ($params as $key => $value) {
-                $stmt->bindValue(':' . $key, $value);
+                Build::buildValueType($stmt, $key, $value);
             }
             $stmt->execute();
         } catch (\PDOException $e) {
@@ -336,7 +338,7 @@ trait Common
 
             $stmt = $this->db->prepare($sql);
             foreach ($data as $key => $value) {
-                $stmt->bindValue(':' . $key, $value);
+                Build::buildValueType($stmt, $key, $value);
             }
             $stmt->execute();
 
@@ -362,7 +364,7 @@ trait Common
         return $this->effected;
     }
 
-    public function lastid(): string|int|array
+    public function lastid(): string|int
     {
         return $this->_lastid;
     }

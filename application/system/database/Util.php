@@ -8,7 +8,7 @@ class Util
 {
     /**
      * 构建查询条件数组
-     * @param float|int|string|array ...$wheres 查询条件
+     * @param mixed ...$wheres 查询条件
      * @return array 查询条件数组
      * @example
      * 示例：
@@ -31,7 +31,7 @@ class Util
      * where(['id','>',1,'and'],['name','like','%张三%']);// [['id','>',1,'and'],['name','like','%张三%']]
      * 
      */
-    public static function where(float|int|string|array ...$wheres): array
+    public static function where(mixed ...$wheres): array
     {
         if (empty($wheres)) {
             return [];

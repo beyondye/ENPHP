@@ -320,6 +320,46 @@ class BuildTest extends TestCase
     }
 
     /**
+     * 测试 wherePlaceholder 方法 - null 值处理
+     */
+    public function testWherePlaceholderNullValues()
+    {
+        // 测试 IS NULL
+        $wheres1 = [
+            ['email', '=', null]
+        ];
+        $result1 = Build::wherePlaceholder($wheres1);
+        $expected1 = 'email IS NULL';
+        $this->assertEquals($expected1, $result1);
+
+        // 测试 IS NOT NULL
+        $wheres2 = [
+            ['email', '!=', null]
+        ];
+        $result2 = Build::wherePlaceholder($wheres2);
+        $expected2 = 'email IS NOT NULL';
+        $this->assertEquals($expected2, $result2);
+
+        // 测试 IS NOT NULL (使用 <> 操作符)
+        $wheres3 = [
+            ['email', '<>', null]
+        ];
+        $result3 = Build::wherePlaceholder($wheres3);
+        $expected3 = 'email IS NOT NULL';
+        $this->assertEquals($expected3, $result3);
+
+        // 测试混合条件（包含 null 和非 null）
+        $wheres4 = [
+            ['id', '=', 1, 'and'],
+            ['email', '=', null, 'or'],
+            ['name', '!=', null]
+        ];
+        $result4 = Build::wherePlaceholder($wheres4);
+        $expected4 = 'id = :where_0 AND email IS NULL OR name IS NOT NULL';
+        $this->assertEquals($expected4, $result4);
+    }
+
+    /**
      * 测试 wherePlaceholderValues 方法 - 基本功能
      */
     public function testWherePlaceholderValuesBasic()
@@ -400,6 +440,31 @@ class BuildTest extends TestCase
         $expected = [
             'where_0_0' => 18,
             'where_0_1' => 30
+        ];
+        $this->assertEquals($expected, $result);
+    }
+
+    /**
+     * 测试 wherePlaceholderValues 方法 - null 值处理
+     */
+    public function testWherePlaceholderValuesNullValues()
+    {
+        // 创建一个模拟的 PDOStatement 对象
+        $mockStmt = $this->createMock(PDOStatement::class);
+        // 只期望绑定非 null 值
+        $mockStmt->expects($this->exactly(1))
+                 ->method('bindValue')
+                 ->willReturn(true);
+        
+        $wheres = [
+            ['id', '=', 1], // 非 null 值，应该绑定
+            ['email', '=', null], // null 值，不应该绑定
+            ['name', '!=', null] // null 值，不应该绑定
+        ];
+        
+        $result = Build::wherePlaceholderValues($mockStmt, $wheres);
+        $expected = [
+            'where_0' => 1, // 非 null 值，应该绑定
         ];
         $this->assertEquals($expected, $result);
     }

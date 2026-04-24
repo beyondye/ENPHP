@@ -82,7 +82,7 @@ class Model
         return $this;
     }
 
-    public function where(float|int|string|array ...$wheres): object
+    public function where(float|int|string|array|bool ...$wheres): object
     {
         $this->conditions['wheres'][] = $wheres;
         return $this;
@@ -204,9 +204,9 @@ class Model
         return $this->db->update($this->table, $data, ...$wheres);
     }
 
-    public function insert(array ...$data): int|string|array
+    public function insert(array ...$data): int|string
     {
-        if (empty($data[0]) || !is_array($data[0])) {
+        if (!isset($data[0]) || empty($data[0]) || !is_array($data[0])) {
             throw new ModelException('Insert Data Cannot Be Empty Or Not Array.');
         }
 
