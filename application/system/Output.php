@@ -1,11 +1,11 @@
 <?php
 
-namespace system;
+declare(strict_types=1);
 
+namespace system;
 
 class Output
 {
-
     /**
      * http状态码
      *
@@ -55,21 +55,60 @@ class Output
 
     /**
      * 压缩HTML
-     *
+     * 
      * @param string $string
-     *
      * @return string
      */
-    public static function compress(string $string)
+    public static function compress(string $string): string
     {
-        $string = str_replace("\r\n", '', $string);
-        $string = str_replace("\n", '', $string);
-        $string = str_replace("\t", '', $string);
+        // 存储需要保留的标签内容
+        $preserved = [];
 
-        $pattern = ["/> *([^ ]*) *</", "/\s+/", "/\s+>/", "/\s+</", "/>\s+/", "/<\s+/", "/<!--[^!]*-->/", "'/\*[^*]*\*/'"];
-        $replace = [">\\1<", " ", ">", "<", ">", "<", "", ""];
+        // 匹配 <pre> 和 <textarea> 标签及其内容
+        $pattern = '/(<(pre|textarea)[^>]*>)([\s\S]*?)(<\/\2>)/i';
 
-        return preg_replace($pattern, $replace, $string);
+        // 提取并存储这些标签内的内容
+        $string = preg_replace_callback($pattern, function ($matches) use (&$preserved) {
+            $key = '__PRESERVED_' . count($preserved) . '__';
+            $preserved[$key] = $matches[0];
+            return $key;
+        }, $string);
+
+        // 移除换行符和制表符
+        $string = str_replace(["\r\n", "\n", "\t"], '', $string);
+
+        // 构建替换模式
+        $pattern = [
+            "/> *([^ ]*) *</",  // 标签之间的多余空格
+            "/\s+/",             // 多个连续空白字符
+            "/\s+>/",            // 标签前的多余空格
+            "/\s+</",            // 标签后的多余空格
+            "/>\s+/",            // 标签后和内容前的多余空格
+            "/<\s+/",            // 内容后和标签前的多余空格
+            "/<!--[^!]*-->/",     // HTML 注释
+            "/\/\*[^*]*\*\//s"   // CSS/JS 注释
+        ];
+
+        $replace = [
+            ">\\1<",             // 保留标签间的内容
+            " ",                 // 替换为单个空格
+            ">",                 // 移除标签前的空格
+            "<",                 // 移除标签后的空格
+            ">",                 // 移除标签后和内容前的空格
+            "<",                 // 移除内容后和标签前的空格
+            "",                  // 移除 HTML 注释
+            ""                   // 移除 CSS/JS 注释
+        ];
+
+        // 执行替换
+        $string = preg_replace($pattern, $replace, $string);
+
+        // 将保留的内容放回
+        foreach ($preserved as $key => $value) {
+            $string = str_replace($key, $value, $string);
+        }
+
+        return $string;
     }
 
     /**
@@ -91,7 +130,7 @@ class Output
         extract($_vars);
 
         ob_start();
-        include APP_DIR . 'template/' . TEMPLATE . '/' . $_view . EXT;
+        include TEMPLATE_DIR . $_view . EXT;
 
         if ($_return) {
             $_buffer = ob_get_contents();
@@ -128,13 +167,19 @@ class Output
      */
     public static function json(int $status, string $message, $data = [], bool $return = false)
     {
-        $content = ['status' => $status, 'message' => $message, 'data' => $data];
+        $content = [
+            'status'  => $status,
+            'message' => $message,
+            'data'    => $data,
+            'timestamp' => time()
+        ];
 
+        $json = json_encode($content, JSON_UNESCAPED_UNICODE | JSON_INVALID_UTF8_IGNORE);
         if ($return) {
-            return json_encode($content,JSON_INVALID_UTF8_IGNORE);
+            return $json;
         } else {
             header('Content-Type:application/json;charset=' . CHARSET);
-            echo json_encode($content,JSON_INVALID_UTF8_IGNORE);
+            echo $json;
         }
     }
 
@@ -146,7 +191,7 @@ class Output
      *
      * @return void
      */
-    public static function redirect(string $uri = '', int $http_response_code = 302)
+    public static function redirect(string $uri = '', int $http_response_code = 302): void
     {
         header("Location: " . $uri, true, $http_response_code);
         exit;
@@ -160,14 +205,15 @@ class Output
      * @return void
      *
      */
-    public static function status(int $http_status_code)
+    public static function status(int $http_status_code): void
     {
         if (isset(self::HTTP_STATUS_CODE[$http_status_code])) {
-            header(self::HTTP_STATUS_CODE[$http_status_code], true);
+            header(self::HTTP_STATUS_CODE[$http_status_code], true, $http_status_code);
+            return;
         }
-
-        header('Unknown Status');
+        header("HTTP/1.1 500 Internal Server Error", true, 500);
     }
+
 
     /**
      * 错误页面
@@ -177,19 +223,15 @@ class Output
      *
      * @return void
      */
-    public static function error(string $name = 'general', array $data = ['heading' => 'Error Message', 'message' => 'An error occurred.'])
+    public static function error($code = 500, string $name = 'error/general', array $data = ['heading' => 'Internal Server Error', 'message' => 'An internal error has occurred.']): void
     {
-
-        extract($data);
-
-        ob_start();
-        include APP_DIR . 'error/' . $name . EXT;
-        $_content = ob_get_contents();
-        ob_end_clean();
-        $_content = self::compress($_content);
-
-        header('Content-Type:text/html;charset=' . CHARSET);
-        echo $_content;
+        self::status($code);
+        try {
+            echo self::view($name, $data, true, true);
+        } catch (\Exception $e) {
+            header('Content-Type:text/html;charset=' . CHARSET);
+            die('<h1>' . $code . '</h1><p>' . $e->getMessage() . '</p>');
+        }
     }
 
     /**
@@ -201,13 +243,14 @@ class Output
      *
      * @return string
      */
-    public static function url(string $action = '', array $param = [], string $anchor = '')
+    public static function url(string $action = '', array $param = [], string $anchor = ''): string
     {
+       
         $anchor = $anchor == '' ? '' : '#' . $anchor;
 
         $key = '/';
         if ($param) {
-            $key = '/'.join('/', array_keys($param));
+            $key = '/' . join('/', array_keys($param));
         }
 
         if (array_key_exists($key, URL[$action])) {
@@ -230,5 +273,4 @@ class Output
 
         return $anchor;
     }
-
 }

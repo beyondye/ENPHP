@@ -66,7 +66,7 @@ const LANG_LIST = [
     'pl' => 'Polski'
 ];
 //默认语言
-const LANG = 'zh'; 
+const LANG = 'zh';
 //自定义语言数据目录
 const LANG_DIR = APP_DIR . 'locale/lang/';
 
@@ -81,6 +81,11 @@ const URL = [
     ],
     'www/news/detail' => [
         '/id' => '/news/{id}.html'
+    ],
+    'test' => [
+        '/' => '/test',
+        '/id' => '/test/{id}',
+        '/id/name' => '/test/{id}/{name}'
     ]
 ];
 
@@ -90,9 +95,9 @@ const PROFILER_LOG_FILE = APP_DIR . 'log/profiler.log';
 //中间件设置
 const MIDDLEWARE = [
     'before' => [
-        'auth' => \app\middleware\Auth::class,
-        'authorize' => \app\middleware\Authorize::class,
-        'lang' => \app\middleware\Lang::class
+        'auth' => middleware\Auth::class,
+        'authorize' => middleware\Authorize::class,
+        'lang' => middleware\Lang::class
     ],
     'after' => []
 ];
