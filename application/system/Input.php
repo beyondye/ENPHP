@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace system;
@@ -48,12 +49,12 @@ class Input
 
     public static function method(): string
     {
-        return $_SERVER['REQUEST_METHOD']??'';
+        return $_SERVER['REQUEST_METHOD'] ?? '';
     }
 
     public static function referer(): string
     {
-        return $_SERVER['HTTP_REFERER']??'';
+        return $_SERVER['HTTP_REFERER'] ?? '';
     }
 
     public static function body(): string
@@ -63,16 +64,24 @@ class Input
 
     public static function isAjax(): bool
     {
-        if (isset($_SERVER['HTTP_X_REQUESTED_WITH'])) {
-            return (strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest');
-        } else {
-            return false;
+        // 1. 处理 X-Requested-With (兼容 jQuery, Axios 等库)
+        $requestedWith = $_SERVER['HTTP_X_REQUESTED_WITH'] ?? '';
+        if (strtolower($requestedWith) === 'xmlhttprequest') {
+            return true;
         }
+
+        // 2. 兼容现代 Fetch API 及某些 REST 客户端
+        $accept = $_SERVER['HTTP_ACCEPT'] ?? '';
+        if (str_contains(strtolower($accept), 'application/json')) {
+            return true;
+        }
+
+        return false;
     }
 
     public static function ip(): string
     {
-      $keys = [
+        $keys = [
             'HTTP_CLIENT_IP',
             'HTTP_X_FORWARDED_FOR',
             'HTTP_X_FORWARDED',
@@ -97,9 +106,9 @@ class Input
 
         return '0.0.0.0';
     }
-    
+
     public static function host(): string
     {
-        return $_SERVER['HTTP_HOST']??'';
+        return $_SERVER['HTTP_HOST'] ?? '';
     }
 }

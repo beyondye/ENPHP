@@ -3,10 +3,10 @@
 
 <head>
     <meta charset="UTF-8">
-    <title><?php echo $heading; ?></title>
+    <title><?php echo $code; ?></title>
 </head>
 <body>
-    <h1><?php echo $heading; ?></h1>
+    <h1><?php echo $code; ?></h1>
     <p><?php echo $message; ?></p>
 </body>
 </html>

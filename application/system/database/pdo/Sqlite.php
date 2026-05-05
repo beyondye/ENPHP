@@ -35,9 +35,7 @@ class Sqlite extends DatabaseAbstract
         ];
 
         try {
-            profiler('benchmark', 'sqlite', $config['database']);
             $this->db = new \PDO("sqlite:{$config['database']}", $config['username'], $config['password'], $options);
-            profiler('benchmark', 'sqlite');
         } catch (\PDOException $e) {
             throw new DatabaseException('SQLite Database Connection Error :' . $e->getMessage());
         }

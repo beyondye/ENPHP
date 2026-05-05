@@ -39,11 +39,9 @@ class Pgsql extends DatabaseAbstract
         ];
 
         try {
-            profiler('benchmark', 'database', $config['host']);
             $this->db = new \PDO($dsn, $config['username'], $config['password'], $options);
-            profiler('benchmark', 'database');
         } catch (\PDOException $e) {
-            throw new DatabaseException('Database Connection Error :' . $e->getMessage());
+            throw new DatabaseException('Pgsql Database Connection Error :' . $e->getMessage());
         }
     }
 

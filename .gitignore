@@ -12,3 +12,4 @@ Thumbs.db
 /test/coverage
 /test/.phpunit.cache
 composer.lock
+nginx.conf

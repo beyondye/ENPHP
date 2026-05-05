@@ -1,10 +1,7 @@
 <?php
 //route
-const DEFAULT_CONTROLLER = 'main';
-const DEFAULT_ACTION = 'index';
-const MODULE_KEY_NAME = 'm';
-const CONTROLLER_KEY_NAME = 'c';
-const ACTION_KEY_NAME = 'a';
+const DEFAULT_ACTION = 'main/index';
+const ACTION_KEY_NAME = 'act';
 const EXT = '.php';
 
 //output编码
@@ -95,11 +92,40 @@ const PROFILER_LOG_FILE = APP_DIR . 'log/profiler.log';
 //中间件设置
 const MIDDLEWARE = [
     'before' => [
-        'auth' => middleware\Auth::class,
-        'authorize' => middleware\Authorize::class,
-        'lang' => middleware\Lang::class
+        //'auth' => middleware\Auth::class,
+        //'authorize' => middleware\Authorize::class,
+        //'lang' => middleware\Lang::class
     ],
     'after' => []
 ];
 
+//异常映射表
+const EXCEPTION_MAP = [
+
+    // 404错误放前面，避免被通用异常捕获
+    \system\PageException::class => ['http' => 404, 'biz' => 4040, 'template' => 'error/404', 'log' => true],
+
+    // 具体的业务/模型异常放前面
+    \system\model\ModelException::class      => ['http' => 500, 'biz' => 5000, 'template' => 'error/500', 'log' => true],
+    \system\database\DatabaseException::class => ['http' => 500, 'biz' => 5000, 'template' => 'error/500', 'log' => true],
+    \system\SysException::class              => ['http' => 500, 'biz' => 5000, 'template' => 'error/500', 'log' => true],
+
+    // 通用异常放最后面
+    \ErrorException::class                   => ['http' => 500, 'biz' => 5000, 'template' => 'error/500', 'log' => true],
+    \Exception::class                        => ['http' => 500, 'biz' => 5000, 'template' => 'error/500', 'log' => true],
+    \Throwable::class                        => ['http' => 500, 'biz' => 5000, 'template' => 'error/500', 'log' => true],
+
+];
+//异常日志文件
+const LOG_FILE = APP_DIR . 'log/error.log';
+
+//路由配置
+const ROUTER = [
+    'main/index' => [
+        'controller' => \app\module\www\Main::class,
+        'action' => 'index'
+    ],
+];
+
+//自动加载配置文件路径
 const AUTOLOAD_CONFIG_PATH = APP_DIR . 'config/' . ENVIRONMENT . '/autoload/';

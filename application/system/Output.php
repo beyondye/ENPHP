@@ -217,20 +217,20 @@ class Output
 
     /**
      * 错误页面
-     *
-     * @param string 错误页面模版名
-     * @param array 数据数组
+     * @param int //HTTP状态码
+     * @param string //错误页面模版名
+     * @param array //数据数组
      *
      * @return void
      */
-    public static function error($code = 500, string $name = 'error/general', array $data = ['heading' => 'Internal Server Error', 'message' => 'An internal error has occurred.']): void
+    public static function error(int $code = 500, string $name = 'error/general', array $data = ['heading' => 'Internal Server Error', 'message' => 'An internal error has occurred.']): void
     {
         self::status($code);
         try {
             echo self::view($name, $data, true, true);
         } catch (\Exception $e) {
             header('Content-Type:text/html;charset=' . CHARSET);
-            die('<h1>' . $code . '</h1><p>' . $e->getMessage() . '</p>');
+            die('<h1>Error</h1><p>Server Internal Error</p>');
         }
     }
 

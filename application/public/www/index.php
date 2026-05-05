@@ -18,9 +18,6 @@ define('APP_DIR', realpath('../../') . DIRECTORY_SEPARATOR);
 //系统文件目录
 define('SYS_DIR', realpath('../../system') . DIRECTORY_SEPARATOR);
 
-//设置模块目录
-const MODULE_DIR = APP_DIR . 'module/www/';
-
 //设置模板目录
 const TEMPLATE_DIR = APP_DIR . 'template/www/';
 
@@ -28,10 +25,10 @@ const TEMPLATE_DIR = APP_DIR . 'template/www/';
 define('ENTRY', $_SERVER['PHP_SELF']);
 
 //配置目录
-const CONFIG_DIR = APP_DIR . 'config/www/';
+const CONFIG_DIR = APP_DIR . 'config/' . ENVIRONMENT . '/';
 
 //常量配置文件
-const CONST_FILE = APP_DIR . 'config/www/constant.php';
+const CONST_FILE = CONFIG_DIR . 'constant.php';
 
 //类映射
 const  CLASS_MAP= [
