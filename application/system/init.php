@@ -100,19 +100,15 @@ define('ACTION', \system\Input::get(ACTION_KEY_NAME, DEFAULT_ACTION));
 if (!isset(ROUTER[ACTION])) {
     throw new \system\PageException('Page Not Found');
 }
-
 if (!isset(ROUTER[ACTION]['controller'])) {
     throw new \system\PageException('Page Not Found');
 }
-
 if (!isset(ROUTER[ACTION]['action'])) { 
     throw new \system\PageException('Page Not Found');
 }
 
-
 $controller = ROUTER[ACTION]['controller'];
 $ins = new $controller();
-
 if (!method_exists($ins, ROUTER[ACTION]['action'])) {
     throw new \system\PageException('Page Not Found');
 }
