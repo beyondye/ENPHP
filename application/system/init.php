@@ -57,6 +57,7 @@ $exceptionHandler = function (\Throwable $e) {
     if (\system\Input::isAjax()) {
         $msg = ($http >= 500) ? 'Internal Server Error' : $e->getMessage();
         \system\Output::json($biz, $msg);
+        return;
     }
 
     // 页面响应
