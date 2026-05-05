@@ -171,7 +171,8 @@ class Output
             'status'  => $status,
             'message' => $message,
             'data'    => $data,
-            'timestamp' => time()
+            'timestamp' => time(),
+            'trace_id' => TRACE_ID
         ];
 
         $json = json_encode($content, JSON_UNESCAPED_UNICODE | JSON_INVALID_UTF8_IGNORE);
@@ -217,9 +218,9 @@ class Output
 
     /**
      * 错误页面
-     * @param int //HTTP状态码
-     * @param string //错误页面模版名
-     * @param array //数据数组
+     * @param int $code //HTTP状态码
+     * @param string $name //错误页面模版名
+     * @param array $data //数据数组
      *
      * @return void
      */
@@ -230,7 +231,7 @@ class Output
             echo self::view($name, $data, true, true);
         } catch (\Exception $e) {
             header('Content-Type:text/html;charset=' . CHARSET);
-            die('<h1>Error</h1><p>Server Internal Error</p>');
+            die('<h1>Error</h1><p>Server Internal Error</p><p>Trace ID: ' . TRACE_ID . '</p></pre>');
         }
     }
 

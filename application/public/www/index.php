@@ -36,5 +36,8 @@ const  CLASS_MAP= [
     'app' => APP_DIR,
 ];
 
+//跟踪ID
+define('TRACE_ID', uniqid('ID'));
+
 //初始脚本
 require_once SYS_DIR . 'init.php';

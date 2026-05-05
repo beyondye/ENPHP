@@ -46,7 +46,7 @@ $exceptionHandler = function (\Throwable $e) {
     }
 
     if ($log) {
-        $msg = sprintf("[%s] %s: %s in %s:%d\n%s\n", date('Y-m-d H:i:s'), get_class($e), $e->getMessage(), $e->getFile(), $e->getLine(), $e->getTraceAsString());
+        $msg = sprintf("[%s] %s: %s in %s:%d\n%s\nTrace ID: %s\n", date('Y-m-d H:i:s'), get_class($e), $e->getMessage(), $e->getFile(), $e->getLine(), $e->getTraceAsString(), TRACE_ID);
         @file_put_contents(LOG_FILE, $msg, FILE_APPEND);
     }
 
