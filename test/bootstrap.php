@@ -33,6 +33,8 @@ const CONFIG_DIR = APP_DIR . 'config/' . ENVIRONMENT . '/';
 //常量配置文件
 const CONST_FILE = CONFIG_DIR . 'constant.php';
 
+//跟踪ID
+define('TRACE_ID', uniqid());
 
 //include constant file
 include CONST_FILE;
