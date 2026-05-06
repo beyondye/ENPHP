@@ -30,7 +30,7 @@ return [
         'alphaNumChinese' => '{label} Must Be Alpha Num Chinese',
         'alphaNumDash' => '{label} Must Be Alpha Num Dash',
         'default' => '{label} Validation Failed',
-        'key_no_exist' => '{label} Does Not Exist',
+        'key_no_exist' => '{label} Field Missing',
         'method_no_exist' => '{label} Uses Non-existent Validation Method {limit}',
     ]
 ];

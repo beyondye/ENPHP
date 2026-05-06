@@ -53,10 +53,11 @@ $exceptionHandler = function (\Throwable $e) {
     if (ob_get_length()) ob_clean(); // 清除已有的输出缓冲
 
     \system\Output::status($http);
-
+    
     if (\system\Input::isAjax()) {
         $msg = ($http >= 500) ? 'Internal Server Error' : $e->getMessage();
-        \system\Output::json($biz, $msg);
+        $data=method_exists($e,'getData') ? $e->getData() : [];
+        \system\Output::json($biz, $msg, $data);
         return;
     }
 
