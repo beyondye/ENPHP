@@ -30,11 +30,6 @@ const CONFIG_DIR = APP_DIR . 'config/' . ENVIRONMENT . '/';
 //常量配置文件
 const CONST_FILE = CONFIG_DIR . 'constant.php';
 
-//类映射
-const  CLASS_MAP= [
-    'system' => SYS_DIR,
-    'app' => APP_DIR,
-];
 
 //跟踪ID
 define('TRACE_ID', uniqid());

@@ -129,3 +129,9 @@ const ROUTER = [
 
 //自动加载配置文件路径
 const AUTOLOAD_CONFIG_PATH = APP_DIR . 'config/' . ENVIRONMENT . '/autoload/';
+
+//类映射
+const  CLASS_MAP= [
+    'system' => SYS_DIR,
+    'app' => APP_DIR,
+];
