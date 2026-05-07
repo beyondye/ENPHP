@@ -1,6 +1,6 @@
 <?php
 
-namespace test\unit;
+declare(strict_types=1);
 
 use PHPUnit\Framework\TestCase;
 use system\Config;
@@ -9,50 +9,45 @@ use system\SysException;
 class ServiceFuncTest extends TestCase
 {
     /**
-     * 测试开始前初始化配置
+     * 测试 service 函数 - 正常情况：服务配置是闭包
      */
-    protected function setUp(): void
+    public function testServiceWithClosure()
     {
-       
-            // 直接设置测试所需的配置数据，按照 service() 函数的实际实现结构
-            Config::set('test', [
-                'entry' => 'app\service\Test',
-                'params' => [
-                    'test' => [
-                        'type' => 'class',
-                        'value' => 'app\model\Test',
-                        'params' => [
-                            'db' => ['value' => 'default']
-                        ],
-                    ],
-                ]
-            ]);
+        // 设置测试配置
+        Config::set('test_closure', function () {
+            return new class {
+                public $name = 'test_service';
+            };
+        });
         
-    }
-
-    /**
-     * 测试正常情况下获取服务实例
-     */
-    public function testServiceNormalCase()
-    {
-        // 确保服务配置存在
-        $config = Config::get('test');
-        $this->assertNotEmpty($config);
-        $this->assertArrayHasKey('entry', $config);
-        
-        // 调用 service 函数获取服务实例
-        $service = service('test');
+        // 调用 service 函数
+        $service = service('test_closure');
         
         // 验证返回的是对象
         $this->assertIsObject($service);
-        // 验证返回的是正确的类实例
-        $this->assertInstanceOf('app\service\Test', $service);
+        $this->assertEquals('test_service', $service->name);
     }
-    
+
     /**
-     * 测试服务配置不存在的情况
+     * 测试 service 函数 - 正常情况：服务配置是类名字符串
      */
-    public function testServiceConfigNotFound()
+    public function testServiceWithClassName()
+    {
+        // 设置测试配置
+        Config::set('test_class', stdClass::class);
+        
+        // 调用 service 函数
+        $service = service('test_class');
+        
+        // 验证返回的是对象
+        $this->assertIsObject($service);
+        $this->assertInstanceOf(stdClass::class, $service);
+    }
+
+    /**
+     * 测试 service 函数 - 服务配置不存在
+     */
+    public function testServiceNotFound()
     {
         $this->expectException(SysException::class);
         $this->expectExceptionMessage('Service config not found:[non_existent_service]');
@@ -60,61 +55,34 @@ class ServiceFuncTest extends TestCase
         // 尝试获取不存在的服务
         service('non_existent_service');
     }
-    
+
     /**
-     * 测试服务配置不是数组的情况
+     * 测试 service 函数 - 服务配置不是可调用的
      */
-    public function testServiceConfigNotArray()
+    public function testServiceNotCallable()
     {
-        // 临时修改配置为非数组
-        Config::set('test', 'not an array');
+        // 设置不可调用的配置
+        Config::set('test_not_callable', 'invalid_service');
         
         $this->expectException(SysException::class);
-        $this->expectExceptionMessage('Service config must be an array:[test]');
+        $this->expectExceptionMessage('Service config must be callable:[test_not_callable]');
         
         // 尝试获取服务
-        service('test');
-        
-        // 恢复配置
-        Config::set('test', [
-            'entry' => 'service\Test',
-            'params' => []
-        ]);
+        service('test_not_callable');
     }
-    
+
     /**
-     * 测试服务配置缺少 entry 键的情况
+     * 测试 service 函数 - 服务配置是数组但不可调用
      */
-    public function testServiceMissingEntry()
+    public function testServiceArrayNotCallable()
     {
-        // 临时修改配置，移除 entry 键
-        Config::set('test', []);
+        // 设置数组配置（但不是有效的回调数组）
+        Config::set('test_array', ['key' => 'value']);
         
         $this->expectException(SysException::class);
-        $this->expectExceptionMessage('Service config missing entry:[test]');
+        $this->expectExceptionMessage('Service config must be callable:[test_array]');
         
         // 尝试获取服务
-        service('test');
+        service('test_array');
     }
-    
-    
-    /**
-     * 测试服务参数的递归构建功能
-     */
-    public function testServiceParamsRecursiveBuild()
-    {
-        // 确保服务配置存在且包含参数
-        $config = Config::get('test');
-        $this->assertNotEmpty($config);
-        $this->assertArrayHasKey('params', $config);
-        
-        // 调用 service 函数获取服务实例
-        $service = service('test');
-        
-        // 验证返回的是对象
-        $this->assertIsObject($service);
-        // 验证返回的是正确的类实例
-        $this->assertInstanceOf('app\service\Test', $service);
-    }
-    
 }

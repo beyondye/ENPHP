@@ -113,55 +113,21 @@ function lang(string $key, array $replace = [], string $lang = '')
 
 function service(string $name): object
 {
-    $service= \system\Config::get($name);
+    $service = \system\Config::get($name);
 
     if ($service === null) {
         throw new \system\SysException("Service config not found:[{$name}]");
     }
-
-    // 检查配置是否为数组
-    if (!is_array($service)) {
-        throw new \system\SysException("Service config must be an array:[{$name}]");
+    
+    // 如果是闭包或其他可调用对象，直接调用
+    if (is_callable($service)) {
+        return $service();
     }
-
-    // 检查服务配置是否包含 entry 键
-    if (!isset($service['entry'])) {
-        throw new \system\SysException("Service config missing entry:[{$name}]");
+    
+    // 如果是字符串，尝试作为类名实例化
+    if (is_string($service) && class_exists($service)) {
+        return new $service();
     }
-
-    /**
-     * 递归构建器：采用闭包实现，支持无限层级类嵌套
-     */
-    $buildService = function ($item) use (&$buildService) {
-
-        if (!is_array($item) || !array_key_exists('value', $item)) {
-            return $item;
-        }
-
-        if (($item['type'] ?? '') === 'class') {
-            $className = $item['value'];
-
-            if (!class_exists($className)) {
-                throw new \system\SysException("Class not found:[{$className}]");
-            }
-
-            $rawParams = $item['params'] ?? [];
-            $resolvedArgs = array_map($buildService, $rawParams);
-
-            return new $className(...array_values($resolvedArgs));
-        }
-
-        return $item['value'];
-    };
-
-    $args = array_map($buildService, $service['params'] ?? []);
-
-
-    try {
-        $instance = new $service['entry'](...array_values($args));
-    } catch (Error $e) {
-        throw new \system\SysException("Class not found:[{$service['entry']}]");
-    }
-
-    return $instance;
+    
+    throw new \system\SysException("Service config must be callable:[{$name}]");
 }
