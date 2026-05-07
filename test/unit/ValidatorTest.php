@@ -436,9 +436,9 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
         $this->assertFalse($result2);
         $this->assertArrayHasKey('field', $validator2->errors);
         $this->assertArrayHasKey('extra_field', $validator2->errors);
-        $this->assertEquals('字段不存在', $validator2->errors['field']);
-        $this->assertEquals('额外字段不存在', $validator2->errors['extra_field']);
-        $this->assertEquals('bb不存在', $validator2->errors['bb']);
+        $this->assertEquals('字段字段缺失', $validator2->errors['field']);
+        $this->assertEquals('额外字段字段缺失', $validator2->errors['extra_field']);
+        $this->assertEquals('bb字段缺失', $validator2->errors['bb']);
         
         // 数据多于规则
         $validator3 = ValidatorClass::make([

@@ -111,4 +111,39 @@ class Input
     {
         return $_SERVER['HTTP_HOST'] ?? '';
     }
+
+
+    public static function filter($name = 'filter'): array
+    {
+        $where = [];
+        $filter = self::get($name);
+        if (!$filter) {
+            return $where;
+        }
+
+        $filters = explode('|', urldecode($filter));
+        foreach ($filters as $value) {
+
+            $w = explode(':', $value);
+            if (count($w) != 3) {
+                continue;
+            }
+
+            if ($w[0] == '' || $w[1] == '' || $w[2] == '') {
+                continue;
+            }
+
+            if (preg_match("/^([a-z0-9_])+$/i", $w[0]) == 0) {
+                continue;
+            }
+
+            if (!in_array($w[1], ['=', '>', '<', '>=', '<=', '<>', '!=', 'in', 'like', 'between'])) {
+                continue;
+            }
+
+            $where[$w[0]] = $w;
+        }
+
+        return $where;
+    }
 }
