@@ -119,14 +119,6 @@ const EXCEPTION_MAP = [
 //异常日志文件
 const LOG_FILE = APP_DIR . 'log/error.log';
 
-//路由配置
-const ROUTER = [
-    'main/index' => [
-        'controller' => \app\module\www\Main::class,
-        'action' => 'index'
-    ],
-];
-
 //自动加载配置文件路径
 const AUTOLOAD_CONFIG_PATH = APP_DIR . 'config/' . ENVIRONMENT . '/autoload/';
 

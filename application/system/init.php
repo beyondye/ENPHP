@@ -99,24 +99,11 @@ define('ACTION', \system\Input::get(ACTION_KEY_NAME, DEFAULT_ACTION));
 
 \system\Middleware::before();
 
-if (!isset(ROUTER[ACTION])) {
-    throw new \system\PageException('Page Not Found');
-}
-if (!isset(ROUTER[ACTION]['controller'])) {
-    throw new \system\PageException('Page Not Found');
-}
-if (!isset(ROUTER[ACTION]['action'])) { 
+if (!isset(\system\Config::get('router')[ACTION])) {
     throw new \system\PageException('Page Not Found');
 }
 
-$controller = ROUTER[ACTION]['controller'];
-$ins = new $controller();
-if (!method_exists($ins, ROUTER[ACTION]['action'])) {
-    throw new \system\PageException('Page Not Found');
-}
-
-$act = ROUTER[ACTION]['action'];
-$ins->$act();
+\system\Config::get('router.' . ACTION)();
 
 \system\Middleware::after();
 
