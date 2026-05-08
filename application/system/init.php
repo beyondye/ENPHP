@@ -103,7 +103,7 @@ if (!isset(\system\Config::get('router')[ACTION])) {
     throw new \system\PageException('Page Not Found');
 }
 
-\system\Config::get('router.' . ACTION)();
+\system\Config::get('router')[ACTION]();
 
 \system\Middleware::after();
 
