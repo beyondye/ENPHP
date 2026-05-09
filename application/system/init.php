@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 require_once CONST_FILE;
@@ -35,6 +36,10 @@ $exceptionHandler = function (\Throwable $e) {
     $template = 'error/general';
     $log = false;
 
+    if (\system\Config::get(EXCEPTION_CONFIG_NAME) === null || !is_array(\system\Config::get(EXCEPTION_CONFIG_NAME))) {
+        \system\Config::set(EXCEPTION_CONFIG_NAME, [\Throwable::class => ['log' => true]]);
+    }
+
     foreach (\system\Config::get(EXCEPTION_CONFIG_NAME) as $class => $config) {
         if ($e instanceof $class) {
             $http = $config['http'] ?? 500;
@@ -53,10 +58,10 @@ $exceptionHandler = function (\Throwable $e) {
     if (ob_get_length()) ob_clean(); // 清除已有的输出缓冲
 
     \system\Output::status($http);
-    
+
     if (\system\Input::isAjax()) {
         $msg = ($http >= 500) ? 'Internal Server Error' : $e->getMessage();
-        $data=method_exists($e,'getData') ? $e->getData() : [];
+        $data = method_exists($e, 'getData') ? $e->getData() : [];
         \system\Output::json($biz, $msg, $data);
         return;
     }
