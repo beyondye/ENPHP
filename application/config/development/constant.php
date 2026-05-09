@@ -2,6 +2,7 @@
 //route
 const DEFAULT_ACTION = 'main/index';
 const ACTION_KEY_NAME = 'act';
+const ROUTE_CONFIG_NAME = 'router';
 const EXT = '.php';
 
 //output编码
@@ -45,6 +46,8 @@ const AUTH_JWT_MODE = 'header';
 //认证cookie存活时间
 const AUTH_COOKIE_EXPIRE = 0;
 
+//异常配置文件名
+const EXCEPTION_CONFIG_NAME = 'exception';
 
 //语言环境列表
 const LANG_LIST = [
@@ -99,23 +102,7 @@ const MIDDLEWARE = [
     'after' => []
 ];
 
-//异常映射表
-const EXCEPTION_MAP = [
 
-    // 404错误放前面，避免被通用异常捕获
-    \system\PageException::class => ['http' => 404, 'biz' => 4040, 'template' => 'error/404', 'log' => true],
-
-    // 具体的业务/模型异常放前面
-    \system\model\ModelException::class      => ['http' => 500, 'biz' => 5000, 'template' => 'error/500', 'log' => true],
-    \system\database\DatabaseException::class => ['http' => 500, 'biz' => 5000, 'template' => 'error/500', 'log' => true],
-    \system\SysException::class              => ['http' => 500, 'biz' => 5000, 'template' => 'error/500', 'log' => true],
-
-    // 通用异常放最后面
-    \ErrorException::class                   => ['http' => 500, 'biz' => 5000, 'template' => 'error/500', 'log' => true],
-    \Exception::class                        => ['http' => 500, 'biz' => 5000, 'template' => 'error/500', 'log' => true],
-    \Throwable::class                        => ['http' => 500, 'biz' => 5000, 'template' => 'error/500', 'log' => true],
-
-];
 //异常日志文件
 const LOG_FILE = APP_DIR . 'log/error.log';
 

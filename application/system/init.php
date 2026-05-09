@@ -35,7 +35,7 @@ $exceptionHandler = function (\Throwable $e) {
     $template = 'error/general';
     $log = false;
 
-    foreach (EXCEPTION_MAP as $class => $config) {
+    foreach (\system\Config::get(EXCEPTION_CONFIG_NAME) as $class => $config) {
         if ($e instanceof $class) {
             $http = $config['http'] ?? 500;
             $biz = $config['biz'] ?? 5000;
@@ -99,11 +99,15 @@ define('ACTION', \system\Input::get(ACTION_KEY_NAME, DEFAULT_ACTION));
 
 \system\Middleware::before();
 
-if (!isset(\system\Config::get('router')[ACTION])) {
+if (\system\Config::get(ROUTE_CONFIG_NAME) === null) {
     throw new \system\PageException('Page Not Found');
 }
 
-\system\Config::get('router')[ACTION]();
+if (!isset(\system\Config::get(ROUTE_CONFIG_NAME)[ACTION])) {
+    throw new \system\PageException('Page Not Found');
+}
+
+\system\Config::get(ROUTE_CONFIG_NAME)[ACTION]();
 
 \system\Middleware::after();
 

@@ -6,7 +6,6 @@ use system\Output;
 
 class Main extends \system\Controller
 {
-
     public function index()
     {
         service('service.test');
