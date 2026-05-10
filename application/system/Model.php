@@ -92,7 +92,7 @@ class Model
     {
         $this->conditions['groups'] = $groups;
         return $this;
-    }   
+    }
 
     public function having(array ...$havings): object
     {
@@ -196,10 +196,9 @@ class Model
             throw new ModelException('Update Condition Cannot Be Empty.');
         }
 
+        $this->updating();
         Safe::fillable($data, $this->fillable);
         Safe::data($data, $this->schema);
-
-        $this->updating();
 
         return $this->db->update($this->table, $data, ...$wheres);
     }
@@ -218,14 +217,13 @@ class Model
             throw new ModelException('Schema Array Not Defined.');
         }
 
+        $this->creating();
         $merged = [];
         foreach ($data as $key => $rs) {
             Safe::fillable($rs, $this->fillable);
             Safe::data($rs, $this->schema);
             $merged[$key] = array_merge($this->fillable, $rs); //合并填充字段和数据字段
         }
-
-        $this->creating();
 
         return $this->db->insert($this->table, $merged, $this->primary);
     }
@@ -263,7 +261,7 @@ class Model
     {
         $condition = [
             'field' => $this->conditions['fields'] ?? [],
-            'where' => array_key_exists('wheres', $this->conditions) ? $this->_bindWhere(...$this->conditions['wheres']) : [],  
+            'where' => array_key_exists('wheres', $this->conditions) ? $this->_bindWhere(...$this->conditions['wheres']) : [],
             'groupby' => $this->conditions['groups'] ?? [],
             'having' => $this->conditions['havings'] ?? [],
             'orderby' => $this->conditions['orders'] ?? [],
@@ -278,7 +276,7 @@ class Model
     {
         $condition = [
             'field' => $this->conditions['fields'] ?? [],
-            'where' => array_key_exists('wheres', $this->conditions) ? $this->_bindWhere(...$this->conditions['wheres']) : [],  
+            'where' => array_key_exists('wheres', $this->conditions) ? $this->_bindWhere(...$this->conditions['wheres']) : [],
             'groupby' => $this->conditions['groups'] ?? [],
             'having' => $this->conditions['havings'] ?? [],
             'orderby' => $this->conditions['orders'] ?? [],
@@ -293,7 +291,7 @@ class Model
     {
         $condition = [
             'field' => ['count(*) as total'],
-            'where' => array_key_exists('wheres', $this->conditions) ? $this->_bindWhere(...$this->conditions['wheres']) : [],  
+            'where' => array_key_exists('wheres', $this->conditions) ? $this->_bindWhere(...$this->conditions['wheres']) : [],
             'groupby' => $this->conditions['groups'] ?? [],
             'having' => $this->conditions['havings'] ?? [],
             'orderby' => $this->conditions['orders'] ?? []
@@ -313,15 +311,15 @@ class Model
         return $this->where($id)->first() !== null;
     }
 
-    public function rows(int $limit = 1000,int $offset = 0): array
+    public function rows(int $limit = 1000, int $offset = 0): array
     {
         $condition = [
             'field' => $this->conditions['fields'] ?? [],
-            'where' => array_key_exists('wheres', $this->conditions) ? $this->_bindWhere(...$this->conditions['wheres']) : [],  
+            'where' => array_key_exists('wheres', $this->conditions) ? $this->_bindWhere(...$this->conditions['wheres']) : [],
             'groupby' => $this->conditions['groups'] ?? [],
             'having' => $this->conditions['havings'] ?? [],
             'orderby' => $this->conditions['orders'] ?? [],
-            'limit' => [$limit,$offset]
+            'limit' => [$limit, $offset]
         ];
 
         $this->conditions = [];
