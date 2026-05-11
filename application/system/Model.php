@@ -15,7 +15,7 @@ class Model
     protected string $table;
 
     //主键
-    protected string $primary;
+    public string $primary = 'id';
 
     //主键是否自增
     protected bool $autoincrement = false;

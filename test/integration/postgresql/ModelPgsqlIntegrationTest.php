@@ -11,7 +11,7 @@ use system\Database;
 class TestModel extends Model
 {
     protected string $table = 'test_model';
-    protected string $primary = 'id';
+    public string $primary = 'id';
     protected bool $autoincrement = true;
     
     protected array $schema = [
