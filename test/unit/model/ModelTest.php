@@ -93,19 +93,19 @@ class ModelTest extends TestCase
             // 暴露 protected 的 creating 方法
             public function callCreating()
             {
-                $this->creating();
+                $this->creating([]);
             }
 
             // 暴露 protected 的 updating 方法
             public function callUpdating()
             {
-                $this->updating();
+                $this->updating([]);
             }
 
             // 暴露 protected 的 deleting 方法
             public function callDeleting()
             {
-                $this->deleting();
+                $this->deleting([]);
             }
 
             // 暴露 protected 的 db 属性

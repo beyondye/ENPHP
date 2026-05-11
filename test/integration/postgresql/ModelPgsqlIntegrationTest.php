@@ -38,19 +38,22 @@ class TestModelWithEvents extends TestModel
     public bool $updatingCalled = false;
     public bool $deletingCalled = false;
 
-    protected function creating(): void
+    protected function creating(array $data): array
     {
         $this->creatingCalled = true;
+        return $data;
     }
 
-    protected function updating(): void
+    protected function updating(array $data): array
     {
         $this->updatingCalled = true;
+        return $data;
     }
 
-    protected function deleting(): void
+    protected function deleting(array $where): array
     {
         $this->deletingCalled = true;
+        return $where;
     }
 }
 

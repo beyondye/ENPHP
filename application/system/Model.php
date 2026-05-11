@@ -67,13 +67,19 @@ class Model
     }
 
     //创建前事件
-    protected function creating(): void {}
+    protected function creating(array $data): array {
+        return $data;
+    }
 
     //删除前事件
-    protected function updating(): void {}
+    protected function updating(array $data): array {
+        return $data;
+    }
 
     //删除前事件
-    protected function deleting(): void {}
+    protected function deleting(array $where): array {
+        return $where;
+    }
 
     //选择字段
     public function select(array $fields): object
@@ -142,7 +148,7 @@ class Model
             throw new ModelException('Delete Condition Cannot Be Empty.');
         }
 
-        $this->deleting();
+        $wheres = $this->deleting($wheres);
 
         return $this->db->delete($this->table, ...$wheres);
     }
@@ -196,9 +202,10 @@ class Model
             throw new ModelException('Update Condition Cannot Be Empty.');
         }
 
-        $this->updating();
         Safe::fillable($data, $this->fillable);
         Safe::data($data, $this->schema);
+
+        $data = $this->updating($data);
 
         return $this->db->update($this->table, $data, ...$wheres);
     }
@@ -217,7 +224,7 @@ class Model
             throw new ModelException('Schema Array Not Defined.');
         }
 
-        $this->creating();
+        $data = $this->creating($data);
         $merged = [];
         foreach ($data as $key => $rs) {
             Safe::fillable($rs, $this->fillable);
