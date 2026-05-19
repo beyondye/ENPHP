@@ -13,7 +13,7 @@ class Session
         static $start = false;
         if ($start === false) {
             session_name(SESSION_COOKIE_NAME);
-            session_set_cookie_params(SESSION_EXPIRE, COOKIE_PATH, COOKIE_DOMAIN, COOKIE_SECURE, COOKIE_HTTPONLY);
+            session_set_cookie_params(SESSION_COOKIE_OPTIONS);
             session_start();
             $start = true;
         }
@@ -112,8 +112,8 @@ class Session
     public static function destroy()
     {
         self::start();
-        setcookie(SESSION_COOKIE_NAME, '', 1, COOKIE_PATH, COOKIE_DOMAIN, COOKIE_SECURE, COOKIE_HTTPONLY);
+        $options = array_merge(COOKIE_OPTIONS, ['expires' => 1]);
+        setcookie(SESSION_COOKIE_NAME, '', $options);
         return session_destroy();
     }
-
 }

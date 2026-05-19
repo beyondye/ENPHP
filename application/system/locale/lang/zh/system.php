@@ -33,5 +33,25 @@ return [
         'default' => '{label}验证不通过',
         'key_no_exist' => '{label}字段缺失',
         'method_no_exist' => '{label}使用不存在的验证方法{limit}',
+    ],
+    'authentication' => [
+        'cookie_null' => '认证Cookie不能为空',
+        'cookie_format_error' => '认证Cookie格式错误',
+        'cookie_signature_error' => '认证Cookie签名错误',
+        'cookie_expire' => '认证Cookie过期',
+        'cookie_decode_error' => '认证Cookie解密错误',
+
+        'type_error' => '认证类型{type}不支持',
+
+        'jwt_null' => '认证JWT不能为空',
+        'jwt_illegal' => '认证JWT格式错误', 
+        'jwt_exp' => '认证JWT过期',
+        'jwt_verify_failed' => '认证JWT验证失败',
+
+        'session_null' => '认证Session不能为空',
+        'session_illegal' => '认证Session格式错误', 
+
+        'type_null_config' => '认证类型{type}配置不存在',
+        'type_config_format_error' => '认证类型{type}配置格式错误,必须是数组格式',
     ]
 ];

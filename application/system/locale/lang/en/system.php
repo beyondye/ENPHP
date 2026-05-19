@@ -32,5 +32,17 @@ return [
         'default' => '{label} Validation Failed',
         'key_no_exist' => '{label} Field Missing',
         'method_no_exist' => '{label} Uses Non-existent Validation Method {limit}',
+    ],
+    'authentication' => [
+        'cookie_null' => 'Cookie Cannot Be Empty',
+        'cookie_format_error' => 'Cookie Format Error',
+        'cookie_signature_error' => 'Cookie Signature Error',
+        'type_error' => 'Authentication Type Error',
+        'jwt_null' => 'JWT Cannot Be Empty',
+        'jwt_illegal' => 'JWT Format Error',
+        'jwt_exp' => 'JWT Expired',
+        'jwt_verify_failed' => 'JWT Verify Failed',
+        'session_null' => 'Session Cannot Be Empty',
+        'session_illegal' => 'Session Format Error',
     ]
 ];

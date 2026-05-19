@@ -7,21 +7,30 @@ const EXT = '.php';
 
 //output编码
 const CHARSET = 'utf-8';
-//cookie域
-const COOKIE_DOMAIN = '';
-//cookie是否https连接
-const COOKIE_SECURE = false;
-//cookie有效目录
-const COOKIE_PATH = '/';
-//cookie http读取
-const COOKIE_HTTPONLY = true;
-//cookie过期时间
-const COOKIE_EXPIRE = 0;
+
+//cookie选项
+const COOKIE_OPTIONS = [
+    'expires' => 0,
+    'path' => '/',
+    'domain' => '',
+    'secure' => false,
+    'httponly' => true,
+    'samesite' => 'Lax',
+];
+
 
 //session名称
 const SESSION_COOKIE_NAME = 'SE';
-//session过期时间
-const SESSION_EXPIRE = 0;
+
+//session cookie选项
+const SESSION_COOKIE_OPTIONS = [
+    'lifetime' => 0,
+    'path' => '/',
+    'domain' => '',
+    'secure' => false,
+    'httponly' => true,
+    'samesite' => 'Lax',
+];
 
 //安全key
 const ENCRYPTION_KEY = 'weryi9878sdftgtbsdfh';
@@ -33,18 +42,6 @@ const TOKEN_INPUT_NAME = 'fh40dfk98dkfje';
 //表单项认证过期时间
 const TOKEN_EXPIRE = 3600;
 
-//认证方式，cookie,jwt,session
-const AUTH_TYPE = 'session';
-//加密密钥
-const AUTH_SECRET = 'dsd#@4ddz!ds';
-//认证名称
-const AUTH_NAME = 'auth';
-//jwt存活时间,秒为单位
-const AUTH_JWT_EXPIRE = 600;
-//jwt数据过载方式，header或url
-const AUTH_JWT_MODE = 'header';
-//认证cookie存活时间
-const AUTH_COOKIE_EXPIRE = 0;
 
 //异常配置文件名
 const EXCEPTION_CONFIG_NAME = 'exception';
@@ -110,7 +107,7 @@ const LOG_FILE = APP_DIR . 'log/error.log';
 const AUTOLOAD_CONFIG_PATH = APP_DIR . 'config/' . ENVIRONMENT . '/autoload/';
 
 //类映射
-const  CLASS_MAP= [
+const  CLASS_MAP = [
     'system' => SYS_DIR,
     'app' => APP_DIR,
 ];
