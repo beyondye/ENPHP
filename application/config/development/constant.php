@@ -18,7 +18,6 @@ const COOKIE_OPTIONS = [
     'samesite' => 'Lax',
 ];
 
-
 //session名称
 const SESSION_COOKIE_NAME = 'SE';
 

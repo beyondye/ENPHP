@@ -34,15 +34,23 @@ return [
         'method_no_exist' => '{label} Uses Non-existent Validation Method {limit}',
     ],
     'authentication' => [
-        'cookie_null' => 'Cookie Cannot Be Empty',
-        'cookie_format_error' => 'Cookie Format Error',
-        'cookie_signature_error' => 'Cookie Signature Error',
-        'type_error' => 'Authentication Type Error',
-        'jwt_null' => 'JWT Cannot Be Empty',
-        'jwt_illegal' => 'JWT Format Error',
-        'jwt_exp' => 'JWT Expired',
-        'jwt_verify_failed' => 'JWT Verify Failed',
-        'session_null' => 'Session Cannot Be Empty',
-        'session_illegal' => 'Session Format Error',
+        'cookie_null' => 'Authentication Cookie cannot be empty',
+        'cookie_format_error' => 'Authentication Cookie format error',
+        'cookie_signature_error' => 'Authentication Cookie signature error',
+        'cookie_expire' => 'Authentication Cookie expired',
+        'cookie_decode_error' => 'Authentication Cookie decode error',
+
+        'type_error' => 'Authentication type {type} not supported',
+
+        'jwt_null' => 'Authentication JWT cannot be empty',
+        'jwt_illegal' => 'Authentication JWT format error',
+        'jwt_exp' => 'Authentication JWT expired',
+        'jwt_verify_failed' => 'Authentication JWT verify failed',
+
+        'session_null' => 'Authentication Session cannot be empty',
+        'session_illegal' => 'Authentication Session format error',
+
+        'type_null_config' => 'Authentication type {type} configuration not found',
+        'type_config_format_error' => 'Authentication type {type} configuration format error, must be array format',
     ]
 ];

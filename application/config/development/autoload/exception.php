@@ -4,6 +4,7 @@ return [
     \system\PageException::class => ['http' => 404, 'biz' => 4040, 'template' => 'error/404', 'log' => true],
 
     // 具体的业务/模型异常放前面
+    \system\authentication\AuthenticationException::class => ['http' => 500, 'biz' => 5000, 'template' => 'error/500', 'log' => true],
     \system\model\ModelException::class      => ['http' => 500, 'biz' => 5000, 'template' => 'error/500', 'log' => true],
     \system\database\DatabaseException::class => ['http' => 500, 'biz' => 5000, 'template' => 'error/500', 'log' => true],
     \system\SysException::class              => ['http' => 500, 'biz' => 5000, 'template' => 'error/500', 'log' => true],
