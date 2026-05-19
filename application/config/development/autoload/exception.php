@@ -14,3 +14,4 @@ return [
     \Exception::class                        => ['http' => 500, 'biz' => 5000, 'template' => 'error/500', 'log' => true],
     \Throwable::class                        => ['http' => 500, 'biz' => 5000, 'template' => 'error/500', 'log' => true],
 ];
+  

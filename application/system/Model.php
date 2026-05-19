@@ -313,9 +313,9 @@ class Model
         return $this->where($id)->first();
     }
 
-    public function exists(int|string $id): bool
+    public function exists(int|string|array|float $where): bool
     {
-        return $this->where($id)->first() !== null;
+        return $this->where($where)->first() !== null;
     }
 
     public function rows(int $limit = 1000, int $offset = 0): array

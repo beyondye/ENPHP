@@ -759,6 +759,40 @@ class ModelTest extends TestCase
     }
 
     /**
+     * 测试 exists() 方法 - 使用字符串条件
+     */
+    public function testExistsWithStringCondition()
+    {
+        // 模拟返回值
+        $expectedResult = (object) ['id' => '1', 'name' => 'Test'];
+        $this->resultMock->method('first')->willReturn($expectedResult);
+
+        // 调用 exists() 方法，使用字符串条件
+        $result = $this->model->exists('1');
+
+        // 验证结果
+        $this->assertTrue($result);
+    }
+
+    /**
+     * 测试 exists() 方法 - 使用数组条件
+     */
+    public function testExistsWithArrayCondition()
+    {
+        // 模拟返回值
+        $expectedResult = (object) ['id' => 1, 'name' => 'Test'];
+        $this->resultMock->method('first')->willReturn($expectedResult);
+
+        // 调用 exists() 方法，使用数组条件
+        $result = $this->model->exists(['name', '=', 'Test']);
+
+        // 验证结果
+        $this->assertTrue($result);
+    }
+
+  
+
+    /**
      * 测试 rows() 方法
      */
     public function testRows()
