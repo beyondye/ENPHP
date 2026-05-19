@@ -1,20 +1,21 @@
 <?php
 
+declare(strict_types=1);
+
 namespace system;
 
 class Cookie
 {
-
     /**
      * 获取cookie数据,不存在返回null，不带参数返回全部
      *
-     * @param string|null $name
+     * @param string $name
      *
-     * @return array|null
+     * @return array|string|null
      */
-    public static function get(string $name = null)
+    public static function get(string $name = ''): array|string|null
     {
-        if ($name === null) {
+        if ($name === '') {
             return $_COOKIE;
         }
 
@@ -25,55 +26,52 @@ class Cookie
      * 设置cookie输出
      *
      * @param string $name Cookie name
-     * @param string $value Cookie value
-     * @param int $expire 过期秒数基于当前时间戳之上，设置0为关闭浏览器失效
-     * @param string $path cookie有效路径
-     * @param string $domain cookie有效域名
-     * @param boolean $secure 是否必须https
-     * @param boolean $httponly http唯一读取cookie
+     * @param string|int $value Cookie value
+     * @param int|array $options 过期秒数基于当前时间戳之上，设置0为关闭浏览器失效 | cookie选项 
+     * @param string $options['path'] cookie有效路径
+     * @param string $options['domain'] cookie有效域名
+     * @param boolean $options['secure'] 是否必须https传输
+     * @param boolean $options['httponly'] http唯一读取cookie
+     * @param int $options['expires'] 过期时间戳
+     * @param string $options['samesite'] 同源策略
      *
-     * @return boolean
+     * @return bool
      */
-    public static function set(string $name,
-                               string $value,
-                               int $expire = COOKIE_EXPIRE,
-                               string $path = COOKIE_PATH,
-                               string $domain = COOKIE_DOMAIN,
-                               bool $secure = COOKIE_SECURE,
-                               bool $httponly = COOKIE_HTTPONLY)
+    public static function set(string $name, string|int $value, int|array $options = []): bool
     {
-        if (!$name) {
+
+        if ($name === '') {
             return false;
         }
 
-        $expire = intval($expire) == 0 ? 0 : time() + intval($expire);
-        return setcookie($name, $value, $expire, $path, $domain, $secure, $httponly);
+        $expires = 0;
+        if (is_int($options)) {
+            $expires = $options === 0 ? 0 : time() + $options;
+            return setcookie($name, (string)$value, array_merge(COOKIE_OPTIONS, ['expires' => $expires]));
+        }
+
+        $options = array_merge(COOKIE_OPTIONS, $options);
+        $options['expires'] = $options['expires'] === 0 ? 0 : time() + $options['expires'];
+        return setcookie($name, $value, $options);
     }
 
     /**
-     * 设置cookie输出
+     * 设置多个cookie输出
      *
      * @param array $data Cookie数据格式 ['name'=>'value','name2'=>'value2']
-     * @param int $expire 过期秒数基于当前时间戳之上，设置0为关闭浏览器失效
-     * @param string $path 有效路径
-     * @param string $domain 有效域名
-     * @param boolean $secure 是否https传输
-     * @param boolean $httponly http读唯一
+     * @param int|array $options 过期秒数基于当前时间戳之上，设置0为关闭浏览器失效
+     * @param string $options['path'] 有效路径
+     * @param string $options['domain'] 有效域名
+     * @param boolean $options['secure'] 是否必须https传输
+     * @param boolean $options['httponly'] http唯一读取cookie   
      *
-     * @return boolean
+     * @return bool
      */
-    public static function many(array $data,
-                                int $expire = COOKIE_EXPIRE,
-                                string $path = COOKIE_PATH,
-                                string $domain = COOKIE_DOMAIN,
-                                bool $secure = COOKIE_SECURE,
-                                bool $httponly = COOKIE_HTTPONLY)
+    public static function many(array $data, int|array $options = []): bool
     {
-
-        $expire = intval($expire) == 0 ? 0 : time() + intval($expire);
-
         foreach ($data as $key => $val) {
-            setcookie($key, $val, $expire, $path, $domain, $secure, $httponly);
+
+            self::set((string)$key, (string)$val, $options);
         }
 
         return true;
@@ -86,15 +84,17 @@ class Cookie
      *
      * @return bool
      */
-    public static function delete($name)
+    public static function delete(string|array $name): bool
     {
         if (is_array($name)) {
             foreach ($name as $k => $v) {
-                self::delete($v);
+                if (is_string($v)) {
+                    self::delete($v);
+                }
             }
+            return true;
         }
 
-        return self::set($name, '', 1);
+        return self::set($name, '', -3600);
     }
-
 }

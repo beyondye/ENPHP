@@ -115,7 +115,7 @@ class Session
     {
         self::start();
         $_SESSION = [];
-        $options = array_merge(COOKIE_OPTIONS, ['expires' => 1]);
+        $options = array_merge(COOKIE_OPTIONS, ['expires' => -3600]);
         setcookie(SESSION_COOKIE_NAME, '', $options);
         return session_destroy();
     }
