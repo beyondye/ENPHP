@@ -52,7 +52,7 @@ class Util
                 return;
             }
 
-            if (array_key_exists(0, $wheres) && (is_scalar($wheres[0]) || is_null($wheres[0]))) {
+            if (array_is_list($wheres) && (is_scalar($wheres[0]) || is_null($wheres[0]))) {
 
                 $count = count($wheres);
 
@@ -62,22 +62,22 @@ class Util
                 }
 
 
-                if ($count == 2 && is_string($wheres[0]) && array_key_exists(1, $wheres) && (is_scalar($wheres[1]) || is_null($wheres[1]))) {
+                if ($count == 2 && is_string($wheres[0]) && (is_scalar($wheres[1]) || is_null($wheres[1]))) {
                     $result[] = [$wheres[0], '=', $wheres[1]];
                     return;
                 }
 
-                if ($count == 2 && array_key_exists(1, $wheres) && is_array($wheres[1]) && is_string($wheres[0])) {
+                if ($count == 2 && is_array($wheres[1]) && is_string($wheres[0])) {
                     $result[] = [$wheres[0], 'in', $wheres[1]];
                     return;
                 }
 
-                if ($count == 3 && array_key_exists(1, $wheres) && array_key_exists(2, $wheres) && is_string($wheres[0]) && is_string($wheres[1])) {
+                if ($count == 3  && is_string($wheres[0]) && is_string($wheres[1])) {
                     $result[] = [$wheres[0], $wheres[1], $wheres[2]];
                     return;
                 }
 
-                if ($count == 4 && array_key_exists(1, $wheres) && array_key_exists(2, $wheres) && array_key_exists(3, $wheres) && is_string($wheres[0]) && is_string($wheres[1]) && is_string($wheres[3])) {
+                if ($count == 4  && is_string($wheres[0]) && is_string($wheres[1]) && is_string($wheres[3])) {
                     $result[] = [$wheres[0], $wheres[1], $wheres[2], $wheres[3]];
                     return;
                 }
@@ -85,9 +85,8 @@ class Util
                 throw new DatabaseException('Not Support Where Condition Format,Please Check The Format.' . json_encode($wheres));
             }
 
-            if (array_key_exists(0, $wheres) && is_array($wheres[0])) {
+            if (array_is_list($wheres) && is_array($wheres[0])) {
                 foreach ($wheres as $where) {
-
                     if (!is_array($where)) {
                         throw new DatabaseException('If First Parameter Is Array,Other Parameters Must Be Array.' . json_encode($wheres));
                     }
