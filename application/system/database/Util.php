@@ -30,8 +30,8 @@ class Util
      * where(['id','in',[1,2,3],'or'],['name','=','张三']);// [['id','in',[1,2,3],'or'],['name','=','张三']]
      * where(['id','>',1,'and'],['name','like','%张三%']);// [['id','>',1,'and'],['name','like','%张三%']]
      * 
-     * where(null);// ['id','=',null']
-     * where(['id'=>'211','age'=>[18,20]],'and');// [['id','=',211,'and'],['name','=','张三','and'],['age','in',[18,20]]]
+     * where(null);// ['id','=',null]
+     * where(['id'=>'211','age'=>[18,20]]);// [['id','=','211','and'],['age','in',[18,20]]]
      * 
      */
     public static function where(mixed ...$wheres): array
@@ -40,7 +40,7 @@ class Util
             return [];
         }
 
-        if (is_string($wheres[0]) && trim($wheres[0]) == '') {
+        if (is_string($wheres[0]) && trim($wheres[0]) === '') {
             return [];
         }
 
@@ -85,7 +85,7 @@ class Util
                 throw new DatabaseException('Not Support Where Condition Format,Please Check The Format.' . json_encode($wheres));
             }
 
-            if (isset($wheres[0]) && is_array($wheres[0])) {
+            if (array_key_exists(0, $wheres) && is_array($wheres[0])) {
                 foreach ($wheres as $where) {
 
                     if (!is_array($where)) {
