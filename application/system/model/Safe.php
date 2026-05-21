@@ -12,7 +12,7 @@ class Safe
 
     public static function where(array $wheres, array $fields): array
     {
-        $wheres = Util::where($wheres);
+        $wheres = Util::where(...$wheres);
         foreach ($wheres as $where) {
 
             if (in_array(mb_strtolower($where[1]), ['in', 'between'])) {

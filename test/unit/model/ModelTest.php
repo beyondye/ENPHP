@@ -342,7 +342,7 @@ class ModelTest extends TestCase
             }
 
             // 重写 _bindWhere 方法，返回空数组
-            protected function _bindWhere(float|int|string|array ...$wheres): array
+            protected function _bindWhere(float|int|string|array|bool ...$wheres): array
             {
                 return [];
             }
@@ -474,7 +474,7 @@ class ModelTest extends TestCase
             }
 
             // 重写 _bindWhere 方法，返回空数组
-            protected function _bindWhere(float|int|string|array ...$wheres): array
+            protected function _bindWhere(float|int|string|array|bool ...$wheres): array
             {
                 return [];
             }

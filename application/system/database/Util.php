@@ -30,6 +30,9 @@ class Util
      * where(['id','in',[1,2,3],'or'],['name','=','张三']);// [['id','in',[1,2,3],'or'],['name','=','张三']]
      * where(['id','>',1,'and'],['name','like','%张三%']);// [['id','>',1,'and'],['name','like','%张三%']]
      * 
+     * where(null);// ['id','=',null']
+     * where(['id'=>'211','age'=>[18,20]],'and');// [['id','=',211,'and'],['name','=','张三','and'],['age','in',[18,20]]]
+     * 
      */
     public static function where(mixed ...$wheres): array
     {
@@ -46,10 +49,10 @@ class Util
         $build = function ($wheres, $build, &$result): void {
 
             if (empty($wheres)) {
-                return ;
+                return;
             }
 
-            if (is_string($wheres[0]) || is_numeric($wheres[0])) {
+            if (array_key_exists(0, $wheres) && (is_scalar($wheres[0]) || is_null($wheres[0]))) {
 
                 $count = count($wheres);
 
@@ -58,22 +61,23 @@ class Util
                     return;
                 }
 
-                if ($count == 2 && !is_numeric($wheres[0]) && (is_string($wheres[1]) || is_numeric($wheres[1]))) {
+
+                if ($count == 2 && is_string($wheres[0]) && array_key_exists(1, $wheres) && (is_scalar($wheres[1]) || is_null($wheres[1]))) {
                     $result[] = [$wheres[0], '=', $wheres[1]];
                     return;
                 }
 
-                if ($count == 2 && is_array($wheres[1]) && !is_numeric($wheres[0])) {
+                if ($count == 2 && array_key_exists(1, $wheres) && is_array($wheres[1]) && is_string($wheres[0])) {
                     $result[] = [$wheres[0], 'in', $wheres[1]];
                     return;
                 }
 
-                if ($count == 3 && !is_numeric($wheres[0]) && !is_numeric($wheres[1])) {
+                if ($count == 3 && array_key_exists(1, $wheres) && array_key_exists(2, $wheres) && is_string($wheres[0]) && is_string($wheres[1])) {
                     $result[] = [$wheres[0], $wheres[1], $wheres[2]];
                     return;
                 }
 
-                if ($count == 4 && !is_numeric($wheres[0]) && !is_numeric($wheres[1]) && is_string($wheres[3])) {
+                if ($count == 4 && array_key_exists(1, $wheres) && array_key_exists(2, $wheres) && array_key_exists(3, $wheres) && is_string($wheres[0]) && is_string($wheres[1]) && is_string($wheres[3])) {
                     $result[] = [$wheres[0], $wheres[1], $wheres[2], $wheres[3]];
                     return;
                 }
@@ -81,12 +85,32 @@ class Util
                 throw new DatabaseException('Not Support Where Condition Format,Please Check The Format.' . json_encode($wheres));
             }
 
-            if (is_array($wheres[0])) {
+            if (isset($wheres[0]) && is_array($wheres[0])) {
                 foreach ($wheres as $where) {
+
                     if (!is_array($where)) {
                         throw new DatabaseException('If First Parameter Is Array,Other Parameters Must Be Array.' . json_encode($wheres));
                     }
                     $build($where, $build, $result);
+                }
+                return;
+            }
+
+            if (is_array($wheres)) {
+                foreach ($wheres as $key => $value) {
+                    if (is_string($key)) {
+                        if (is_scalar($value) || is_null($value)) {
+                            $result[] = [$key, '=', $value];
+                            continue;
+                        }
+
+                        if (is_array($value)) {
+                            $result[] = [$key, 'in', $value];
+                            continue;
+                        }
+
+                        throw new DatabaseException('Not Support Where Condition Format,Please Check The Format.' . json_encode($wheres));
+                    }
                 }
                 return;
             }

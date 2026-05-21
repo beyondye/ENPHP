@@ -67,17 +67,20 @@ class Model
     }
 
     //创建前事件
-    protected function creating(array $data): array {
+    protected function creating(array $data): array
+    {
         return $data;
     }
 
     //删除前事件
-    protected function updating(array $data): array {
+    protected function updating(array $data): array
+    {
         return $data;
     }
 
     //删除前事件
-    protected function deleting(array $where): array {
+    protected function deleting(array $where): array
+    {
         return $where;
     }
 
@@ -90,7 +93,18 @@ class Model
 
     public function where(float|int|string|array|bool ...$wheres): object
     {
-        $this->conditions['wheres'][] = $wheres;
+        if (empty($wheres)) {
+            return $this;
+        }
+
+        if (is_array($wheres[0])) {
+            foreach ($wheres as $where) {
+                $this->conditions['wheres'][] = $where;
+            }
+        } else {
+            $this->conditions['wheres'][] = $wheres;
+        }
+
         return $this;
     }
 
@@ -237,7 +251,7 @@ class Model
 
     /**
      * 构建查询条件数组
-     * @param float|int|string|array ...$wheres 查询条件
+     * @param float|int|string|array|bool ...$wheres 查询条件
      * @return array 查询条件数组
      * @example
      * 示例：
@@ -253,7 +267,7 @@ class Model
      * where(['id','in',[1,2,3],'or'], ['name','=','李四']);// [['id','in',[1,2,3],'or'], ['name','=','李四']]
      * 
      **/
-    protected function _bindWhere(float|int|string|array ...$wheres): array
+    protected function _bindWhere(float|int|string|array|bool ...$wheres): array
     {
         if (is_numeric($wheres[0]) || is_string($wheres[0])) {
             if (count($wheres) == 1) {
@@ -313,9 +327,9 @@ class Model
         return $this->where($id)->first();
     }
 
-    public function exists(int|string|array|float $where): bool
+    public function exists(int|string|array|float|bool ...$wheres): bool
     {
-        return $this->where($where)->first() !== null;
+        return $this->where(...$wheres)->first() !== null;
     }
 
     public function rows(int $limit = 1000, int $offset = 0): array

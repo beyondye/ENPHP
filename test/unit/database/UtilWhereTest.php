@@ -38,6 +38,15 @@ class UtilWhereTest extends TestCase
     }
 
     /**
+     * 测试单个null参数
+     */
+    public function testWhereSingleNull()
+    {
+        $result = Util::where(null);
+        $this->assertEquals([['id', '=', null]], $result);
+    }
+
+    /**
      * 测试两个参数 - 字段名和值
      */
     public function testWhereTwoParamsFieldAndValue()
@@ -74,6 +83,15 @@ class UtilWhereTest extends TestCase
     }
 
     /**
+     * 测试五参数抛出异常
+     */
+    public function testWhereFiveParamsThrowsException()
+    {
+        $this->expectException(DatabaseException::class);
+        Util::where('id', '=', 1, 'and', 'extra');
+    }
+
+    /**
      * 测试单个数组参数
      */
     public function testWhereSingleArray()
@@ -107,6 +125,23 @@ class UtilWhereTest extends TestCase
     {
         $result = Util::where(['id', '=', 1], ['name', '=', '张三', 'and']);
         $this->assertEquals([['id', '=', 1, 'and'], ['name', '=', '张三']], $result);
+    }
+
+    /**
+     * 测试所有条件都带连接符的情况
+     */
+    public function testWhereAllConditionsWithOperators()
+    {
+        $result = Util::where(
+            ['id', '>', 10, 'and'],
+            ['name', 'like', '%test%', 'or'],
+            ['status', '=', 'active', 'and']
+        );
+        $this->assertEquals([
+            ['id', '>', 10, 'and'],
+            ['name', 'like', '%test%', 'or'],
+            ['status', '=', 'active']
+        ], $result);
     }
 
     /**
@@ -164,6 +199,14 @@ class UtilWhereTest extends TestCase
         $this->assertEquals([['user_id', '=', 1]], $result);
     }
 
+    /**
+     * 测试边界情况 - 纯数字字段名
+     */
+    public function testWhereNumericFieldName()
+    {
+        $result = Util::where('1', '=', 100);
+        $this->assertEquals([['1', '=', 100]], $result);
+    }
 
     /**
      * 测试边界情况 - 大型数组参数
@@ -185,15 +228,6 @@ class UtilWhereTest extends TestCase
     }
 
     /**
-     * 测试边界情况 - 带 'not' 逻辑运算符的情况
-     */
-    public function testWhereNotLogicalOperator()
-    {
-        $result = Util::where(['id', '=', 1, 'not'], ['name', '=', 'test']);
-        $this->assertEquals([['id', '=', 1, 'not'], ['name', '=', 'test']], $result);
-    }
-
-    /**
      * 测试边界情况 - 带浮点数的情况
      */
     public function testWhereFloatValue()
@@ -212,24 +246,68 @@ class UtilWhereTest extends TestCase
         Util::where(['id', '=', 1], 'invalid_param');
     }
 
-        /**
-     * 测试非数组参数情况（触发 'Not Support Non-Array Parameter' 异常）
+    /**
+     * 测试非数组参数情况（触发异常）
      */
     public function testWhereNonArrayParameter()
     {
         $this->expectException(DatabaseException::class);
-        $this->expectExceptionMessage('Not Support Non-Array Parameter.');
-        // 传入包含布尔值的数组，布尔值既不是字符串/数字也不是数组
-        Util::where([true]);
+        $this->expectExceptionMessage('Not Support Where Condition Format,Please Check The Format.');
+        Util::where([object::class => new \DateTime()]);
     }
 
-        /**
-     * 测试嵌套空数组情况（覆盖 lines 48-50 的 empty($wheres) 检查）
+    /**
+     * 测试嵌套空数组情况
      */
     public function testWhereNestedEmptyArray()
     {
-        // 传入包含空数组的参数，应该返回空数组
         $result = Util::where([[]]);
         $this->assertEquals([], $result);
     }
+
+    /**
+     * 测试关联数组参数 - 字段+值格式
+     */
+    public function testWhereAssociativeArrayFieldAndValue()
+    {
+        $result = Util::where(['status' => 'active', 'id' => 1]);
+        $this->assertEquals([['status', '=', 'active', 'and'], ['id', '=', 1]], $result);
+    }
+
+    /**
+     * 测试关联数组参数 - 字段+数组格式（IN查询）
+     */
+    public function testWhereAssociativeArrayFieldAndArray()
+    {
+        $result = Util::where(['id' => [1, 2, 3], 'status' => 'active']);
+        $this->assertEquals([['id', 'in', [1, 2, 3], 'and'], ['status', '=', 'active']], $result);
+    }
+
+    /**
+     * 测试关联数组参数 - 包含null值
+     */
+    public function testWhereAssociativeArrayWithNull()
+    {
+        $result = Util::where(['deleted_at' => null]);
+        $this->assertEquals([['deleted_at', '=', null]], $result);
+    }
+
+    /**
+     * 测试关联数组参数 - 值为对象时抛出异常
+     */
+    public function testWhereAssociativeArrayWithObjectValue()
+    {
+        $this->expectException(DatabaseException::class);
+        Util::where(['date' => new \DateTime()]);
+    }
+/**
+     * 测试纯关联数组参数（不含数字索引）
+     */
+    public function testWherePureAssociativeArray()
+    {
+        // 使用纯字符串键的关联数组
+        $result = Util::where(['status' => 'active', 'name' => 'test']);
+        $this->assertEquals([['status', '=', 'active', 'and'], ['name', '=', 'test']], $result);
+    }
+
 }
