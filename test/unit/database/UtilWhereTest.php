@@ -310,4 +310,23 @@ class UtilWhereTest extends TestCase
         $this->assertEquals([['status', '=', 'active', 'and'], ['name', '=', 'test']], $result);
     }
 
+    /**
+     * 测试关联数组中数字索引的数组元素被递归处理（覆盖第 113-115 行）
+     */
+    public function testWhereAssociativeArrayWithNumericIndexArray()
+    {
+        $result = Util::where(['status' => 'active', 0 => ['id', '=', 1]]);
+        $this->assertEquals([['status', '=', 'active', 'and'], ['id', '=', 1]], $result);
+    }
+
+    /**
+     * 测试关联数组中数字索引的对象元素抛出异常（覆盖第 117-118 行）
+     */
+    public function testWhereAssociativeArrayWithNumericIndexObject()
+    {
+        $this->expectException(DatabaseException::class);
+        $this->expectExceptionMessage('Not Support Non-Array Parameter.');
+        Util::where(['status' => 'active', 0 => new \stdClass()]);
+    }
+
 }

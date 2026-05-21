@@ -61,7 +61,6 @@ class Util
                     return;
                 }
 
-
                 if ($count == 2 && is_string($wheres[0]) && (is_scalar($wheres[1]) || is_null($wheres[1]))) {
                     $result[] = [$wheres[0], '=', $wheres[1]];
                     return;
@@ -110,11 +109,15 @@ class Util
 
                         throw new DatabaseException('Not Support Where Condition Format,Please Check The Format.' . json_encode($wheres));
                     }
-                }
-                return;
-            }
 
-            throw new DatabaseException('Not Support Non-Array Parameter.' . json_encode($wheres));
+                    if (is_array($value)) {
+                        $build($value, $build, $result);
+                        continue;
+                    }
+
+                    throw new DatabaseException('Not Support Non-Array Parameter.' . json_encode($wheres));
+                }
+            }
         };
 
         $build($wheres, $build, $result);
