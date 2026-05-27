@@ -9,7 +9,7 @@ Thumbs.db
 /node_modules
 .phpunit.result.cache
 .phpunit-watcher-result.cache
-/test/coverage
-/test/.phpunit.cache
+/tests/coverage
+/tests/.phpunit.cache
 composer.lock
 nginx.conf
