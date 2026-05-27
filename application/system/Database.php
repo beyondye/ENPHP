@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace system;
+namespace System;
 
-use system\database\DatabaseAbstract;
-use system\database\DatabaseException;
-use system\Config;
+use System\Database\DatabaseAbstract;
+use System\Database\DatabaseException;
+use System\Config;
 
 class Database
 {
@@ -34,13 +34,13 @@ class Database
 
         switch ($driver) {
             case 'pdo_mysql':
-                $ins[$service] = new database\pdo\Mysql($config);
+                $ins[$service] = new Database\PDO\Mysql($config);
                 break;
             case 'pdo_sqlite':
-                $ins[$service] = new database\pdo\Sqlite($config);
+                $ins[$service] = new Database\PDO\Sqlite($config);
                 break;
             case 'pdo_pgsql':
-                $ins[$service] = new database\pdo\Pgsql($config);
+                $ins[$service] = new Database\PDO\Pgsql($config);
                 break;
             default:
                 throw new DatabaseException("'{$service}' Driver Not Support.");

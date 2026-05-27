@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace system\database\pdo;
+namespace System\Database\PDO;
 
-use system\database\DatabaseException;
+use System\Database\DatabaseException;
 
 class Build
 {

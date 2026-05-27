@@ -1,10 +1,9 @@
 <?php
+
 declare(strict_types=1);
-namespace system\database;
 
-use system\SysException;
+namespace System\Database;
 
-class DatabaseException extends SysException
-{
+use System\SysException;
 
-}
+class DatabaseException extends SysException {}

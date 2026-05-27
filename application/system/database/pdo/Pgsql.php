@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace system\database\pdo;
+namespace System\Database\PDO;
 
-use system\database\DatabaseAbstract;
-use system\database\DatabaseException;
+use System\Database\DatabaseAbstract;
+use System\Database\DatabaseException;
 
 class Pgsql extends DatabaseAbstract
 {

@@ -1,6 +1,6 @@
 <?php
 return [
     'main/index' =>function(){
-        return new \app\module\www\Main()->index();
+        return new \App\Modules\Www\Main()->index();
     }
 ];

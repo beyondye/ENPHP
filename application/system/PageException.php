@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
 
-namespace system;
+namespace System;
 
-use system\SysException;
+use System\SysException;
 
 class PageException extends SysException {
 

@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace system\database\pdo;
+namespace System\Database\PDO;
 
-use system\database\DatabaseException;
-use system\database\Util;
-use system\database\pdo\Build;
-use system\database\ResultAbstract;
+use System\Database\DatabaseException;
+use System\Database\Util;
+use System\Database\PDO\Build;
+use System\Database\ResultAbstract;
 
 trait Common
 {

@@ -36,11 +36,11 @@ $exceptionHandler = function (\Throwable $e) {
     $template = 'error/general';
     $log = false;
 
-    if (\system\Config::get(EXCEPTION_CONFIG_NAME) === null || !is_array(\system\Config::get(EXCEPTION_CONFIG_NAME))) {
-        \system\Config::set(EXCEPTION_CONFIG_NAME, [\Throwable::class => ['log' => true]]);
+    if (\System\Config::get(EXCEPTION_CONFIG_NAME) === null || !is_array(\System\Config::get(EXCEPTION_CONFIG_NAME))) {
+        \System\Config::set(EXCEPTION_CONFIG_NAME, [\Throwable::class => ['log' => true]]);
     }
 
-    foreach (\system\Config::get(EXCEPTION_CONFIG_NAME) as $class => $config) {
+    foreach (\System\Config::get(EXCEPTION_CONFIG_NAME) as $class => $config) {
         if ($e instanceof $class) {
             $http = $config['http'] ?? 500;
             $biz = $config['biz'] ?? 5000;
@@ -57,20 +57,20 @@ $exceptionHandler = function (\Throwable $e) {
 
     if (ob_get_length()) ob_clean(); // 清除已有的输出缓冲
 
-    \system\Output::status($http);
+    \System\Output::status($http);
 
-    if (\system\Input::isAjax()) {
+    if (\System\Input::isAjax()) {
         $msg = ($http >= 500) ? 'Internal Server Error' : $e->getMessage();
         $data = method_exists($e, 'getData') ? $e->getData() : [];
-        \system\Output::json($biz, $msg, $data);
+        \System\Output::json($biz, $msg, $data);
         return;
     }
 
     // 页面响应
     if ($http < 500) {
-        \system\Output::error($http, $template, ['exception' => $e]);
+        \System\Output::error($http, $template, ['exception' => $e]);
     } else {
-        \system\Output::error($http, $template);
+        \System\Output::error($http, $template);
     }
 };
 set_exception_handler($exceptionHandler);
@@ -98,22 +98,22 @@ register_shutdown_function(function () use ($exceptionHandler) {
 });
 
 
-\system\Config::init(AUTOLOAD_CONFIG_PATH);
+\System\Config::init(AUTOLOAD_CONFIG_PATH);
 
-define('ACTION', \system\Input::get(ACTION_KEY_NAME, DEFAULT_ACTION));
+define('ACTION', \System\Input::get(ACTION_KEY_NAME, DEFAULT_ACTION));
 
-\system\Middleware::before();
+\System\Middleware::before();
 
-if (\system\Config::get(ROUTE_CONFIG_NAME) === null) {
-    throw new \system\PageException('Page Not Found');
+if (\System\Config::get(ROUTE_CONFIG_NAME) === null) {
+    throw new \System\PageException('Page Not Found');
 }
 
-if (!isset(\system\Config::get(ROUTE_CONFIG_NAME)[ACTION])) {
-    throw new \system\PageException('Page Not Found');
+if (!isset(\System\Config::get(ROUTE_CONFIG_NAME)[ACTION])) {
+    throw new \System\PageException('Page Not Found');
 }
 
-\system\Config::get(ROUTE_CONFIG_NAME)[ACTION]();
+\System\Config::get(ROUTE_CONFIG_NAME)[ACTION]();
 
-\system\Middleware::after();
+\System\Middleware::after();
 
 //echo '<pre>',var_dump(get_included_files()),'</pre>';

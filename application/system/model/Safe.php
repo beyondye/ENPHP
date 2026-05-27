@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace system\model;
+namespace System\Model;
 
-use system\model\ModelException;
-use system\database\Util;
+use System\Model\ModelException;
+use System\Database\Util;
 
 class Safe
 {

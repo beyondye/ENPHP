@@ -1,7 +1,8 @@
 <?php
+
 declare(strict_types=1);
 
-namespace system\authentication;
+namespace System\Authentication;
 
 abstract class AbstractAuthentication
 {
@@ -58,5 +59,4 @@ abstract class AbstractAuthentication
      * @return bool
      */
     abstract protected function remove(): bool;
-
 }

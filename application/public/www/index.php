@@ -16,10 +16,10 @@ const PROFILER = true;
 define('APP_DIR', realpath('../../') . DIRECTORY_SEPARATOR);
 
 //系统文件目录
-define('SYS_DIR', realpath('../../system') . DIRECTORY_SEPARATOR);
+define('SYS_DIR', realpath('../../System') . DIRECTORY_SEPARATOR);
 
 //设置模板目录
-const TEMPLATE_DIR = APP_DIR . 'template/www/';
+const TEMPLATE_DIR = APP_DIR . 'templates/www/';
 
 //入口地址
 define('ENTRY', $_SERVER['PHP_SELF']);

@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace system;
+namespace System;
 
-use system\authentication\AuthenticationException;
+use System\Authentication\AuthenticationException;
 
 class Authentication
 {

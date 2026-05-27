@@ -1,6 +1,8 @@
 <?php
 
-namespace system\cache;
+declare(strict_types=1);
+
+namespace System\Cache;
 
 class Redis extends AbstractCache
 {
@@ -138,7 +140,6 @@ class Redis extends AbstractCache
                 $this->redis->sAdd($tag, $key);
             }
         }
-
     }
 
     /**
@@ -212,5 +213,4 @@ class Redis extends AbstractCache
 
         return $this;
     }
-
 }

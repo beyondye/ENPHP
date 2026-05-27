@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace system\database;
+namespace System\Database;
 
-use system\database\ResultAbstract;
+use System\Database\ResultAbstract;
 
 abstract class DatabaseAbstract
 {

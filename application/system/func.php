@@ -11,7 +11,7 @@ function profiler(string $type, string $mark, string $desc = '')
         return false;
     }
 
-    $profiler = \system\Profiler::instance();
+    $profiler = \System\Profiler::instance();
     $profiler->$type($mark, $desc);
 
     return true;
@@ -26,7 +26,7 @@ function lang(string $key, array $replace = [], string $lang = '')
 
     static $filedata = [];
 
-    $language = $lang ?: \system\Lang::get(); //获取当前语言环境
+    $language = $lang ?: \System\Lang::get(); //获取当前语言环境
 
     $keys = explode('.', $key);
     $file = $keys[0];
@@ -113,10 +113,10 @@ function lang(string $key, array $replace = [], string $lang = '')
 
 function service(string $name): object
 {
-    $service = \system\Config::get($name);
+    $service = \System\Config::get($name);
 
     if ($service === null) {
-        throw new \system\SysException("Service config not found:[{$name}]");
+        throw new \System\SysException("Service config not found:[{$name}]");
     }
     
     // 如果是闭包或其他可调用对象，直接调用
@@ -129,5 +129,5 @@ function service(string $name): object
         return new $service();
     }
     
-    throw new \system\SysException("Service config must be callable:[{$name}]");
+    throw new \System\SysException("Service config must be callable:[{$name}]");
 }

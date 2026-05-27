@@ -1,11 +1,7 @@
 <?php
+
 declare(strict_types=1);
 
-namespace system;
+namespace System;
 
-use Exception;
-
-class SysException extends Exception
-{
-
-}
+class SysException extends \Exception {}

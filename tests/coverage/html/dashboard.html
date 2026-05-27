@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="UTF-8">
+  <title>Dashboard for /Users/ding/site/ENPHP/application</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="_css/bootstrap.min.css?v=13.0.1" rel="stylesheet" type="text/css">
+  <link href="_css/billboard.min.css?v=13.0.1" rel="stylesheet" type="text/css">
+  <link href="_css/style.css?v=13.0.1" rel="stylesheet" type="text/css">
+  <link href="_css/custom.css" rel="stylesheet" type="text/css">
+ </head>
+ <body>
+  <header>
+   <div class="container-fluid">
+    <div class="row">
+     <div class="col-md-12">
+      <nav aria-label="breadcrumb">
+       <ol class="breadcrumb">
+         <li class="breadcrumb-item"><a href="index.html">/Users/ding/site/ENPHP/application</a></li>
+         <li class="breadcrumb-item active">(Dashboard)</li>
+
+       </ol>
+      </nav>
+     </div>
+    </div>
+   </div>
+  </header>
+  <div class="container-fluid">
+   <div class="row">
+    <div class="col-md-12">
+     <h2>Classes</h2>
+    </div>
+   </div>
+   <div class="row">
+    <div class="col-md-6">
+     <h3>Coverage Distribution</h3>
+     <div id="classesCoverageDistribution" style="height: 300px;">
+       <svg></svg>
+     </div>
+    </div>
+    <div class="col-md-6">
+     <h3>Complexity</h3>
+     <div id="classComplexity" style="height: 300px;">
+       <svg></svg>
+     </div>
+    </div>
+   </div>
+   <div class="row">
+    <div class="col-md-6">
+     <h3 style="margin-top: 2rem;">Insufficient Coverage</h3>
+     <div class="scrollbox">
+      <table class="table">
+       <thead>
+        <tr>
+         <th>Class</th>
+         <th class="text-right">Coverage</th>
+        </tr>
+       </thead>
+       <tbody>
+       <tr><td><a href="Middlewares/Auth.php.html#7">App\Middlewares\Auth</a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Middlewares/Authorize.php.html#7">App\Middlewares\Authorize</a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Middlewares/Lang.php.html#8">App\Middlewares\Lang</a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Modules/Www/Main.php.html#8">App\Modules\Www\Main</a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Services/Test.php.html#9">App\Services\Test</a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="System/Authentication/Cookie.php.html#7">System\Authentication\Cookie</a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="System/Authentication/Jwt.php.html#7">System\Authentication\Jwt</a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="System/Authentication/Session.php.html#7">System\Authentication\Session</a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="System/Cache.php.html#6">System\Cache</a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="System/Cache/AbstractCache.php.html#7">System\Cache\AbstractCache</a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="System/Cache/File.php.html#6">System\Cache\File</a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="System/Cache/Redis.php.html#7">System\Cache\Redis</a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="System/Helper.php.html#6">System\Helper</a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="System/Library/Captcha.php.html#7">System\Library\Captcha</a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="System/Library/Grid.php.html#6">system\library\Grid</a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="System/Library/Html.php.html#5">system\library\Html</a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="System/Library/Image.php.html#22">system\library\Image</a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="System/Library/Smtp.php.html#21">system\library\Smtp</a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="System/Library/Upload.php.html#6">system\library\Upload</a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="System/Middleware.php.html#7">System\Middleware</a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="System/Profiler.php.html#6">System\Profiler</a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="System/Redis.php.html#6">System\Redis</a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="System/Security.php.html#6">System\Security</a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="System/Config.php.html#7">System\Config</a></td><td class="text-right">68%</td></tr>
+       <tr><td><a href="System/Output.php.html#7">System\Output</a></td><td class="text-right">80%</td></tr>
+       <tr><td><a href="System/Database.php.html#11">System\Database</a></td><td class="text-right">85%</td></tr>
+       <tr><td><a href="System/Authentication.php.html#9">System\Authentication</a></td><td class="text-right">89%</td></tr>
+
+       </tbody>
+      </table>
+     </div>
+    </div>
+    <div class="col-md-6">
+     <h3 style="margin-top: 2rem;">Project Risks</h3>
+     <div class="scrollbox">
+      <table class="table">
+       <thead>
+        <tr>
+         <th>Class</th>
+         <th class="text-right">Coverage</th>
+         <th class="text-right">Complexity</th>
+         <th class="text-right"><abbr title="Change Risk Anti-Patterns (CRAP) Index">CRAP</abbr></th>
+        </tr>
+       </thead>
+       <tbody>
+       <tr><td><a href="System/Library/Smtp.php.html#21">system\library\Smtp</a></td><td class="text-right">0.0%</td><td class="text-right">53</td><td class="text-right">2862</td></tr>
+       <tr><td><a href="System/Cache/File.php.html#6">System\Cache\File</a></td><td class="text-right">0.0%</td><td class="text-right">50</td><td class="text-right">2550</td></tr>
+       <tr><td><a href="System/Library/Grid.php.html#6">system\library\Grid</a></td><td class="text-right">0.0%</td><td class="text-right">35</td><td class="text-right">1260</td></tr>
+       <tr><td><a href="System/Cache/Redis.php.html#7">System\Cache\Redis</a></td><td class="text-right">0.0%</td><td class="text-right">24</td><td class="text-right">600</td></tr>
+       <tr><td><a href="System/Library/Image.php.html#22">system\library\Image</a></td><td class="text-right">0.0%</td><td class="text-right">23</td><td class="text-right">552</td></tr>
+       <tr><td><a href="System/Library/Html.php.html#5">system\library\Html</a></td><td class="text-right">0.0%</td><td class="text-right">20</td><td class="text-right">420</td></tr>
+       <tr><td><a href="System/Authentication/Jwt.php.html#7">System\Authentication\Jwt</a></td><td class="text-right">0.0%</td><td class="text-right">19</td><td class="text-right">380</td></tr>
+       <tr><td><a href="System/Library/Upload.php.html#6">system\library\Upload</a></td><td class="text-right">0.0%</td><td class="text-right">18</td><td class="text-right">342</td></tr>
+       <tr><td><a href="System/Helper.php.html#6">System\Helper</a></td><td class="text-right">0.0%</td><td class="text-right">16</td><td class="text-right">272</td></tr>
+       <tr><td><a href="System/Authentication/Cookie.php.html#7">System\Authentication\Cookie</a></td><td class="text-right">0.0%</td><td class="text-right">15</td><td class="text-right">240</td></tr>
+       <tr><td><a href="System/Library/Captcha.php.html#7">System\Library\Captcha</a></td><td class="text-right">0.0%</td><td class="text-right">15</td><td class="text-right">240</td></tr>
+       <tr><td><a href="System/Authentication/Session.php.html#7">System\Authentication\Session</a></td><td class="text-right">0.0%</td><td class="text-right">13</td><td class="text-right">182</td></tr>
+       <tr><td><a href="System/Profiler.php.html#6">System\Profiler</a></td><td class="text-right">0.0%</td><td class="text-right">10</td><td class="text-right">110</td></tr>
+       <tr><td><a href="System/Redis.php.html#6">System\Redis</a></td><td class="text-right">0.0%</td><td class="text-right">9</td><td class="text-right">90</td></tr>
+       <tr><td><a href="System/Security.php.html#6">System\Security</a></td><td class="text-right">0.0%</td><td class="text-right">8</td><td class="text-right">72</td></tr>
+       <tr><td><a href="System/Cache.php.html#6">System\Cache</a></td><td class="text-right">0.0%</td><td class="text-right">5</td><td class="text-right">30</td></tr>
+       <tr><td><a href="System/Output.php.html#7">System\Output</a></td><td class="text-right">80.9%</td><td class="text-right">21</td><td class="text-right">24</td></tr>
+       <tr><td><a href="System/Config.php.html#7">System\Config</a></td><td class="text-right">69.0%</td><td class="text-right">16</td><td class="text-right">23</td></tr>
+       <tr><td><a href="System/Middleware.php.html#7">System\Middleware</a></td><td class="text-right">0.0%</td><td class="text-right">4</td><td class="text-right">20</td></tr>
+       <tr><td><a href="System/Authentication.php.html#9">System\Authentication</a></td><td class="text-right">89.5%</td><td class="text-right">9</td><td class="text-right">9</td></tr>
+       <tr><td><a href="System/Database.php.html#11">System\Database</a></td><td class="text-right">85.0%</td><td class="text-right">8</td><td class="text-right">8</td></tr>
+
+       </tbody>
+      </table>
+     </div>
+    </div>
+   </div>
+   <div class="row">
+    <div class="col-md-12">
+     <h2 style="margin-top: 3rem;">Methods</h2>
+    </div>
+   </div>
+   <div class="row">
+    <div class="col-md-6">
+     <h3>Coverage Distribution</h3>
+     <div id="methodsCoverageDistribution" style="height: 300px;">
+       <svg></svg>
+     </div>
+    </div>
+    <div class="col-md-6">
+     <h3>Complexity</h3>
+     <div id="methodComplexity" style="height: 300px;">
+       <svg></svg>
+     </div>
+    </div>
+   </div>
+   <div class="row">
+    <div class="col-md-6">
+     <h3 style="margin-top: 2rem;">Insufficient Coverage</h3>
+     <div class="scrollbox">
+      <table class="table">
+       <thead>
+        <tr>
+         <th>Method</th>
+         <th class="text-right">Coverage</th>
+        </tr>
+       </thead>
+       <tbody>
+       <tr><td><a href="Middlewares/Auth.php.html#10"><abbr title="App\Middlewares\Auth::handle">handle</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Middlewares/Authorize.php.html#10"><abbr title="App\Middlewares\Authorize::handle">handle</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Middlewares/Lang.php.html#10"><abbr title="App\Middlewares\Lang::handle">handle</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Modules/Www/Main.php.html#10"><abbr title="App\Modules\Www\Main::index">index</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Services/Test.php.html#11"><abbr title="App\Services\Test::__construct">__construct</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="System/Authentication/Cookie.php.html#23"><abbr title="System\Authentication\Cookie::__construct">__construct</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="System/Authentication/Cookie.php.html#33"><abbr title="System\Authentication\Cookie::check">check</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="System/Authentication/Cookie.php.html#77"><abbr title="System\Authentication\Cookie::data">data</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="System/Authentication/Cookie.php.html#98"><abbr title="System\Authentication\Cookie::id">id</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="System/Authentication/Cookie.php.html#111"><abbr title="System\Authentication\Cookie::create">create</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="System/Authentication/Cookie.php.html#137"><abbr title="System\Authentication\Cookie::remove">remove</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="System/Authentication/Jwt.php.html#15"><abbr title="System\Authentication\Jwt::__construct">__construct</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="System/Authentication/Jwt.php.html#25"><abbr title="System\Authentication\Jwt::check">check</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="System/Authentication/Jwt.php.html#81"><abbr title="System\Authentication\Jwt::data">data</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="System/Authentication/Jwt.php.html#102"><abbr title="System\Authentication\Jwt::id">id</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="System/Authentication/Jwt.php.html#115"><abbr title="System\Authentication\Jwt::create">create</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="System/Authentication/Jwt.php.html#136"><abbr title="System\Authentication\Jwt::remove">remove</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="System/Authentication/Jwt.php.html#149"><abbr title="System\Authentication\Jwt::base64url_encode">base64url_encode</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="System/Authentication/Jwt.php.html#161"><abbr title="System\Authentication\Jwt::base64url_decode">base64url_decode</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="System/Authentication/Session.php.html#18"><abbr title="System\Authentication\Session::__construct">__construct</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="System/Authentication/Session.php.html#27"><abbr title="System\Authentication\Session::check">check</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="System/Authentication/Session.php.html#64"><abbr title="System\Authentication\Session::data">data</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="System/Authentication/Session.php.html#84"><abbr title="System\Authentication\Session::id">id</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="System/Authentication/Session.php.html#97"><abbr title="System\Authentication\Session::create">create</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="System/Authentication/Session.php.html#112"><abbr title="System\Authentication\Session::remove">remove</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="System/Cache.php.html#14"><abbr title="System\Cache::instance">instance</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="System/Cache/AbstractCache.php.html#19"><abbr title="System\Cache\AbstractCache::set">set</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="System/Cache/AbstractCache.php.html#29"><abbr title="System\Cache\AbstractCache::increment">increment</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="System/Cache/AbstractCache.php.html#40"><abbr title="System\Cache\AbstractCache::decrement">decrement</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="System/Cache/AbstractCache.php.html#50"><abbr title="System\Cache\AbstractCache::delete">delete</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="System/Cache/AbstractCache.php.html#57"><abbr title="System\Cache\AbstractCache::flush">flush</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="System/Cache/AbstractCache.php.html#66"><abbr title="System\Cache\AbstractCache::get">get</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="System/Cache/AbstractCache.php.html#75"><abbr title="System\Cache\AbstractCache::tags">tags</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="System/Cache/File.php.html#36"><abbr title="System\Cache\File::__construct">__construct</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="System/Cache/File.php.html#48"><abbr title="System\Cache\File::route">route</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="System/Cache/File.php.html#64"><abbr title="System\Cache\File::set">set</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="System/Cache/File.php.html#96"><abbr title="System\Cache\File::increment">increment</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="System/Cache/File.php.html#124"><abbr title="System\Cache\File::decrement">decrement</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="System/Cache/File.php.html#151"><abbr title="System\Cache\File::delete">delete</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="System/Cache/File.php.html#173"><abbr title="System\Cache\File::flush">flush</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="System/Cache/File.php.html#193"><abbr title="System\Cache\File::delTree">delTree</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="System/Cache/File.php.html#209"><abbr title="System\Cache\File::get">get</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="System/Cache/File.php.html#240"><abbr title="System\Cache\File::expire">expire</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="System/Cache/File.php.html#265"><abbr title="System\Cache\File::setTags">setTags</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="System/Cache/File.php.html#297"><abbr title="System\Cache\File::getTags">getTags</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="System/Cache/File.php.html#323"><abbr title="System\Cache\File::flushTags">flushTags</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="System/Cache/File.php.html#356"><abbr title="System\Cache\File::tags">tags</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="System/Cache/Redis.php.html#32"><abbr title="System\Cache\Redis::__construct">__construct</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="System/Cache/Redis.php.html#46"><abbr title="System\Cache\Redis::set">set</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="System/Cache/Redis.php.html#65"><abbr title="System\Cache\Redis::increment">increment</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="System/Cache/Redis.php.html#78"><abbr title="System\Cache\Redis::decrement">decrement</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="System/Cache/Redis.php.html#90"><abbr title="System\Cache\Redis::delete">delete</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="System/Cache/Redis.php.html#100"><abbr title="System\Cache\Redis::flush">flush</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="System/Cache/Redis.php.html#116"><abbr title="System\Cache\Redis::get">get</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="System/Cache/Redis.php.html#133"><abbr title="System\Cache\Redis::setTags">setTags</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="System/Cache/Redis.php.html#152"><abbr title="System\Cache\Redis::getTags">getTags</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="System/Cache/Redis.php.html#175"><abbr title="System\Cache\Redis::flushTags">flushTags</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="System/Cache/Redis.php.html#206"><abbr title="System\Cache\Redis::tags">tags</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="System/Config.php.html#14"><abbr title="System\Config::init">init</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="System/Helper.php.html#20"><abbr title="System\Helper::pager">pager</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="System/Library/Captcha.php.html#112"><abbr title="System\Library\Captcha::__construct">__construct</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="System/Library/Captcha.php.html#130"><abbr title="System\Library\Captcha::getColor">getColor</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="System/Library/Captcha.php.html#149"><abbr title="System\Library\Captcha::setNoisePix">setNoisePix</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="System/Library/Captcha.php.html#162"><abbr title="System\Library\Captcha::setNoiseLine">setNoiseLine</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="System/Library/Captcha.php.html#175"><abbr title="System\Library\Captcha::create">create</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="System/Library/Captcha.php.html#220"><abbr title="System\Library\Captcha::show">show</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="System/Library/Captcha.php.html#231"><abbr title="System\Library\Captcha::getCode">getCode</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="System/Library/Grid.php.html#73"><abbr title="system\library\Grid::setField">setField</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="System/Library/Grid.php.html#172"><abbr title="system\library\Grid::setFilter">setFilter</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="System/Library/Grid.php.html#186"><abbr title="system\library\Grid::filters">filters</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="System/Library/Grid.php.html#199"><abbr title="system\library\Grid::setTool">setTool</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="System/Library/Grid.php.html#214"><abbr title="system\library\Grid::tools">tools</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="System/Library/Grid.php.html#226"><abbr title="system\library\Grid::tr">tr</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="System/Library/Grid.php.html#255"><abbr title="system\library\Grid::thead">thead</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="System/Library/Grid.php.html#280"><abbr title="system\library\Grid::table">table</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="System/Library/Grid.php.html#297"><abbr title="system\library\Grid::render">render</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="System/Library/Html.php.html#30"><abbr title="system\library\Html::tag">tag</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="System/Library/Html.php.html#77"><abbr title="system\library\Html::tags">tags</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="System/Library/Html.php.html#103"><abbr title="system\library\Html::select">select</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="System/Library/Html.php.html#137"><abbr title="system\library\Html::input">input</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="System/Library/Html.php.html#150"><abbr title="system\library\Html::elements">elements</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="System/Library/Html.php.html#172"><abbr title="system\library\Html::properties">properties</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="System/Library/Image.php.html#197"><abbr title="system\library\Image::create">create</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="System/Library/Image.php.html#233"><abbr title="system\library\Image::ext">ext</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="System/Library/Image.php.html#256"><abbr title="system\library\Image::save">save</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="System/Library/Image.php.html#276"><abbr title="system\library\Image::resize">resize</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="System/Library/Image.php.html#331"><abbr title="system\library\Image::watermark">watermark</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="System/Library/Smtp.php.html#110"><abbr title="system\library\Smtp::__construct">__construct</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="System/Library/Smtp.php.html#133"><abbr title="system\library\Smtp::from">from</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="System/Library/Smtp.php.html#145"><abbr title="system\library\Smtp::fromname">fromname</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="System/Library/Smtp.php.html#157"><abbr title="system\library\Smtp::to">to</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="System/Library/Smtp.php.html#180"><abbr title="system\library\Smtp::cc">cc</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="System/Library/Smtp.php.html#202"><abbr title="system\library\Smtp::bcc">bcc</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="System/Library/Smtp.php.html#224"><abbr title="system\library\Smtp::attachment">attachment</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="System/Library/Smtp.php.html#238"><abbr title="system\library\Smtp::subject">subject</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="System/Library/Smtp.php.html#250"><abbr title="system\library\Smtp::mime">mime</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="System/Library/Smtp.php.html#262"><abbr title="system\library\Smtp::body">body</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="System/Library/Smtp.php.html#273"><abbr title="system\library\Smtp::send">send</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="System/Library/Smtp.php.html#297"><abbr title="system\library\Smtp::error">error</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="System/Library/Smtp.php.html#310"><abbr title="system\library\Smtp::getCommand">getCommand</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="System/Library/Smtp.php.html#391"><abbr title="system\library\Smtp::sendCommand">sendCommand</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="System/Library/Smtp.php.html#433"><abbr title="system\library\Smtp::readFile">readFile</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="System/Library/Smtp.php.html#448"><abbr title="system\library\Smtp::socket">socket</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="System/Library/Smtp.php.html#477"><abbr title="system\library\Smtp::close">close</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="System/Library/Upload.php.html#118"><abbr title="system\library\Upload::__construct">__construct</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="System/Library/Upload.php.html#131"><abbr title="system\library\Upload::getExt">getExt</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="System/Library/Upload.php.html#142"><abbr title="system\library\Upload::isExt">isExt</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="System/Library/Upload.php.html#165"><abbr title="system\library\Upload::execute">execute</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="System/Library/Upload.php.html#230"><abbr title="system\library\Upload::createDir">createDir</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="System/Middleware.php.html#12"><abbr title="System\Middleware::before">before</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="System/Middleware.php.html#22"><abbr title="System\Middleware::after">after</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="System/Model/Safe.php.html#144"><abbr title="System\Model\Safe::boolean">boolean</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="System/Output.php.html#195"><abbr title="System\Output::redirect">redirect</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="System/Output.php.html#209"><abbr title="System\Output::status">status</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="System/Output.php.html#227"><abbr title="System\Output::error">error</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="System/Profiler.php.html#16"><abbr title="System\Profiler::instance">instance</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="System/Profiler.php.html#31"><abbr title="System\Profiler::microtime">microtime</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="System/Profiler.php.html#44"><abbr title="System\Profiler::benchmark">benchmark</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="System/Profiler.php.html#66"><abbr title="System\Profiler::memory">memory</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="System/Profiler.php.html#79"><abbr title="System\Profiler::__destruct">__destruct</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="System/Redis.php.html#22"><abbr title="System\Redis::__construct">__construct</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="System/Redis.php.html#52"><abbr title="System\Redis::__destruct">__destruct</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="System/Redis.php.html#64"><abbr title="System\Redis::instance">instance</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="System/Security.php.html#14"><abbr title="System\Security::token">token</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="System/Security.php.html#31"><abbr title="System\Security::tokenName">tokenName</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="System/Security.php.html#45"><abbr title="System\Security::checkToken">checkToken</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="System/Output.php.html#126"><abbr title="System\Output::view">view</abbr></a></td><td class="text-right">68%</td></tr>
+       <tr><td><a href="System/Database.php.html#14"><abbr title="System\Database::instance">instance</abbr></a></td><td class="text-right">85%</td></tr>
+       <tr><td><a href="System/Input.php.html#65"><abbr title="System\Input::isAjax">isAjax</abbr></a></td><td class="text-right">85%</td></tr>
+       <tr><td><a href="System/Model.php.html#94"><abbr title="System\Model::where">where</abbr></a></td><td class="text-right">85%</td></tr>
+       <tr><td><a href="System/Authentication.php.html#21"><abbr title="System\Authentication::instance">instance</abbr></a></td><td class="text-right">88%</td></tr>
+
+       </tbody>
+      </table>
+     </div>
+    </div>
+    <div class="col-md-6">
+     <h3 style="margin-top: 2rem;">Project Risks</h3>
+     <div class="scrollbox">
+      <table class="table">
+       <thead>
+        <tr>
+         <th>Method</th>
+         <th class="text-right">Coverage</th>
+         <th class="text-right">Complexity</th>
+         <th class="text-right"><abbr title="Change Risk Anti-Patterns (CRAP) Index">CRAP</abbr></th>
+        </tr>
+       </thead>
+       <tbody>
+       <tr><td><a href="System/Helper.php.html#20"><abbr title="System\Helper::pager">pager</abbr></a></td><td class="text-right">0.0%</td><td class="text-right">16</td><td class="text-right">272</td></tr>
+       <tr><td><a href="System/Library/Grid.php.html#73"><abbr title="system\library\Grid::setField">setField</abbr></a></td><td class="text-right">0.0%</td><td class="text-right">16</td><td class="text-right">272</td></tr>
+       <tr><td><a href="System/Authentication/Jwt.php.html#25"><abbr title="System\Authentication\Jwt::check">check</abbr></a></td><td class="text-right">0.0%</td><td class="text-right">10</td><td class="text-right">110</td></tr>
+       <tr><td><a href="System/Library/Smtp.php.html#310"><abbr title="system\library\Smtp::getCommand">getCommand</abbr></a></td><td class="text-right">0.0%</td><td class="text-right">10</td><td class="text-right">110</td></tr>
+       <tr><td><a href="System/Library/Upload.php.html#165"><abbr title="system\library\Upload::execute">execute</abbr></a></td><td class="text-right">0.0%</td><td class="text-right">9</td><td class="text-right">90</td></tr>
+       <tr><td><a href="System/Authentication/Cookie.php.html#33"><abbr title="System\Authentication\Cookie::check">check</abbr></a></td><td class="text-right">0.0%</td><td class="text-right">7</td><td class="text-right">56</td></tr>
+       <tr><td><a href="System/Library/Image.php.html#276"><abbr title="system\library\Image::resize">resize</abbr></a></td><td class="text-right">0.0%</td><td class="text-right">7</td><td class="text-right">56</td></tr>
+       <tr><td><a href="System/Authentication/Session.php.html#27"><abbr title="System\Authentication\Session::check">check</abbr></a></td><td class="text-right">0.0%</td><td class="text-right">6</td><td class="text-right">42</td></tr>
+       <tr><td><a href="System/Cache/File.php.html#265"><abbr title="System\Cache\File::setTags">setTags</abbr></a></td><td class="text-right">0.0%</td><td class="text-right">6</td><td class="text-right">42</td></tr>
+       <tr><td><a href="System/Library/Captcha.php.html#175"><abbr title="System\Library\Captcha::create">create</abbr></a></td><td class="text-right">0.0%</td><td class="text-right">6</td><td class="text-right">42</td></tr>
+       <tr><td><a href="System/Library/Grid.php.html#226"><abbr title="system\library\Grid::tr">tr</abbr></a></td><td class="text-right">0.0%</td><td class="text-right">6</td><td class="text-right">42</td></tr>
+       <tr><td><a href="System/Library/Html.php.html#30"><abbr title="system\library\Html::tag">tag</abbr></a></td><td class="text-right">0.0%</td><td class="text-right">6</td><td class="text-right">42</td></tr>
+       <tr><td><a href="System/Library/Smtp.php.html#391"><abbr title="system\library\Smtp::sendCommand">sendCommand</abbr></a></td><td class="text-right">0.0%</td><td class="text-right">6</td><td class="text-right">42</td></tr>
+       <tr><td><a href="System/Security.php.html#45"><abbr title="System\Security::checkToken">checkToken</abbr></a></td><td class="text-right">0.0%</td><td class="text-right">6</td><td class="text-right">42</td></tr>
+       <tr><td><a href="System/Cache.php.html#14"><abbr title="System\Cache::instance">instance</abbr></a></td><td class="text-right">0.0%</td><td class="text-right">5</td><td class="text-right">30</td></tr>
+       <tr><td><a href="System/Cache/File.php.html#209"><abbr title="System\Cache\File::get">get</abbr></a></td><td class="text-right">0.0%</td><td class="text-right">5</td><td class="text-right">30</td></tr>
+       <tr><td><a href="System/Cache/File.php.html#297"><abbr title="System\Cache\File::getTags">getTags</abbr></a></td><td class="text-right">0.0%</td><td class="text-right">5</td><td class="text-right">30</td></tr>
+       <tr><td><a href="System/Cache/File.php.html#323"><abbr title="System\Cache\File::flushTags">flushTags</abbr></a></td><td class="text-right">0.0%</td><td class="text-right">5</td><td class="text-right">30</td></tr>
+       <tr><td><a href="System/Cache/Redis.php.html#175"><abbr title="System\Cache\Redis::flushTags">flushTags</abbr></a></td><td class="text-right">0.0%</td><td class="text-right">5</td><td class="text-right">30</td></tr>
+       <tr><td><a href="System/Library/Html.php.html#103"><abbr title="system\library\Html::select">select</abbr></a></td><td class="text-right">0.0%</td><td class="text-right">5</td><td class="text-right">30</td></tr>
+       <tr><td><a href="System/Library/Image.php.html#197"><abbr title="system\library\Image::create">create</abbr></a></td><td class="text-right">0.0%</td><td class="text-right">5</td><td class="text-right">30</td></tr>
+       <tr><td><a href="System/Library/Image.php.html#331"><abbr title="system\library\Image::watermark">watermark</abbr></a></td><td class="text-right">0.0%</td><td class="text-right">5</td><td class="text-right">30</td></tr>
+       <tr><td><a href="System/Redis.php.html#22"><abbr title="System\Redis::__construct">__construct</abbr></a></td><td class="text-right">0.0%</td><td class="text-right">5</td><td class="text-right">30</td></tr>
+       <tr><td><a href="System/Cache/File.php.html#64"><abbr title="System\Cache\File::set">set</abbr></a></td><td class="text-right">0.0%</td><td class="text-right">4</td><td class="text-right">20</td></tr>
+       <tr><td><a href="System/Cache/File.php.html#96"><abbr title="System\Cache\File::increment">increment</abbr></a></td><td class="text-right">0.0%</td><td class="text-right">4</td><td class="text-right">20</td></tr>
+       <tr><td><a href="System/Cache/File.php.html#124"><abbr title="System\Cache\File::decrement">decrement</abbr></a></td><td class="text-right">0.0%</td><td class="text-right">4</td><td class="text-right">20</td></tr>
+       <tr><td><a href="System/Cache/File.php.html#151"><abbr title="System\Cache\File::delete">delete</abbr></a></td><td class="text-right">0.0%</td><td class="text-right">4</td><td class="text-right">20</td></tr>
+       <tr><td><a href="System/Cache/Redis.php.html#152"><abbr title="System\Cache\Redis::getTags">getTags</abbr></a></td><td class="text-right">0.0%</td><td class="text-right">4</td><td class="text-right">20</td></tr>
+       <tr><td><a href="System/Config.php.html#14"><abbr title="System\Config::init">init</abbr></a></td><td class="text-right">0.0%</td><td class="text-right">4</td><td class="text-right">20</td></tr>
+       <tr><td><a href="System/Library/Grid.php.html#255"><abbr title="system\library\Grid::thead">thead</abbr></a></td><td class="text-right">0.0%</td><td class="text-right">4</td><td class="text-right">20</td></tr>
+       <tr><td><a href="System/Library/Html.php.html#150"><abbr title="system\library\Html::elements">elements</abbr></a></td><td class="text-right">0.0%</td><td class="text-right">4</td><td class="text-right">20</td></tr>
+       <tr><td><a href="System/Library/Smtp.php.html#157"><abbr title="system\library\Smtp::to">to</abbr></a></td><td class="text-right">0.0%</td><td class="text-right">4</td><td class="text-right">20</td></tr>
+       <tr><td><a href="System/Library/Smtp.php.html#180"><abbr title="system\library\Smtp::cc">cc</abbr></a></td><td class="text-right">0.0%</td><td class="text-right">4</td><td class="text-right">20</td></tr>
+       <tr><td><a href="System/Library/Smtp.php.html#202"><abbr title="system\library\Smtp::bcc">bcc</abbr></a></td><td class="text-right">0.0%</td><td class="text-right">4</td><td class="text-right">20</td></tr>
+       <tr><td><a href="System/Library/Smtp.php.html#448"><abbr title="system\library\Smtp::socket">socket</abbr></a></td><td class="text-right">0.0%</td><td class="text-right">4</td><td class="text-right">20</td></tr>
+       <tr><td><a href="System/Library/Upload.php.html#142"><abbr title="system\library\Upload::isExt">isExt</abbr></a></td><td class="text-right">0.0%</td><td class="text-right">4</td><td class="text-right">20</td></tr>
+       <tr><td><a href="System/Profiler.php.html#79"><abbr title="System\Profiler::__destruct">__destruct</abbr></a></td><td class="text-right">0.0%</td><td class="text-right">4</td><td class="text-right">20</td></tr>
+       <tr><td><a href="System/Authentication/Cookie.php.html#77"><abbr title="System\Authentication\Cookie::data">data</abbr></a></td><td class="text-right">0.0%</td><td class="text-right">3</td><td class="text-right">12</td></tr>
+       <tr><td><a href="System/Authentication/Jwt.php.html#81"><abbr title="System\Authentication\Jwt::data">data</abbr></a></td><td class="text-right">0.0%</td><td class="text-right">3</td><td class="text-right">12</td></tr>
+       <tr><td><a href="System/Authentication/Session.php.html#64"><abbr title="System\Authentication\Session::data">data</abbr></a></td><td class="text-right">0.0%</td><td class="text-right">3</td><td class="text-right">12</td></tr>
+       <tr><td><a href="System/Cache/File.php.html#173"><abbr title="System\Cache\File::flush">flush</abbr></a></td><td class="text-right">0.0%</td><td class="text-right">3</td><td class="text-right">12</td></tr>
+       <tr><td><a href="System/Cache/File.php.html#193"><abbr title="System\Cache\File::delTree">delTree</abbr></a></td><td class="text-right">0.0%</td><td class="text-right">3</td><td class="text-right">12</td></tr>
+       <tr><td><a href="System/Cache/File.php.html#240"><abbr title="System\Cache\File::expire">expire</abbr></a></td><td class="text-right">0.0%</td><td class="text-right">3</td><td class="text-right">12</td></tr>
+       <tr><td><a href="System/Cache/Redis.php.html#133"><abbr title="System\Cache\Redis::setTags">setTags</abbr></a></td><td class="text-right">0.0%</td><td class="text-right">3</td><td class="text-right">12</td></tr>
+       <tr><td><a href="System/Library/Image.php.html#233"><abbr title="system\library\Image::ext">ext</abbr></a></td><td class="text-right">0.0%</td><td class="text-right">3</td><td class="text-right">12</td></tr>
+       <tr><td><a href="System/Library/Image.php.html#256"><abbr title="system\library\Image::save">save</abbr></a></td><td class="text-right">0.0%</td><td class="text-right">3</td><td class="text-right">12</td></tr>
+       <tr><td><a href="System/Library/Smtp.php.html#110"><abbr title="system\library\Smtp::__construct">__construct</abbr></a></td><td class="text-right">0.0%</td><td class="text-right">3</td><td class="text-right">12</td></tr>
+       <tr><td><a href="System/Library/Smtp.php.html#273"><abbr title="system\library\Smtp::send">send</abbr></a></td><td class="text-right">0.0%</td><td class="text-right">3</td><td class="text-right">12</td></tr>
+       <tr><td><a href="System/Library/Smtp.php.html#433"><abbr title="system\library\Smtp::readFile">readFile</abbr></a></td><td class="text-right">0.0%</td><td class="text-right">3</td><td class="text-right">12</td></tr>
+       <tr><td><a href="System/Library/Smtp.php.html#477"><abbr title="system\library\Smtp::close">close</abbr></a></td><td class="text-right">0.0%</td><td class="text-right">3</td><td class="text-right">12</td></tr>
+       <tr><td><a href="System/Library/Upload.php.html#230"><abbr title="system\library\Upload::createDir">createDir</abbr></a></td><td class="text-right">0.0%</td><td class="text-right">3</td><td class="text-right">12</td></tr>
+       <tr><td><a href="System/Redis.php.html#64"><abbr title="System\Redis::instance">instance</abbr></a></td><td class="text-right">0.0%</td><td class="text-right">3</td><td class="text-right">12</td></tr>
+       <tr><td><a href="System/Authentication.php.html#21"><abbr title="System\Authentication::instance">instance</abbr></a></td><td class="text-right">88.9%</td><td class="text-right">8</td><td class="text-right">8</td></tr>
+       <tr><td><a href="System/Database.php.html#14"><abbr title="System\Database::instance">instance</abbr></a></td><td class="text-right">85.0%</td><td class="text-right">8</td><td class="text-right">8</td></tr>
+       <tr><td><a href="System/Authentication/Cookie.php.html#111"><abbr title="System\Authentication\Cookie::create">create</abbr></a></td><td class="text-right">0.0%</td><td class="text-right">2</td><td class="text-right">6</td></tr>
+       <tr><td><a href="System/Cache/File.php.html#356"><abbr title="System\Cache\File::tags">tags</abbr></a></td><td class="text-right">0.0%</td><td class="text-right">2</td><td class="text-right">6</td></tr>
+       <tr><td><a href="System/Cache/Redis.php.html#46"><abbr title="System\Cache\Redis::set">set</abbr></a></td><td class="text-right">0.0%</td><td class="text-right">2</td><td class="text-right">6</td></tr>
+       <tr><td><a href="System/Cache/Redis.php.html#100"><abbr title="System\Cache\Redis::flush">flush</abbr></a></td><td class="text-right">0.0%</td><td class="text-right">2</td><td class="text-right">6</td></tr>
+       <tr><td><a href="System/Cache/Redis.php.html#116"><abbr title="System\Cache\Redis::get">get</abbr></a></td><td class="text-right">0.0%</td><td class="text-right">2</td><td class="text-right">6</td></tr>
+       <tr><td><a href="System/Cache/Redis.php.html#206"><abbr title="System\Cache\Redis::tags">tags</abbr></a></td><td class="text-right">0.0%</td><td class="text-right">2</td><td class="text-right">6</td></tr>
+       <tr><td><a href="System/Library/Captcha.php.html#112"><abbr title="System\Library\Captcha::__construct">__construct</abbr></a></td><td class="text-right">0.0%</td><td class="text-right">2</td><td class="text-right">6</td></tr>
+       <tr><td><a href="System/Library/Captcha.php.html#149"><abbr title="System\Library\Captcha::setNoisePix">setNoisePix</abbr></a></td><td class="text-right">0.0%</td><td class="text-right">2</td><td class="text-right">6</td></tr>
+       <tr><td><a href="System/Library/Captcha.php.html#162"><abbr title="System\Library\Captcha::setNoiseLine">setNoiseLine</abbr></a></td><td class="text-right">0.0%</td><td class="text-right">2</td><td class="text-right">6</td></tr>
+       <tr><td><a href="System/Library/Grid.php.html#172"><abbr title="system\library\Grid::setFilter">setFilter</abbr></a></td><td class="text-right">0.0%</td><td class="text-right">2</td><td class="text-right">6</td></tr>
+       <tr><td><a href="System/Library/Grid.php.html#199"><abbr title="system\library\Grid::setTool">setTool</abbr></a></td><td class="text-right">0.0%</td><td class="text-right">2</td><td class="text-right">6</td></tr>
+       <tr><td><a href="System/Library/Grid.php.html#280"><abbr title="system\library\Grid::table">table</abbr></a></td><td class="text-right">0.0%</td><td class="text-right">2</td><td class="text-right">6</td></tr>
+       <tr><td><a href="System/Library/Html.php.html#77"><abbr title="system\library\Html::tags">tags</abbr></a></td><td class="text-right">0.0%</td><td class="text-right">2</td><td class="text-right">6</td></tr>
+       <tr><td><a href="System/Library/Html.php.html#172"><abbr title="system\library\Html::properties">properties</abbr></a></td><td class="text-right">0.0%</td><td class="text-right">2</td><td class="text-right">6</td></tr>
+       <tr><td><a href="System/Library/Smtp.php.html#224"><abbr title="system\library\Smtp::attachment">attachment</abbr></a></td><td class="text-right">0.0%</td><td class="text-right">2</td><td class="text-right">6</td></tr>
+       <tr><td><a href="System/Library/Smtp.php.html#297"><abbr title="system\library\Smtp::error">error</abbr></a></td><td class="text-right">0.0%</td><td class="text-right">2</td><td class="text-right">6</td></tr>
+       <tr><td><a href="System/Middleware.php.html#12"><abbr title="System\Middleware::before">before</abbr></a></td><td class="text-right">0.0%</td><td class="text-right">2</td><td class="text-right">6</td></tr>
+       <tr><td><a href="System/Middleware.php.html#22"><abbr title="System\Middleware::after">after</abbr></a></td><td class="text-right">0.0%</td><td class="text-right">2</td><td class="text-right">6</td></tr>
+       <tr><td><a href="System/Model/Safe.php.html#144"><abbr title="System\Model\Safe::boolean">boolean</abbr></a></td><td class="text-right">0.0%</td><td class="text-right">2</td><td class="text-right">6</td></tr>
+       <tr><td><a href="System/Output.php.html#209"><abbr title="System\Output::status">status</abbr></a></td><td class="text-right">0.0%</td><td class="text-right">2</td><td class="text-right">6</td></tr>
+       <tr><td><a href="System/Output.php.html#227"><abbr title="System\Output::error">error</abbr></a></td><td class="text-right">0.0%</td><td class="text-right">2</td><td class="text-right">6</td></tr>
+       <tr><td><a href="System/Profiler.php.html#16"><abbr title="System\Profiler::instance">instance</abbr></a></td><td class="text-right">0.0%</td><td class="text-right">2</td><td class="text-right">6</td></tr>
+       <tr><td><a href="System/Profiler.php.html#44"><abbr title="System\Profiler::benchmark">benchmark</abbr></a></td><td class="text-right">0.0%</td><td class="text-right">2</td><td class="text-right">6</td></tr>
+       <tr><td><a href="System/Output.php.html#126"><abbr title="System\Output::view">view</abbr></a></td><td class="text-right">68.4%</td><td class="text-right">5</td><td class="text-right">5</td></tr>
+       <tr><td><a href="System/Model.php.html#94"><abbr title="System\Model::where">where</abbr></a></td><td class="text-right">85.7%</td><td class="text-right">4</td><td class="text-right">4</td></tr>
+       <tr><td><a href="System/Input.php.html#65"><abbr title="System\Input::isAjax">isAjax</abbr></a></td><td class="text-right">85.7%</td><td class="text-right">3</td><td class="text-right">3</td></tr>
+
+       </tbody>
+      </table>
+     </div>
+    </div>
+   </div>
+   <footer>
+    <hr/>
+    <p>
+     <small>Generated by <a href="https://github.com/sebastianbergmann/php-code-coverage" target="_top">php-code-coverage 13.0.1</a> using <a href="https://www.php.net/" target="_top">PHP 8.4.7</a> and <a href="https://phpunit.de/">PHPUnit 13.0.5</a> at Wed May 27 14:16:13 CST 2026.</small>
+    </p>
+   </footer>
+  </div>
+  <script src="_js/billboard.pkgd.min.js?v=13.0.1" type="text/javascript"></script>
+  <script type="application/json" id="complexity_class">[[0,1,"Middlewares\/Auth.php.html#7","App\\Middlewares\\Auth","2"],[0,1,"Middlewares\/Authorize.php.html#7","App\\Middlewares\\Authorize","2"],[0,1,"Middlewares\/Lang.php.html#8","App\\Middlewares\\Lang","2"],[0,1,"Modules\/Www\/Main.php.html#8","App\\Modules\\Www\\Main","2"],[0,1,"Services\/Test.php.html#9","App\\Services\\Test","2"],[0,15,"System\/Authentication\/Cookie.php.html#7","System\\Authentication\\Cookie","240"],[0,19,"System\/Authentication\/Jwt.php.html#7","System\\Authentication\\Jwt","380"],[0,13,"System\/Authentication\/Session.php.html#7","System\\Authentication\\Session","182"],[0,5,"System\/Cache.php.html#6","System\\Cache","30"],[0,0,"System\/Cache\/AbstractCache.php.html#7","System\\Cache\\AbstractCache","0"],[0,50,"System\/Cache\/File.php.html#6","System\\Cache\\File","2550"],[0,24,"System\/Cache\/Redis.php.html#7","System\\Cache\\Redis","600"],[0,16,"System\/Helper.php.html#6","System\\Helper","272"],[0,15,"System\/Library\/Captcha.php.html#7","System\\Library\\Captcha","240"],[0,35,"System\/Library\/Grid.php.html#6","system\\library\\Grid","1260"],[0,20,"System\/Library\/Html.php.html#5","system\\library\\Html","420"],[0,23,"System\/Library\/Image.php.html#22","system\\library\\Image","552"],[0,53,"System\/Library\/Smtp.php.html#21","system\\library\\Smtp","2862"],[0,18,"System\/Library\/Upload.php.html#6","system\\library\\Upload","342"],[0,4,"System\/Middleware.php.html#7","System\\Middleware","20"],[0,10,"System\/Profiler.php.html#6","System\\Profiler","110"],[0,9,"System\/Redis.php.html#6","System\\Redis","90"],[0,8,"System\/Security.php.html#6","System\\Security","72"],[68.96551724137932,16,"System\/Config.php.html#7","System\\Config","23.65"],[80.89887640449437,21,"System\/Output.php.html#7","System\\Output","24.07"],[85,8,"System\/Database.php.html#11","System\\Database","8.22"],[89.47368421052632,9,"System\/Authentication.php.html#9","System\\Authentication","9.09"],[96.73913043478261,57,"System\/Model\/Safe.php.html#10","System\\Model\\Safe","57"],[96.92307692307692,31,"System\/Input.php.html#7","System\\Input","31"],[99.06542056074767,48,"System\/Model.php.html#12","System\\Model","48"],[100,0,"Models\/Test.php.html#7","App\\Models\\Test","0"],[100,0,"System\/Authentication\/AbstractAuthentication.php.html#7","System\\Authentication\\AbstractAuthentication","0"],[100,0,"System\/Authentication\/AuthenticationException.php.html#9","System\\Authentication\\AuthenticationException","0"],[100,5,"System\/Context.php.html#6","System\\Context","5"],[100,13,"System\/Cookie.php.html#7","System\\Cookie","13"],[100,0,"System\/Database\/DatabaseAbstract.php.html#9","System\\Database\\DatabaseAbstract","0"],[100,0,"System\/Database\/DatabaseException.php.html#9","System\\Database\\DatabaseException","0"],[100,72,"System\/Database\/PDO\/Build.php.html#9","System\\Database\\PDO\\Build","72"],[100,5,"System\/Database\/PDO\/Mysql.php.html#10","System\\Database\\PDO\\Mysql","5"],[100,5,"System\/Database\/PDO\/Pgsql.php.html#10","System\\Database\\PDO\\Pgsql","5"],[100,8,"System\/Database\/PDO\/Result.php.html#8","System\\Database\\PDO\\Result","8"],[100,3,"System\/Database\/PDO\/Sqlite.php.html#10","System\\Database\\PDO\\Sqlite","3"],[100,0,"System\/Database\/ResultAbstract.php.html#6","System\\Database\\ResultAbstract","0"],[100,39,"System\/Database\/Util.php.html#7","system\\database\\Util","39"],[100,2,"System\/Lang.php.html#7","System\\Lang","2"],[100,0,"System\/Locale.php.html#7","System\\Locale","0"],[100,0,"System\/Model\/ModelException.php.html#8","System\\Model\\ModelException","0"],[100,0,"System\/PageException.php.html#8","System\\PageException","0"],[100,13,"System\/Session.php.html#7","System\\Session","13"],[100,0,"System\/SysException.php.html#7","System\\SysException","0"],[100,85,"System\/Validator.php.html#7","System\\Validator","85"],[100,55,"System\/Database\/PDO\/Common.php.html#12","System\\Database\\PDO\\Common","55"]]</script>
+  <script type="application/json" id="complexity_method">[[0,1,"Middlewares\/Auth.php.html#10","App\\Middlewares\\Auth::handle","2"],[0,1,"Middlewares\/Authorize.php.html#10","App\\Middlewares\\Authorize::handle","2"],[0,1,"Middlewares\/Lang.php.html#10","App\\Middlewares\\Lang::handle","2"],[0,1,"Modules\/Www\/Main.php.html#10","App\\Modules\\Www\\Main::index","2"],[0,1,"Services\/Test.php.html#11","App\\Services\\Test::__construct","2"],[0,1,"System\/Authentication\/Cookie.php.html#23","System\\Authentication\\Cookie::__construct","2"],[0,7,"System\/Authentication\/Cookie.php.html#33","System\\Authentication\\Cookie::check","56"],[0,3,"System\/Authentication\/Cookie.php.html#77","System\\Authentication\\Cookie::data","12"],[0,1,"System\/Authentication\/Cookie.php.html#98","System\\Authentication\\Cookie::id","2"],[0,2,"System\/Authentication\/Cookie.php.html#111","System\\Authentication\\Cookie::create","6"],[0,1,"System\/Authentication\/Cookie.php.html#137","System\\Authentication\\Cookie::remove","2"],[0,1,"System\/Authentication\/Jwt.php.html#15","System\\Authentication\\Jwt::__construct","2"],[0,10,"System\/Authentication\/Jwt.php.html#25","System\\Authentication\\Jwt::check","110"],[0,3,"System\/Authentication\/Jwt.php.html#81","System\\Authentication\\Jwt::data","12"],[0,1,"System\/Authentication\/Jwt.php.html#102","System\\Authentication\\Jwt::id","2"],[0,1,"System\/Authentication\/Jwt.php.html#115","System\\Authentication\\Jwt::create","2"],[0,1,"System\/Authentication\/Jwt.php.html#136","System\\Authentication\\Jwt::remove","2"],[0,1,"System\/Authentication\/Jwt.php.html#149","System\\Authentication\\Jwt::base64url_encode","2"],[0,1,"System\/Authentication\/Jwt.php.html#161","System\\Authentication\\Jwt::base64url_decode","2"],[0,1,"System\/Authentication\/Session.php.html#18","System\\Authentication\\Session::__construct","2"],[0,6,"System\/Authentication\/Session.php.html#27","System\\Authentication\\Session::check","42"],[0,3,"System\/Authentication\/Session.php.html#64","System\\Authentication\\Session::data","12"],[0,1,"System\/Authentication\/Session.php.html#84","System\\Authentication\\Session::id","2"],[0,1,"System\/Authentication\/Session.php.html#97","System\\Authentication\\Session::create","2"],[0,1,"System\/Authentication\/Session.php.html#112","System\\Authentication\\Session::remove","2"],[0,5,"System\/Cache.php.html#14","System\\Cache::instance","30"],[0,0,"System\/Cache\/AbstractCache.php.html#19","System\\Cache\\AbstractCache::set","0"],[0,0,"System\/Cache\/AbstractCache.php.html#29","System\\Cache\\AbstractCache::increment","0"],[0,0,"System\/Cache\/AbstractCache.php.html#40","System\\Cache\\AbstractCache::decrement","0"],[0,0,"System\/Cache\/AbstractCache.php.html#50","System\\Cache\\AbstractCache::delete","0"],[0,0,"System\/Cache\/AbstractCache.php.html#57","System\\Cache\\AbstractCache::flush","0"],[0,0,"System\/Cache\/AbstractCache.php.html#66","System\\Cache\\AbstractCache::get","0"],[0,0,"System\/Cache\/AbstractCache.php.html#75","System\\Cache\\AbstractCache::tags","0"],[0,1,"System\/Cache\/File.php.html#36","System\\Cache\\File::__construct","2"],[0,1,"System\/Cache\/File.php.html#48","System\\Cache\\File::route","2"],[0,4,"System\/Cache\/File.php.html#64","System\\Cache\\File::set","20"],[0,4,"System\/Cache\/File.php.html#96","System\\Cache\\File::increment","20"],[0,4,"System\/Cache\/File.php.html#124","System\\Cache\\File::decrement","20"],[0,4,"System\/Cache\/File.php.html#151","System\\Cache\\File::delete","20"],[0,3,"System\/Cache\/File.php.html#173","System\\Cache\\File::flush","12"],[0,3,"System\/Cache\/File.php.html#193","System\\Cache\\File::delTree","12"],[0,5,"System\/Cache\/File.php.html#209","System\\Cache\\File::get","30"],[0,3,"System\/Cache\/File.php.html#240","System\\Cache\\File::expire","12"],[0,6,"System\/Cache\/File.php.html#265","System\\Cache\\File::setTags","42"],[0,5,"System\/Cache\/File.php.html#297","System\\Cache\\File::getTags","30"],[0,5,"System\/Cache\/File.php.html#323","System\\Cache\\File::flushTags","30"],[0,2,"System\/Cache\/File.php.html#356","System\\Cache\\File::tags","6"],[0,1,"System\/Cache\/Redis.php.html#32","System\\Cache\\Redis::__construct","2"],[0,2,"System\/Cache\/Redis.php.html#46","System\\Cache\\Redis::set","6"],[0,1,"System\/Cache\/Redis.php.html#65","System\\Cache\\Redis::increment","2"],[0,1,"System\/Cache\/Redis.php.html#78","System\\Cache\\Redis::decrement","2"],[0,1,"System\/Cache\/Redis.php.html#90","System\\Cache\\Redis::delete","2"],[0,2,"System\/Cache\/Redis.php.html#100","System\\Cache\\Redis::flush","6"],[0,2,"System\/Cache\/Redis.php.html#116","System\\Cache\\Redis::get","6"],[0,3,"System\/Cache\/Redis.php.html#133","System\\Cache\\Redis::setTags","12"],[0,4,"System\/Cache\/Redis.php.html#152","System\\Cache\\Redis::getTags","20"],[0,5,"System\/Cache\/Redis.php.html#175","System\\Cache\\Redis::flushTags","30"],[0,2,"System\/Cache\/Redis.php.html#206","System\\Cache\\Redis::tags","6"],[0,4,"System\/Config.php.html#14","System\\Config::init","20"],[0,16,"System\/Helper.php.html#20","System\\Helper::pager","272"],[0,2,"System\/Library\/Captcha.php.html#112","System\\Library\\Captcha::__construct","6"],[0,1,"System\/Library\/Captcha.php.html#130","System\\Library\\Captcha::getColor","2"],[0,2,"System\/Library\/Captcha.php.html#149","System\\Library\\Captcha::setNoisePix","6"],[0,2,"System\/Library\/Captcha.php.html#162","System\\Library\\Captcha::setNoiseLine","6"],[0,6,"System\/Library\/Captcha.php.html#175","System\\Library\\Captcha::create","42"],[0,1,"System\/Library\/Captcha.php.html#220","System\\Library\\Captcha::show","2"],[0,1,"System\/Library\/Captcha.php.html#231","System\\Library\\Captcha::getCode","2"],[0,16,"System\/Library\/Grid.php.html#73","system\\library\\Grid::setField","272"],[0,2,"System\/Library\/Grid.php.html#172","system\\library\\Grid::setFilter","6"],[0,1,"System\/Library\/Grid.php.html#186","system\\library\\Grid::filters","2"],[0,2,"System\/Library\/Grid.php.html#199","system\\library\\Grid::setTool","6"],[0,1,"System\/Library\/Grid.php.html#214","system\\library\\Grid::tools","2"],[0,6,"System\/Library\/Grid.php.html#226","system\\library\\Grid::tr","42"],[0,4,"System\/Library\/Grid.php.html#255","system\\library\\Grid::thead","20"],[0,2,"System\/Library\/Grid.php.html#280","system\\library\\Grid::table","6"],[0,1,"System\/Library\/Grid.php.html#297","system\\library\\Grid::render","2"],[0,6,"System\/Library\/Html.php.html#30","system\\library\\Html::tag","42"],[0,2,"System\/Library\/Html.php.html#77","system\\library\\Html::tags","6"],[0,5,"System\/Library\/Html.php.html#103","system\\library\\Html::select","30"],[0,1,"System\/Library\/Html.php.html#137","system\\library\\Html::input","2"],[0,4,"System\/Library\/Html.php.html#150","system\\library\\Html::elements","20"],[0,2,"System\/Library\/Html.php.html#172","system\\library\\Html::properties","6"],[0,5,"System\/Library\/Image.php.html#197","system\\library\\Image::create","30"],[0,3,"System\/Library\/Image.php.html#233","system\\library\\Image::ext","12"],[0,3,"System\/Library\/Image.php.html#256","system\\library\\Image::save","12"],[0,7,"System\/Library\/Image.php.html#276","system\\library\\Image::resize","56"],[0,5,"System\/Library\/Image.php.html#331","system\\library\\Image::watermark","30"],[0,3,"System\/Library\/Smtp.php.html#110","system\\library\\Smtp::__construct","12"],[0,1,"System\/Library\/Smtp.php.html#133","system\\library\\Smtp::from","2"],[0,1,"System\/Library\/Smtp.php.html#145","system\\library\\Smtp::fromname","2"],[0,4,"System\/Library\/Smtp.php.html#157","system\\library\\Smtp::to","20"],[0,4,"System\/Library\/Smtp.php.html#180","system\\library\\Smtp::cc","20"],[0,4,"System\/Library\/Smtp.php.html#202","system\\library\\Smtp::bcc","20"],[0,2,"System\/Library\/Smtp.php.html#224","system\\library\\Smtp::attachment","6"],[0,1,"System\/Library\/Smtp.php.html#238","system\\library\\Smtp::subject","2"],[0,1,"System\/Library\/Smtp.php.html#250","system\\library\\Smtp::mime","2"],[0,1,"System\/Library\/Smtp.php.html#262","system\\library\\Smtp::body","2"],[0,3,"System\/Library\/Smtp.php.html#273","system\\library\\Smtp::send","12"],[0,2,"System\/Library\/Smtp.php.html#297","system\\library\\Smtp::error","6"],[0,10,"System\/Library\/Smtp.php.html#310","system\\library\\Smtp::getCommand","110"],[0,6,"System\/Library\/Smtp.php.html#391","system\\library\\Smtp::sendCommand","42"],[0,3,"System\/Library\/Smtp.php.html#433","system\\library\\Smtp::readFile","12"],[0,4,"System\/Library\/Smtp.php.html#448","system\\library\\Smtp::socket","20"],[0,3,"System\/Library\/Smtp.php.html#477","system\\library\\Smtp::close","12"],[0,1,"System\/Library\/Upload.php.html#118","system\\library\\Upload::__construct","2"],[0,1,"System\/Library\/Upload.php.html#131","system\\library\\Upload::getExt","2"],[0,4,"System\/Library\/Upload.php.html#142","system\\library\\Upload::isExt","20"],[0,9,"System\/Library\/Upload.php.html#165","system\\library\\Upload::execute","90"],[0,3,"System\/Library\/Upload.php.html#230","system\\library\\Upload::createDir","12"],[0,2,"System\/Middleware.php.html#12","System\\Middleware::before","6"],[0,2,"System\/Middleware.php.html#22","System\\Middleware::after","6"],[0,2,"System\/Model\/Safe.php.html#144","System\\Model\\Safe::boolean","6"],[0,1,"System\/Output.php.html#195","System\\Output::redirect","2"],[0,2,"System\/Output.php.html#209","System\\Output::status","6"],[0,2,"System\/Output.php.html#227","System\\Output::error","6"],[0,2,"System\/Profiler.php.html#16","System\\Profiler::instance","6"],[0,1,"System\/Profiler.php.html#31","System\\Profiler::microtime","2"],[0,2,"System\/Profiler.php.html#44","System\\Profiler::benchmark","6"],[0,1,"System\/Profiler.php.html#66","System\\Profiler::memory","2"],[0,4,"System\/Profiler.php.html#79","System\\Profiler::__destruct","20"],[0,5,"System\/Redis.php.html#22","System\\Redis::__construct","30"],[0,1,"System\/Redis.php.html#52","System\\Redis::__destruct","2"],[0,3,"System\/Redis.php.html#64","System\\Redis::instance","12"],[0,1,"System\/Security.php.html#14","System\\Security::token","2"],[0,1,"System\/Security.php.html#31","System\\Security::tokenName","2"],[0,6,"System\/Security.php.html#45","System\\Security::checkToken","42"],[68.42105263157895,5,"System\/Output.php.html#126","System\\Output::view","5.79"],[85,8,"System\/Database.php.html#14","System\\Database::instance","8.22"],[85.71428571428571,3,"System\/Input.php.html#65","System\\Input::isAjax","3.03"],[85.71428571428571,4,"System\/Model.php.html#94","System\\Model::where","4.05"],[88.88888888888889,8,"System\/Authentication.php.html#21","System\\Authentication::instance","8.09"],[90.9090909090909,5,"System\/Config.php.html#31","System\\Config::get","5.02"],[94.11764705882352,9,"System\/Input.php.html#116","System\\Input::filter","9.02"],[94.44444444444444,19,"System\/Model\/Safe.php.html#149","System\\Model\\Safe::validate","19.06"],[100,1,"System\/Authentication.php.html#57","System\\Authentication::reset","1"],[100,0,"System\/Authentication\/AbstractAuthentication.php.html#28","System\\Authentication\\AbstractAuthentication::check","0"],[100,0,"System\/Authentication\/AbstractAuthentication.php.html#37","System\\Authentication\\AbstractAuthentication::create","0"],[100,0,"System\/Authentication\/AbstractAuthentication.php.html#46","System\\Authentication\\AbstractAuthentication::data","0"],[100,0,"System\/Authentication\/AbstractAuthentication.php.html#53","System\\Authentication\\AbstractAuthentication::id","0"],[100,0,"System\/Authentication\/AbstractAuthentication.php.html#61","System\\Authentication\\AbstractAuthentication::remove","0"],[100,2,"System\/Config.php.html#54","System\\Config::flush","2"],[100,5,"System\/Config.php.html#61","System\\Config::set","5"],[100,1,"System\/Context.php.html#10","System\\Context::get","1"],[100,1,"System\/Context.php.html#15","System\\Context::set","1"],[100,1,"System\/Context.php.html#20","System\\Context::has","1"],[100,1,"System\/Context.php.html#25","System\\Context::remove","1"],[100,1,"System\/Context.php.html#30","System\\Context::clear","1"],[100,2,"System\/Cookie.php.html#16","System\\Cookie::get","2"],[100,5,"System\/Cookie.php.html#40","System\\Cookie::set","5"],[100,2,"System\/Cookie.php.html#70","System\\Cookie::many","2"],[100,4,"System\/Cookie.php.html#87","System\\Cookie::delete","4"],[100,0,"System\/Database\/DatabaseAbstract.php.html#11","System\\Database\\DatabaseAbstract::execute","0"],[100,0,"System\/Database\/DatabaseAbstract.php.html#13","System\\Database\\DatabaseAbstract::insert","0"],[100,0,"System\/Database\/DatabaseAbstract.php.html#15","System\\Database\\DatabaseAbstract::upsert","0"],[100,0,"System\/Database\/DatabaseAbstract.php.html#17","System\\Database\\DatabaseAbstract::update","0"],[100,0,"System\/Database\/DatabaseAbstract.php.html#19","System\\Database\\DatabaseAbstract::delete","0"],[100,0,"System\/Database\/DatabaseAbstract.php.html#21","System\\Database\\DatabaseAbstract::lastid","0"],[100,0,"System\/Database\/DatabaseAbstract.php.html#23","System\\Database\\DatabaseAbstract::effected","0"],[100,0,"System\/Database\/DatabaseAbstract.php.html#25","System\\Database\\DatabaseAbstract::commit","0"],[100,0,"System\/Database\/DatabaseAbstract.php.html#27","System\\Database\\DatabaseAbstract::rollback","0"],[100,0,"System\/Database\/DatabaseAbstract.php.html#29","System\\Database\\DatabaseAbstract::transaction","0"],[100,0,"System\/Database\/DatabaseAbstract.php.html#31","System\\Database\\DatabaseAbstract::select","0"],[100,0,"System\/Database\/DatabaseAbstract.php.html#33","System\\Database\\DatabaseAbstract::close","0"],[100,33,"System\/Database\/PDO\/Build.php.html#11","System\\Database\\PDO\\Build::wherePlaceholder","33"],[100,7,"System\/Database\/PDO\/Build.php.html#98","System\\Database\\PDO\\Build::wherePlaceholderValues","7"],[100,2,"System\/Database\/PDO\/Build.php.html#128","System\\Database\\PDO\\Build::where","2"],[100,3,"System\/Database\/PDO\/Build.php.html#138","System\\Database\\PDO\\Build::fields","3"],[100,2,"System\/Database\/PDO\/Build.php.html#149","System\\Database\\PDO\\Build::having","2"],[100,4,"System\/Database\/PDO\/Build.php.html#159","System\\Database\\PDO\\Build::groupBy","4"],[100,8,"System\/Database\/PDO\/Build.php.html#178","System\\Database\\PDO\\Build::orderBy","8"],[100,9,"System\/Database\/PDO\/Build.php.html#197","System\\Database\\PDO\\Build::limit","9"],[100,4,"System\/Database\/PDO\/Build.php.html#216","System\\Database\\PDO\\Build::buildValueType","4"],[100,5,"System\/Database\/PDO\/Mysql.php.html#16","System\\Database\\PDO\\Mysql::__construct","5"],[100,5,"System\/Database\/PDO\/Pgsql.php.html#16","System\\Database\\PDO\\Pgsql::__construct","5"],[100,1,"System\/Database\/PDO\/Result.php.html#14","System\\Database\\PDO\\Result::__construct","1"],[100,2,"System\/Database\/PDO\/Result.php.html#19","System\\Database\\PDO\\Result::all","2"],[100,1,"System\/Database\/PDO\/Result.php.html#33","System\\Database\\PDO\\Result::count","1"],[100,3,"System\/Database\/PDO\/Result.php.html#38","System\\Database\\PDO\\Result::first","3"],[100,1,"System\/Database\/PDO\/Result.php.html#60","System\\Database\\PDO\\Result::raw","1"],[100,3,"System\/Database\/PDO\/Sqlite.php.html#16","System\\Database\\PDO\\Sqlite::__construct","3"],[100,0,"System\/Database\/ResultAbstract.php.html#8","System\\Database\\ResultAbstract::all","0"],[100,0,"System\/Database\/ResultAbstract.php.html#9","System\\Database\\ResultAbstract::count","0"],[100,0,"System\/Database\/ResultAbstract.php.html#10","System\\Database\\ResultAbstract::first","0"],[100,0,"System\/Database\/ResultAbstract.php.html#11","System\\Database\\ResultAbstract::raw","0"],[100,39,"System\/Database\/Util.php.html#37","system\\database\\Util::where","39"],[100,5,"System\/Input.php.html#9","System\\Input::get","5"],[100,4,"System\/Input.php.html#28","System\\Input::post","4"],[100,1,"System\/Input.php.html#50","System\\Input::method","1"],[100,1,"System\/Input.php.html#55","System\\Input::referer","1"],[100,1,"System\/Input.php.html#60","System\\Input::body","1"],[100,6,"System\/Input.php.html#82","System\\Input::ip","6"],[100,1,"System\/Input.php.html#110","System\\Input::host","1"],[100,1,"System\/Lang.php.html#12","System\\Lang::get","1"],[100,1,"System\/Lang.php.html#16","System\\Lang::set","1"],[100,1,"System\/Model.php.html#64","System\\Model::__construct","1"],[100,1,"System\/Model.php.html#70","System\\Model::creating","1"],[100,1,"System\/Model.php.html#76","System\\Model::updating","1"],[100,1,"System\/Model.php.html#82","System\\Model::deleting","1"],[100,1,"System\/Model.php.html#88","System\\Model::select","1"],[100,1,"System\/Model.php.html#111","System\\Model::groupBy","1"],[100,1,"System\/Model.php.html#117","System\\Model::having","1"],[100,1,"System\/Model.php.html#123","System\\Model::orderBy","1"],[100,3,"System\/Model.php.html#154","System\\Model::delete","3"],[100,8,"System\/Model.php.html#196","System\\Model::update","8"],[100,9,"System\/Model.php.html#227","System\\Model::insert","9"],[100,4,"System\/Model.php.html#270","System\\Model::_bindWhere","4"],[100,2,"System\/Model.php.html#281","System\\Model::first","2"],[100,2,"System\/Model.php.html#296","System\\Model::all","2"],[100,2,"System\/Model.php.html#311","System\\Model::count","2"],[100,1,"System\/Model.php.html#325","System\\Model::find","1"],[100,1,"System\/Model.php.html#330","System\\Model::exists","1"],[100,2,"System\/Model.php.html#335","System\\Model::rows","2"],[100,2,"System\/Model.php.html#350","System\\Model::transaction","2"],[100,7,"System\/Model\/Safe.php.html#13","System\\Model\\Safe::where","7"],[100,3,"System\/Model\/Safe.php.html#36","System\\Model\\Safe::fillable","3"],[100,3,"System\/Model\/Safe.php.html#46","System\\Model\\Safe::data","3"],[100,7,"System\/Model\/Safe.php.html#56","System\\Model\\Safe::integer","7"],[100,2,"System\/Model\/Safe.php.html#72","System\\Model\\Safe::varchar","2"],[100,2,"System\/Model\/Safe.php.html#81","System\\Model\\Safe::datetime","2"],[100,1,"System\/Model\/Safe.php.html#90","System\\Model\\Safe::enum","1"],[100,11,"System\/Model\/Safe.php.html#96","System\\Model\\Safe::decimal","11"],[100,2,"System\/Output.php.html#62","System\\Output::compress","2"],[100,2,"System\/Output.php.html#168","System\\Output::json","2"],[100,7,"System\/Output.php.html#247","System\\Output::url","7"],[100,2,"System\/Session.php.html#12","System\\Session::start","2"],[100,3,"System\/Session.php.html#32","System\\Session::set","3"],[100,1,"System\/Session.php.html#52","System\\Session::get","1"],[100,2,"System\/Session.php.html#65","System\\Session::flash","2"],[100,3,"System\/Session.php.html#84","System\\Session::delete","3"],[100,1,"System\/Session.php.html#103","System\\Session::regenerate","1"],[100,1,"System\/Session.php.html#114","System\\Session::destroy","1"],[100,1,"System\/Validator.php.html#10","System\\Validator::__construct","1"],[100,1,"System\/Validator.php.html#17","System\\Validator::make","1"],[100,9,"System\/Validator.php.html#97","System\\Validator::setRules","9"],[100,5,"System\/Validator.php.html#143","System\\Validator::setError","5"],[100,20,"System\/Validator.php.html#177","System\\Validator::execute","20"],[100,3,"System\/Validator.php.html#281","System\\Validator::regex","3"],[100,1,"System\/Validator.php.html#303","System\\Validator::string","1"],[100,1,"System\/Validator.php.html#313","System\\Validator::num","1"],[100,1,"System\/Validator.php.html#323","System\\Validator::float","1"],[100,3,"System\/Validator.php.html#334","System\\Validator::required","3"],[100,1,"System\/Validator.php.html#352","System\\Validator::same","1"],[100,1,"System\/Validator.php.html#363","System\\Validator::len","1"],[100,1,"System\/Validator.php.html#374","System\\Validator::minLen","1"],[100,1,"System\/Validator.php.html#385","System\\Validator::maxLen","1"],[100,1,"System\/Validator.php.html#396","System\\Validator::mobile","1"],[100,1,"System\/Validator.php.html#406","System\\Validator::email","1"],[100,1,"System\/Validator.php.html#416","System\\Validator::ip6","1"],[100,1,"System\/Validator.php.html#426","System\\Validator::ip4","1"],[100,1,"System\/Validator.php.html#436","System\\Validator::url","1"],[100,1,"System\/Validator.php.html#446","System\\Validator::id","1"],[100,1,"System\/Validator.php.html#456","System\\Validator::alphaNumChinese","1"],[100,1,"System\/Validator.php.html#466","System\\Validator::chinese","1"],[100,1,"System\/Validator.php.html#477","System\\Validator::alpha","1"],[100,1,"System\/Validator.php.html#487","System\\Validator::alphaNum","1"],[100,1,"System\/Validator.php.html#497","System\\Validator::alphaNumDash","1"],[100,2,"System\/Validator.php.html#508","System\\Validator::gt","2"],[100,2,"System\/Validator.php.html#522","System\\Validator::lt","2"],[100,2,"System\/Validator.php.html#536","System\\Validator::gte","2"],[100,2,"System\/Validator.php.html#550","System\\Validator::lte","2"],[100,2,"System\/Validator.php.html#565","System\\Validator::eq","2"],[100,2,"System\/Validator.php.html#580","System\\Validator::neq","2"],[100,1,"System\/Validator.php.html#595","System\\Validator::in","1"],[100,1,"System\/Validator.php.html#606","System\\Validator::nin","1"],[100,6,"System\/Validator.php.html#616","System\\Validator::int","6"],[100,5,"System\/Validator.php.html#642","System\\Validator::filter","5"],[100,2,"System\/Database\/PDO\/Common.php.html#17","System\\Database\\PDO\\Common::transaction","2"],[100,2,"System\/Database\/PDO\/Common.php.html#25","System\\Database\\PDO\\Common::commit","2"],[100,2,"System\/Database\/PDO\/Common.php.html#33","System\\Database\\PDO\\Common::rollback","2"],[100,1,"System\/Database\/PDO\/Common.php.html#41","System\\Database\\PDO\\Common::close","1"],[100,18,"System\/Database\/PDO\/Common.php.html#47","System\\Database\\PDO\\Common::insert","18"],[100,7,"System\/Database\/PDO\/Common.php.html#137","System\\Database\\PDO\\Common::update","7"],[100,4,"System\/Database\/PDO\/Common.php.html#198","System\\Database\\PDO\\Common::delete","4"],[100,5,"System\/Database\/PDO\/Common.php.html#235","System\\Database\\PDO\\Common::execute","5"],[100,3,"System\/Database\/PDO\/Common.php.html#280","System\\Database\\PDO\\Common::select","3"],[100,9,"System\/Database\/PDO\/Common.php.html#307","System\\Database\\PDO\\Common::upsert","9"],[100,1,"System\/Database\/PDO\/Common.php.html#362","System\\Database\\PDO\\Common::effected","1"],[100,1,"System\/Database\/PDO\/Common.php.html#367","System\\Database\\PDO\\Common::lastid","1"]]</script>
+  <script type="text/javascript" defer>
+  const barLabels = [
+    '0%',
+    '0-10%',
+    '10-20%',
+    '20-30%',
+    '30-40%',
+    '40-50%',
+    '50-60%',
+    '60-70%',
+    '70-80%',
+    '80-90%',
+    '90-100%',
+    '100%'
+  ];
+  const barConfig = (name, fullName, values) => ({
+    axis: {
+      x: {
+        type: "category",
+        categories: barLabels,
+      },
+      y: {
+        label: {
+          text: `#${name}`,
+          position: 'outer-top',
+        },
+      },
+    },
+    bindto: `#${name}CoverageDistribution`,
+    data: {
+      columns: [
+        [fullName].concat(values),
+      ],
+      colors: {
+        [fullName]: "rgba(69, 114, 167, 0.75)",
+      },
+      type: "bar",
+    },
+    bar: {
+      width: {
+        ratio: 0.9,
+      },
+    },
+    grid: {
+      focus: {
+        show: false,
+      },
+      x: {
+        show: true,
+      },
+      y: {
+        show: true,
+      },
+    },
+    legend: {
+      show: false,
+    },
+    tooltip: {
+      contents: function (data) {
+        return `<table class="bb-tooltip"><tbody>
+            <tr><th colspan="2">Coverage ${barLabels[data[0].x]}</th></tr>
+            <tr><td class="value">${data[0].value} ${name}</td></tr>
+          </tbody></table>`;
+      },
+      grouped: false,
+    },
+  });
+  bb.generate(
+    barConfig('classes', "Class Coverage", [23,0,0,0,0,0,0,1,0,3,3,22])
+  );
+  bb.generate(
+    barConfig('methods', "Method Coverage", [126,0,0,0,0,0,0,1,0,4,3,144])
+  );
+
+  const scatterConfig = (name, complexityData) => ({
+    axis: {
+      x: {
+        label: {
+          text: 'Code Coverage (in percent)',
+          position: 'outer-right',
+        },
+        tick: {
+          values: [0, 20, 40, 60, 80, 100],
+        },
+      },
+      y: {
+        label: {
+          text: 'Cyclomatic Complexity',
+          position: 'outer-top',
+        },
+        min: 0,
+        padding: {
+          bottom: 0,
+          top: 5,
+        },
+      },
+    },
+    bindto: `#${name}Complexity`,
+    data: {
+      columns: [
+        ["complexity_x"].concat(complexityData.map(d => d[0])),
+        ["complexity"].concat(complexityData.map(d => d[1])),
+      ],
+      onclick: function(data, element) {
+        window.location = complexityData[data.index][2];
+      },
+      type: "scatter",
+      xs: {
+        "complexity": "complexity_x",
+      },
+    },
+    grid: {
+      focus: {
+        show: true,
+        y: true,
+      },
+      x: {
+        show: true,
+      },
+      y: {
+        show: true,
+      },
+    },
+    legend: {
+      show: false,
+    },
+    tooltip: {
+      contents: function (data) {
+        const coverage = Math.round(data[0].x);
+        const complexity = data[0].value;
+        const targetName = complexityData[data[0].index][3];
+        const crap = complexityData[data[0].index][4];
+        return `<table class="bb-tooltip"><tbody>
+            <tr><th colspan="2">${targetName}</th></tr>
+            <tr class="bb-tooltip-name-complexity"><td>Coverage</td><td class="name">${coverage}%</td></tr>
+            <tr class="bb-tooltip-name-complexity"><td>Complexity</td><td class="value">${complexity}</td></tr>
+            <tr class="bb-tooltip-name-complexity"><td>Crap</td><td class="value">${crap}</td></tr>
+          </tbody></table>`;
+      },
+      grouped: false,
+    },
+  });
+  const classComplexityData = JSON.parse(document.getElementById('complexity_class').textContent);
+  bb.generate(
+    scatterConfig("class", classComplexityData)
+  );
+  const methodComplexityData = JSON.parse(document.getElementById('complexity_method').textContent);
+  bb.generate(
+    scatterConfig("method", methodComplexityData),
+  );
+  </script>
+ </body>
+</html>

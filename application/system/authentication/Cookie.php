@@ -2,9 +2,7 @@
 
 declare(strict_types=1);
 
-namespace system\authentication;
-
-use system\authentication\AuthenticationException;
+namespace System\Authentication;
 
 class Cookie extends AbstractAuthentication
 {

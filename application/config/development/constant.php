@@ -91,9 +91,9 @@ const PROFILER_LOG_FILE = APP_DIR . 'log/profiler.log';
 //中间件设置
 const MIDDLEWARE = [
     'before' => [
-        //'auth' => middleware\Auth::class,
-        //'authorize' => middleware\Authorize::class,
-        //'lang' => middleware\Lang::class
+        //'auth' => \App\Middlewares\Auth::class,
+        //'authorize' => \App\Middlewares\Authorize::class,
+        //'lang' => \App\Middlewares\Lang::class
     ],
     'after' => []
 ];
@@ -107,6 +107,6 @@ const AUTOLOAD_CONFIG_PATH = APP_DIR . 'config/' . ENVIRONMENT . '/autoload/';
 
 //类映射
 const  CLASS_MAP = [
-    'system' => SYS_DIR,
-    'app' => APP_DIR,
+    'System' => SYS_DIR,
+    'App' => APP_DIR,
 ];

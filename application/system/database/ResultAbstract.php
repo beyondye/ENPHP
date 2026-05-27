@@ -1,5 +1,7 @@
 <?php
-namespace system\database;
+declare(strict_types=1);
+
+namespace System\Database;
 
 abstract class ResultAbstract
 {

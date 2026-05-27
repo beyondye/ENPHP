@@ -1,10 +1,9 @@
 <?php
-namespace system\authentication;
 
-use system\SysException;
+declare(strict_types=1);
 
-class AuthenticationException extends SysException
-{
+namespace System\Authentication;
 
+use System\SysException;
 
-}
+class AuthenticationException extends SysException {}

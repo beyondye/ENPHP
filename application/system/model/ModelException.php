@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
 
-namespace system\model;
+namespace System\Model;
 
-use system\SysException;
+use System\SysException;
 
 class ModelException extends SysException
 {

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace system\library;
+namespace System\Library;
 
 class Captcha
 {

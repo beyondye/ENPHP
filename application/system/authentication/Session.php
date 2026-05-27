@@ -2,9 +2,7 @@
 
 declare(strict_types=1);
 
-namespace system\authentication;
-
-use system\authentication\AbstractAuthentication;
+namespace System\Authentication;
 
 class Session extends AbstractAuthentication
 {

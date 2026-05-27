@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace system;
+namespace System;
 
-use system\database\DatabaseAbstract;
-use system\Database;
-use system\model\ModelException;
-use system\model\Safe;
+use System\database\DatabaseAbstract;
+use System\Database;
+use System\Model\ModelException;
+use System\Model\Safe;
 
 class Model
 {

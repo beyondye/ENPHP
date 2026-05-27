@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
 xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/13.0/phpunit.xsd" 
-bootstrap="./test/bootstrap.php" 
+bootstrap="./tests/bootstrap.php" 
 colors="true" processIsolation="false" 
 stopOnFailure="false" 
 failOnRisky="true" 
 failOnWarning="true" 
-cacheDirectory="./test/.phpunit.cache"
+cacheDirectory="./tests/.phpunit.cache"
 displayDetailsOnIncompleteTests="true"
 displayDetailsOnSkippedTests="true"
 displayDetailsOnTestsThatTriggerDeprecations="true" 
@@ -27,15 +27,15 @@ beStrictAboutOutputDuringTests="true">
   <!-- 测试套件配置 -->
   <testsuites>
     <testsuite name="all">
-      <directory>./test/unit</directory>
-      <directory>./test/integration</directory>
+      <directory>./tests/Unit</directory>
+      <directory>./tests/Integration</directory>
     </testsuite>
   </testsuites>
   <!-- 2. 覆盖率报告输出（仅保留报告格式配置） -->
   <coverage>
     <report>
-      <html outputDirectory="./test/coverage/html"/>
-      <text outputFile="./test/coverage/coverage.txt"/>
+      <html outputDirectory="./tests/coverage/html"/>
+      <text outputFile="./tests/coverage/coverage.txt"/>
     </report>
   </coverage>
 </phpunit>

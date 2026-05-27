@@ -1,6 +1,8 @@
 <?php
 
-namespace system;
+declare(strict_types=1);
+
+namespace System;
 
 class Config
 {
@@ -64,13 +66,13 @@ class Config
         $data = &self::$items; // 使用引用 &
 
         foreach ($segments as $segment) {
-           
+
             if (!isset($data[$segment]) || !is_array($data[$segment])) {
                 $data[$segment] = [];
             }
             $data = &$data[$segment]; // 移动引用到下一层
         }
 
-        $data = $value; 
+        $data = $value;
     }
 }
