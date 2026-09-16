@@ -118,16 +118,17 @@ function service(string $name): object
     if ($service === null) {
         throw new \System\SysException("Service config not found:[{$name}]");
     }
-    
+
     // 如果是闭包或其他可调用对象，直接调用
     if (is_callable($service)) {
         return $service();
     }
-    
+
     // 如果是字符串，尝试作为类名实例化
     if (is_string($service) && class_exists($service)) {
         return new $service();
     }
-    
+
     throw new \System\SysException("Service config must be callable:[{$name}]");
 }
+

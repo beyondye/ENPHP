@@ -280,6 +280,7 @@ class Model
 
     public function first(): object|null
     {
+
         $condition = [
             'field' => $this->conditions['fields'] ?? [],
             'where' => array_key_exists('wheres', $this->conditions) ? $this->_bindWhere(...$this->conditions['wheres']) : [],

@@ -26,7 +26,7 @@ class Session extends AbstractAuthentication
      */
     public function check(): bool
     {
-        $session = \system\Session::get($this->_config['name']);
+        $session = \System\Session::get($this->_config['name']);
         if ($session == null) {
             throw new AuthenticationException(lang('system.authentication.session_null'));
         }
@@ -98,7 +98,7 @@ class Session extends AbstractAuthentication
     {
 
         $payload = json_encode(['status' => 'ok', 'data' => $data]);
-        \system\Session::set($this->_config['name'], $payload);
+        \System\Session::set($this->_config['name'], $payload);
         $this->_data = $payload;
         $this->_id = session_id();
         return $this->_id;
@@ -111,7 +111,7 @@ class Session extends AbstractAuthentication
      */
     public function remove(): bool
     {
-        \system\Session::delete($this->_config['name']);
+        \System\Session::delete($this->_config['name']);
         return true;
     }
 }
