@@ -32,7 +32,7 @@ const CONST_FILE = CONFIG_DIR . 'constant.php';
 
 
 //跟踪ID
-define('TRACE_ID', uniqid());
+define('TRACE_ID', bin2hex(random_bytes(16)));
 
 //初始脚本
-require_once SYS_DIR . 'init.php';
+require SYS_DIR . 'init.php';
